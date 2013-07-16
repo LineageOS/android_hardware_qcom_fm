@@ -34,7 +34,7 @@
     <string name="msg_callactive">FM transmit is not supported when there is an active voice call</string>
     <string name="fmtx_autoselect_name">Auto-select will delete all the presets, continue?</string>
 
-    <string name="stat_notif_tx_frequency">FM Transmitting at: \'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
+    <string name="stat_notif_tx_frequency">Transmitting at: \'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
 
     <string name="transmit_msg_string">Transmitting at:</string>
 </resources>

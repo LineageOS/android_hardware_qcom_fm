@@ -62,7 +62,7 @@
     <string name="preset_delete">Delete</string>
     <string name="preset_search">Search for \'<xliff:g id="preset_pi">%1$s</xliff:g>\'</string>
 
-    <string name="stat_notif_frequency">FM Radio Station \'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
+    <string name="stat_notif_frequency">\'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
 
     <string name="regional_band">Regional band</string>
 
