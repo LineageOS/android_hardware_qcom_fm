@@ -1847,15 +1847,6 @@ public class FMRadioService extends Service
       Log.d(LOGTAG,"startNotification");
 
       synchronized (mNotificationLock) {
-          RemoteViews views = new RemoteViews(getPackageName(), R.layout.statusbar);
-          views.setImageViewResource(R.id.icon, R.drawable.stat_notify_fm);
-          if (isFmOn())
-          {
-              views.setTextViewText(R.id.frequency, getTunedFrequencyString());
-          } else {
-             views.setTextViewText(R.id.frequency, "");
-          }
-
           Context context = getApplicationContext();
           Notification notification;
           NotificationManager notificationManager =
@@ -1868,8 +1859,9 @@ public class FMRadioService extends Service
           notificationManager.createNotificationChannel(notificationChannel);
 
           notification = new Notification.Builder(context, FMRADIO_NOTIFICATION_CHANNEL)
-            .setCustomContentView(views)
             .setSmallIcon(R.drawable.stat_notify_fm)
+            .setContentTitle(isFmOn() ? getString(R.string.app_name) : "")
+            .setContentText(isFmOn() ? getTunedFrequencyString() : "")
             .setContentIntent(PendingIntent.getActivity(this,
                 0, new Intent("com.caf.fmradio.FMRADIO_ACTIVITY"), 0))
             .setOngoing(true)
