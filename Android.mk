@@ -15,7 +15,19 @@ LOCAL_JNI_SHARED_LIBRARIES := libqcomfm_jni
 LOCAL_SHARED_LIBRARIES := liblog
 LOCAL_MODULE:= qcom.fmradio
 
+LOCAL_ADDITIONAL_DEPENDENCIES := qcom.fmradio.xml
+
 include $(BUILD_JAVA_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := qcom.fmradio.xml
+LOCAL_SRC_FILES := qcom/fmradio/$(LOCAL_MODULE)
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_CLASS := ETC
+LOCAL_MODULE_PATH := $(TARGET_OUT)/etc/permissions
+
+include $(BUILD_PREBUILT)
 
 ifeq ($(BOARD_HAS_QCA_FM_SOC), "cherokee")
 LOCAL_CFLAGS += -DFM_SOC_TYPE_CHEROKEE
