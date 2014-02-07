@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fade3982_7d6df031",
+        "filename": "fmapp2/res/values-pl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 8423
+      },
+      "writtenOn": "2014-02-07T05:31:44Z",
+      "side": 1,
+      "message": "Do usuni?cia (DO NOT TRANSLATE)",
+      "revId": "a07ff448761c0b2696a5aab64677050eaae03954",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
