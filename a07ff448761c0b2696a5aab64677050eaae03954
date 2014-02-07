@@ -16,6 +16,40 @@
       "revId": "a07ff448761c0b2696a5aab64677050eaae03954",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_f8fe2e04",
+        "filename": "fmapp2/res/values-pl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 5868
+      },
+      "writtenOn": "2014-02-07T07:47:48Z",
+      "side": 1,
+      "message": "Not Translated? ^",
+      "revId": "a07ff448761c0b2696a5aab64677050eaae03954",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_bd06581e",
+        "filename": "fmapp2/res/values-pl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 5868
+      },
+      "writtenOn": "2014-02-07T07:47:48Z",
+      "side": 1,
+      "message": "Not translated? ^",
+      "revId": "a07ff448761c0b2696a5aab64677050eaae03954",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
