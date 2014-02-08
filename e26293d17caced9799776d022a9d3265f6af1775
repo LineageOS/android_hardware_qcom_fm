@@ -1,0 +1,361 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fade3982_d3998b21",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "Rock clasico",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_339f1705",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "Test de emergencia",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_13a49355",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "Lengua extranjera",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_53861bba",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "religiosa",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_73899fca",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "Tertulias religiosas",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_b39327fa",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "suave",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_9390a3ee",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "suave",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_f3bbef73",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "infantiles",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_d3c06be3",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "country",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_33b6f78a",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "audiencia fácil",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_13bbf373",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "Test de emergencia",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_73b07f8c",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "ligera",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_53ad7b30",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "nacional",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_b3aa0718",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "música",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_93a7034f",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "musicales",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_d367cb23",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "teléfono",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_336d5705",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "rigurosa",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_1372d3e5",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "sociales\n\n\nCheck uppers in the below strings",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_7377dfd4",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "Taiwán",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_b3816792",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "Taiwán",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_937ee3ac",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 322,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2014-02-08T13:19:43Z",
+      "side": 1,
+      "message": "I don\u0027t understand any of the gibberish below :)",
+      "revId": "e26293d17caced9799776d022a9d3265f6af1775",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
