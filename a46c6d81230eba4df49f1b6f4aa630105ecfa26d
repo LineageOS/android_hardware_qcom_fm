@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fade3982_d3e7c83e",
+        "filename": "FMRecord/res/values-nl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-10T11:22:20Z",
+      "side": 1,
+      "message": "... om te kunnen opnemen.",
+      "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
