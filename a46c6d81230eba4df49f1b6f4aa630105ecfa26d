@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "fade3982_7f54bd53",
+        "filename": "FMRecord/res/values-nl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-13T11:19:05Z",
+      "side": 1,
+      "message": "2014 wordt dus automatisch gedaan?",
+      "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_d3e7c83e",
         "filename": "FMRecord/res/values-nl/strings.xml",
         "patchSetId": 1
@@ -54,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "fade3982_5f6a991b",
+        "filename": "FMRecord/res/values-nl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-13T11:19:05Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "fade3982_5fa0d990",
+      "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_bfada58a",
         "filename": "FMRecord/res/values-nl/strings.xml",
         "patchSetId": 1
@@ -65,6 +100,24 @@
       "writtenOn": "2014-02-13T10:09:12Z",
       "side": 1,
       "message": "Die moet translatable\u003d\"false\" worden",
+      "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_9f7421fe",
+        "filename": "FMRecord/res/values-nl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-13T11:19:05Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "fade3982_bfada58a",
       "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
