@@ -34,6 +34,57 @@
       "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_5fa0d990",
+        "filename": "FMRecord/res/values-nl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2014-02-13T10:09:12Z",
+      "side": 1,
+      "message": "\u0027Verander\u0027 klinkt te neutraal vind ik. \u0027Verminder\u0027 vind ik gepaster.",
+      "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_bfada58a",
+        "filename": "FMRecord/res/values-nl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2014-02-13T10:09:12Z",
+      "side": 1,
+      "message": "Die moet translatable\u003d\"false\" worden",
+      "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_9faa616f",
+        "filename": "FMRecord/res/values-nl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2014-02-13T10:09:12Z",
+      "side": 1,
+      "message": "\\\"",
+      "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
