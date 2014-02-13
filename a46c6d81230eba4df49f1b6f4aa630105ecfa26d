@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fade3982_e5783a92",
+        "filename": "FMRecord/res/values-nl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-13T14:27:23Z",
+      "side": 1,
+      "message": "Ok, maar we mogen Linus ook wel helpen hoor :-)",
+      "parentUuid": "fade3982_8a0cdd43",
+      "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_d3e7c83e",
         "filename": "FMRecord/res/values-nl/strings.xml",
         "patchSetId": 1
@@ -172,6 +190,24 @@
       "side": 1,
       "message": "-1 want niet alle landen hebben hetzelfde formaat",
       "parentUuid": "fade3982_9f7421fe",
+      "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_456e46ca",
+        "filename": "FMRecord/res/values-nl/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-13T14:27:23Z",
+      "side": 1,
+      "message": "-1 dom inderdaad, Duitsers doen het met puntjes enzo ... :-)",
+      "parentUuid": "fade3982_2a179152",
       "revId": "a46c6d81230eba4df49f1b6f4aa630105ecfa26d",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
