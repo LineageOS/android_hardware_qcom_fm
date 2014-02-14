@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fade3982_9a51cc65",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-14T14:22:51Z",
+      "side": 1,
+      "message": "-1 spatie teveel na Tx?",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
