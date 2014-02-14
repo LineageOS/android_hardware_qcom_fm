@@ -16,6 +16,24 @@
       "revId": "cb046b7b7fc5e70a544449e3ea9a4a1caaa9ceca",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_1a65bc44",
+        "filename": "FMRecord/res/values-nl/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-14T14:10:08Z",
+      "side": 1,
+      "message": "ships, foutje",
+      "parentUuid": "fade3982_5a2584a9",
+      "revId": "cb046b7b7fc5e70a544449e3ea9a4a1caaa9ceca",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
