@@ -2,6 +2,91 @@
   "comments": [
     {
       "key": {
+        "uuid": "fade3982_4daaecd5",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-15T02:53:49Z",
+      "side": 1,
+      "message": "kHz.\nKomma ipv punt.\nSpatie tussen frequentie en eenheid: 87,5 MHz",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_8dacf4ee",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-15T02:53:49Z",
+      "side": 1,
+      "message": "Moeten deze (en onderstaande) items beginnen met een spatie?",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_adaf38e2",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-15T02:53:49Z",
+      "side": 1,
+      "message": "Threshold -\u003e drempelwaarde.",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_edb94030",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-15T02:53:49Z",
+      "side": 1,
+      "message": "kHz",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_cdb6fc3c",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 340,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-15T02:53:49Z",
+      "side": 1,
+      "message": "leeg?",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_9a51cc65",
         "filename": "fmapp2/res/values-nl/cm_translations.xml",
         "patchSetId": 1
@@ -13,6 +98,91 @@
       "writtenOn": "2014-02-14T14:22:51Z",
       "side": 1,
       "message": "-1 spatie teveel na Tx?",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_2d820853",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-15T02:53:49Z",
+      "side": 1,
+      "message": "Verminder de opnamekwaliteit ...",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_ad961892",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-15T02:53:49Z",
+      "side": 1,
+      "message": "bestaat",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_0d874462",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-15T02:53:49Z",
+      "side": 1,
+      "message": "Configureer",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_6d7c1073",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 531,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-15T02:53:49Z",
+      "side": 1,
+      "message": "MHz",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_4d814c4a",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-15T02:53:49Z",
+      "side": 1,
+      "message": "MHz",
       "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
