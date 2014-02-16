@@ -72,6 +72,23 @@
     },
     {
       "key": {
+        "uuid": "fade3982_1030fb55",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "samples-teller",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_adaf38e2",
         "filename": "fmapp2/res/values-nl/cm_translations.xml",
         "patchSetId": 1
@@ -194,6 +211,23 @@
     },
     {
       "key": {
+        "uuid": "fade3982_70350745",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "\u0027Staten\u0027 met hoofdletter",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_2d820853",
         "filename": "fmapp2/res/values-nl/cm_translations.xml",
         "patchSetId": 1
@@ -229,6 +263,125 @@
     },
     {
       "key": {
+        "uuid": "fade3982_503a8337",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 454,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "Zoekcategorie",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_b03f8f24",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "Selecteer zoekcategorie",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_903c0b31",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 456,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "Zoekcategorie",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_f04917d2",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "Zoekcategorie waarde\n(Engels vertaling \u003d search_category_value_type)",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_d04693be",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 468,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "... die moet scrollen.",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_30125fb5",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "\u0027Uitgebreid radio-tekstboodschap\u0027 of \u0027Uitgebreide radio-tekst\u0027",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_10175ba4",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "\u0027Start test\u0027",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_ad961892",
         "filename": "fmapp2/res/values-nl/cm_translations.xml",
         "patchSetId": 1
@@ -258,6 +411,57 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "fade3982_ad961892",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_700ce794",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "Zendernaam ... bestaat al. Vul een andere naam in. (\u0027andere\u0027 zonder n op einde)",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_5011e3ab",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "Af -\u003e AF",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_b0266f14",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 524,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-16T12:02:29Z",
+      "side": 1,
+      "message": "\u0027Goed Kanaal\u0027 (met hoofdletters)",
       "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
