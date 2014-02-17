@@ -16,6 +16,24 @@
       "revId": "d5226fb73d9e412cfc8a251f64de429096352bf2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_2626a5ba",
+        "filename": "fmapp2/res/values-es/cm_translations.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 2134
+      },
+      "writtenOn": "2014-02-17T03:19:58Z",
+      "side": 1,
+      "message": "@Marco, it must be fixed in Transifex. Waiting for it.",
+      "parentUuid": "fade3982_0b360c03",
+      "revId": "d5226fb73d9e412cfc8a251f64de429096352bf2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
