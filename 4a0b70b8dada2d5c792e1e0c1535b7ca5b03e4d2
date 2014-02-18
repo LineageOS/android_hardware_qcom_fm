@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fade3982_c1a7e34d",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T07:21:41Z",
+      "side": 1,
+      "message": "fix ik in de volgende patchset",
+      "revId": "4a0b70b8dada2d5c792e1e0c1535b7ca5b03e4d2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
