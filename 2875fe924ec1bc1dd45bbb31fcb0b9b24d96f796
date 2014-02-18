@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fade3982_e1778700",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T07:18:26Z",
+      "side": 1,
+      "message": "alle translatable\u003d\"false\" toevoegen aan deze commit http://review.cyanogenmod.org/#/c/59775/",
+      "parentUuid": "fade3982_10f3db74",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_50ed638a",
         "filename": "fmapp2/res/values-nl/cm_translations.xml",
         "patchSetId": 1
@@ -413,6 +431,24 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "fade3982_8dacf4ee",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_c17403ff",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T07:18:26Z",
+      "side": 1,
+      "message": "Was ook in het Engels, wordt aangepast in deze commit http://review.cyanogenmod.org/#/c/59775/",
+      "parentUuid": "fade3982_8dcb5472",
       "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
@@ -853,6 +889,24 @@
     },
     {
       "key": {
+        "uuid": "fade3982_81ff9b33",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T07:18:26Z",
+      "side": 1,
+      "message": "via Transifex, is nergens anders verkrijgbaar",
+      "parentUuid": "fade3982_7044e773",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_b05e6f43",
         "filename": "fmapp2/res/values-nl/cm_translations.xml",
         "patchSetId": 1
@@ -898,6 +952,24 @@
       "writtenOn": "2014-02-16T14:33:40Z",
       "side": 1,
       "message": "+1",
+      "parentUuid": "fade3982_905b6b54",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_816afb18",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T07:18:26Z",
+      "side": 1,
+      "message": "de app heet Fm Tx, waarbij Tx staat voor uitzenden",
       "parentUuid": "fade3982_905b6b54",
       "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
@@ -1421,6 +1493,24 @@
       "writtenOn": "2014-02-16T12:25:42Z",
       "side": 1,
       "message": "+1",
+      "parentUuid": "fade3982_5011e3ab",
+      "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_41bbd372",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T07:18:26Z",
+      "side": 1,
+      "message": "Kan je uitleggen waarom moet dit AF zijn? Moet dan namelijk ook in het Engels veranderd worden.",
       "parentUuid": "fade3982_5011e3ab",
       "revId": "2875fe924ec1bc1dd45bbb31fcb0b9b24d96f796",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
