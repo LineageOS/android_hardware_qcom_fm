@@ -16,6 +16,24 @@
       "revId": "4a0b70b8dada2d5c792e1e0c1535b7ca5b03e4d2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_0168abf4",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-18T07:23:03Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "fade3982_c1a7e34d",
+      "revId": "4a0b70b8dada2d5c792e1e0c1535b7ca5b03e4d2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
