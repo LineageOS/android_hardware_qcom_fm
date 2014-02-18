@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fade3982_0130ab55",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T05:45:05Z",
+      "side": 1,
+      "message": "translatable\u003d\"false\"",
+      "revId": "6bc223ef979698dba1b5ed4962caeebb03402dce",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_61353745",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T05:45:05Z",
+      "side": 1,
+      "message": "translatable\u003d\"false\"",
+      "revId": "6bc223ef979698dba1b5ed4962caeebb03402dce",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_413ab337",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T05:45:05Z",
+      "side": 1,
+      "message": "translatable\u003d\"false\"",
+      "revId": "6bc223ef979698dba1b5ed4962caeebb03402dce",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_a13f3f24",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T05:45:05Z",
+      "side": 1,
+      "message": "translatable\u003d\"false\"",
+      "revId": "6bc223ef979698dba1b5ed4962caeebb03402dce",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_813cbb30",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T05:45:05Z",
+      "side": 1,
+      "message": "translatable\u003d\"false\"",
+      "revId": "6bc223ef979698dba1b5ed4962caeebb03402dce",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_e14947d2",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-18T05:45:05Z",
+      "side": 1,
+      "message": "translatable\u003d\"false\"",
+      "revId": "6bc223ef979698dba1b5ed4962caeebb03402dce",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
