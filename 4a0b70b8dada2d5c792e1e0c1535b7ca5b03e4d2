@@ -34,6 +34,74 @@
       "revId": "4a0b70b8dada2d5c792e1e0c1535b7ca5b03e4d2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_5cca9ca2",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-18T12:02:02Z",
+      "side": 1,
+      "message": "Is \u0027Radio-Tekst\u0027 niet eenduidiger dan \u0027tekstboodschap\u0027 (ref. http://nl.wikipedia.org/wiki/Radio_Data_System)",
+      "revId": "4a0b70b8dada2d5c792e1e0c1535b7ca5b03e4d2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_fcd45048",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 354,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-18T12:02:02Z",
+      "side": 1,
+      "message": "\u003cstring name\u003d\"radio_text_string\"\u003e",
+      "revId": "4a0b70b8dada2d5c792e1e0c1535b7ca5b03e4d2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_3ccfd8b1",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-18T12:02:02Z",
+      "side": 1,
+      "message": "Zoeken annuleren",
+      "revId": "4a0b70b8dada2d5c792e1e0c1535b7ca5b03e4d2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_7cc16080",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 399,
+      "author": {
+        "id": 7221
+      },
+      "writtenOn": "2014-02-18T12:02:02Z",
+      "side": 1,
+      "message": "AF \u003d Alternative Frequencies, zie (http://nl.wikipedia.org/wiki/Radio_Data_System).\n\u0027Af\u0027 kan verward worden met bijwoord af.",
+      "revId": "4a0b70b8dada2d5c792e1e0c1535b7ca5b03e4d2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
