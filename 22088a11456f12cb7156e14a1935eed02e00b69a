@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fade3982_fed8c51f",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-19T15:42:34Z",
+      "side": 1,
+      "message": "no capitalization for items below ?",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_ded181fd",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-19T15:42:34Z",
+      "side": 1,
+      "message": "In strings.xml, RMSSI is used (capitals)",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_9ee7f9e3",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-19T15:42:34Z",
+      "side": 1,
+      "message": "Af \u003d AF ? Alternate Frequency",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fade3982_bece3d58",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 366,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-19T15:42:34Z",
+      "side": 1,
+      "message": "in strings.xml, RxRePeat is used",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
