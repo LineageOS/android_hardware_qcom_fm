@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fade3982_21ba0c24",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2014-02-20T09:15:06Z",
+      "side": 1,
+      "message": "I was wondering if these settings are accessible from the user. Can\u0027t test since I don\u0027t have a device with working qcom FM",
+      "parentUuid": "fade3982_fed8c51f",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_ded181fd",
         "filename": "fmapp2/res/values/arrays.xml",
         "patchSetId": 3
