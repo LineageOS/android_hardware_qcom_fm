@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fade3982_e120244c",
+        "filename": "fmapp2/res/values/arrays.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-20T12:40:19Z",
+      "side": 1,
+      "message": "Yeah same here, cannot test....\nIf not accessible, should these be transl.\u003dfalse?",
+      "parentUuid": "fade3982_21ba0c24",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_ded181fd",
         "filename": "fmapp2/res/values/arrays.xml",
         "patchSetId": 3
