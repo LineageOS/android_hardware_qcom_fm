@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "bae84128_e045e217",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-22T23:49:46Z",
+      "side": 1,
+      "message": "Hmm, volgens mij praten we een beetje langs elkaar heen. Als je bedoeld met het initiële commentaar in deze patch dat er transmitter stond en dat het daarom zender moet zijn ben ik het met je eens (+1 dus). Maar ik dacht dat je bedoelde dat er FM-transmitter moest staan, en daar was ik het niet mee eens. Er zijn inderdaad apparaten die je in de auto kunt gebruiken om uit te zenden op de FM-band om van b.v. een MP3-speler geluid af te spelen in de auto zonder een fysieke kabel. En dat noem je een FM-transmitter.",
+      "parentUuid": "bae84128_2037cae4",
+      "revId": "764795542d80457ca04d11201e7c3ff74d393e73",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_5edd7113",
         "filename": "fmapp2/res/values-nl/cm_translations.xml",
         "patchSetId": 3
