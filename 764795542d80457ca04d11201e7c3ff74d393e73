@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bae84128_4013ee5c",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-22T14:27:34Z",
+      "side": 1,
+      "message": "-1 Daar staat toch gewoon de Engelse term? Bij FM-transmitter heb ik meteen het volgende beeld:\nhttps://www.google.nl/#q\u003dfm-transmitter+auto\neen apparaat in de auto die op een FM-zender een signaal aan het uitzenden is.",
+      "parentUuid": "fade3982_1ec5a93b",
+      "revId": "764795542d80457ca04d11201e7c3ff74d393e73",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fade3982_5edd7113",
         "filename": "fmapp2/res/values-nl/cm_translations.xml",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2014-02-19T15:35:37Z",
       "side": 1,
       "message": "Ook in het NL, text met n X \nhttp://nl.wikipedia.org/wiki/Radio_Data_System\n\nmaar we kunnen er ook nog \"RDS Radio Text van maken?",
+      "revId": "764795542d80457ca04d11201e7c3ff74d393e73",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_20106a4e",
+        "filename": "fmapp2/res/values-nl/cm_translations.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 353,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-22T14:27:34Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "fade3982_5edd7113",
       "revId": "764795542d80457ca04d11201e7c3ff74d393e73",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
