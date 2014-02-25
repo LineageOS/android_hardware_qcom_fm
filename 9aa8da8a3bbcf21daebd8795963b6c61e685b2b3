@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_cf9a89c5",
+        "filename": "fmapp2/res/values-nl/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2014-02-25T13:27:33Z",
+      "side": 1,
+      "message": "ondersteund*",
+      "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_af9f45b3",
+        "filename": "fmapp2/res/values-nl/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2014-02-25T13:27:33Z",
+      "side": 1,
+      "message": "Automatisch selecteren bevestigen?",
+      "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_0fa59103",
+        "filename": "fmapp2/res/values-nl/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2014-02-25T13:27:33Z",
+      "side": 1,
+      "message": "Nu afspelen, Nu aan het afspelen",
+      "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_efa94de1",
+        "filename": "fmapp2/res/values-nl/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2014-02-25T13:27:33Z",
+      "side": 1,
+      "message": "Moeten deze default_-strings wel vertaald worden?",
+      "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_4faf99e3",
+        "filename": "fmapp2/res/values-nl/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2014-02-25T13:27:33Z",
+      "side": 1,
+      "message": "FM-bewerking*",
+      "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_2facd5ec",
+        "filename": "fmapp2/res/values-nl/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2014-02-25T13:27:33Z",
+      "side": 1,
+      "message": "Band-afzoekmethode",
+      "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
