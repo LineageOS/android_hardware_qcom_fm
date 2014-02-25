@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_49267917",
+        "filename": "FMRecord/res/values-af/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2014-02-25T04:09:00Z",
+      "side": 1,
+      "message": "\u0026lt; must be \u0027\u003c\u0027\n\u0026gt; must be \u0027\u003e\u0027",
+      "revId": "fea497f257dbdd1e2bba2fe41aba8818c38d7ae1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_29233507",
+        "filename": "FMRecord/res/values-af/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 2597
+      },
+      "writtenOn": "2014-02-25T04:09:00Z",
+      "side": 1,
+      "message": "\\\u0027",
+      "revId": "fea497f257dbdd1e2bba2fe41aba8818c38d7ae1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
