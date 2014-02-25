@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bae84128_8f5521c8",
+        "filename": "fmapp2/res/values-nl/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-25T14:19:03Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "bae84128_cf9a89c5",
+      "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bae84128_af9f45b3",
         "filename": "fmapp2/res/values-nl/strings.xml",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "bae84128_af62a5ab",
+        "filename": "fmapp2/res/values-nl/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 272,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-25T14:19:03Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "bae84128_af9f45b3",
+      "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bae84128_0fa59103",
         "filename": "fmapp2/res/values-nl/strings.xml",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2014-02-25T13:27:33Z",
       "side": 1,
       "message": "Nu afspelen, Nu aan het afspelen",
+      "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_0f58f1f9",
+        "filename": "fmapp2/res/values-nl/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-25T14:19:03Z",
+      "side": 1,
+      "message": "+1 Nu afspelen",
+      "parentUuid": "bae84128_0fa59103",
       "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
@@ -87,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "bae84128_ef5cadef",
+        "filename": "fmapp2/res/values-nl/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-25T14:19:03Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "bae84128_4faf99e3",
+      "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bae84128_2facd5ec",
         "filename": "fmapp2/res/values-nl/strings.xml",
         "patchSetId": 4
@@ -98,6 +170,24 @@
       "writtenOn": "2014-02-25T13:27:33Z",
       "side": 1,
       "message": "Band-afzoekmethode",
+      "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_4f72f97d",
+        "filename": "fmapp2/res/values-nl/strings.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 7630
+      },
+      "writtenOn": "2014-02-25T14:19:03Z",
+      "side": 1,
+      "message": "+1",
+      "parentUuid": "bae84128_2facd5ec",
       "revId": "9aa8da8a3bbcf21daebd8795963b6c61e685b2b3",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
