@@ -103,6 +103,125 @@
       "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_87f98550",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-26T16:33:26Z",
+      "side": 1,
+      "message": "default, so translatable \u003d false ?",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_e794d1e9",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-26T16:33:26Z",
+      "side": 1,
+      "message": "default, so translatable \u003d false ?",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_c799cd21",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-26T16:33:26Z",
+      "side": 1,
+      "message": "default, so translatable \u003d false ?",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_279fd904",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-26T16:33:26Z",
+      "side": 1,
+      "message": "default, so translatable \u003d false ?",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_a793e9f9",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-26T16:33:26Z",
+      "side": 1,
+      "message": "default, so translatable \u003d false ?",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_27b6b98a",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-26T16:33:26Z",
+      "side": 1,
+      "message": "default, so translatable \u003d false ?\n\nbut this can probably be translated....",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_c7c0ade3",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 2881
+      },
+      "writtenOn": "2014-02-26T16:33:26Z",
+      "side": 1,
+      "message": "default, so translatable \u003d false ?",
+      "revId": "22088a11456f12cb7156e14a1935eed02e00b69a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
