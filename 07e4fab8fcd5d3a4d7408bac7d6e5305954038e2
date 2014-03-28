@@ -1,0 +1,548 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bae84128_522c354a",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Impossível acessar o cartão SD",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_3231b1a3",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Fone de ouvido com fios",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_9226bd66",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Ativar Alto-falante",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_722b3931",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Desativar Alto-falante",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_d220454c",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Pesquisando por estações para criar uma lista automática",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_b21dc111",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Por favor ligue os auriculares com fio para usar o rádio FM",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_121bcd1c",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Desligue todos os fones de ouvido para usar FM Tx",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_f21749eb",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Insira um nome",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_52d39538",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Insira um nome",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_32d89153",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "A Escolha Automática irá apagar todas as estações da l\nista \\\u0027\u003cxliff:g id\u003d\"presetlist_name\"\u003e%1$s\u003c/xliff:g\u003e\\\u0027, Continuar?",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_92dd1d45",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Auto Selecionar irá apagar todas Predefinições, deseja conti\nnuar?",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_72e21905",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Inserir um nome",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_32bff1d1",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Configurações",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_f2ee29eb",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Restaurar Configurações de Fábrica",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_52ba75e2",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Restaurar Configurações de Fábrica",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_d2e7a510",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Restaurar",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_12f2add2",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Confirmar Redefinição das Configurações",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_72b979e9",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Todas as configurações serão restauradas, assim como as estações memorizadas",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_92b4fdf2",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Restaurar para as configurações padrão",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_d2ce8582",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Restaurar Configurações de Fábrica",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_b2cb0172",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Restaurar todas as Configurações",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_f2c5895b",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Confirmar Restauração",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_52a1d5a8",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Todas as configurações serão restauradas, assim como as estações memorizadas",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_32a6d1c1",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Não foi possível acessar o cartão SD.",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_92ab5d89",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Seu cartão de armazenamento SD está sem espaço. Troque a qualidade ou remova alguns arquivos.",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_72b059f5",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Procurar na Memória",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_d295e540",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Selecione o Tipo de Pesquisa",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_b292e155",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Pré-configurações",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_12a0ed9e",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Isto é uma Mensagem de Texto longa de Rádio que precisa de rolagem",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_f29c696b",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Falha na Operação FM.",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_5288b522",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Operação FM falhada. O áudio FM não é permitido durante uma chamada.",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_328d3132",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:44:12Z",
+      "side": 1,
+      "message": "Nome de estação vazio, insira novamente.",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
