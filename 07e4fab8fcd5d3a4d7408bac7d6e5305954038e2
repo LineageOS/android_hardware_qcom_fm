@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "bae84128_12774d3b",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:52:01Z",
+      "side": 1,
+      "message": "Fone de ouvido com fio",
+      "parentUuid": "bae84128_3231b1a3",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bae84128_9226bd66",
         "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
         "patchSetId": 9
@@ -98,6 +116,24 @@
       "writtenOn": "2014-03-28T00:44:12Z",
       "side": 1,
       "message": "Por favor ligue os auriculares com fio para usar o rádio FM",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_b2794132",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:52:01Z",
+      "side": 1,
+      "message": "Por favor ligue os fones de ouvido com fio para usar o rádio FM",
+      "parentUuid": "bae84128_b21dc111",
       "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
@@ -172,6 +208,24 @@
     },
     {
       "key": {
+        "uuid": "bae84128_f273c94b",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:52:01Z",
+      "side": 1,
+      "message": "A Escolha Automática irá apagar todas as estações da lista \\\u0027\u003cxliff:g id\u003d\"presetlist_name\"\u003e%1$s\u003c/xliff:g\u003e\\\u0027, Continuar?",
+      "parentUuid": "bae84128_32d89153",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bae84128_92dd1d45",
         "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
         "patchSetId": 9
@@ -183,6 +237,24 @@
       "writtenOn": "2014-03-28T00:44:12Z",
       "side": 1,
       "message": "Auto Selecionar irá apagar todas Predefinições, deseja conti\nnuar?",
+      "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae84128_528f1523",
+        "filename": "fmapp2/res/values-pt-rBR/cm_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 378
+      },
+      "writtenOn": "2014-03-28T00:52:01Z",
+      "side": 1,
+      "message": "Auto Selecionar irá apagar todas Predefinições, deseja continuar?",
+      "parentUuid": "bae84128_92dd1d45",
       "revId": "07e4fab8fcd5d3a4d7408bac7d6e5305954038e2",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
