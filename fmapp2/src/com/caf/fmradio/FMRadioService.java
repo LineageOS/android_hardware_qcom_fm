@@ -1283,11 +1283,11 @@ public class FMRadioService extends Service
         try {
             if (getResources().getBoolean(R.bool.def_save_name_format_enabled)) {
                 String suffix = getResources().getString(R.string.def_save_name_suffix);
-                suffix = "".equals(suffix) ? ".3gpp" : suffix;
+                suffix = "".equals(suffix) ? ".aac" : suffix;
                 String prefix = getResources().getString(R.string.def_save_name_prefix) + '-';
                 mSampleFile = createTempFile(prefix, suffix, sampleDir);
             } else {
-                mSampleFile = File.createTempFile("FMRecording", ".3gpp", sampleDir);
+                mSampleFile = File.createTempFile("FMRecording", ".aac", sampleDir);
             }
         } catch (IOException e) {
             Log.e(LOGTAG, "Not able to access SD Card");
