@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fad55976_dea5f7b5",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-28T06:24:52Z",
+      "side": 1,
+      "message": "Record",
+      "revId": "827e838781eea19e620f9a749ac65916695356c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad55976_3eab738b",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-28T06:24:52Z",
+      "side": 1,
+      "message": "This will delete all your saved presets. Search for stations?",
+      "revId": "827e838781eea19e620f9a749ac65916695356c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad55976_1eb02ff4",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-28T06:24:52Z",
+      "side": 1,
+      "message": "Ditch these dialog titles and use option title instead.",
+      "revId": "827e838781eea19e620f9a749ac65916695356c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad55976_7e95eb3e",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-28T06:24:52Z",
+      "side": 1,
+      "message": "This looks like a checkbox. Ditch these two strings, summary is pointless.",
+      "revId": "827e838781eea19e620f9a749ac65916695356c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad55976_5e92a758",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-28T06:24:52Z",
+      "side": 1,
+      "message": "Dup",
+      "revId": "827e838781eea19e620f9a749ac65916695356c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad55976_be9f635e",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-28T06:24:52Z",
+      "side": 1,
+      "message": "This will clear all application settings, including saved presets. Continue?",
+      "revId": "827e838781eea19e620f9a749ac65916695356c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad55976_9e9c1f6b",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-28T06:24:52Z",
+      "side": 1,
+      "message": "Change this to \"Search type\" and remove \"search_category_title\"",
+      "revId": "827e838781eea19e620f9a749ac65916695356c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad55976_fe871b10",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-28T06:24:52Z",
+      "side": 1,
+      "message": "Is this needed?",
+      "revId": "827e838781eea19e620f9a749ac65916695356c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad55976_de8cd737",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-28T06:24:52Z",
+      "side": 1,
+      "message": "I don\u0027t think placeholders even should be in the UI",
+      "revId": "827e838781eea19e620f9a749ac65916695356c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad55976_3e825301",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-28T06:24:52Z",
+      "side": 1,
+      "message": "\\\u0027\u003cxliff:g id\u003d\"name\"\u003e%s\u003c/xliff:g\u003e\\\u0027 is already in use, please pick a different name.",
+      "revId": "827e838781eea19e620f9a749ac65916695356c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad55976_1e878f10",
+        "filename": "fmapp2/res/values/strings.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-28T06:24:52Z",
+      "side": 1,
+      "message": "\"limit\" is probably not needed in these two. Also, (MHz) - no \"in\"",
+      "revId": "827e838781eea19e620f9a749ac65916695356c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
