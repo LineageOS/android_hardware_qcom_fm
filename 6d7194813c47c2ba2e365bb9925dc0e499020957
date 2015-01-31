@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fad55976_b51ad96c",
+        "filename": "fmapp2/res/values/transmit_strings.xml",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 5574
+      },
+      "writtenOn": "2015-01-31T10:57:47Z",
+      "side": 1,
+      "message": "Searching for weakest frequencies to transmit\\u2026",
+      "revId": "6d7194813c47c2ba2e365bb9925dc0e499020957",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
