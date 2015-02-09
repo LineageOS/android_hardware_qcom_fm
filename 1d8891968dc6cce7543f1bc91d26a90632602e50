@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "bacf61ea_1d8835e7",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1851,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2015-02-09T07:02:24Z",
+      "side": 1,
+      "message": "\"Check if internal Antenna should be used\"",
+      "revId": "1d8891968dc6cce7543f1bc91d26a90632602e50",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bacf61ea_9dd8a51f",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
         "patchSetId": 4
@@ -13,6 +30,23 @@
       "writtenOn": "2015-02-09T05:19:48Z",
       "side": 1,
       "message": "change comment to something more appropriate, indent if statement properly",
+      "revId": "1d8891968dc6cce7543f1bc91d26a90632602e50",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_3d8379ce",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2015-02-09T07:02:24Z",
+      "side": 1,
+      "message": "You can simply make this:\n    bStatus \u003d mReceiver.setInternalAntenna(SystemProperties.getBoolean(\"hw.fm.internal_antenna\", false)",
       "revId": "1d8891968dc6cce7543f1bc91d26a90632602e50",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
