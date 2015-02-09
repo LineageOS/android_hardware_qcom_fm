@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_9dd8a51f",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 8463
+      },
+      "writtenOn": "2015-02-09T05:19:48Z",
+      "side": 1,
+      "message": "change comment to something more appropriate, indent if statement properly",
+      "revId": "1d8891968dc6cce7543f1bc91d26a90632602e50",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
