@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "bacf61ea_e476653d",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 1417,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-02-12T17:20:24Z",
+      "side": 1,
+      "message": "This function is probably a better place to check your property no?",
+      "revId": "24ff057ea50b45ed03883679cedad008ba0cb175",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bacf61ea_83f8467e",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
         "patchSetId": 5
