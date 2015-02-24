@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bacf61ea_f65ba252",
+        "filename": "fmapp2/AndroidManifest.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2015-02-24T06:44:19Z",
+      "side": 1,
+      "message": "remove extra space before /\u003e",
+      "revId": "c9945e88347a210377b7e616e7cb2218d64bd289",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bacf61ea_165f5642",
+        "filename": "fmapp2/res/values/styles.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2015-02-24T06:44:19Z",
+      "side": 1,
+      "message": "2 -\u003e 4 spaces",
+      "revId": "c9945e88347a210377b7e616e7cb2218d64bd289",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
