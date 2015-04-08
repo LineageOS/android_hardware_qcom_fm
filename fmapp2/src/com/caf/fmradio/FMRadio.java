@@ -227,6 +227,8 @@ public class FMRadio extends Activity
    private TextView mSleepMsgTV;
    private TextView mRecordingMsgTV;
 
+   private ImageView mFmSeeker;
+
    private double mOutputFreq;
    private int mPresetPageNumber = 0;
    private int mStereo = -1;
@@ -357,6 +359,8 @@ public class FMRadio extends Activity
       if (mBackButton != null) {
           mBackButton.setOnClickListener(mBackClickListener);
       }
+
+      mFmSeeker = (ImageView)findViewById(R.id.fm_seeker);
 
       /* 6 Preset Buttons */
       mPresetButtons[0] = (Button)findViewById(R.id.presets_button_1);
@@ -1944,6 +1948,7 @@ public class FMRadio extends Activity
           setMuteModeButtonImage(false);
       }
       if (bEnable) {
+         mFmSeeker.setVisibility(View.VISIBLE);
          if (mRadioTextScroller != null) {
              mRadioTextScroller.startScroll();
          }
@@ -1968,6 +1973,7 @@ public class FMRadio extends Activity
              }
         }
       }else {
+         mFmSeeker.setVisibility(View.INVISIBLE);
          if (mRadioTextScroller != null) {
              mRadioTextScroller.stopScroll();
          }
