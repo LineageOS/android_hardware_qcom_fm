@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac371cc_e4a30f4e",
+        "filename": "fmapp2/src/com/caf/fmradio/FmSharedPreferences.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 9528
+      },
+      "writtenOn": "2015-04-10T12:35:37Z",
+      "side": 1,
+      "message": "set this to REGIONAL_BAND_NORTH_AMERICA for clarity? i know it\u0027s the same thing, but this will be cleaner so we can tell you\u0027re setting it to a meaningful default :)",
+      "revId": "d848964e52fa6c33dbfc26df543191ef5ce95374",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
