@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac371cc_9f90a497",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2225,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-04-10T16:43:51Z",
+      "side": 1,
+      "message": "Can\u0027t this be moved into the mReceiver !\u003d null block?",
+      "revId": "5a5e6dd3d44f77bc1b7bb8c11485da6e2839662f",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
