@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac371cc_35ac2fed",
+        "filename": "qcom/fmradio/FmReceiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1490,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-04-11T12:24:40Z",
+      "side": 1,
+      "message": "Maybe you want to move k outside the for loop, it\u0027s kind of weird here. Also, this loop is terrible and hard to understand.",
+      "revId": "303783a1916888fc4cb63f54a5452b8edc0991a6",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
