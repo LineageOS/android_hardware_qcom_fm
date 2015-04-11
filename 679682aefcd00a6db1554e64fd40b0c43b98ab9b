@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac371cc_9a90b297",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2223,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-04-11T06:41:33Z",
+      "side": 1,
+      "message": "Unnecessary change to these two lines",
+      "revId": "679682aefcd00a6db1554e64fd40b0c43b98ab9b",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
