@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3ac371cc_df9fb5b2",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1643,
+      "author": {
+        "id": 12941
+      },
+      "writtenOn": "2015-04-14T12:04:38Z",
+      "side": 1,
+      "message": "There are instances where enableRadioOnOffUI() is called right after tuneRadio(), so perhaps it\u0027s better to search for tuneRadio() calls and add enableRadioOnOffUI() right after that. (A side note, this app seemed have been originally written to be touching UI elements on none main threads which could cause crashes/UI hangs. A long term solution is to replace all the Runnables with AsyncTasks)",
+      "revId": "e65a11e9526508cc9fa3bbd7271f78e890819c02",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
