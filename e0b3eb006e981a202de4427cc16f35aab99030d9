@@ -16,6 +16,24 @@
       "revId": "e0b3eb006e981a202de4427cc16f35aab99030d9",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a89bdaa_da73374c",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1861,
+      "author": {
+        "id": 8429
+      },
+      "writtenOn": "2015-05-15T16:11:32Z",
+      "side": 1,
+      "message": "You mean we should move this line ahead of setInternalAntenna? This seems more sensible.",
+      "parentUuid": "9a89bdaa_77ca4651",
+      "revId": "e0b3eb006e981a202de4427cc16f35aab99030d9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
