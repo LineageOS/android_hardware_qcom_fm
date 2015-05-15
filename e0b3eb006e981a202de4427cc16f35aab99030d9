@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a89bdaa_77ca4651",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1861,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-05-15T06:53:20Z",
+      "side": 1,
+      "message": "Wait, I don\u0027t get this logic, readInternalAntennaAvailable calls through to getInternalAntenna to set mInternalAntennaAvailable. Why not just setInternalAntenna(mInternalAntennaAvailable) ?",
+      "revId": "e0b3eb006e981a202de4427cc16f35aab99030d9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
