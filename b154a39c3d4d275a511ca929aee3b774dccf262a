@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f0e0f27_16cbad53",
+        "filename": "fmapp2/src/com/caf/fmradio/FMTransmitterConfigReceiver.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2015-08-08T02:35:06Z",
+      "side": 1,
+      "message": "Might as well fix their typos :P",
+      "revId": "b154a39c3d4d275a511ca929aee3b774dccf262a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
