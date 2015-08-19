@@ -77,6 +77,7 @@ interface IFMRadioService
     boolean isRtPlusSupported();
     boolean isA2DPConnected();
     boolean isSearchInProgress();
+    List getScannedFrequencies();
     boolean getIntfDetLowTh();
     boolean getIntfDetHighTh();
     boolean getRxRepeatCount();
