@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9f436f4f_95e0c498",
+        "filename": "fmapp2/res/values-en-rAU/strings.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2015-09-30T23:51:09Z",
+      "side": 1,
+      "message": "Strings are missing here",
+      "revId": "dd75c242603f06ba4af7f8233f79d375e640b1aa",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
