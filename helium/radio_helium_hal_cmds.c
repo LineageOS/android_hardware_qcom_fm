@@ -161,6 +161,34 @@ int hci_fm_set_recv_conf_req (struct hci_fm_recv_conf_req *conf)
     return send_fm_cmd_pkt(opcode, sizeof((*conf)), conf);
 }
 
+int hci_fm_get_program_service_req ()
+{
+    uint16_t opcode = 0;
+
+   opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
+                         HCI_OCF_FM_GET_PROGRAM_SERVICE_REQ);
+    return send_fm_cmd_pkt(opcode, 0, NULL);
+}
+
+int hci_fm_get_rds_grpcounters_req (int val)
+{
+    uint16_t opcode = 0;
+
+   opcode = hci_opcode_pack(HCI_OGF_FM_STATUS_PARAMETERS_CMD_REQ,
+                         HCI_OCF_FM_READ_GRP_COUNTERS);
+    return send_fm_cmd_pkt(opcode, sizeof(val), &val);
+}
+
+int hci_fm_set_notch_filter_req (int val)
+{
+    uint16_t opcode = 0;
+
+   opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
+                     HCI_OCF_FM_EN_NOTCH_CTRL);
+    return send_fm_cmd_pkt(opcode, sizeof(val), &val);
+}
+
+
 int helium_set_sig_threshold_req(char th)
 {
     uint16_t opcode = 0;

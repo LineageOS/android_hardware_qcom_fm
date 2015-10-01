@@ -119,6 +119,23 @@ static void hci_cc_rsp(char *ev_buff)
     radio_hci_req_complete(status);
 }
 
+static void hci_cc_rds_grp_cntrs_rsp(char *ev_buff)
+{
+    char status;
+    if (ev_buff == NULL) {
+        ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
+        return;
+    }
+    status = ev_buff[0];
+    ALOGE("%s:%s, status =%d\n", LOG_TAG, __func__,status);
+    if(status < 0)
+    {
+        ALOGE("%s:%s, read rds_grp_cntrs failed status=%d\n", LOG_TAG, __func__,status);
+    }
+    jni_cb->rds_grp_cntrs_rsp_cb(&ev_buff[1]);
+}
+
+
 static inline void hci_cmd_complete_event(char *buff)
 {
     uint16_t opcode;
@@ -168,6 +185,9 @@ static inline void hci_cmd_complete_event(char *buff)
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_EVENT_MASK):
     case hci_common_cmd_op_pack(HCI_OCF_FM_SET_SPUR_TABLE):
             hci_cc_rsp(pbuf);
+            break;
+    case hci_status_param_op_pack(HCI_OCF_FM_READ_GRP_COUNTERS):
+            hci_cc_rds_grp_cntrs_rsp(pbuf);
             break;
 /*    case hci_common_cmd_op_pack(HCI_OCF_FM_GET_SPUR_TABLE):
             hci_cc_get_spur_tbl(buff);
@@ -463,7 +483,7 @@ static void hci_ev_rt_plus_tag(char *buff)
     data = malloc(len);
     if (data != NULL) {
         data[0] = len;
-        ALOGE("%s:%s: data length=%d\n", LOG_TAG, __func__,data[0]);
+        ALOGI("%s:%s: data length=%d\n", LOG_TAG, __func__,data[0]);
         data[1] = buff[RDS_PTYPE];
         data[2] = buff[RDS_PID_LOWER];
         data[3] = buff[RDS_PID_HIGHER];
@@ -948,6 +968,24 @@ static int set_fm_ctrl(int cmd, int val)
              goto END;
          }
          break;
+
+    case HCI_FM_HELIUM_RDS_GRP_COUNTERS:
+         ALOGD("%s: rds_grp counter read  value=%d ", LOG_TAG,val);
+         ret = hci_fm_get_rds_grpcounters_req(val);
+         if (ret < 0) {
+             radio->g_rds_grp_proc_ps = saved_val;
+             goto END;
+         }
+         break;
+
+    case HCI_FM_HELIUM_SET_NOTCH_FILTER:
+         ALOGD("%s: set notch filter  notch=%d ", LOG_TAG,val);
+         ret = hci_fm_set_notch_filter_req(val);
+         if (ret < 0) {
+            goto END;
+         }
+         break;
+
     case HCI_FM_HELIUM_RDSD_BUF:
          radio->rds_grp.rds_buf_size = val;
          break;

@@ -101,6 +101,7 @@ typedef void (*rt_plus_cb)(char *rt_plus);
 typedef void (*ert_cb)(char *ert);
 typedef void (*disable_cb)();
 typedef void (*callback_thread_event)(unsigned int evt);
+typedef void (*rds_grp_cntrs_cb)(char *rds_params);
 
 
 static JNIEnv *mCallbackEnv = NULL;
@@ -307,6 +308,11 @@ void fm_ert_update_cb(char *ert)
     mCallbackEnv->DeleteLocalRef(ert_buff);
 }
 
+void rds_grp_cntrs_rsp_cb(char * evt_buffer)
+{
+   ALOGE("rds_grp_cntrs_rsp_cb");
+}
+
 void fm_disabled_cb()
 {
    ALOGE("DISABLE");
@@ -348,6 +354,7 @@ typedef struct {
    rt_plus_cb  rt_plus_update_cb;
    ert_cb  ert_update_cb;
    disable_cb  disabled_cb;
+   rds_grp_cntrs_cb rds_grp_cntrs_rsp_cb;
    callback_thread_event thread_evt_cb;
 } fm_vendor_callbacks_t;
 
@@ -375,6 +382,7 @@ static   fm_vendor_callbacks_t fm_callbacks = {
     fm_rt_plus_update_cb,
     fm_ert_update_cb,
     fm_disabled_cb,
+    rds_grp_cntrs_rsp_cb,
     fm_thread_evt_cb
 };
 
@@ -1427,7 +1435,6 @@ int register_android_hardware_fm_fmradio(JNIEnv* env)
         return jniRegisterNativeMethods(env, "qcom/fmradio/FmReceiverJNI", gMethods, NELEM(gMethods));
 }
 } // end namespace
-
 
 jint JNI_OnLoad(JavaVM *jvm, void *reserved)
 {

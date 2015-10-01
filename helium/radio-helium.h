@@ -159,6 +159,7 @@ typedef void (*rt_plus_cb)(char *rt_plus);
 typedef void (*ert_cb)(char *ert);
 typedef void (*disable_cb)();
 typedef void (*callback_thread_event)(unsigned int evt);
+typedef void (*rds_grp_cntrs_cb)(char *rds_params);
 
 typedef struct {
     size_t  size;
@@ -177,6 +178,7 @@ typedef struct {
     rt_plus_cb  rt_plus_update_cb;
     ert_cb  ert_update_cb;
     disable_cb  disabled_cb;
+    rds_grp_cntrs_cb rds_grp_cntrs_rsp_cb;
     callback_thread_event thread_evt_cb;
 } fm_vendor_callbacks_t;
 
@@ -385,6 +387,18 @@ struct hci_fm_search_rds_station_req {
     struct hci_fm_search_station_req srch_station;
     char    srch_pty;
     short   srch_pi;
+} ;
+
+struct hci_fm_rds_grp_cntrs_params {
+  int totalRdsSBlockErrors;
+  int totalRdsGroups;
+  int totalRdsGroup0;
+  int totalRdsGroup2;
+  int totalRdsBlockB;
+  int totalRdsProcessedGroup0;
+  int totalRdsProcessedGroup2;
+  int totalRdsGroupFiltered;
+  int totalRdsChangeFiltered;
 } ;
 
 struct hci_fm_search_station_list_req {
@@ -622,6 +636,12 @@ struct hci_fm_conf_rsp {
     char    status;
     struct hci_fm_recv_conf_req recv_conf_rsp;
 } ;
+
+struct hci_fm_rds_grp_cntrs_rsp {
+    char    status;
+    struct hci_fm_rds_grp_cntrs_params recv_rds_grp_cntrs_rsp;
+} ;
+
 
 struct hci_fm_get_trans_conf_rsp {
     char    status;
