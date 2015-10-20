@@ -43,7 +43,7 @@
 #include <sys/eventfd.h>
 #include <errno.h>
 
-int fd;
+int fm_fd;
 fm_hal_cb *hal_cb;
 
 void event_notification(uint16_t event)
@@ -146,7 +146,7 @@ wait_for_cmd_credits:
 
 			ALOGE("%s: Sizeof FM_HDR: %d", __func__, (int)sizeof(temp->hdr));
 			/* Use socket 'fd' to send the command down to WCNSS Filter */
-			write(fd, (uint8_t *)temp->hdr, (sizeof(FM_HDR) + temp->hdr->plen));
+			write(fm_fd, (uint8_t *)temp->hdr, (sizeof(FM_HDR) + temp->hdr->plen));
 			//write(fd, &temp_1, 1);
 
 			/* Decrement cmd credits by '1' after sending the cmd*/
@@ -192,6 +192,10 @@ static inline uint64_t read_event() {
     uint64_t value = 0;
     eventfd_read(event_fd, &value);
     return value;
+}
+static inline void fm_send_event(uint64_t event_id) {
+    assert(event_fd != -1);
+    eventfd_write(event_fd, event_id);
 }
 
 static int read_fm_event(int fd, FM_EVT_HDR *pbuf, int len)
@@ -242,6 +246,12 @@ static int read_fm_event(int fd, FM_EVT_HDR *pbuf, int len)
                                 __func__, ret, pbuf->protocol_byte, pbuf->evt_code, pbuf->evt_len, pbuf->cmd_params[3], pbuf->cmd_params[2],
                             pbuf->cmd_params[1], pbuf->cmd_params[0]);
                             evt_type = FM_CMD_STATUS;
+                        } else if (pbuf->evt_code == FM_HW_ERR_EVENT) {
+                              ALOGI("%s: FM H/w Err Event Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
+                              lib_running =0;
+                              // commented till bt vendor include added
+                             // fm_vnd_if->ssr_cleanup();
+
                         } else {
                             ALOGI("%s: Not CS/CC Event: Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
                             evt_type = -1;
@@ -290,8 +300,10 @@ static int read_fm_event(int fd, FM_EVT_HDR *pbuf, int len)
                 ALOGE("%s: No data available, though select returned!!!\n", __func__);
 #endif
         }
-        else if (n < 0)
-            ALOGE("%s: select() failed with return value: %d", __func__, ret);
+        else if (n < 0) {
+           ALOGE("%s: select() failed with return value: %d", __func__, ret);
+           lib_running =0;
+        }
         else if (n == 0)
             ALOGE("%s: select() timeout!!!", __func__);
     }
@@ -303,29 +315,17 @@ static void *userial_read_thread(void *arg)
 {
 	int length;
 
-	while(lib_running) {
+       FM_EVT_HDR *evt_buf = (FM_EVT_HDR *) malloc(sizeof(FM_EVT_HDR) + MAX_FM_EVT_PARAMS);
 
-                FM_EVT_HDR *evt_buf = (FM_EVT_HDR *) malloc(sizeof(FM_EVT_HDR) + MAX_FM_EVT_PARAMS);
-
-		ALOGE("%s: Wait for events from the WCNSS Filter", __func__);
-		length = read_fm_event(fd, evt_buf, sizeof(FM_EVT_HDR) + MAX_FM_EVT_PARAMS);
-
-#if 0
-		if (length > 0) {
-			//TODO: Copy the data to the RX-Q
-			//TODO: Notify event/data availability
-			ALOGE("%s: FM Event or RDS data available: Notify FM-HAL Layer", __func__);
-			event_notification(HC_EVENT_RX);
-		} else
-			ALOGE("%s: return value from read_fm_event(): %d", __func__, length);
-#endif
-		//TODO: Have condition for breaking from the loop!
-	}
-	lib_running = 0;
-	ALOGE("%s: Leaving userial_read_thread()", __func__);
-	pthread_exit(NULL);
-
-	return arg;
+       ALOGE("%s: Wait for events from the WCNSS Filter", __func__);
+       length = read_fm_event(fm_fd, evt_buf, sizeof(FM_EVT_HDR) + MAX_FM_EVT_PARAMS);
+       ALOGE("length=%d\n",length);
+       if(length <=0){
+         lib_running =0;
+       }
+       ALOGE("%s: Leaving userial_read_thread()", __func__);
+       pthread_exit(NULL);
+       return arg;
 }
 
 /*
@@ -443,8 +443,8 @@ int open_serial_port()
     ALOGI("%s: Opening the TTy Serial port...", __func__);
     ret = fm_vnd_if->op(BT_VND_OP_FM_USERIAL_OPEN, &fd_array);
 
-    fd = fd_array[0];
-    if (fd == -1) {
+    fm_fd = fd_array[0];
+    if (fm_fd == -1) {
         ALOGE("%s unable to open TTY serial port", __func__);
         goto err;
     }
@@ -505,4 +505,28 @@ void transmit(FM_HDR *pbuf)
 {
     enqueue_fm_tx_cmd(pbuf);
     event_notification(HC_EVENT_TX);
+}
+
+void userial_close_reader(void) {
+    // Join the reader thread if it is still running.
+    if (lib_running) {
+   //     send_event(USERIAL_RX_EXIT);
+        int result = pthread_join(&fmHCIControlBlock.fmRxTaskThreadId, NULL);
+        if (result)
+            ALOGE("%s failed to join reader thread: %d", __func__, result);
+        return;
+    }
+    ALOGW("%s Already closed userial reader thread", __func__);
+}
+
+void fm_userial_close(void) {
+   if (lib_running) {
+       int result = pthread_join(&fmHCIControlBlock.fmRxTaskThreadId, NULL);
+       if (result)
+           ALOGE("%s failed to join reader thread: %d", __func__, result);
+   }
+   fm_vnd_if->op(BT_VND_OP_FM_USERIAL_CLOSE, NULL);
+   // Free all buffers still waiting in the RX queue.
+   //  TODO: use list data structure and clean this up.
+   fm_fd = -1;
 }

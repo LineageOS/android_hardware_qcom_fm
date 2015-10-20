@@ -69,6 +69,7 @@ typedef enum {
 
 #define FM_CMD_COMPLETE 0x0f
 #define FM_CMD_STATUS   0x10
+#define FM_HW_ERR_EVENT 0x1A
 
 static pthread_mutex_t utils_mutex;
 

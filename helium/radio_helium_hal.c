@@ -103,6 +103,9 @@ static void hci_cc_fm_disable_rsp(char *ev_buff)
     if (radio->mode == FM_TURNING_OFF) {
         jni_cb->disabled_cb();
         radio->mode = FM_OFF;
+        //close the userial port and power off the chip
+      fm_userial_close();
+      fm_power(FM_RADIO_DISABLE);
     }
 }
 
@@ -514,6 +517,13 @@ static void hci_ev_ert()
     }
 }
 
+static void hci_ev_hw_error(char *buff)
+{
+   ALOGE("%s:%s: start", LOG_TAG, __func__);
+   jni_cb->disabled_cb();
+    fm_userial_close();
+}
+
 static void hci_buff_ert(struct rds_grp_data *rds_buf)
 {
     int i;
@@ -701,6 +711,9 @@ void radio_hci_event_packet(char *evt_buf)
     case HCI_EV_RADIO_TEXT_PLUS_TAG:
         hci_ev_rt_plus_tag(((FM_EVT_HDR *)evt_buf)->cmd_params);
         break;
+	case HCI_EV_HW_ERR_EVENT:
+		hci_ev_hw_error(((FM_EVT_HDR *)evt_buf)->cmd_params);
+		break;
     default:
         break;
     }

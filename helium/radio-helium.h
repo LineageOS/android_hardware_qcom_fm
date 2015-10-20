@@ -497,6 +497,8 @@ struct hci_fm_blend_table {
 #define HCI_EV_SEARCH_LIST_COMPLETE     0x14
 #define HCI_EV_RADIO_TEXT_PLUS_ID       0x18
 #define HCI_EV_RADIO_TEXT_PLUS_TAG      0x19
+#define HCI_EV_HW_ERR_EVENT             0x1A
+
 
 #define HCI_REQ_DONE      0
 #define HCI_REQ_PEND      1

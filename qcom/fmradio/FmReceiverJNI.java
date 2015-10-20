@@ -202,10 +202,18 @@ class FmReceiverJNI {
 
     public void disableCallback() {
         Log.e(TAG, "disableCallback enter");
-        FmTransceiver.setFMPowerState(FmTransceiver.FMState_Turned_Off);
-        Log.v(TAG, "RxEvtList: CURRENT-STATE : FMTurningOff ---> NEW-STATE : FMOff");
-        FmReceiver.mCallback.FmRxEvDisableReceiver();
-        Log.e(TAG, "disableCallback exit");
+        if (FmTransceiver.getFMPowerState() == FmTransceiver.subPwrLevel_FMTurning_Off) {
+                 /*Set the state as FMOff */
+            FmTransceiver.setFMPowerState(FmTransceiver.FMState_Turned_Off);
+            Log.v(TAG, "RxEvtList: CURRENT-STATE : FMTurningOff ---> NEW-STATE : FMOff");
+            FmReceiver.mCallback.FmRxEvDisableReceiver();
+        } else {
+            FmTransceiver.setFMPowerState(FmTransceiver.FMState_Turned_Off);
+            Log.d(TAG, "Unexpected RADIO_DISABLED recvd");
+            Log.v(TAG, "RxEvtList: CURRENT-STATE : FMRxOn ---> NEW-STATE : FMOff");
+            FmReceiver.mCallback.FmRxEvRadioReset();
+            Log.e(TAG, "disableCallback exit");
+        }
     }
 
     public FmReceiverJNI(FmRxEvCallbacks callback) {
