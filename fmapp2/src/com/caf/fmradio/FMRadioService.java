@@ -213,6 +213,9 @@ public class FMRadioService extends Service
    private Object mRecordSinkLock = new Object();
    private boolean mIsFMDeviceLoopbackActive = false;
 
+   private static final int FM_OFF_FROM_APPLICATION = 1;
+   private static final int FM_OFF_FROM_ANTENNA = 2;
+
    public FMRadioService() {
    }
 
@@ -238,9 +241,7 @@ public class FMRadioService extends Service
       registerDelayedServiceStop();
       registerExternalStorageListener();
       registerAirplaneModeStatusChanged();
-      // registering media button receiver seperately as we need to set
-      // different priority for receiving media events
-      registerFmMediaButtonReceiver();
+
       mSession = new MediaSession(getApplicationContext(), this.getClass().getName());
       mSession.setCallback(mSessionCallback);
       mSession.setFlags(MediaSession.FLAG_EXCLUSIVE_GLOBAL_PRIORITY |
@@ -665,71 +666,6 @@ public class FMRadioService extends Service
         }
     }
 
-    public void registerFmMediaButtonReceiver() {
-        if (mFmMediaButtonListener == null) {
-            mFmMediaButtonListener = new BroadcastReceiver() {
-                 public void onReceive(Context context, Intent intent) {
-                     Log.d(LOGTAG, "FMMediaButtonIntentReceiver.FM_MEDIA_BUTTON");
-                     Log.d(LOGTAG, "KeyEvent = " +intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT));
-                     String action = intent.getAction();
-                     if (action.equals(FMMediaButtonIntentReceiver.FM_MEDIA_BUTTON)) {
-                         KeyEvent event = (KeyEvent)
-                                     intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-                         int keycode = event.getKeyCode();
-                         switch (keycode) {
-                             case KeyEvent.KEYCODE_HEADSETHOOK :
-                                 toggleFM();
-                                 if (isOrderedBroadcast()) {
-                                     abortBroadcast();
-                                 }
-                                 break;
-                             case KeyEvent.KEYCODE_MEDIA_PAUSE :
-                                 if (isFmOn()){
-                                     //FM should be off when Headset hook pressed.
-                                     fmOff();
-                                     if (isOrderedBroadcast()) {
-                                        abortBroadcast();
-                                     }
-                                     try {
-                                         /* Notify the UI/Activity, only if the service is "bound"
-                                            by an activity and if Callbacks are registered
-                                          */
-                                         if ((mServiceInUse) && (mCallbacks != null) ) {
-                                            mCallbacks.onDisabled();
-                                         }
-                                     } catch (RemoteException e) {
-                                         e.printStackTrace();
-                                     }
-                                 }
-                                 break;
-                             case KeyEvent.KEYCODE_MEDIA_PLAY:
-                                 if (isAntennaAvailable() && mServiceInUse) {
-                                     fmOn();
-                                     if (isOrderedBroadcast()) {
-                                         abortBroadcast();
-                                     }
-                                     try {
-                                          /* Notify the UI/Activity, only if the service is "bound"
-                                             by an activity and if Callbacks are registered
-                                           */
-                                          if (mCallbacks != null ) {
-                                               mCallbacks.onEnabled();
-                                          }
-                                     } catch (RemoteException e) {
-                                          e.printStackTrace();
-                                     }
-                                 }
-                                 break;
-                         } // end of switch
-                     } // end of FMMediaButtonIntentReceiver.FM_MEDIA_BUTTON
-                 } // end of onReceive
-            };
-            IntentFilter iFilter = new IntentFilter();
-            iFilter.addAction(FMMediaButtonIntentReceiver.FM_MEDIA_BUTTON);
-            registerReceiver(mFmMediaButtonListener, iFilter);
-         }
-     }
-
     public void registerAudioBecomeNoisy() {
         if (mAudioBecomeNoisyListener == null) {
             mAudioBecomeNoisyListener = new BroadcastReceiver() {
@@ -742,7 +678,7 @@ public class FMRadioService extends Service
                        if (isFmOn())
                        {
                            /* Disable FM and let the UI know */
-                           fmOff();
+                           fmOff(FM_OFF_FROM_ANTENNA);
                            try
                            {
                               /* Notify the UI/Activity, only if the service is "bound"
@@ -1092,12 +1028,14 @@ public class FMRadioService extends Service
           Log.d(LOGTAG, "audio focuss couldnot be granted");
           return;
        }
+       mSession.setActive(true);
 
        Log.d(LOGTAG,"FM registering for registerMediaButtonEventReceiver");
        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
        ComponentName fmRadio = new ComponentName(this.getPackageName(),
                                   FMMediaButtonIntentReceiver.class.getName());
        mAudioManager.registerMediaButtonEventReceiver(fmRadio);
+
        mStoppedOnFocusLoss = false;
 
        if (!mA2dpDeviceState.isDeviceAvailable()) {
@@ -1670,6 +1608,7 @@ public class FMRadioService extends Service
 
    private void stop() {
       Log.d(LOGTAG,"in stop");
+
       if (!mServiceInUse) {
           Log.d(LOGTAG,"calling unregisterMediaButtonEventReceiver in stop");
           mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -1726,7 +1665,7 @@ public class FMRadioService extends Service
 
       public boolean fmOff() throws RemoteException
       {
-         return(mService.get().fmOff());
+         return(mService.get().fmOff(FM_OFF_FROM_APPLICATION));
       }
 
       public boolean fmRadioReset() throws RemoteException
@@ -2030,6 +1969,7 @@ public class FMRadioService extends Service
       {
          return(mService.get().isA2DPConnected());
       }
+
    }
    private final IBinder mBinder = new ServiceStub(this);
 
@@ -2243,6 +2183,19 @@ public class FMRadioService extends Service
       return(bStatus);
    }
 
+
+   private boolean fmOff(int off_from) {
+       if (off_from == FM_OFF_FROM_APPLICATION || off_from == FM_OFF_FROM_ANTENNA) {
+           Log.d(LOGTAG, "FM application close button pressed or antenna removed");
+           mSession.setActive(false);
+           AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+           if (audioManager != null)
+               audioManager.abandonAudioFocus(mAudioFocusListener);
+           else
+               Log.d(LOGTAG, "Failed to get Audio Service");
+       }
+       return fmOff();
+   }
   /*
    * Turn OFF FM: Disable the FM Host when hardware resets asynchronously            .
    *                                                                                 .
