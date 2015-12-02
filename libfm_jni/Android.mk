@@ -1,3 +1,4 @@
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 ifneq (,$(filter $(QCOM_BOARD_PLATFORMS),$(TARGET_BOARD_PLATFORM)))
 LOCAL_PATH := $(call my-dir)
 
@@ -36,3 +37,5 @@ LOCAL_MODULE := libfmjni
 #include $(BUILD_SHARED_LIBRARY)
 
 endif
+
+endif # QCOM_HARDWARE
