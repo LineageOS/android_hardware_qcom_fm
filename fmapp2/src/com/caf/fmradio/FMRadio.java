@@ -2060,10 +2060,6 @@ public class FMRadio extends Activity
         }else{
             mSpeakerButton.setImageResource(R.drawable.btn_earphone);
         }
-        if (isA2DPConnected())
-            mSpeakerButton.setClickable(false);
-        else
-            mSpeakerButton.setClickable(true);
       }
    }
 
@@ -2245,11 +2241,11 @@ public class FMRadio extends Activity
    private void A2DPConnectionState(boolean state) {
       Log.d(LOGTAG, "A2DPConnectionState with:" +state);
       if (state) {
-          Log.d(LOGTAG, "make speaker button disable");
-          mSpeakerButton.setClickable(false);
+          Log.d(LOGTAG, "A2DP connected, set button to speaker");
+          mSpeakerButton.setImageResource(R.drawable.btn_speaker);
       } else {
-          Log.d(LOGTAG, "make speaker button enable");
-          mSpeakerButton.setClickable(true);
+          Log.d(LOGTAG, "A2DP dis-connected, set button to earphone");
+          mSpeakerButton.setImageResource(R.drawable.btn_earphone);
       }
    }
    /** Scan related */
@@ -2626,7 +2622,7 @@ public class FMRadio extends Activity
 
    @Override
    public boolean onKeyDown(int keyCode, KeyEvent event) {
-       Log.d(LOGTAG, "KEY event received" + keyCode);
+       Log.d(LOGTAG, "KEY event received " + keyCode);
        switch (keyCode) {
            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
            case 126: //KeyEvent.KEYCODE_MEDIA_PLAY:
@@ -2999,6 +2995,8 @@ public class FMRadio extends Activity
          return;
       }
       context.unbindService(sb);
+      Log.e(LOGTAG, "stop FM radio service");
+      context.stopService(new Intent(context, FMRadioService.class));
       if (sConnectionMap.isEmpty()) {
          // presumably there is nobody interested in the service at this point,
          // so don't hang on to the ServiceConnection
