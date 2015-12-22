@@ -11,7 +11,7 @@ else
   bdroid_CFLAGS += -DHAS_NO_BDROID_BUILDCFG
 endif
 
-BDROID_DIR:= external/bluetooth/bluedroid
+BDROID_DIR:= system/bt
 
 LOCAL_CFLAGS += $(bdroid_CFLAGS)
 
@@ -28,6 +28,8 @@ LOCAL_CFLAGS += -std=c99
 
 LOCAL_C_INCLUDES += \
         $(BDROID_DIR)/hci/include \
+        $(BDROID_DIR)/stack/include \
+        $(BDROID_DIR)/osi/include \
         $(LOCAL_PATH)/../helium
 
 LOCAL_MODULE := libfm-hci

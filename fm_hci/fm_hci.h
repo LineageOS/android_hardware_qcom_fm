@@ -102,6 +102,7 @@ void transmit(FM_HDR *pbuf);
 int  fm_hci_init(fm_hal_cb *);
 void fm_power(fm_power_state state);
 int open_serial_port(void);
+void fm_userial_close(void);
 
 typedef struct {
     pthread_mutex_t tx_q_lock;

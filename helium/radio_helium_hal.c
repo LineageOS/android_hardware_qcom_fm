@@ -29,6 +29,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
 #include <utils/Log.h>
 #include "radio-helium-commands.h"
 #include "radio-helium.h"
@@ -38,6 +40,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 fm_vendor_callbacks_t *jni_cb;
 int hci_fm_get_signal_threshold();
 int hci_fm_enable_recv_req();
+int hci_fm_mute_mode_req(struct hci_fm_mute_mode_req );
 struct helium_device *radio;
 static int oda_agt;
 static int grp_mask;
@@ -98,14 +101,18 @@ static void hci_cc_fm_disable_rsp(char *ev_buff)
         ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
         return;
     }
+    ALOGE("%s:enetred %s calling ", LOG_TAG, __func__);
     status = (char) *ev_buff;
     radio_hci_req_complete(status);
     if (radio->mode == FM_TURNING_OFF) {
         jni_cb->disabled_cb();
         radio->mode = FM_OFF;
+        jni_cb->disabled_cb();
+        jni_cb->thread_evt_cb(1);
         //close the userial port and power off the chip
-      fm_userial_close();
-      fm_power(FM_RADIO_DISABLE);
+        ALOGE("%s:calling fm userial close\n", LOG_TAG );
+        fm_userial_close();
+    //  fm_power(FM_RADIO_DISABLE);
     }
 }
 
@@ -138,6 +145,57 @@ static void hci_cc_rds_grp_cntrs_rsp(char *ev_buff)
     jni_cb->rds_grp_cntrs_rsp_cb(&ev_buff[1]);
 }
 
+static void hci_cc_riva_peek_rsp(char *ev_buff)
+{
+    char status;
+
+    if (ev_buff == NULL) {
+        ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
+        return;
+    }
+    status = ev_buff[0];
+    ALOGE("%s:%s, status =%d\n", LOG_TAG, __func__,status);
+    if (status < 0) {
+        ALOGE("%s:%s, peek failed=%d\n", LOG_TAG, __func__, status);
+    }
+    jni_cb->fm_peek_rsp_cb(&ev_buff[PEEK_DATA_OFSET]);
+    radio_hci_req_complete(status);
+}
+
+static void hci_cc_ssbi_peek_rsp(char *ev_buff)
+{
+    char status;
+
+    if (ev_buff == NULL) {
+        ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
+        return;
+    }
+    status = ev_buff[0];
+    ALOGE("%s:%s, status =%d\n", LOG_TAG, __func__,status);
+    if (status < 0) {
+        ALOGE("%s:%s,ssbi peek failed=%d\n", LOG_TAG, __func__, status);
+    }
+    jni_cb->fm_ssbi_peek_rsp_cb(&ev_buff[PEEK_DATA_OFSET]);
+    radio_hci_req_complete(status);
+}
+
+static void hci_cc_get_ch_det_threshold_rsp(char *ev_buff)
+{
+    char status;
+
+    if (ev_buff == NULL) {
+        ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
+        return;
+    }
+    status = ev_buff[0];
+    ALOGE("%s:%s, status =%d\n", LOG_TAG, __func__,status);
+    if (status < 0) {
+        ALOGE("%s:%s,ssbi peek failed=%d\n", LOG_TAG, __func__, status);
+    }
+    memcpy(&radio->ch_det_threshold, &ev_buff[1],
+                        sizeof(struct hci_fm_ch_det_threshold));
+    radio_hci_req_complete(status);
+}
 
 static inline void hci_cmd_complete_event(char *buff)
 {
@@ -192,11 +250,17 @@ static inline void hci_cmd_complete_event(char *buff)
     case hci_status_param_op_pack(HCI_OCF_FM_READ_GRP_COUNTERS):
             hci_cc_rds_grp_cntrs_rsp(pbuf);
             break;
-/*    case hci_common_cmd_op_pack(HCI_OCF_FM_GET_SPUR_TABLE):
-            hci_cc_get_spur_tbl(buff);
+    case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_PEEK_DATA):
+            hci_cc_riva_peek_rsp(buff);
             break;
     case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_SSBI_PEEK_REG):
             hci_cc_ssbi_peek_rsp(buff);
+            break;
+    case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_GET_CH_DET_THRESHOLD):
+            hci_cc_get_ch_det_threshold_rsp(buff);
+            break;
+/*    case hci_common_cmd_op_pack(HCI_OCF_FM_GET_SPUR_TABLE):
+            hci_cc_get_spur_tbl(buff);
             break;
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_GET_SIGNAL_THRESHOLD):
             hci_cc_sig_threshold_rsp(buff);
@@ -222,10 +286,6 @@ static inline void hci_cmd_complete_event(char *buff)
             hci_cc_riva_read_default_rsp(buff);
             break;
 
-    case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_PEEK_DATA):
-            hci_cc_riva_peek_rsp(buff);
-            break;
-
     case hci_common_cmd_op_pack(HCI_OCF_FM_GET_FEATURE_LIST):
             hci_cc_feature_list_rsp(buff);
             break;
@@ -240,9 +300,6 @@ static inline void hci_cmd_complete_event(char *buff)
             hci_cc_do_calibration_rsp(buff);
             break;
 
-    case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_GET_CH_DET_THRESHOLD):
-            hci_cc_get_ch_det_threshold_rsp(buff);
-            break;
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_GET_BLND_TBL):
             hci_cc_get_blend_tbl_rsp(buff);
             break;
@@ -364,6 +421,7 @@ static inline void hci_ev_radio_text(char *buff)
 
     while ((buff[len+RDS_OFFSET] != 0x0d) && (len < MAX_RT_LENGTH))
            len++;
+    ALOGV("%s:%s: radio text length=%d\n", LOG_TAG, __func__,len);
     data = malloc(len+RDS_OFFSET);
     if (!data) {
         ALOGE("%s:Failed to allocate memory", LOG_TAG);
@@ -521,7 +579,8 @@ static void hci_ev_hw_error(char *buff)
 {
    ALOGE("%s:%s: start", LOG_TAG, __func__);
    jni_cb->disabled_cb();
-    fm_userial_close();
+   jni_cb->thread_evt_cb(1);
+   fm_userial_close();
 }
 
 static void hci_buff_ert(struct rds_grp_data *rds_buf)
@@ -646,7 +705,7 @@ static void hci_ev_raw_rds_group_data(char *buff)
          //    hci_ev_rt_plus(temp);
         }
         else if (carrier == ert_carrier) {
-             ALOGE("%s:: calling event ert", __func__);
+             ALOGI("%s:: calling event ert", __func__);
              hci_buff_ert(&temp);
        }
     }
@@ -711,9 +770,9 @@ void radio_hci_event_packet(char *evt_buf)
     case HCI_EV_RADIO_TEXT_PLUS_TAG:
         hci_ev_rt_plus_tag(((FM_EVT_HDR *)evt_buf)->cmd_params);
         break;
-	case HCI_EV_HW_ERR_EVENT:
-		hci_ev_hw_error(((FM_EVT_HDR *)evt_buf)->cmd_params);
-		break;
+    case HCI_EV_HW_ERR_EVENT:
+	    hci_ev_hw_error(((FM_EVT_HDR *)evt_buf)->cmd_params);
+	    break;
     default:
         break;
     }
@@ -1063,6 +1122,125 @@ static int set_fm_ctrl(int cmd, int val)
         radio->stereo_mode.stereo_mode = ~val;
         hci_set_fm_stereo_mode_req(&radio->stereo_mode);
         break;
+    case HCI_FM_HELIUM_RIVA_ACCS_ADDR:
+        radio->riva_data_req.cmd_params.start_addr = val;
+        break;
+    case HCI_FM_HELIUM_RIVA_ACCS_LEN:
+        if (is_valid_peek_len(val)) {
+            radio->riva_data_req.cmd_params.length = val;
+        } else {
+            ret = -1;
+            ALOGE("%s: riva access len is not valid\n", LOG_TAG);
+            goto END;
+        }
+        break;
+    case HCI_FM_HELIUM_RIVA_PEEK:
+        radio->riva_data_req.cmd_params.subopcode = RIVA_PEEK_OPCODE;
+        val = hci_peek_data(&radio->riva_data_req.cmd_params);
+        break;
+    case HCI_FM_HELIUM_RIVA_POKE:
+         if (radio->riva_data_req.cmd_params.length <=
+                    MAX_RIVA_PEEK_RSP_SIZE) {
+             radio->riva_data_req.cmd_params.subopcode =
+                                                RIVA_POKE_OPCODE;
+             ret = hci_poke_data(&radio->riva_data_req);
+         } else {
+             ALOGE("%s: riva access len is not valid for poke\n", LOG_TAG);
+             ret = -1;
+             goto END;
+         }
+         break;
+    case HCI_FM_HELIUM_SSBI_ACCS_ADDR:
+        radio->ssbi_data_accs.start_addr = val;
+        break;
+    case HCI_FM_HELIUM_SSBI_POKE:
+        radio->ssbi_data_accs.data = val;
+        ret = hci_ssbi_poke_reg(&radio->ssbi_data_accs);
+        break;
+    case HCI_FM_HELIUM_SSBI_PEEK:
+        radio->ssbi_peek_reg.start_address = val;
+        hci_ssbi_peek_reg(&radio->ssbi_peek_reg);
+        break;
+    case HCI_FM_HELIUM_SINR_SAMPLES:
+         if (!is_valid_sinr_samples(val)) {
+             ALOGE("%s: sinr samples count is not valid\n", __func__);
+             ret = -1;
+             goto END;
+         }
+         ret = hci_fm_get_ch_det_th();
+         if (ret < 0) {
+             ALOGE("Failed to get chnl det thresholds  %d", ret);
+             goto END;
+         }
+         saved_val = radio->ch_det_threshold.sinr_samples;
+         radio->ch_det_threshold.sinr_samples = val;
+         ret = set_ch_det_thresholds_req(&radio->ch_det_threshold);
+         if (ret < 0) {
+             ALOGE("Failed to set SINR samples  %d", ret);
+             radio->ch_det_threshold.sinr_samples = saved_val;
+             goto END;
+         }
+         break;
+    case HCI_FM_HELIUM_SINR_THRESHOLD:
+         if (!is_valid_sinr_th(val)) {
+             ALOGE("%s: sinr threshold is not valid\n");
+             ret = -1;
+             goto END;
+         }
+         ret = hci_fm_get_ch_det_th();
+         if (ret < 0) {
+             ALOGE("Failed to get chnl det thresholds  %d", ret);
+             goto END;
+         }
+         saved_val = radio->ch_det_threshold.sinr;
+         radio->ch_det_threshold.sinr = val;
+         ret = set_ch_det_thresholds_req(&radio->ch_det_threshold);
+         if (ret < 0) {
+             ALOGE("Failed to set SINR threshold %d", ret);
+             radio->ch_det_threshold.sinr = saved_val;
+             goto END;
+         }
+         break;
+    case HCI_FM_HELIUM_INTF_LOW_THRESHOLD:
+         if (!is_valid_intf_det_low_th(val)) {
+             ALOGE("%s: intf det low threshold is not valid\n", __func__);
+             ret = -1;
+             goto END;
+         }
+         ret = hci_fm_get_ch_det_th();
+         if (ret < 0) {
+             ALOGE("Failed to get chnl det thresholds  %d", ret);
+             goto END;
+         }
+         saved_val = radio->ch_det_threshold.low_th;
+         radio->ch_det_threshold.low_th = val;
+         ret = set_ch_det_thresholds_req(&radio->ch_det_threshold);
+         if (ret < 0) {
+             ALOGE("Failed to Set Low det threshold %d", ret);
+             radio->ch_det_threshold.low_th = saved_val;
+             goto END;
+         }
+         break;
+    case HCI_FM_HELIUM_INTF_HIGH_THRESHOLD:
+         if (!is_valid_intf_det_hgh_th(val)) {
+             ALOGE("%s: intf high threshold is not valid\n", __func__);
+             ret = -1;
+             goto END;
+         }
+         ret = hci_fm_get_ch_det_th();
+         if (ret < 0) {
+             ALOGE("Failed to get chnl det thresholds  %d", ret);
+             goto END;
+         }
+         saved_val = radio->ch_det_threshold.high_th;
+         radio->ch_det_threshold.high_th = val;
+         ret = set_ch_det_thresholds_req(&radio->ch_det_threshold);
+         if (ret < 0) {
+             ALOGE("Failed to set High det threshold %d ", ret);
+             radio->ch_det_threshold.high_th = saved_val;
+             goto END;
+         }
+         break;
     default:
         ALOGE("%s:%s: Not a valid FM CMD!!", LOG_TAG, __func__);
         ret = 0;
@@ -1087,6 +1265,26 @@ static void get_fm_ctrl(int cmd, int val)
         break;
     case HCI_FM_HELIUM_LOWER_BAND:
         val = radio->recv_conf.band_low_limit;
+        break;
+    case HCI_FM_HELIUM_SINR_SAMPLES:
+        ret = hci_fm_get_ch_det_th();
+         if (ret == 0)
+             val = radio->ch_det_threshold.sinr_samples;
+        break;
+    case HCI_FM_HELIUM_SINR_THRESHOLD:
+        ret = hci_fm_get_ch_det_th();
+        if (ret == 0)
+            val = radio->ch_det_threshold.sinr;
+        break;
+    case HCI_FM_HELIUM_INTF_LOW_THRESHOLD:
+        ret = hci_fm_get_ch_det_th();
+        if (ret == 0)
+            val = radio->ch_det_threshold.low_th;
+        break;
+    case HCI_FM_HELIUM_INTF_HIGH_THRESHOLD:
+        ret = hci_fm_get_ch_det_th();
+        if (ret == 0)
+            val = radio->ch_det_threshold.high_th;
         break;
     default:
         break;

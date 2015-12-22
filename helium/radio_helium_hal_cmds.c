@@ -29,6 +29,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdio.h>
 #include <utils/Log.h>
+#include <string.h>
+#include <stdlib.h>
+#include <errno.h>
 #include "radio-helium-commands.h"
 #include "radio-helium.h"
 #include "fm_hci.h"
@@ -282,3 +285,74 @@ int hci_set_fm_stereo_mode_req(struct hci_fm_stereo_mode_req *param)
                                               stereo_mode_req);
 }
 
+int hci_peek_data(struct hci_fm_riva_data *data)
+{
+    uint16_t opcode = 0;
+
+    if (data == NULL) {
+        ALOGE("%s:%s, peek data req is null\n", LOG_TAG, __func__);
+        return -1;
+    }
+    opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
+                HCI_OCF_FM_PEEK_DATA);
+    return send_fm_cmd_pkt(opcode, sizeof((*data)), data);
+}
+
+int hci_poke_data(struct hci_fm_riva_poke *data)
+{
+    uint16_t opcode = 0;
+
+    if (data == NULL) {
+        ALOGE("%s:%s, poke data req is null\n", LOG_TAG, __func__);
+        return -1;
+    }
+    opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
+                HCI_OCF_FM_POKE_DATA);
+    return send_fm_cmd_pkt(opcode, sizeof((*data)), data);
+}
+
+int hci_ssbi_poke_reg(struct hci_fm_ssbi_req *data)
+{
+    uint16_t opcode = 0;
+
+    if (data == NULL) {
+        ALOGE("%s:%s,SSBI poke data req is null\n", LOG_TAG, __func__);
+        return -1;
+    }
+    opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
+                HCI_OCF_FM_SSBI_POKE_REG);
+    return send_fm_cmd_pkt(opcode, sizeof((*data)), data);
+}
+
+int hci_ssbi_peek_reg(struct hci_fm_ssbi_peek *data)
+{
+    uint16_t opcode = 0;
+
+    if (data == NULL) {
+        ALOGE("%s:%s,SSBI peek data req is null\n", LOG_TAG, __func__);
+        return -1;
+    }
+    opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
+                HCI_OCF_FM_SSBI_PEEK_REG);
+   return send_fm_cmd_pkt(opcode, sizeof((*data)), data);
+}
+
+int hci_fm_get_ch_det_th()
+{
+    uint16_t opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
+			HCI_OCF_FM_GET_CH_DET_THRESHOLD);
+    return send_fm_cmd_pkt(opcode, 0, NULL);
+}
+
+int set_ch_det_thresholds_req(struct hci_fm_ch_det_threshold *ch_det_th)
+{
+    uint16_t opcode = 0;
+
+    if (ch_det_th == NULL) {
+        ALOGE("%s,%s channel det thrshld is null\n", LOG_TAG,  __func__);
+        return -1;
+    }
+    opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
+                            HCI_OCF_FM_SET_CH_DET_THRESHOLD);
+    return send_fm_cmd_pkt(opcode, sizeof((*ch_det_th)), ch_det_th);
+}

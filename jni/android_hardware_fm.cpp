@@ -102,7 +102,9 @@ typedef void (*ert_cb)(char *ert);
 typedef void (*disable_cb)();
 typedef void (*callback_thread_event)(unsigned int evt);
 typedef void (*rds_grp_cntrs_cb)(char *rds_params);
-
+typedef void (*fm_peek_cb)(char *peek_rsp);
+typedef void (*fm_ssbi_peek_cb)(char *ssbi_peek_rsp);
+typedef void (*fm_ch_det_th_cb)(char *ch_det_rsp);
 
 static JNIEnv *mCallbackEnv = NULL;
 static jobject mCallbacksObj = NULL;
@@ -315,8 +317,20 @@ void rds_grp_cntrs_rsp_cb(char * evt_buffer)
 
 void fm_disabled_cb()
 {
-   ALOGE("DISABLE");
-   mCallbackEnv->CallVoidMethod(mCallbacksObj, method_disableCallback);
+    ALOGE("DISABLE");
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_disableCallback);
+}
+
+void fm_peek_rsp_cb(char *peek_rsp) {
+    ALOGE("fm_peek_rsp_cb");
+}
+
+void fm_ssbi_peek_rsp_cb(char *ssbi_peek_rsp){
+    ALOGE("fm_ssbi_peek_rsp_cb");
+}
+
+void fm_ch_det_th_rsp_cb(char *ch_det_rsp){
+    ALOGE("fm_ch_det_th_rsp_cb");
 }
 
 static void fm_thread_evt_cb(unsigned int event) {
@@ -355,6 +369,9 @@ typedef struct {
    ert_cb  ert_update_cb;
    disable_cb  disabled_cb;
    rds_grp_cntrs_cb rds_grp_cntrs_rsp_cb;
+   fm_peek_cb fm_peek_rsp_cb;
+   fm_ssbi_peek_cb fm_ssbi_peek_rsp_cb;
+   fm_ch_det_th_cb fm_ch_det_th_rsp_cb;
    callback_thread_event thread_evt_cb;
 } fm_vendor_callbacks_t;
 
@@ -383,6 +400,9 @@ static   fm_vendor_callbacks_t fm_callbacks = {
     fm_ert_update_cb,
     fm_disabled_cb,
     rds_grp_cntrs_rsp_cb,
+    fm_peek_rsp_cb,
+    fm_ssbi_peek_rsp_cb,
+    fm_ch_det_th_rsp_cb,
     fm_thread_evt_cb
 };
 

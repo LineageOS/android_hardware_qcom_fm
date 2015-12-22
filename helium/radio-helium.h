@@ -160,6 +160,9 @@ typedef void (*ert_cb)(char *ert);
 typedef void (*disable_cb)();
 typedef void (*callback_thread_event)(unsigned int evt);
 typedef void (*rds_grp_cntrs_cb)(char *rds_params);
+typedef void (*fm_peek_cb)(char *peek_rsp);
+typedef void (*fm_ssbi_peek_cb)(char *ssbi_peek_rsp);
+typedef void (*fm_ch_det_th_cb)(char *ch_det_rsp);
 
 typedef struct {
     size_t  size;
@@ -179,6 +182,9 @@ typedef struct {
     ert_cb  ert_update_cb;
     disable_cb  disabled_cb;
     rds_grp_cntrs_cb rds_grp_cntrs_rsp_cb;
+    fm_peek_cb fm_peek_rsp_cb;
+    fm_ssbi_peek_cb fm_ssbi_peek_rsp_cb;
+    fm_ch_det_th_cb fm_ch_det_th_rsp_cb;
     callback_thread_event thread_evt_cb;
 } fm_vendor_callbacks_t;
 
@@ -498,7 +504,6 @@ struct hci_fm_blend_table {
 #define HCI_EV_RADIO_TEXT_PLUS_ID       0x18
 #define HCI_EV_RADIO_TEXT_PLUS_TAG      0x19
 #define HCI_EV_HW_ERR_EVENT             0x1A
-
 
 #define HCI_REQ_DONE      0
 #define HCI_REQ_PEND      1
@@ -1157,5 +1162,34 @@ struct helium_device {
     enum hlm_region_t region;
     struct hci_fm_dbg_param_rsp st_dbg_param;
     struct hci_ev_srch_list_compl srch_st_result;
+    struct hci_fm_riva_poke   riva_data_req;
+    struct hci_fm_ssbi_req    ssbi_data_accs;
+    struct hci_fm_ssbi_peek   ssbi_peek_reg;
+    struct hci_fm_ch_det_threshold ch_det_threshold;
 };
+int hci_fm_disable_recv_req();
+int helium_search_list(struct hci_fm_search_station_list_req *s_list);
+int helium_search_rds_stations(struct hci_fm_search_rds_station_req *rds_srch);
+int helium_search_stations(struct hci_fm_search_station_req *srch);
+int helium_cancel_search_req();
+int hci_fm_set_recv_conf_req (struct hci_fm_recv_conf_req *conf);
+int hci_fm_get_program_service_req ();
+int hci_fm_get_rds_grpcounters_req (int val);
+int hci_fm_set_notch_filter_req (int val);
+int helium_set_sig_threshold_req(char th);
+int helium_rds_grp_mask_req(struct hci_fm_rds_grp_req *rds_grp_msk);
+int helium_rds_grp_process_req(int rds_grp);
+int helium_set_event_mask_req(char e_mask);
+int helium_set_antenna_req(char ant);
+int helium_set_fm_mute_mode_req(struct hci_fm_mute_mode_req *mute);
+int hci_fm_tune_station_req(int param);
+int hci_set_fm_stereo_mode_req(struct hci_fm_stereo_mode_req *param);
+int hci_peek_data(struct hci_fm_riva_data *data);
+int hci_poke_data(struct hci_fm_riva_poke *data);
+int hci_ssbi_poke_reg(struct hci_fm_ssbi_req *data);
+int hci_ssbi_peek_reg(struct hci_fm_ssbi_peek *data);
+int hci_fm_get_ch_det_th();
+int set_ch_det_thresholds_req(struct hci_fm_ch_det_threshold *ch_det_th);
+
+
 #endif /* __UAPI_RADIO_HCI_CORE_H */

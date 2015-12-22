@@ -149,6 +149,7 @@ public class FmRxRdsData {
 
          rds_group_mask  = ((rdsMask & 0x000000FF));
 
+        Log.d(LOGTAG, "In rdsOptions: rds_group_mask : " + rds_group_mask);
         re = FmReceiverJNI.setControlNative(mFd, V4L2_CID_PRIVATE_TAVARUA_RDSGROUP_PROC, rds_group_mask);
         return re;
     }
