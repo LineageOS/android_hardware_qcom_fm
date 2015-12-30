@@ -27,6 +27,8 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#define LOG_TAG "android_hardware_fm"
+
 #include <jni.h>
 #include "JNIHelp.h"
 #include "android_runtime/AndroidRuntime.h"
@@ -291,8 +293,9 @@ jint IsRdsSupport(JNIEnv *env, jobject thiz)
         ret = JNI_FALSE;
     if (!ret) {
         ALOGE("%s, error, [ret=%d]\n", __func__, ret);
+    } else {
+        ALOGD("%s, [ret=%d]\n", __func__, ret);
     }
-    ALOGD("%s, [ret=%d]\n", __func__, ret);
     return ret;
 }
 
@@ -318,7 +321,7 @@ jint SetAntenna(JNIEnv *env, jobject thiz, jint antenna)
     } else if (1 == antenna) {
         ana = FM_SHORT_ANA;
     } else {
-        ALOGE("%s:fail, para error\n", __func__);
+        ALOGE("%s: fail, para error\n", __func__);
         jret = JNI_FALSE;
         goto out;
     }
@@ -365,18 +368,18 @@ int register_android_hardware_fm(JNIEnv* env)
 
 jint JNI_OnLoad(JavaVM *jvm, void *reserved)
 {
-  JNIEnv *e;
-  int status;
-   ALOGE("FM : loading FM-JNI\n");
+   JNIEnv *e;
+   int status;
+   ALOGI("FM: loading FM-JNI\n");
 
-   if(jvm->GetEnv((void **)&e, JNI_VERSION_1_6)) {
+   if (jvm->GetEnv((void **)&e, JNI_VERSION_1_6)) {
        ALOGE("JNI version mismatch error");
-      return JNI_ERR;
+       return JNI_ERR;
    }
 
    if ((status = register_android_hardware_fm(e)) < 0) {
        ALOGE("jni adapter service registration failure, status: %d", status);
-      return JNI_ERR;
+       return JNI_ERR;
    }
    return JNI_VERSION_1_6;
 }
