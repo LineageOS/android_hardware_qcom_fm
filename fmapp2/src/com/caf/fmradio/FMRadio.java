@@ -1675,9 +1675,6 @@ public class FMRadio extends Activity
       }
       if(mService != null) {
          try {
-            if(bSpeakerPhoneOn) {
-               mService.enableSpeaker(false);
-            }
             bStatus = mService.fmOff();
             enableRadioOnOffUI();
             if (bStatus == false) {
