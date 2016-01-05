@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fce034c_987a5286",
+        "filename": "libfm_jni/FmRadioController.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-01-05T03:55:53Z",
+      "side": 1,
+      "message": "cancelled",
+      "revId": "db089fcab17daba693e5aaf2c8942c5f36594340",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
