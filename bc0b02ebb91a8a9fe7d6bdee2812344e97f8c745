@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3fce034c_d8abf372",
+        "filename": "libfm_jni/FmRadioController.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-01-07T05:43:03Z",
+      "side": 1,
+      "message": "If you really care about resetting \u0027value\u0027, you should probably memset here instead.",
+      "revId": "bc0b02ebb91a8a9fe7d6bdee2812344e97f8c745",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fce034c_f8a82f78",
+        "filename": "libfm_jni/FmRadioController.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-01-07T05:43:03Z",
+      "side": 1,
+      "message": "Or just use\n\nproperty_get_bool(FM_INTERNAL_ANTENNA_PROP, false);\n\nand forget about re-using value.",
+      "revId": "bc0b02ebb91a8a9fe7d6bdee2812344e97f8c745",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
