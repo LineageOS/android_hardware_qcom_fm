@@ -33,6 +33,24 @@
       "revId": "bc0b02ebb91a8a9fe7d6bdee2812344e97f8c745",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fce034c_f35ff00b",
+        "filename": "libfm_jni/FmRadioController.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 13589
+      },
+      "writtenOn": "2016-01-07T08:59:18Z",
+      "side": 1,
+      "message": "I like the property_get_bool, it is way cleaner to use.",
+      "parentUuid": "3fce034c_f8a82f78",
+      "revId": "bc0b02ebb91a8a9fe7d6bdee2812344e97f8c745",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
