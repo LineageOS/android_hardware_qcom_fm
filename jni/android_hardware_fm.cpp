@@ -606,8 +606,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
        /*Set the mode for soc downloader*/
        property_set("hw.fm.mode", "normal");
        /* Need to clear the hw.fm.init firstly */
-#ifndef QCOM_NO_FM_FIRMWARE
        property_set("hw.fm.init", "0");
+#ifndef QCOM_NO_FM_FIRMWARE
        property_set("ctl.start", "fm_dl");
        sched_yield();
        for(i=0; i<45; i++) {
@@ -619,6 +619,11 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
             usleep(WAIT_TIMEOUT);
          }
        }
+#else
+       property_set("hw.fm.init", "1");
+       usleep(WAIT_TIMEOUT);
+       init_success = 1;
+#endif
        ALOGE("init_success:%d after %f seconds \n", init_success, 0.2*i);
        if(!init_success) {
          property_set("ctl.stop", "fm_dl");
@@ -626,9 +631,6 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
          close(fd);
          return FM_JNI_FAILURE;
        }
-#else
-       usleep(WAIT_TIMEOUT);
-#endif
     }
     return fd;
 }
