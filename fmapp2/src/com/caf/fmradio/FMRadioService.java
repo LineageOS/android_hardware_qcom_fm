@@ -722,6 +722,7 @@ public class FMRadioService extends Service
         }
     }
 
+    // TODO: Check if this is needed with latest Android versions?
     public void registerMusicServiceCommandReceiver() {
         if (mMusicCommandListener == null) {
             mMusicCommandListener = new BroadcastReceiver() {
@@ -738,20 +739,10 @@ public class FMRadioService extends Service
                                 mA2dpDisconnected = false;
                                 return;
                             }
-                            if(isFmOn()){
-                                fmOff();
+                            if (isFmOn()) {
+                                fmOperationsOff();
                                 if (isOrderedBroadcast()) {
                                     abortBroadcast();
-                                }
-                                try {
-                                    /* Notify the UI/Activity, only if the service is "bound"
-                                       by an activity and if Callbacks are registered
-                                    */
-                                    if((mServiceInUse) && (mCallbacks != null) ){
-                                        mCallbacks.onDisabled();
-                                    }
-                                } catch (RemoteException e) {
-                                    e.printStackTrace();
                                 }
                             }
                         }
