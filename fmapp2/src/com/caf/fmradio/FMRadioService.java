@@ -212,6 +212,7 @@ public class FMRadioService extends Service
    private static final int AUDIO_FRAMES_COUNT_TO_IGNORE = 3;
    private Object mRecordSinkLock = new Object();
    private boolean mIsFMDeviceLoopbackActive = false;
+   private File mStoragePath = null;
 
    private static final int FM_OFF_FROM_APPLICATION = 1;
    private static final int FM_OFF_FROM_ANTENNA = 2;
@@ -540,8 +541,16 @@ public class FMRadioService extends Service
                            || (action.equals(Intent.ACTION_MEDIA_EJECT))) {
                          Log.d(LOGTAG, "ACTION_MEDIA_UNMOUNTED Intent received");
                          if (mFmRecordingOn == true) {
+                             if (mStoragePath == null) {
+                                 Log.d(LOGTAG, "Storage path is null, doing nothing");
+                                 return;
+                             }
                              try {
-                                  stopRecording();
+                                 String state = Environment.getExternalStorageState(mStoragePath);
+                                 if (!Environment.MEDIA_MOUNTED.equals(state)) {
+                                     Log.d(LOGTAG, "Recording storage is not mounted, stop recording");
+                                     stopRecording();
+                                 }
                              } catch (Exception e) {
                                   e.printStackTrace();
                              }
@@ -1125,6 +1134,13 @@ public class FMRadioService extends Service
 
         }
 
+        mStoragePath = Environment.getExternalStorageDirectory();
+        Log.d(LOGTAG, "mStoragePath " + mStoragePath);
+        if (null == mStoragePath) {
+            Log.e(LOGTAG, "External Storage Directory is null");
+            return false;
+        }
+
         mSampleFile = null;
         File sampleDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/FMRecording");
         if(!(sampleDir.mkdirs() || sampleDir.isDirectory()))
@@ -1221,7 +1237,7 @@ public class FMRadioService extends Service
        int sampleLength = (int)((System.currentTimeMillis() - mSampleStart)/1000 );
        if (sampleLength == 0)
            return;
-       String state = Environment.getExternalStorageState();
+       String state = Environment.getExternalStorageState(mStoragePath);
        Log.d(LOGTAG, "storage state is " + state);
 
        if (Environment.MEDIA_MOUNTED.equals(state)) {
@@ -2263,16 +2279,6 @@ public class FMRadioService extends Service
 
    public boolean isSpeakerEnabled() {
       return mSpeakerPhoneOn;
-   }
-   public boolean isExternalStorageAvailable() {
-     boolean mStorageAvail = false;
-     String state = Environment.getExternalStorageState();
-
-     if(Environment.MEDIA_MOUNTED.equals(state)){
-         Log.d(LOGTAG, "device available");
-         mStorageAvail = true;
-     }
-     return mStorageAvail;
    }
 
    public void enableSpeaker(boolean speakerOn) {
