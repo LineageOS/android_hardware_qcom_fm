@@ -53,6 +53,7 @@ interface IFMRadioService
     boolean setIntfDetLowTh(int intfLowTh);
     boolean setIntfDetHighTh(int intfHighTh);
     String getExtenRadioText();
+    int getExtenCountryCode();
     int getSinrSamplesCnt();
     int getSinrTh();
     int getSearchAlgoType();

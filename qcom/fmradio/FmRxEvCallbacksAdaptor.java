@@ -51,5 +51,6 @@ public class FmRxEvCallbacksAdaptor implements FmRxEvCallbacks {
     public void FmRxEvRdsAfInfo() {};
     public void FmRxEvRTPlus() {};
     public void FmRxEvERTInfo() {};
+    public void FmRxEvECCInfo() {};
 }
 

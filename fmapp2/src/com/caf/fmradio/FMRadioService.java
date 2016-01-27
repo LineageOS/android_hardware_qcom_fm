@@ -2043,6 +2043,10 @@ public class FMRadioService extends Service
          return(mService.get().isA2DPConnected());
       }
 
+      public int getExtenCountryCode()
+      {
+         return(mService.get().getExtenCountryCode());
+      }
    }
    private final IBinder mBinder = new ServiceStub(this);
 
@@ -2741,6 +2745,16 @@ public class FMRadioService extends Service
       Log.d(LOGTAG, "eRadio Text:[" + str +"]");
       return str;
    }
+   public int  getExtenCountryCode() {
+      int val = 0;
+      if (mFMRxRDSData != null)
+      {
+         val = mFMRxRDSData.getECountryCode();
+      }
+      Log.d(LOGTAG, "eCountry Code :[" + val +"]");
+      return val;
+   }
+
    /* Retrieves the RDS Program Type (PTY) code.
     *
     * @return int - RDS PTY code.
@@ -3290,6 +3304,19 @@ public class FMRadioService extends Service
                 mFMRxRDSData = mReceiver.getERTInfo();
                 if(mCallbacks != null)
                    mCallbacks.onExtenRadioTextChanged();
+             }
+         } catch (RemoteException e) {
+             e.printStackTrace();
+         }
+      }
+      public void FmRxEvECCInfo()
+      {
+         Log.d(LOGTAG, "FmRxEvECCInfo");
+         try {
+             if (mReceiver != null) {
+                mFMRxRDSData = mReceiver.getECCInfo();
+                if(mCallbacks != null)
+                   mCallbacks.onExtenCountryCodeChanged();
              }
          } catch (RemoteException e) {
              e.printStackTrace();

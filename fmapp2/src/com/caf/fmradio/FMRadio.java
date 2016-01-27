@@ -218,6 +218,7 @@ public class FMRadio extends Activity
    /* Bottom row in the station info layout */
    private TextView mRadioTextTV;
    private TextView mERadioTextTV;
+   private TextView mEContryCodeTV;
 
    /* Sleep and Recording Messages */
    private TextView mSleepMsgTV;
@@ -2805,6 +2806,26 @@ public class FMRadio extends Activity
       }
    };
 
+   Runnable mUpdateExtenCountryCode = new Runnable() {
+      public void run() {
+         String str = "";
+         int value;
+         if ((mService != null) && isFmOn()) {
+            try {
+               /* Get Extended Radio Text and update the display */
+               value = mService.getExtenCountryCode();
+               str = Integer.toString(value);
+               Log.d(LOGTAG, "mUpdateExtenCountryCode: Updatable string: [" + str + "]");
+               mERadioTextTV.setText(str);
+               mERadioTextScroller.mOriginalString = str;
+               mERadioTextScroller.startScroll();
+            }catch (RemoteException e) {
+               e.printStackTrace();
+            }
+         }
+      }
+   };
+
    /* Create runnable for posting */
    Runnable mUpdateProgramService = new Runnable() {
       public void run() {
@@ -3123,6 +3144,9 @@ public class FMRadio extends Activity
       }
       public void onExtenRadioTextChanged() {
          mHandler.post(mUpdateExtenRadioText);
+      }
+      public void onExtenCountryCodeChanged() {
+         mHandler.post(mUpdateExtenCountryCode);
       }
       public void onAlternateFrequencyChanged() {
          Log.d(LOGTAG, "mServiceCallbacks.onAlternateFrequencyChanged :");

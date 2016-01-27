@@ -558,6 +558,28 @@ static void hci_ev_rt_plus_tag(char *buff)
      }
 }
 
+static void  hci_ev_ext_country_code(char *buff)
+{
+    char *data = NULL;
+    int len = 15;
+    ALOGD("%s:%s: start", LOG_TAG, __func__);
+    data = malloc(len);
+    if (data != NULL) {
+        data[0] = len;
+        ALOGI("%s:%s: data length=%d\n", LOG_TAG, __func__,data[0]);
+        data[1] = buff[RDS_PTYPE];
+        data[2] = buff[RDS_PID_LOWER];
+        data[3] = buff[RDS_PID_HIGHER];
+        data[4] = buff[3];
+        memcpy(&data[RDS_OFFSET], &buff[4], len-RDS_OFFSET);
+        // data[len] = 0x00;
+        jni_cb->ext_country_code_cb(data);
+        free(data);
+    } else {
+        ALOGE("%s:memory allocation failed\n", LOG_TAG);
+    }
+}
+
 static void hci_ev_ert()
 {
     char *data = NULL;
@@ -770,9 +792,12 @@ void radio_hci_event_packet(char *evt_buf)
     case HCI_EV_RADIO_TEXT_PLUS_TAG:
         hci_ev_rt_plus_tag(((FM_EVT_HDR *)evt_buf)->cmd_params);
         break;
+    case HCI_EV_EXT_COUNTRY_CODE:
+        hci_ev_ext_country_code(((FM_EVT_HDR *)evt_buf)->cmd_params);
+        break;
     case HCI_EV_HW_ERR_EVENT:
-	    hci_ev_hw_error(((FM_EVT_HDR *)evt_buf)->cmd_params);
-	    break;
+        hci_ev_hw_error(((FM_EVT_HDR *)evt_buf)->cmd_params);
+        break;
     default:
         break;
     }

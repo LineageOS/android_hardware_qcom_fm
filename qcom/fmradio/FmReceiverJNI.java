@@ -113,6 +113,17 @@ class FmReceiverJNI {
         Log.d(TAG, "RtCallback exit " );
     }
 
+    public void EccCallback(byte[] ecc) {
+        Log.i(TAG, "EccCallback enter " );
+        if (ecc == null) {
+            Log.e(TAG, "ECC null return  ");
+            return;
+        }
+        mRdsBuffer = Arrays.copyOf(ecc, ecc.length);
+        FmReceiver.mCallback.FmRxEvECCInfo();
+        Log.i(TAG, "EccCallback exit " );
+    }
+
     public void PsInfoCallback(byte[] psInfo) {
         Log.d(TAG, "PsInfoCallback enter " );
         if (psInfo == null) {

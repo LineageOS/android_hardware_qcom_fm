@@ -50,4 +50,5 @@ interface IFMRadioServiceCallbacks
   void onA2DPConnectionstateChanged(boolean state);
   void onFmAudioPathStarted();
   void onFmAudioPathStopped();
+  void onExtenCountryCodeChanged();
 }

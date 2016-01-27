@@ -2657,6 +2657,10 @@ public class FMStats extends Activity  {
           {
              Log.d(LOGTAG, "Extended Radio Text changed:");
           }
+          public void onExtenCountryCodeChanged()
+          {
+             Log.d(LOGTAG, "Extended ountry Code  changed:");
+          }
           public void onAlternateFrequencyChanged()
           {
              Log.d(LOGTAG, "mServiceCallbacks.onAlternateFrequencyChanged :");

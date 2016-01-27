@@ -1600,6 +1600,21 @@ public class FmReceiver extends FmTransceiver
       return mRdsData;
    }
 
+   public FmRxRdsData getECCInfo() {
+      byte [] raw_ecc = new byte[STD_BUF_SIZE];
+      int ecc_code =0;
+      int bytes_read;
+
+      raw_ecc = FmReceiverJNI.getPsBuffer(raw_ecc);
+      bytes_read = raw_ecc[0];
+      Log.d (TAG, "bytes_read = " + bytes_read);
+      if (bytes_read > 0) {
+          ecc_code =  raw_ecc[9] & 0xFF;
+          mRdsData.setECountryCode(ecc_code);
+          Log.d(TAG, "ECC code: " + ecc_code );
+      }
+      return mRdsData;
+   }
    /*==============================================================
    FUNCTION:  getAFInfo
    ==============================================================*/

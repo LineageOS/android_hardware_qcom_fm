@@ -50,6 +50,7 @@ public class FmRxRdsData {
     private int mPrgmId;
     private int mPrgmType;
     private int mFd;
+    private int mECountryCode;
 
     /* V4L2 controls */
     private static final int V4L2_CID_PRIVATE_BASE = 0x8000000;
@@ -215,6 +216,12 @@ public class FmRxRdsData {
     }
     public void setERadioText (String x) {
          mERadioText = x;
+    }
+    public void setECountryCode(int x) {
+         mECountryCode = x;
+    }
+    public int getECountryCode() {
+         return mECountryCode;
     }
     public boolean getFormatDir() {
          return formatting_dir;

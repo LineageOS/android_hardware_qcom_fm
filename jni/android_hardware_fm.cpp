@@ -78,7 +78,6 @@ enum search_dir_t {
     SCAN_DN
 };
 
-
 static JNIEnv *g_jEnv = NULL;
 static JavaVM *g_jVM = NULL;
 
@@ -88,7 +87,6 @@ namespace android {
 char *FM_LIBRARY_NAME = "fm_helium.so";
 char *FM_LIBRARY_SYMBOL_NAME = "FM_HELIUM_LIB_INTERFACE";
 void *lib_handle;
-
 
 typedef void (*enb_result_cb)();
 typedef void (*tune_rsp_cb)(int Freq);
@@ -109,6 +107,7 @@ typedef void (*rds_grp_cntrs_cb)(char *rds_params);
 typedef void (*fm_peek_cb)(char *peek_rsp);
 typedef void (*fm_ssbi_peek_cb)(char *ssbi_peek_rsp);
 typedef void (*fm_ch_det_th_cb)(char *ch_det_rsp);
+typedef void (*fm_ecc_evt_cb)(char *ecc);
 
 static JNIEnv *mCallbackEnv = NULL;
 static jobject mCallbacksObj = NULL;
@@ -120,6 +119,7 @@ static jmethodID method_rtCallback;
 static jmethodID method_ertCallback;
 static jmethodID method_aflistCallback;
 static jmethodID method_rtplusCallback;
+static jmethodID method_eccCallback;
 
 jmethodID method_enableCallback;
 jmethodID method_tuneCallback;
@@ -289,7 +289,7 @@ void fm_rt_plus_update_cb(char *rt_plus)
 
 void fm_ert_update_cb(char *ert)
 {
-    ALOGE("ERT_EVT");
+    ALOGI("ERT_EVT");
     jbyteArray ert_buff = NULL;
     int i,len;
 
@@ -301,18 +301,43 @@ void fm_ert_update_cb(char *ert)
     len = (int)(ert[0] & 0xFF);
     len = len+3;
 
-    ALOGE(" ert data len=%d :",len);
+    ALOGI(" ert data len=%d :",len);
     ert_buff = mCallbackEnv->NewByteArray(len);
     if (ert_buff == NULL) {
-        ALOGE(" ps data allocate failed :");
+        ALOGE(" ert data allocate failed :");
         return;
     }
 
     mCallbackEnv->SetByteArrayRegion(ert_buff, 0, len,(jbyte *)ert);
-    jbyte* bytes= mCallbackEnv->GetByteArrayElements(ert_buff,0);
+   // jbyte* bytes= mCallbackEnv->GetByteArrayElements(ert_buff,0);
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_ertCallback,ert_buff);
     mCallbackEnv->DeleteLocalRef(ert_buff);
 }
+
+void fm_ext_country_code_cb(char *ecc)
+{
+    ALOGI("Extended Contry code ");
+    jbyteArray ecc_buff = NULL;
+    int i,len;
+
+    if (!checkCallbackThread()) {
+        ALOGE("Callback: '%s' is not called on the correct thread", __FUNCTION__);
+        return;
+    }
+
+    len = (int)(ecc[0] & 0xFF);
+
+    ALOGI(" ecc data len=%d :",len);
+    ecc_buff = mCallbackEnv->NewByteArray(len);
+    if (ecc_buff == NULL) {
+        ALOGE(" ecc data allocate failed :");
+        return;
+    }
+    mCallbackEnv->SetByteArrayRegion(ecc_buff, 0, len,(jbyte *)ecc);
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_eccCallback,ecc_buff);
+    mCallbackEnv->DeleteLocalRef(ecc_buff);
+}
+
 
 void rds_grp_cntrs_rsp_cb(char * evt_buffer)
 {
@@ -376,6 +401,7 @@ typedef struct {
    fm_peek_cb fm_peek_rsp_cb;
    fm_ssbi_peek_cb fm_ssbi_peek_rsp_cb;
    fm_ch_det_th_cb fm_ch_det_th_rsp_cb;
+   fm_ecc_evt_cb   ext_country_code_cb;
    callback_thread_event thread_evt_cb;
 } fm_vendor_callbacks_t;
 
@@ -407,6 +433,7 @@ static   fm_vendor_callbacks_t fm_callbacks = {
     fm_peek_rsp_cb,
     fm_ssbi_peek_rsp_cb,
     fm_ch_det_th_rsp_cb,
+    fm_ext_country_code_cb,
     fm_thread_evt_cb
 };
 #endif
@@ -1336,7 +1363,6 @@ static void classInitNative(JNIEnv* env, jclass clazz) {
 
     ALOGI("ClassInit native called \n");
 #ifdef FM_SOC_TYPE_CHEROKEE
-
     jclass dataClass = env->FindClass("qcom/fmradio/FmReceiverJNI");
     javaClassRef = (jclass) env->NewGlobalRef(dataClass);
     lib_handle = dlopen(FM_LIBRARY_NAME, RTLD_NOW);
@@ -1344,7 +1370,7 @@ static void classInitNative(JNIEnv* env, jclass clazz) {
         ALOGE("%s unable to open %s: %s", __func__, FM_LIBRARY_NAME, dlerror());
         goto error;
     }
-    ALOGE("Opened %s shared object library successfully", FM_LIBRARY_NAME);
+    ALOGI("Opened %s shared object library successfully", FM_LIBRARY_NAME);
 
     ALOGI("Obtaining handle: '%s' to the shared object library...", FM_LIBRARY_SYMBOL_NAME);
     vendor_interface = (fm_interface_t *)dlsym(lib_handle, FM_LIBRARY_SYMBOL_NAME);
@@ -1356,9 +1382,9 @@ static void classInitNative(JNIEnv* env, jclass clazz) {
     method_psInfoCallback = env->GetMethodID(javaClassRef, "PsInfoCallback", "([B)V");
     method_rtCallback = env->GetMethodID(javaClassRef, "RtCallback", "([B)V");
     method_ertCallback = env->GetMethodID(javaClassRef, "ErtCallback", "([B)V");
+    method_eccCallback = env->GetMethodID(javaClassRef, "EccCallback", "([B)V");
     method_rtplusCallback = env->GetMethodID(javaClassRef, "RtPlusCallback", "([B)V");
     method_aflistCallback = env->GetMethodID(javaClassRef, "AflistCallback", "([B)V");
-    ALOGI("method_psInfoCallback: '%p' env =%p...", method_psInfoCallback, env);
     method_enableCallback = env->GetMethodID(javaClassRef, "enableCallback", "()V");
     method_tuneCallback = env->GetMethodID(javaClassRef, "tuneCallback", "(I)V");
     method_seekCmplCallback = env->GetMethodID(javaClassRef, "seekCmplCallback", "(I)V");
@@ -1390,9 +1416,8 @@ static void initNative(JNIEnv *env, jobject object) {
             ALOGE("%s unable to initialize vendor library: %d", __func__, status);
             return;
         }
-        ALOGE("***** FM HAL Initialization complete *****\n");
+        ALOGI("***** FM HAL Initialization complete *****\n");
     }
-    ALOGE("object =%p, env = %p\n",object,env);
     mCallbacksObj = env->NewGlobalRef(object);
 #endif
 }
@@ -1485,7 +1510,7 @@ jint JNI_OnLoad(JavaVM *jvm, void *reserved)
     int status;
     g_jVM = jvm;
 
-    ALOGE("FM : Loading QCOMM FM-JNI");
+    ALOGI("FM : Loading QCOMM FM-JNI");
     if (jvm->GetEnv((void **)&e, JNI_VERSION_1_6)) {
         ALOGE("JNI version mismatch error");
         return JNI_ERR;

@@ -163,6 +163,7 @@ typedef void (*rds_grp_cntrs_cb)(char *rds_params);
 typedef void (*fm_peek_cb)(char *peek_rsp);
 typedef void (*fm_ssbi_peek_cb)(char *ssbi_peek_rsp);
 typedef void (*fm_ch_det_th_cb)(char *ch_det_rsp);
+typedef void (*fm_ecc_evt_cb)(char *ecc_rsp);
 
 typedef struct {
     size_t  size;
@@ -185,6 +186,7 @@ typedef struct {
     fm_peek_cb fm_peek_rsp_cb;
     fm_ssbi_peek_cb fm_ssbi_peek_rsp_cb;
     fm_ch_det_th_cb fm_ch_det_th_rsp_cb;
+    fm_ecc_evt_cb	ext_country_code_cb;
     callback_thread_event thread_evt_cb;
 } fm_vendor_callbacks_t;
 
@@ -501,6 +503,8 @@ struct hci_fm_blend_table {
 #define HCI_EV_SEARCH_COMPLETE          0x12
 #define HCI_EV_SEARCH_RDS_COMPLETE      0x13
 #define HCI_EV_SEARCH_LIST_COMPLETE     0x14
+
+#define HCI_EV_EXT_COUNTRY_CODE         0x17
 #define HCI_EV_RADIO_TEXT_PLUS_ID       0x18
 #define HCI_EV_RADIO_TEXT_PLUS_TAG      0x19
 #define HCI_EV_HW_ERR_EVENT             0x1A
