@@ -283,10 +283,6 @@ public class FMRadioService extends Service
       cancelAlarms();
       //release the audio focus listener
       AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-      if (isMuted()) {
-          mMuted = false;
-          audioManager.setStreamMute(AudioManager.STREAM_MUSIC,false);
-      }
       audioManager.abandonAudioFocus(mAudioFocusListener);
       /* Remove the Screen On/off listener */
       if (mScreenOnOffReceiver != null) {
@@ -356,6 +352,8 @@ public class FMRadioService extends Service
                                      AUDIO_SAMPLE_RATE, AUDIO_CHANNEL_CONFIG,
                                      AUDIO_ENCODING_FORMAT, FM_RECORD_BUF_SIZE,
                                      AudioTrack.MODE_STREAM);
+        if (mMuted)
+            mAudioTrack.setVolume(0.0f);
    }
 
    private synchronized void startRecordSink() {
@@ -722,6 +720,7 @@ public class FMRadioService extends Service
         }
     }
 
+    // TODO: Check if this is needed with latest Android versions?
     public void registerMusicServiceCommandReceiver() {
         if (mMusicCommandListener == null) {
             mMusicCommandListener = new BroadcastReceiver() {
@@ -738,20 +737,10 @@ public class FMRadioService extends Service
                                 mA2dpDisconnected = false;
                                 return;
                             }
-                            if(isFmOn()){
-                                fmOff();
+                            if (isFmOn()) {
+                                fmOperationsOff();
                                 if (isOrderedBroadcast()) {
                                     abortBroadcast();
-                                }
-                                try {
-                                    /* Notify the UI/Activity, only if the service is "bound"
-                                       by an activity and if Callbacks are registered
-                                    */
-                                    if((mServiceInUse) && (mCallbacks != null) ){
-                                        mCallbacks.onDisabled();
-                                    }
-                                } catch (RemoteException e) {
-                                    e.printStackTrace();
                                 }
                             }
                         }
@@ -1539,8 +1528,6 @@ public class FMRadioService extends Service
                          mSpeakerDisableHandler.postDelayed(mSpeakerDisableTask, 0);
                       }
                       if (true == mPlaybackInProgress) {
-                          if(mMuted)
-                             unMute();
                           stopFM();
                       }
                       if (mSpeakerPhoneOn) {
@@ -2154,7 +2141,6 @@ public class FMRadioService extends Service
       if(audioManager != null)
       {
          Log.d(LOGTAG, "audioManager.setFmRadioOn = false \n" );
-         unMute();
          stopFM();
          //audioManager.setParameters("FMRadioOn=false");
          Log.d(LOGTAG, "audioManager.setFmRadioOn false done \n" );
@@ -2405,7 +2391,9 @@ public class FMRadioService extends Service
       if (audioManager != null)
       {
          mMuted = true;
-         audioManager.setStreamMute(AudioManager.STREAM_MUSIC,true);
+         audioManager.setParameters("fm_mute=1");
+         if (mAudioTrack != null)
+             mAudioTrack.setVolume(0.0f);
       }
       return bCommandSent;
    }
@@ -2425,7 +2413,9 @@ public class FMRadioService extends Service
       if (audioManager != null)
       {
          mMuted = false;
-         audioManager.setStreamMute(AudioManager.STREAM_MUSIC,false);
+         audioManager.setParameters("fm_mute=0");
+         if (mAudioTrack != null)
+             mAudioTrack.setVolume(1.0f);
          if (mResumeAfterCall)
          {
              //We are unmuting FM in a voice call. Need to enable FM audio routing.
