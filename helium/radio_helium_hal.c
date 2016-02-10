@@ -36,6 +36,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "radio-helium.h"
 #include "fm_hci.h"
 #include <dlfcn.h>
+#include <errno.h>
 
 fm_vendor_callbacks_t *jni_cb;
 int hci_fm_get_signal_threshold();
@@ -52,6 +53,12 @@ static unsigned char c_byt_pair_index;
 static char utf_8_flag;
 static char rt_ert_flag;
 static char formatting_dir;
+static uint32_t ch_det_th_mask_flag;
+static uint32_t def_data_rd_mask_flag;
+static uint32_t blend_tbl_mask_flag;
+static uint32_t station_param_mask_flag;
+static uint32_t station_dbg_param_mask_flag;
+uint64_t flag;
 
 #define LOG_TAG "radio_helium"
 static void radio_hci_req_complete(char result)
@@ -76,6 +83,8 @@ static void hci_cc_fm_enable_rsp(char *ev_rsp)
     jni_cb->thread_evt_cb(0);
     radio_hci_req_complete(rsp->status);
     jni_cb->enabled_cb();
+    if (rsp->status == FM_HC_STATUS_SUCCESS)
+        radio->mode = FM_RECV;
 }
 
 static void hci_cc_conf_rsp(char *ev_rsp)
@@ -181,20 +190,179 @@ static void hci_cc_ssbi_peek_rsp(char *ev_buff)
 
 static void hci_cc_get_ch_det_threshold_rsp(char *ev_buff)
 {
-    char status;
-
+    int status;
+    int val = 0;
     if (ev_buff == NULL) {
         ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
         return;
     }
     status = ev_buff[0];
-    ALOGE("%s:%s, status =%d\n", LOG_TAG, __func__,status);
-    if (status < 0) {
+    ALOGV("%s:%s, status =%d\n", LOG_TAG, __func__,status);
+    if (status != 0) {
         ALOGE("%s:%s,ssbi peek failed=%d\n", LOG_TAG, __func__, status);
-    }
-    memcpy(&radio->ch_det_threshold, &ev_buff[1],
+    } else {
+        memcpy(&radio->ch_det_threshold, &ev_buff[1],
                         sizeof(struct hci_fm_ch_det_threshold));
-    radio_hci_req_complete(status);
+        radio_hci_req_complete(status);
+
+        if (test_bit(ch_det_th_mask_flag, CMD_CHDET_SINR_TH))
+            val = radio->ch_det_threshold.sinr;
+        else if (test_bit(ch_det_th_mask_flag, CMD_CHDET_SINR_SAMPLE))
+            val = radio->ch_det_threshold.sinr_samples;
+        else if (test_bit(ch_det_th_mask_flag, CMD_CHDET_INTF_TH_LOW))
+            val = radio->ch_det_threshold.low_th;
+        else if (test_bit(ch_det_th_mask_flag, CMD_CHDET_INTF_TH_HIGH))
+            val = radio->ch_det_threshold.high_th;
+    }
+    clear_all_bit(ch_det_th_mask_flag);
+    jni_cb->fm_get_ch_det_thr_cb(val, status);
+}
+
+static void hci_cc_set_ch_det_threshold_rsp(char *ev_buff)
+{
+    int status = ev_buff[0];
+
+    jni_cb->fm_set_ch_det_thr_cb(status);
+}
+
+static void hci_cc_sig_threshold_rsp(char *ev_buff)
+{
+    int status, val = -1;
+    ALOGD("hci_cc_sig_threshold_rsp");
+
+    status = ev_buff[0];
+
+    if (status != 0) {
+        ALOGE("%s: status= 0x%x", __func__, status);
+    } else {
+        val = ev_buff[1];
+    }
+    jni_cb->fm_get_sig_thres_cb(val, status);
+}
+
+static void hci_cc_default_data_read_rsp(char *ev_buff)
+{
+    int status, val= 0, data_len = 0;
+
+    if (ev_buff == NULL) {
+        ALOGE("Response buffer is null");
+        return;
+    }
+    status = ev_buff[0];
+    if (status == 0) {
+        data_len = ev_buff[1];
+        ALOGV("hci_cc_default_data_read_rsp:data_len = %d", data_len);
+        memcpy(&radio->def_data, &ev_buff[1], data_len + sizeof(char));
+
+        if (test_bit(def_data_rd_mask_flag, CMD_DEFRD_AF_RMSSI_TH)) {
+            val = radio->def_data.data[AF_RMSSI_TH_OFFSET];
+        } else if (test_bit(def_data_rd_mask_flag, CMD_DEFRD_AF_RMSSI_SAMPLE)) {
+            val = radio->def_data.data[AF_RMSSI_SAMPLES_OFFSET];
+        } else if (test_bit(def_data_rd_mask_flag, CMD_DEFRD_GD_CH_RMSSI_TH)) {
+            val = radio->def_data.data[GD_CH_RMSSI_TH_OFFSET];
+            if (val > MAX_GD_CH_RMSSI_TH)
+                val -= 256;
+        } else if (test_bit(def_data_rd_mask_flag, CMD_DEFRD_SEARCH_ALGO)) {
+            val = radio->def_data.data[SRCH_ALGO_TYPE_OFFSET];
+        } else if (test_bit(def_data_rd_mask_flag, CMD_DEFRD_SINR_FIRST_STAGE)) {
+            val = radio->def_data.data[SINRFIRSTSTAGE_OFFSET];
+            if (val > MAX_SINR_FIRSTSTAGE)
+                val -= 256;
+        } else if (test_bit(def_data_rd_mask_flag, CMD_DEFRD_RMSSI_FIRST_STAGE)) {
+            val = radio->def_data.data[RMSSIFIRSTSTAGE_OFFSET];
+        } else if (test_bit(def_data_rd_mask_flag, CMD_DEFRD_CF0TH12)) {
+            val = (radio->def_data.data[CF0TH12_BYTE1_OFFSET] |
+                    (radio->def_data.data[CF0TH12_BYTE2_OFFSET] << 8));
+        } else if (test_bit(def_data_rd_mask_flag, CMD_DEFRD_TUNE_POWER)) {
+        } else if (test_bit(def_data_rd_mask_flag, CMD_DEFRD_REPEATCOUNT)) {
+            val = radio->def_data.data[RX_REPEATE_BYTE_OFFSET];
+        }
+    } else {
+        ALOGE("%s: Error: Status= 0x%x", __func__, status);
+    }
+    clear_all_bit(def_data_rd_mask_flag);
+    jni_cb->fm_def_data_read_cb(val, status);
+}
+
+static void hci_cc_default_data_write_rsp(char *ev_buff)
+{
+    int status = ev_buff[0];
+
+    jni_cb->fm_def_data_write_cb(status);
+}
+
+static void hci_cc_get_blend_tbl_rsp(char *ev_buff)
+{
+    int status, val;
+
+    if (ev_buff == NULL) {
+        ALOGE("%s:response buffer in null", LOG_TAG);
+        return;
+    }
+
+    status = ev_buff[0];
+    if (status != 0) {
+        ALOGE("%s: status = 0x%x", LOG_TAG, status);
+    } else {
+        memcpy(&radio->blend_tbl, &ev_buff[1],
+                sizeof(struct hci_fm_blend_table));
+
+        ALOGE("hci_cc_get_blend_tbl_rsp: data");
+        int i;
+        for (i = 0; i < 8; i++)
+            ALOGE("data[%d] = 0x%x", i, ev_buff[1 + i]);
+        if (test_bit(blend_tbl_mask_flag, CMD_BLENDTBL_SINR_HI)) {
+            val = radio->blend_tbl.BlendSinrHi;
+        } else if (test_bit(blend_tbl_mask_flag, CMD_BLENDTBL_RMSSI_HI)) {
+            val = radio->blend_tbl.BlendRmssiHi;
+        }
+    }
+    clear_all_bit(blend_tbl_mask_flag);
+    jni_cb->fm_get_blend_cb(val, status);
+}
+
+static void hci_cc_set_blend_tbl_rsp(char *ev_buff)
+{
+    int status = ev_buff[0];
+
+    jni_cb->fm_set_blend_cb(status);
+}
+
+static void hci_cc_station_rsp(char *ev_buff)
+{
+    int val, status = ev_buff[0];
+
+    if (status == FM_HC_STATUS_SUCCESS) {
+        memcpy(&radio->fm_st_rsp.station_rsp.station_freq, &ev_buff[1],
+                sizeof(struct hci_fm_station_rsp) - sizeof(char));
+        if (test_bit(station_param_mask_flag, CMD_STNPARAM_RSSI)) {
+                val = radio->fm_st_rsp.station_rsp.rssi;
+        } else if (test_bit(station_param_mask_flag, CMD_STNPARAM_SINR)) {
+            val = radio->fm_st_rsp.station_rsp.sinr;
+        }
+    }
+    ALOGE("hci_cc_station_rsp: val =%x, status = %x", val, status);
+
+    jni_cb->fm_get_station_param_cb(val, status);
+    clear_all_bit(station_param_mask_flag);
+}
+
+static void hci_cc_dbg_param_rsp(char *ev_buff)
+{
+    int val, status = ev_buff[0];
+
+    if (status == FM_HC_STATUS_SUCCESS) {
+        memcpy(&radio->st_dbg_param, &ev_buff[1],
+                sizeof(struct hci_fm_dbg_param_rsp));
+        if (test_bit(station_dbg_param_mask_flag, CMD_STNDBGPARAM_INFDETOUT)) {
+            val = radio->st_dbg_param.in_det_out;
+        } else if (test_bit(station_dbg_param_mask_flag, CMD_STNDBGPARAM_IOVERC)) {
+            val = radio->st_dbg_param.io_verc;
+        }
+    }
+    ALOGE("hci_cc_dbg_param_rsp: val =%x, status = %x", val, status);
+    jni_cb->fm_get_station_debug_param_cb(val, status);
+    clear_all_bit(station_dbg_param_mask_flag);
 }
 
 static inline void hci_cmd_complete_event(char *buff)
@@ -233,10 +401,10 @@ static inline void hci_cmd_complete_event(char *buff)
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_RDS_GRP_PROCESS):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_EN_WAN_AVD_CTRL):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_EN_NOTCH_CTRL):
-    case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_CH_DET_THRESHOLD):
-    case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_BLND_TBL):
-    case hci_common_cmd_op_pack(HCI_OCF_FM_DEFAULT_DATA_WRITE):
             hci_cc_rsp(pbuf);
+            break;
+    case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_CH_DET_THRESHOLD):
+            hci_cc_set_ch_det_threshold_rsp(pbuf);
             break;
     case hci_common_cmd_op_pack(HCI_OCF_FM_RESET):
     case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_SSBI_POKE_REG):
@@ -257,17 +425,34 @@ static inline void hci_cmd_complete_event(char *buff)
             hci_cc_ssbi_peek_rsp(buff);
             break;
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_GET_CH_DET_THRESHOLD):
-            hci_cc_get_ch_det_threshold_rsp(buff);
-            break;
-/*    case hci_common_cmd_op_pack(HCI_OCF_FM_GET_SPUR_TABLE):
-            hci_cc_get_spur_tbl(buff);
+            hci_cc_get_ch_det_threshold_rsp(pbuf);
             break;
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_GET_SIGNAL_THRESHOLD):
-            hci_cc_sig_threshold_rsp(buff);
+            hci_cc_sig_threshold_rsp(pbuf);
+            break;
+    case hci_common_cmd_op_pack(HCI_OCF_FM_DEFAULT_DATA_READ):
+            hci_cc_default_data_read_rsp(pbuf);
+            break;
+    case hci_common_cmd_op_pack(HCI_OCF_FM_DEFAULT_DATA_WRITE):
+            hci_cc_default_data_write_rsp(pbuf);
+            break;
+    case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_GET_BLND_TBL):
+            hci_cc_get_blend_tbl_rsp(pbuf);
+            break;
+    case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_BLND_TBL):
+            hci_cc_set_blend_tbl_rsp(pbuf);
             break;
 
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_GET_STATION_PARAM_REQ):
-            hci_cc_station_rsp(buff);
+            hci_cc_station_rsp(pbuf);
+            break;
+
+    case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_STATION_DBG_PARAM):
+            hci_cc_dbg_param_rsp(pbuf);
+            break;
+
+/*    case hci_common_cmd_op_pack(HCI_OCF_FM_GET_SPUR_TABLE):
+            hci_cc_get_spur_tbl(buff);
             break;
 
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_GET_PROGRAM_SERVICE_REQ):
@@ -282,17 +467,10 @@ static inline void hci_cmd_complete_event(char *buff)
             hci_cc_af_list_rsp(buff);
             break;
 
-    case hci_common_cmd_op_pack(HCI_OCF_FM_DEFAULT_DATA_READ):
-            hci_cc_riva_read_default_rsp(buff);
-            break;
-
     case hci_common_cmd_op_pack(HCI_OCF_FM_GET_FEATURE_LIST):
             hci_cc_feature_list_rsp(buff);
             break;
 
-    case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_STATION_DBG_PARAM):
-            hci_cc_dbg_param_rsp(buff);
-            break;
     case hci_status_param_op_pack(HCI_OCF_FM_READ_GRP_COUNTERS):
             hci_cc_rds_grp_cntrs_rsp(buff);
             break;
@@ -300,9 +478,6 @@ static inline void hci_cmd_complete_event(char *buff)
             hci_cc_do_calibration_rsp(buff);
             break;
 
-    case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_GET_BLND_TBL):
-            hci_cc_get_blend_tbl_rsp(buff);
-            break;
     default:
             ALOGE("opcode 0x%x", opcode);
             break; */
@@ -733,7 +908,7 @@ static void hci_ev_raw_rds_group_data(char *buff)
     }
 }
 
-void radio_hci_event_packet(char *evt_buf)
+static void radio_hci_event_packet(char *evt_buf)
 {
     char evt;
 
@@ -947,8 +1122,11 @@ static int set_fm_ctrl(int cmd, int val)
     char temp_val = 0;
     unsigned int rds_grps_proc = 0;
     char *data;
+    struct hci_fm_def_data_wr_req def_data_wrt;
+
 
     ALOGE("%s:cmd: %x, val: %d",LOG_TAG, cmd, val);
+
     switch (cmd) {
     case HCI_FM_HELIUM_AUDIO_MUTE:
         saved_val = radio->mute_mode.hard_mute;
@@ -960,10 +1138,16 @@ static int set_fm_ctrl(int cmd, int val)
         }
         break;
     case HCI_FM_HELIUM_SRCHMODE:
+        if (is_valid_srch_mode(val))
             radio->g_search_mode = val;
+        else
+            ret = -EINVAL;
         break;
     case HCI_FM_HELIUM_SCANDWELL:
+        if (is_valid_scan_dwell_prd(val))
             radio->g_scan_time = val;
+        else
+            ret = -EINVAL;
         break;
     case HCI_FM_HELIUM_SRCHON:
         helium_search_req(val, SRCH_DIR_UP);
@@ -989,18 +1173,28 @@ static int set_fm_ctrl(int cmd, int val)
         ret = helium_set_sig_threshold_req(temp_val);
         if (ret < 0) {
             ALOGE("%s:Error while setting signal threshold\n", LOG_TAG);
-            goto END;
+            goto end;
         }
         break;
     case HCI_FM_HELIUM_SRCH_PTY:
-         radio->srch_rds.srch_pty = val;
-         radio->srch_st_list.srch_pty = val;
+        if (is_valid_pty(val)) {
+            radio->srch_rds.srch_pty = val;
+            radio->srch_st_list.srch_pty = val;
+        } else {
+            ret = -EINVAL;
+        }
          break;
     case HCI_FM_HELIUM_SRCH_PI:
-         radio->srch_rds.srch_pi = val;
+         if (is_valid_pi(val))
+             radio->srch_rds.srch_pi = val;
+         else
+             ret = -EINVAL;
          break;
     case HCI_FM_HELIUM_SRCH_CNT:
-         radio->srch_st_list.srch_list_max = val;
+         if (is_valid_srch_station_cnt(val))
+             radio->srch_st_list.srch_list_max = val;
+         else
+             ret = -EINVAL;
          break;
     case HCI_FM_HELIUM_SPACING:
          saved_val = radio->recv_conf.ch_spacing;
@@ -1009,7 +1203,7 @@ static int set_fm_ctrl(int cmd, int val)
          if (ret < 0) {
              ALOGE("%s:Error in setting channel spacing", LOG_TAG);
              radio->recv_conf.ch_spacing = saved_val;
-             goto END;
+             goto end;
         }
         break;
     case HCI_FM_HELIUM_EMPHASIS:
@@ -1019,7 +1213,7 @@ static int set_fm_ctrl(int cmd, int val)
          if (ret < 0) {
              ALOGE("%s:Error in setting emphasis", LOG_TAG);
              radio->recv_conf.emphasis = saved_val;
-             goto END;
+             goto end;
          }
          break;
     case HCI_FM_HELIUM_RDS_STD:
@@ -1029,7 +1223,7 @@ static int set_fm_ctrl(int cmd, int val)
          if (ret < 0) {
              ALOGE("%s:Error in rds_std", LOG_TAG);
              radio->recv_conf.rds_std = saved_val;
-             goto END;
+             goto end;
          }
          break;
     case HCI_FM_HELIUM_RDSON:
@@ -1039,7 +1233,7 @@ static int set_fm_ctrl(int cmd, int val)
          if (ret < 0) {
              ALOGE("%s:Error in rds_std", LOG_TAG);
              radio->recv_conf.rds_std = saved_val;
-             goto END;
+             goto end;
          }
          break;
     case HCI_FM_HELIUM_RDSGROUP_MASK:
@@ -1052,7 +1246,7 @@ static int set_fm_ctrl(int cmd, int val)
          if (ret < 0) {
              ALOGE("%s:error in setting group mask\n", LOG_TAG);
              radio->rds_grp.rds_grp_enable_mask = saved_val;
-             goto END;
+             goto end;
         }
         break;
     case HCI_FM_HELIUM_RDSGROUP_PROC:
@@ -1062,7 +1256,7 @@ static int set_fm_ctrl(int cmd, int val)
          ret = helium_rds_grp_process_req(radio->g_rds_grp_proc_ps);
          if (ret < 0) {
              radio->g_rds_grp_proc_ps = saved_val;
-             goto END;
+             goto end;
          }
          break;
 
@@ -1071,7 +1265,7 @@ static int set_fm_ctrl(int cmd, int val)
          ret = hci_fm_get_rds_grpcounters_req(val);
          if (ret < 0) {
              radio->g_rds_grp_proc_ps = saved_val;
-             goto END;
+             goto end;
          }
          break;
 
@@ -1079,7 +1273,7 @@ static int set_fm_ctrl(int cmd, int val)
          ALOGD("%s: set notch filter  notch=%d ", LOG_TAG,val);
          ret = hci_fm_set_notch_filter_req(val);
          if (ret < 0) {
-            goto END;
+            goto end;
          }
          break;
 
@@ -1093,7 +1287,7 @@ static int set_fm_ctrl(int cmd, int val)
          ret = helium_rds_grp_process_req(radio->g_rds_grp_proc_ps);
          if (ret < 0) {
              radio->g_rds_grp_proc_ps = saved_val;
-             goto END;
+             goto end;
         }
         break;
     case HCI_FM_HELIUM_AF_JUMP:
@@ -1106,7 +1300,7 @@ static int set_fm_ctrl(int cmd, int val)
         ret = helium_rds_grp_process_req(radio->g_rds_grp_proc_ps);
         if (ret < 0) {
             radio->g_rds_grp_proc_ps = saved_val;
-            goto END;
+            goto end;
         }
         break;
     case HCI_FM_HELIUM_LP_MODE:
@@ -1117,7 +1311,7 @@ static int set_fm_ctrl(int cmd, int val)
         ret = helium_set_antenna_req(temp_val);
         if (ret < 0) {
             ALOGE("%s:Set Antenna failed retval = %x", LOG_TAG, ret);
-            goto END;
+            goto end;
         }
         radio->g_antenna =  val;
         break;
@@ -1128,7 +1322,7 @@ static int set_fm_ctrl(int cmd, int val)
          if (ret < 0) {
              ALOGE("%s:Error while setting FM soft mute %d", LOG_TAG, ret);
              radio->mute_mode.soft_mute = saved_val;
-             goto END;
+             goto end;
          }
          break;
     case HCI_FM_HELIUM_FREQ:
@@ -1156,7 +1350,7 @@ static int set_fm_ctrl(int cmd, int val)
         } else {
             ret = -1;
             ALOGE("%s: riva access len is not valid\n", LOG_TAG);
-            goto END;
+            goto end;
         }
         break;
     case HCI_FM_HELIUM_RIVA_PEEK:
@@ -1172,7 +1366,7 @@ static int set_fm_ctrl(int cmd, int val)
          } else {
              ALOGE("%s: riva access len is not valid for poke\n", LOG_TAG);
              ret = -1;
-             goto END;
+             goto end;
          }
          break;
     case HCI_FM_HELIUM_SSBI_ACCS_ADDR:
@@ -1190,97 +1384,142 @@ static int set_fm_ctrl(int cmd, int val)
          if (!is_valid_sinr_samples(val)) {
              ALOGE("%s: sinr samples count is not valid\n", __func__);
              ret = -1;
-             goto END;
+             goto end;
          }
-         ret = hci_fm_get_ch_det_th();
-         if (ret < 0) {
-             ALOGE("Failed to get chnl det thresholds  %d", ret);
-             goto END;
-         }
-         saved_val = radio->ch_det_threshold.sinr_samples;
          radio->ch_det_threshold.sinr_samples = val;
          ret = set_ch_det_thresholds_req(&radio->ch_det_threshold);
          if (ret < 0) {
              ALOGE("Failed to set SINR samples  %d", ret);
-             radio->ch_det_threshold.sinr_samples = saved_val;
-             goto END;
+             goto end;
          }
          break;
     case HCI_FM_HELIUM_SINR_THRESHOLD:
          if (!is_valid_sinr_th(val)) {
-             ALOGE("%s: sinr threshold is not valid\n");
+             ALOGE("%s: sinr threshold is not valid\n", __func__);
              ret = -1;
-             goto END;
+             goto end;
          }
-         ret = hci_fm_get_ch_det_th();
-         if (ret < 0) {
-             ALOGE("Failed to get chnl det thresholds  %d", ret);
-             goto END;
-         }
-         saved_val = radio->ch_det_threshold.sinr;
          radio->ch_det_threshold.sinr = val;
          ret = set_ch_det_thresholds_req(&radio->ch_det_threshold);
-         if (ret < 0) {
-             ALOGE("Failed to set SINR threshold %d", ret);
-             radio->ch_det_threshold.sinr = saved_val;
-             goto END;
-         }
          break;
     case HCI_FM_HELIUM_INTF_LOW_THRESHOLD:
          if (!is_valid_intf_det_low_th(val)) {
              ALOGE("%s: intf det low threshold is not valid\n", __func__);
              ret = -1;
-             goto END;
+             goto end;
          }
-         ret = hci_fm_get_ch_det_th();
-         if (ret < 0) {
-             ALOGE("Failed to get chnl det thresholds  %d", ret);
-             goto END;
-         }
-         saved_val = radio->ch_det_threshold.low_th;
          radio->ch_det_threshold.low_th = val;
          ret = set_ch_det_thresholds_req(&radio->ch_det_threshold);
-         if (ret < 0) {
-             ALOGE("Failed to Set Low det threshold %d", ret);
-             radio->ch_det_threshold.low_th = saved_val;
-             goto END;
-         }
          break;
     case HCI_FM_HELIUM_INTF_HIGH_THRESHOLD:
          if (!is_valid_intf_det_hgh_th(val)) {
              ALOGE("%s: intf high threshold is not valid\n", __func__);
              ret = -1;
-             goto END;
+             goto end;
          }
-         ret = hci_fm_get_ch_det_th();
-         if (ret < 0) {
-             ALOGE("Failed to get chnl det thresholds  %d", ret);
-             goto END;
-         }
-         saved_val = radio->ch_det_threshold.high_th;
          radio->ch_det_threshold.high_th = val;
          ret = set_ch_det_thresholds_req(&radio->ch_det_threshold);
-         if (ret < 0) {
-             ALOGE("Failed to set High det threshold %d ", ret);
-             radio->ch_det_threshold.high_th = saved_val;
-             goto END;
+         break;
+    case HCI_FM_HELIUM_SINRFIRSTSTAGE:
+         def_data_wrt.mode = FM_SRCH_CONFG_MODE;
+         def_data_wrt.length = FM_SRCH_CNFG_LEN;
+         memcpy(&def_data_wrt.data, &radio->def_data.data,
+                 radio->def_data.data_len);
+         def_data_wrt.data[SINRFIRSTSTAGE_OFFSET] = val;
+         ret = hci_fm_default_data_write_req(&def_data_wrt);
+         break;
+    case HCI_FM_HELIUM_RMSSIFIRSTSTAGE:
+         def_data_wrt.mode = FM_SRCH_CONFG_MODE;
+         def_data_wrt.length = FM_SRCH_CNFG_LEN;
+         memcpy(&def_data_wrt.data, &radio->def_data.data,
+                 radio->def_data.data_len);
+         def_data_wrt.data[RMSSIFIRSTSTAGE_OFFSET] = val;
+         ret = hci_fm_default_data_write_req(&def_data_wrt);
+         break;
+    case HCI_FM_HELIUM_CF0TH12:
+         def_data_wrt.mode = FM_SRCH_CONFG_MODE;
+         def_data_wrt.length = FM_SRCH_CNFG_LEN;
+         memcpy(&def_data_wrt.data, &radio->def_data.data,
+                 radio->def_data.data_len);
+         def_data_wrt.data[CF0TH12_BYTE1_OFFSET] = (val & 0xFF);
+         def_data_wrt.data[CF0TH12_BYTE2_OFFSET] = ((val >> 8) & 0xFF);
+         ret = hci_fm_default_data_write_req(&def_data_wrt);
+         break;
+    case HCI_FM_HELIUM_SRCHALGOTYPE:
+         def_data_wrt.mode = FM_SRCH_CONFG_MODE;
+         def_data_wrt.length = FM_SRCH_CNFG_LEN;
+         memcpy(&def_data_wrt.data, &radio->def_data.data,
+                 radio->def_data.data_len);
+         def_data_wrt.data[SRCH_ALGO_TYPE_OFFSET] = val;
+         ret = hci_fm_default_data_write_req(&def_data_wrt);
+         break;
+    case HCI_FM_HELIUM_AF_RMSSI_TH:
+         def_data_wrt.mode = FM_AFJUMP_CONFG_MODE;
+         def_data_wrt.length = FM_AFJUMP_CNFG_LEN;
+         memcpy(&def_data_wrt.data, &radio->def_data.data,
+                 radio->def_data.data_len);
+         def_data_wrt.data[AF_RMSSI_TH_OFFSET] = (val & 0xFF);
+         ret = hci_fm_default_data_write_req(&def_data_wrt);
+         break;
+    case HCI_FM_HELIUM_GOOD_CH_RMSSI_TH:
+         def_data_wrt.mode = FM_AFJUMP_CONFG_MODE;
+         def_data_wrt.length = FM_AFJUMP_CNFG_LEN;
+         memcpy(&def_data_wrt.data, &radio->def_data.data,
+                 radio->def_data.data_len);
+         def_data_wrt.data[GD_CH_RMSSI_TH_OFFSET] = val;
+         ret = hci_fm_default_data_write_req(&def_data_wrt);
+         break;
+    case HCI_FM_HELIUM_AF_RMSSI_SAMPLES:
+         def_data_wrt.mode = FM_AFJUMP_CONFG_MODE;
+         def_data_wrt.length = FM_AFJUMP_CNFG_LEN;
+         memcpy(&def_data_wrt.data, &radio->def_data.data,
+                 radio->def_data.data_len);
+         def_data_wrt.data[AF_RMSSI_SAMPLES_OFFSET] = val;
+         ret = hci_fm_default_data_write_req(&def_data_wrt);
+         break;
+    case HCI_FM_HELIUM_RXREPEATCOUNT:
+         def_data_wrt.mode = RDS_PS0_XFR_MODE;
+         def_data_wrt.length = RDS_PS0_LEN;
+         memcpy(&def_data_wrt.data, &radio->def_data.data,
+                 radio->def_data.data_len);
+         def_data_wrt.data[AF_RMSSI_SAMPLES_OFFSET] = val;
+         ret = hci_fm_default_data_write_req(&def_data_wrt);
+         break;
+    case HCI_FM_HELIUM_BLEND_SINRHI:
+         if (!is_valid_blend_value(val)) {
+             ALOGE("%s: sinr samples count is not valid\n", __func__);
+             ret = -1;
+             goto end;
          }
+         radio->blend_tbl.BlendSinrHi = val;
+         ret = hci_fm_set_blend_tbl_req(&radio->blend_tbl);
+         break;
+    case HCI_FM_HELIUM_BLEND_RMSSIHI:
+         if (!is_valid_blend_value(val)) {
+             ALOGE("%s: sinr samples count is not valid\n", __func__);
+             ret = -1;
+             goto end;
+         }
+         radio->blend_tbl.BlendRmssiHi = val;
+         ret = hci_fm_set_blend_tbl_req(&radio->blend_tbl);
          break;
     default:
         ALOGE("%s:%s: Not a valid FM CMD!!", LOG_TAG, __func__);
         ret = 0;
         break;
     }
-END:
+end:
     if (ret < 0)
         ALOGE("%s:%s: %d cmd failed", LOG_TAG, __func__, cmd);
     return ret;
 }
 
-static void get_fm_ctrl(int cmd, int val)
+static int get_fm_ctrl(int cmd, int val)
 {
     int ret = 0;
+    struct hci_fm_def_data_rd_req def_data_rd;
 
+    ALOGE("%s: cmd = 0x%x", __func__, cmd);
     switch(cmd) {
     case HCI_FM_HELIUM_FREQ:
         val = radio->fm_st_rsp.station_rsp.station_freq;
@@ -1292,24 +1531,127 @@ static void get_fm_ctrl(int cmd, int val)
         val = radio->recv_conf.band_low_limit;
         break;
     case HCI_FM_HELIUM_SINR_SAMPLES:
+        set_bit(ch_det_th_mask_flag, CMD_CHDET_SINR_SAMPLE);
         ret = hci_fm_get_ch_det_th();
-         if (ret == 0)
-             val = radio->ch_det_threshold.sinr_samples;
+        if (ret != FM_HC_STATUS_SUCCESS)
+            clear_bit(ch_det_th_mask_flag, CMD_CHDET_SINR_SAMPLE);
         break;
     case HCI_FM_HELIUM_SINR_THRESHOLD:
+        set_bit(ch_det_th_mask_flag, CMD_CHDET_SINR_TH);
         ret = hci_fm_get_ch_det_th();
-        if (ret == 0)
-            val = radio->ch_det_threshold.sinr;
+        if (ret != FM_HC_STATUS_SUCCESS)
+            clear_bit(ch_det_th_mask_flag, CMD_CHDET_SINR_TH);
         break;
     case HCI_FM_HELIUM_INTF_LOW_THRESHOLD:
+        set_bit(ch_det_th_mask_flag, CMD_CHDET_INTF_TH_LOW);
         ret = hci_fm_get_ch_det_th();
-        if (ret == 0)
-            val = radio->ch_det_threshold.low_th;
+        if (ret != FM_HC_STATUS_SUCCESS)
+            clear_bit(ch_det_th_mask_flag, CMD_CHDET_INTF_TH_LOW);
         break;
     case HCI_FM_HELIUM_INTF_HIGH_THRESHOLD:
+        set_bit(ch_det_th_mask_flag, CMD_CHDET_INTF_TH_HIGH);
         ret = hci_fm_get_ch_det_th();
-        if (ret == 0)
-            val = radio->ch_det_threshold.high_th;
+        if (ret != FM_HC_STATUS_SUCCESS)
+            clear_bit(ch_det_th_mask_flag, CMD_CHDET_INTF_TH_HIGH);
+        break;
+    case HCI_FM_HELIUM_SINRFIRSTSTAGE:
+        set_bit(def_data_rd_mask_flag, CMD_DEFRD_SINR_FIRST_STAGE);
+        def_data_rd.mode = FM_SRCH_CONFG_MODE;
+        def_data_rd.length = FM_SRCH_CNFG_LEN;
+        goto cmd;
+    case HCI_FM_HELIUM_RMSSIFIRSTSTAGE:
+        set_bit(def_data_rd_mask_flag, CMD_DEFRD_RMSSI_FIRST_STAGE);
+        def_data_rd.mode = FM_SRCH_CONFG_MODE;
+        def_data_rd.length = FM_SRCH_CNFG_LEN;
+        goto cmd;
+    case HCI_FM_HELIUM_CF0TH12:
+        set_bit(def_data_rd_mask_flag, CMD_DEFRD_CF0TH12);
+        def_data_rd.mode = FM_SRCH_CONFG_MODE;
+        def_data_rd.length = FM_SRCH_CNFG_LEN;
+        goto cmd;
+    case HCI_FM_HELIUM_SRCHALGOTYPE:
+        def_data_rd.mode = FM_SRCH_CONFG_MODE;
+        def_data_rd.length = FM_SRCH_CNFG_LEN;
+        set_bit(def_data_rd_mask_flag, CMD_DEFRD_SEARCH_ALGO);
+        goto cmd;
+    case HCI_FM_HELIUM_AF_RMSSI_TH:
+        set_bit(def_data_rd_mask_flag, CMD_DEFRD_AF_RMSSI_TH);
+        def_data_rd.mode = FM_AFJUMP_CONFG_MODE;
+        def_data_rd.length = FM_AFJUMP_CNFG_LEN;
+        goto cmd;
+    case HCI_FM_HELIUM_GOOD_CH_RMSSI_TH:
+        set_bit(def_data_rd_mask_flag, CMD_DEFRD_GD_CH_RMSSI_TH);
+        def_data_rd.mode = FM_AFJUMP_CONFG_MODE;
+        def_data_rd.length = FM_AFJUMP_CNFG_LEN;
+        goto cmd;
+    case HCI_FM_HELIUM_AF_RMSSI_SAMPLES:
+        set_bit(def_data_rd_mask_flag, CMD_DEFRD_AF_RMSSI_SAMPLE);
+        def_data_rd.mode = FM_AFJUMP_CONFG_MODE;
+        def_data_rd.length = FM_AFJUMP_CNFG_LEN;
+
+cmd:
+        def_data_rd.param_len = 0;
+        def_data_rd.param = 0;
+
+        ret = hci_fm_default_data_read_req(&def_data_rd);
+        if (ret != FM_HC_STATUS_SUCCESS)
+            clear_all_bit(def_data_rd_mask_flag);
+        break;
+    case HCI_FM_HELIUM_RXREPEATCOUNT:
+        def_data_rd.mode = RDS_PS0_XFR_MODE;
+        def_data_rd.length = RDS_PS0_LEN;
+        def_data_rd.param_len = 0;
+        def_data_rd.param = 0;
+        set_bit(def_data_rd_mask_flag, CMD_DEFRD_REPEATCOUNT);
+
+        ret = hci_fm_default_data_read_req(&def_data_rd);
+        if (ret != FM_HC_STATUS_SUCCESS)
+            clear_bit(def_data_rd_mask_flag, CMD_DEFRD_REPEATCOUNT);
+        break;
+    case HCI_FM_HELIUM_BLEND_SINRHI:
+        set_bit(blend_tbl_mask_flag, CMD_BLENDTBL_SINR_HI);
+        ret = hci_fm_get_blend_req();
+        if (ret != FM_HC_STATUS_SUCCESS)
+            clear_bit(blend_tbl_mask_flag, CMD_BLENDTBL_SINR_HI);
+    case HCI_FM_HELIUM_BLEND_RMSSIHI:
+        set_bit(blend_tbl_mask_flag, CMD_BLENDTBL_RMSSI_HI);
+        ret = hci_fm_get_blend_req();
+        if (ret != FM_HC_STATUS_SUCCESS)
+            clear_bit(blend_tbl_mask_flag, CMD_BLENDTBL_RMSSI_HI);
+        break;
+    case HCI_FM_HELIUM_IOVERC:
+        set_bit(station_dbg_param_mask_flag, CMD_STNDBGPARAM_IOVERC);
+        ret = hci_fm_get_station_dbg_param_req();
+        if (ret != FM_HC_STATUS_SUCCESS)
+            clear_bit(station_dbg_param_mask_flag, CMD_STNDBGPARAM_IOVERC);
+        break;
+    case HCI_FM_HELIUM_INTDET:
+        set_bit(station_dbg_param_mask_flag, CMD_STNDBGPARAM_INFDETOUT);
+        ret = hci_fm_get_station_dbg_param_req();
+        if (ret != FM_HC_STATUS_SUCCESS)
+            clear_bit(station_dbg_param_mask_flag, CMD_STNDBGPARAM_INFDETOUT);
+        break;
+    case HCI_FM_HELIUM_GET_SINR:
+        if (radio->mode == FM_RECV) {
+            set_bit(station_param_mask_flag, CMD_STNPARAM_SINR);
+            ret = hci_fm_get_station_cmd_param_req();
+            if (ret != FM_HC_STATUS_SUCCESS)
+                clear_bit(station_param_mask_flag, CMD_STNPARAM_SINR);
+        } else {
+            ALOGE("HCI_FM_HELIUM_GET_SINR: radio is not in recv mode");
+            ret = -EINVAL;
+        }
+        break;
+    case HCI_FM_HELIUM_RMSSI:
+        if (radio->mode == FM_RECV) {
+            set_bit(station_param_mask_flag, CMD_STNPARAM_RSSI);
+            ret = hci_fm_get_station_cmd_param_req();
+            if (ret != FM_HC_STATUS_SUCCESS)
+                clear_bit(station_param_mask_flag, CMD_STNPARAM_RSSI);
+        } else if (radio->mode == FM_TRANS) {
+            ALOGE("HCI_FM_HELIUM_RMSSI: radio is not in recv mode");
+            ret = -EINVAL;
+        }
         break;
     default:
         break;

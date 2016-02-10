@@ -738,11 +738,21 @@ class FmRxControls
       }
    }
 
+   public boolean getPSRxRepeatCount(int fd) {
+      int ret;
+      ret = FmReceiverJNI.getControlNative(fd, V4L2_CID_PRIVATE_RXREPEATCOUNT);
+      if (ret < 0) {
+          return false;
+      } else {
+          return true;
+      }
+   }
+
    public byte getBlendSinr(int fd) {
       return (byte)FmReceiverJNI.getControlNative(fd, V4L2_CID_PRIVATE_BLEND_SINRHI);
    }
 
-   public boolean setBlendSinr(int fd, byte sinrHi) {
+   public boolean setBlendSinr(int fd, int sinrHi) {
       int ret;
       ret = FmReceiverJNI.setControlNative(fd, V4L2_CID_PRIVATE_BLEND_SINRHI, sinrHi);
       if(ret < 0) {
@@ -757,7 +767,7 @@ class FmRxControls
       return (byte)FmReceiverJNI.getControlNative(fd, V4L2_CID_PRIVATE_BLEND_RMSSIHI);
    }
 
-   public boolean setBlendRmssi(int fd, byte rmssiHi) {
+   public boolean setBlendRmssi(int fd, int rmssiHi) {
       int ret;
       ret = FmReceiverJNI.setControlNative(fd, V4L2_CID_PRIVATE_BLEND_RMSSIHI, rmssiHi);
       if(ret < 0) {

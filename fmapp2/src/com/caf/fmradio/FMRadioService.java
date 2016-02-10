@@ -1952,9 +1952,17 @@ public class FMRadioService extends Service
       {
           return (mService.get().setIntfDetLowTh(intfLowTh));
       }
+      public boolean getIntfDetLowTh()
+      {
+          return (mService.get().getIntfDetLowTh());
+      }
       public boolean setIntfDetHighTh(int intfHighTh)
       {
           return (mService.get().setIntfDetHighTh(intfHighTh));
+      }
+      public boolean getIntfDetHighTh()
+      {
+          return (mService.get().getIntfDetHighTh());
       }
       public int getSearchAlgoType()
       {
@@ -2023,6 +2031,10 @@ public class FMRadioService extends Service
       public boolean setRxRepeatCount(int count)
       {
            return (mService.get().setRxRepeatCount(count));
+      }
+      public boolean getRxRepeatCount()
+      {
+           return (mService.get().getRxRepeatCount());
       }
       public long getRecordingStartTime()
       {
@@ -3151,10 +3163,113 @@ public class FMRadioService extends Service
              Log.d(LOGTAG, "FmRxEvServiceAvailable: Tuned frequency is below signal threshold level");
          }
       }
-      public void FmRxEvGetSignalThreshold()
+      public void FmRxEvGetSignalThreshold(int val, int status)
       {
          Log.d(LOGTAG, "FmRxEvGetSignalThreshold");
+
+         if (mCallbacks != null) {
+             try {
+                 mCallbacks.getSigThCb(val, status);
+             } catch (RemoteException e) {
+                 Log.e(LOGTAG, "FmRxEvGetSignalThreshold: Exception:" + e.toString());
+             }
+         }
       }
+
+      public void FmRxEvGetChDetThreshold(int val, int status)
+      {
+          Log.e(LOGTAG, "FmRxEvGetChDetThreshold");
+          if (mCallbacks != null) {
+              try {
+                  mCallbacks.getChDetThCb(val, status);
+              } catch (RemoteException e) {
+                  Log.e(LOGTAG, "FmRxEvGetChDetThreshold: Exception = " + e.toString());
+              }
+          }
+      }
+
+      public void FmRxEvSetChDetThreshold(int status)
+      {
+          Log.e(LOGTAG, "FmRxEvSetChDetThreshold");
+          if (mCallbacks != null) {
+              try {
+                  mCallbacks.setChDetThCb(status);
+              } catch (RemoteException e) {
+                    e.printStackTrace();
+              }
+          }
+      }
+
+      public void FmRxEvDefDataRead(int val, int status) {
+          Log.e(LOGTAG, "FmRxEvDefDataRead");
+          if (mCallbacks != null) {
+              try {
+                  mCallbacks.DefDataRdCb(val, status);
+              } catch (RemoteException e) {
+                  Log.e(LOGTAG, "FmRxEvDefDataRead: Exception = " + e.toString());
+              }
+          }
+      }
+
+      public void FmRxEvDefDataWrite(int status)
+      {
+          Log.e(LOGTAG, "FmRxEvDefDataWrite");
+          if (mCallbacks != null) {
+              try {
+                  mCallbacks.DefDataWrtCb(status);
+              } catch (RemoteException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+
+      public void FmRxEvGetBlend(int val, int status)
+      {
+          Log.e(LOGTAG, "FmRxEvGetBlend");
+
+          if (mCallbacks != null) {
+              try {
+                  mCallbacks.getBlendCb(val, status);
+              } catch (RemoteException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+
+      public void FmRxEvSetBlend(int status)
+      {
+          Log.e(LOGTAG, "FmRxEvSetBlend");
+          if (mCallbacks != null) {
+              try {
+                  mCallbacks.setBlendCb(status);
+              } catch (RemoteException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+
+      public void FmRxGetStationParam(int val, int status)
+      {
+          if (mCallbacks != null) {
+              try {
+                  mCallbacks.getStationParamCb(val, status);
+              } catch (RemoteException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+
+      public void FmRxGetStationDbgParam(int val, int status)
+      {
+          if (mCallbacks != null) {
+              try {
+                  mCallbacks.getStationDbgParamCb(val, status);
+              } catch (RemoteException e) {
+                  e.printStackTrace();
+              }
+          }
+      }
+
       public void FmRxEvSearchInProgress()
       {
          Log.d(LOGTAG, "FmRxEvSearchInProgress");
@@ -3402,11 +3517,25 @@ public class FMRadioService extends Service
       else
          return false;
    }
+   public boolean getIntfDetLowTh()
+   {
+       if (mReceiver != null)
+           return mReceiver.getOnChannelThreshold();
+       else
+           return false;
+   }
    public boolean setIntfDetHighTh(int intfHighTh) {
       if(mReceiver != null)
          return mReceiver.setOffChannelThreshold(intfHighTh);
       else
          return false;
+   }
+   public boolean getIntfDetHighTh()
+   {
+       if (mReceiver != null)
+           return mReceiver.getOffChannelThreshold();
+       else
+           return false;
    }
    public int getSearchAlgoType() {
        if(mReceiver != null)
@@ -3556,7 +3685,12 @@ public class FMRadioService extends Service
       else
          return false;
    }
-
+   public boolean getRxRepeatCount() {
+      if(mReceiver != null)
+         return mReceiver.getPSRxRepeatCount();
+      else
+         return false;
+   }
    public long getRecordingStartTime() {
       return mSampleStart;
    }

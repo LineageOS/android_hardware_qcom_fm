@@ -52,5 +52,13 @@ public class FmRxEvCallbacksAdaptor implements FmRxEvCallbacks {
     public void FmRxEvRTPlus() {};
     public void FmRxEvERTInfo() {};
     public void FmRxEvECCInfo() {};
+    public void FmRxEvGetSignalThreshold(int val, int status) {};
+    public void FmRxEvGetChDetThreshold(int val, int status) {};
+    public void FmRxEvDefDataRead(int val, int status) {};
+    public void FmRxEvGetBlend(int val, int status) {};
+    public void FmRxEvSetChDetThreshold(int status) {};
+    public void FmRxEvDefDataWrite(int status) {};
+    public void FmRxEvSetBlend(int status) {};
+    public void FmRxGetStationParam(int val, int status) {};
+    public void FmRxGetStationDbgParam(int val, int status) {};
 }
-

@@ -80,6 +80,53 @@ class FmReceiverJNI {
         Log.e(TAG, "AflistCallback exit " );
     }
 
+    public void getSigThCallback(int val, int status)
+    {
+        Log.d(TAG, "get Signal Threshold callback");
+
+        FmReceiver.mCallback.FmRxEvGetSignalThreshold(val, status);
+    }
+
+    public void getChDetThCallback(int val, int status)
+    {
+        FmReceiver.mCallback.FmRxEvGetChDetThreshold(val, status);
+    }
+
+    public void setChDetThCallback(int status)
+    {
+        FmReceiver.mCallback.FmRxEvSetChDetThreshold(status);
+    }
+
+    public void DefDataRdCallback(int val, int status)
+    {
+        FmReceiver.mCallback.FmRxEvDefDataRead(val, status);
+    }
+
+    public void DefDataWrtCallback(int status)
+    {
+        FmReceiver.mCallback.FmRxEvDefDataWrite(status);
+    }
+
+    public void getBlendCallback(int val, int status)
+    {
+        FmReceiver.mCallback.FmRxEvGetBlend(val, status);
+    }
+
+    public void setBlendCallback(int status)
+    {
+        FmReceiver.mCallback.FmRxEvSetBlend(status);
+    }
+
+    public void getStnParamCallback(int val, int status)
+    {
+        FmReceiver.mCallback.FmRxGetStationParam(val, status);
+    }
+
+    public void getStnDbgParamCallback(int val, int status)
+    {
+        FmReceiver.mCallback.FmRxGetStationDbgParam(val, status);
+    }
+
     public void RtPlusCallback(byte[] rtplus) {
         Log.d(TAG, "RtPlusCallback enter " );
         if (rtplus == null) {

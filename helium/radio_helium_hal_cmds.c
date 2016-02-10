@@ -47,32 +47,28 @@ static int send_fm_cmd_pkt(uint16_t opcode,  uint32_t len, void *param)
     FM_HDR *hdr = (FM_HDR *) malloc(p_len);
     if (!hdr) {
         ALOGE("%s:hdr allocation failed", LOG_TAG);
-        return -1;
+        return -FM_HC_STATUS_NOMEM;
     }
 
-    ALOGE("%s:%s: Sizeof FM_HDR: %d", LOG_TAG, __func__, sizeof(FM_HDR));
-    ALOGE("%s:opcode: %x", LOG_TAG, opcode);
+    ALOGV("%s:opcode: %x", LOG_TAG, opcode);
 
-    hdr->protocol_byte = 0x11;
+    hdr->protocol_byte = RADIO_HCI_COMMAND_PKT;
     hdr->opcode = opcode;
     hdr->plen = len;
     if (len)
         memcpy(hdr->cmd_params, (uint8_t *)param, len);
-    ALOGE("%s:calling transmit", __func__);
-    transmit(hdr);
-    ALOGE("%s:transmit success",__func__);
-    return 0;
+    ret = transmit(hdr);
+    ALOGV("%s:transmit done. status = %d", __func__, ret);
+    return ret;
 }
 
 int hci_fm_get_signal_threshold()
 {
+    uint16_t opcode = 0;
 
-    FM_HDR *hdr = (FM_HDR *) malloc(sizeof(FM_HDR));
-    hdr->protocol_byte = FM_CMD;
-    hdr->opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ, HCI_OCF_FM_GET_SIGNAL_THRESHOLD);
-    hdr->plen   = 0;
-    transmit(hdr);
-    return 0;
+    opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
+            HCI_OCF_FM_GET_SIGNAL_THRESHOLD);
+    return send_fm_cmd_pkt(opcode, 0, NULL);
 }
 
 int hci_fm_enable_recv_req()
@@ -109,7 +105,7 @@ int helium_search_list(struct hci_fm_search_station_list_req *s_list)
 
    if (s_list == NULL) {
        ALOGE("%s:%s, search list param is null\n", LOG_TAG, __func__);
-       return -1;
+       return -EINVAL;
    }
    opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
                 HCI_OCF_FM_SEARCH_STATIONS_LIST);
@@ -122,7 +118,7 @@ int helium_search_rds_stations(struct hci_fm_search_rds_station_req *rds_srch)
 
    if (rds_srch == NULL) {
        ALOGE("%s:%s, rds stations param is null\n", LOG_TAG, __func__);
-       return -1;
+       return -EINVAL;
    }
    opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
                 HCI_OCF_FM_SEARCH_RDS_STATIONS);
@@ -135,7 +131,7 @@ int helium_search_stations(struct hci_fm_search_station_req *srch)
 
    if (srch == NULL) {
        ALOGE("%s:%s, search station param is null\n", LOG_TAG, __func__);
-       return -1;
+       return -EINVAL;
    }
    opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
                 HCI_OCF_FM_SEARCH_STATIONS);
@@ -157,7 +153,7 @@ int hci_fm_set_recv_conf_req (struct hci_fm_recv_conf_req *conf)
 
     if (conf == NULL) {
         ALOGE("%s:%s, recv conf is null\n", LOG_TAG, __func__);
-        return -1;
+        return -EINVAL;
     }
     opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
                               HCI_OCF_FM_SET_RECV_CONF_REQ);
@@ -198,11 +194,11 @@ int helium_set_sig_threshold_req(char th)
 
     if (th == NULL) {
         ALOGE("%s:Threshold value NULL", LOG_TAG);
-        return -1;
+        return -EINVAL;
     }
     opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
                                HCI_OCF_FM_SET_SIGNAL_THRESHOLD);
-    return send_fm_cmd_pkt(opcode, sizeof(th), th);
+    return send_fm_cmd_pkt(opcode, sizeof(th), &th);
 }
 
 int helium_rds_grp_mask_req(struct hci_fm_rds_grp_req *rds_grp_msk)
@@ -251,7 +247,7 @@ int helium_set_fm_mute_mode_req(struct hci_fm_mute_mode_req *mute)
 
     if (mute == NULL) {
         ALOGE("%s:%s, mute mode is null\n", LOG_TAG, __func__);
-        return -1;
+        return -EINVAL;
     }
     opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
                                HCI_OCF_FM_SET_MUTE_MODE_REQ);
@@ -263,7 +259,7 @@ int hci_fm_tune_station_req(int param)
     uint16_t opcode = 0;
     int tune_freq = param;
 
-    ALOGE("%s:tune_freq: %d", LOG_TAG, tune_freq);
+    ALOGV("%s:tune_freq: %d", LOG_TAG, tune_freq);
     opcode = hci_opcode_pack(HCI_OGF_FM_COMMON_CTRL_CMD_REQ,
                                   HCI_OCF_FM_TUNE_STATION_REQ);
     return send_fm_cmd_pkt(opcode, sizeof(tune_freq), &tune_freq);
@@ -277,7 +273,7 @@ int hci_set_fm_stereo_mode_req(struct hci_fm_stereo_mode_req *param)
 
     if (stereo_mode_req == NULL) {
         ALOGE("%s:%s, stere mode req is null\n", LOG_TAG, __func__);
-        return -1;
+        return -EINVAL;
     }
     opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
                              HCI_OCF_FM_SET_STEREO_MODE_REQ);
@@ -291,7 +287,7 @@ int hci_peek_data(struct hci_fm_riva_data *data)
 
     if (data == NULL) {
         ALOGE("%s:%s, peek data req is null\n", LOG_TAG, __func__);
-        return -1;
+        return -EINVAL;
     }
     opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
                 HCI_OCF_FM_PEEK_DATA);
@@ -304,7 +300,7 @@ int hci_poke_data(struct hci_fm_riva_poke *data)
 
     if (data == NULL) {
         ALOGE("%s:%s, poke data req is null\n", LOG_TAG, __func__);
-        return -1;
+        return -EINVAL;
     }
     opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
                 HCI_OCF_FM_POKE_DATA);
@@ -317,7 +313,7 @@ int hci_ssbi_poke_reg(struct hci_fm_ssbi_req *data)
 
     if (data == NULL) {
         ALOGE("%s:%s,SSBI poke data req is null\n", LOG_TAG, __func__);
-        return -1;
+        return -EINVAL;
     }
     opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
                 HCI_OCF_FM_SSBI_POKE_REG);
@@ -330,7 +326,7 @@ int hci_ssbi_peek_reg(struct hci_fm_ssbi_peek *data)
 
     if (data == NULL) {
         ALOGE("%s:%s,SSBI peek data req is null\n", LOG_TAG, __func__);
-        return -1;
+        return -EINVAL;
     }
     opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
                 HCI_OCF_FM_SSBI_PEEK_REG);
@@ -339,8 +335,9 @@ int hci_ssbi_peek_reg(struct hci_fm_ssbi_peek *data)
 
 int hci_fm_get_ch_det_th()
 {
+    ALOGV("%s", __func__);
     uint16_t opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
-			HCI_OCF_FM_GET_CH_DET_THRESHOLD);
+            HCI_OCF_FM_GET_CH_DET_THRESHOLD);
     return send_fm_cmd_pkt(opcode, 0, NULL);
 }
 
@@ -350,9 +347,81 @@ int set_ch_det_thresholds_req(struct hci_fm_ch_det_threshold *ch_det_th)
 
     if (ch_det_th == NULL) {
         ALOGE("%s,%s channel det thrshld is null\n", LOG_TAG,  __func__);
-        return -1;
+        return -EINVAL;
     }
     opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
                             HCI_OCF_FM_SET_CH_DET_THRESHOLD);
     return send_fm_cmd_pkt(opcode, sizeof((*ch_det_th)), ch_det_th);
+}
+
+int hci_fm_default_data_read_req(struct hci_fm_def_data_rd_req *def_data_rd)
+{
+    uint16_t opcode = 0;
+
+    if (def_data_rd == NULL) {
+        ALOGE("Def data read param is null");
+        return -EINVAL;
+    }
+
+    opcode = hci_opcode_pack(HCI_OGF_FM_COMMON_CTRL_CMD_REQ,
+            HCI_OCF_FM_DEFAULT_DATA_READ);
+    return send_fm_cmd_pkt(opcode, sizeof(struct hci_fm_def_data_rd_req),
+            def_data_rd);
+}
+
+int hci_fm_get_blend_req()
+{
+    uint16_t opcode = 0;
+
+    opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
+            HCI_OCF_FM_GET_BLND_TBL);
+    return send_fm_cmd_pkt(opcode, 0, NULL);
+}
+
+int hci_fm_set_blend_tbl_req(struct hci_fm_blend_table *blnd_tbl)
+{
+    int opcode = 0;
+
+    if (blnd_tbl == NULL) {
+        ALOGE("Req param is null");
+        return -EINVAL;
+    }
+
+    opcode =  hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
+            HCI_OCF_FM_SET_BLND_TBL);
+    return send_fm_cmd_pkt(opcode, sizeof(struct hci_fm_blend_table),
+            blnd_tbl);
+}
+
+int hci_fm_default_data_write_req(struct hci_fm_def_data_wr_req * data_wrt)
+{
+    int opcode = 0;
+
+    if (data_wrt == NULL) {
+        ALOGE("req param is null");
+        return -EINVAL;
+    }
+
+    opcode = hci_opcode_pack(HCI_OGF_FM_COMMON_CTRL_CMD_REQ,
+            HCI_OCF_FM_DEFAULT_DATA_WRITE);
+    return send_fm_cmd_pkt(opcode, data_wrt->length + sizeof(char) * 2,
+            data_wrt);
+}
+
+int hci_fm_get_station_cmd_param_req()
+{
+    int opcode = 0;
+
+    opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
+            HCI_OCF_FM_GET_STATION_PARAM_REQ);
+    return send_fm_cmd_pkt(opcode, 0,  NULL);
+}
+
+int hci_fm_get_station_dbg_param_req()
+{
+    int opcode = 0;
+
+    opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
+            HCI_OCF_FM_STATION_DBG_PARAM);
+    return send_fm_cmd_pkt(opcode, 0, NULL);
 }

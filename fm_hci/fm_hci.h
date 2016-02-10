@@ -45,8 +45,8 @@ typedef enum {
 } fm_hc_status_t;
 
 typedef enum {
-	FM_RADIO_DISABLE,
-	FM_RADIO_ENABLE
+    FM_RADIO_DISABLE,
+    FM_RADIO_ENABLE
 }fm_power_state;
 
 /* Host/Controller lib internal event ID */
@@ -94,11 +94,11 @@ typedef struct {
 
 typedef struct hdr
 {
-	FM_HDR	*hdr;
-	struct hdr *next;
+    FM_HDR  *hdr;
+    struct hdr *next;
 } TX_Q;
 
-void transmit(FM_HDR *pbuf);
+int transmit(FM_HDR *pbuf);
 int  fm_hci_init(fm_hal_cb *);
 void fm_power(fm_power_state state);
 int open_serial_port(void);

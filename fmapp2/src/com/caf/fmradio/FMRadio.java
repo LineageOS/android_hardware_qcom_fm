@@ -2118,7 +2118,7 @@ public class FMRadio extends Activity
                display = station.getName();
                 if (display.length() > 6)
                     display = display.substring(0,6)+"...";
-	       mPresetButtons[buttonIndex].setEllipsize(TextUtils.TruncateAt.END);
+               mPresetButtons[buttonIndex].setEllipsize(TextUtils.TruncateAt.END);
                mPresetButtons[buttonIndex].setText(display);
                mPresetButtons[buttonIndex].setTag(station);
                addedStations++;
@@ -2753,7 +2753,7 @@ public class FMRadio extends Activity
                   mRadioTextTV.setText("");
                   mRadioTextScroller.mOriginalString = "";
                }else {
-                  //Log.d(LOGTAG, "mUpdateRadioText: Leaving old string " + mRadioTextTV.getText());
+                  Log.v(LOGTAG, "mUpdateRadioText: Leaving old string " + mRadioTextTV.getText());
                }
 
                /* Get PTY and PI and update the display */
@@ -3224,6 +3224,40 @@ public class FMRadio extends Activity
           Log.d(LOGTAG, "mServiceCallbacks.onFmAudioPathStopped:");
           mSpeakerButton.setClickable(false);
           mMuteButton.setClickable(false);
+      }
+      /* Not used in FmRadio */
+      public void getSigThCb(int val, int status) {
+          Log.d(LOGTAG,"get Sig Thres callback");
+      }
+      public void getChDetThCb(int val, int status) {
+          Log.d(LOGTAG, "get Channel Det Threshold Callback");
+      }
+      public void setChDetThCb(int status)
+      {
+          Log.d(LOGTAG, "set channel Det Threshold Callback");
+      }
+      public void DefDataRdCb(int val, int status) {
+          Log.d(LOGTAG, "Def data Read callback");
+      }
+      public void DefDataWrtCb(int status)
+      {
+          Log.d(LOGTAG, "DefDataWrt");
+      }
+      public void getBlendCb(int val, int status)
+      {
+          Log.d(LOGTAG, "get blend callback");
+      }
+      public void setBlendCb(int status)
+      {
+          Log.d(LOGTAG, "set blend callback");
+      }
+      public void getStationParamCb(int val, int status)
+      {
+          Log.d(LOGTAG, "getStationParam");
+      }
+      public void getStationDbgParamCb(int val, int status)
+      {
+          Log.d(LOGTAG, "getStationDbgParam");
       }
    };
 

@@ -478,7 +478,7 @@ err:
     return -1;
 }
 
-void enqueue_fm_tx_cmd(FM_HDR *pbuf)
+int enqueue_fm_tx_cmd(FM_HDR *pbuf)
 {
 
     pthread_mutex_lock(&fmHCIControlBlock.tx_q_lock);
@@ -486,36 +486,40 @@ void enqueue_fm_tx_cmd(FM_HDR *pbuf)
     if (!fmHCIControlBlock.first) {
         fmHCIControlBlock.first = (TX_Q *) malloc(sizeof(TX_Q));
         if (!fmHCIControlBlock.first) {
-            printf("Failed to allocate memory for first!!\n");
+            ALOGI("Failed to allocate memory for first!!\n");
             pthread_mutex_unlock(&fmHCIControlBlock.tx_q_lock);
-            return;
+            return FM_HC_STATUS_NOMEM;
         }
         fmHCIControlBlock.first->hdr = pbuf;
         fmHCIControlBlock.first->next = NULL;
         fmHCIControlBlock.last = fmHCIControlBlock.first;
-                ALOGI("%s: FM-CMD ENQUEUED SUCCESSFULLY", __func__);
+        ALOGI("%s: FM-CMD ENQUEUED SUCCESSFULLY", __func__);
     } else {
         TX_Q *element =  (TX_Q *) malloc(sizeof(TX_Q));
         if (!element) {
-            printf("Failed to allocate memory for element!!\n");
+            ALOGI("Failed to allocate memory for element!!\n");
             pthread_mutex_unlock(&fmHCIControlBlock.tx_q_lock);
-            return;
+            return FM_HC_STATUS_NOMEM;
         }
         fmHCIControlBlock.last->next = element;
         element->hdr = pbuf;
         element->next = NULL;
         fmHCIControlBlock.last = element;
-                ALOGI("%s: fm-cmd enqueued successfully", __func__);
+        ALOGI("%s: fm-cmd enqueued successfully", __func__);
     }
 
     pthread_mutex_unlock(&fmHCIControlBlock.tx_q_lock);
+    return FM_HC_STATUS_SUCCESS;
 }
 
 /** Transmit frame */
-void transmit(FM_HDR *pbuf)
+int transmit(FM_HDR *pbuf)
 {
-    enqueue_fm_tx_cmd(pbuf);
-    event_notification(HC_EVENT_TX);
+    int status = FM_HC_STATUS_FAIL;
+
+    if ((status = enqueue_fm_tx_cmd(pbuf)) == FM_HC_STATUS_SUCCESS)
+        event_notification(HC_EVENT_TX);
+    return status;
 }
 
 void userial_close_reader(void) {

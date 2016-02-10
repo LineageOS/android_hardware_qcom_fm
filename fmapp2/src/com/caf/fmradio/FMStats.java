@@ -59,6 +59,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.view.LayoutInflater;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.app.AlarmManager;
@@ -173,6 +175,7 @@ public class FMStats extends Activity  {
     CfgRfItemSelectedListener1 mSpinCfgRfListener1 = null;
     CfgRfItemSelectedListener2 mSpinCfgRfListener2 = null;
     CfgRfItemSelectedListener3 mSpinCfgRfListener3 = null;
+    CfgRfItemSelectedListener4 mSpinCfgRfListener4 = null;
     BandSweepMthdsSelectedListener mSweepMthdsListener =
                                      new BandSweepMthdsSelectedListener();
 
@@ -210,6 +213,27 @@ public class FMStats extends Activity  {
     ArrayAdapter<CharSequence> bandSweepMthds;
 
     private static boolean mIsTransportSMD = false;
+    private static boolean setCmdSent = false;
+    private static int lastCmdSent = 0;
+    private final int CMD_CHDET_SINR_TH = 1;
+    private final int CMD_CHDET_SINR_SAMPLE = 2;
+    private final int CMD_CHDET_INTF_TH_LOW = 3;
+    private final int CMD_CHDET_INTF_TH_HIGH = 4;
+    private final int CMD_DEFRD_AF_RMSSI_TH = 5;
+    private final int CMD_DEFRD_AF_RMSSI_SAMPLE = 6;
+    private final int CMD_DEFRD_GD_CH_RMSSI_TH = 7;
+    private final int CMD_DEFRD_SEARCH_ALGO = 8;
+    private final int CMD_DEFRD_SINR_FIRST_STAGE = 9;
+    private final int CMD_DEFRD_RMSSI_FIRST_STAGE = 10;
+    private final int CMD_DEFRD_CF0TH12 = 11;
+    private final int CMD_DEFRD_TUNE_POWER = 12;
+    private final int CMD_DEFRD_REPEATCOUNT = 13;
+    private final int CMD_BLENDTBL_SINR_HI = 14;
+    private final int CMD_BLENDTBL_RMSSI_HI = 15;
+    private final int CMD_STNPARAM_SINR = 16;
+    private final int CMD_STNPARAM_RSSI = 17;
+    private final int CMD_STNDBGPARAM_IOVERC = 18;
+    private final int CMD_STNDBGPARAM_INFDETOUT = 19;
 
     private static final int MPX_DCC = 0;
     private static final int SINR_INTF = 1;
@@ -247,8 +271,11 @@ public class FMStats extends Activity  {
     private int prevSweepMthd = 0; //Manual (using band min, max)
 
     private int curSweepMthd = 0;
+    private int textBoxVal = 0;
+    private int algo_type = -1;
 
     private Thread mRecordUpdateHandlerThread = null;
+    private Thread mRunTestThread = null;
     boolean mRecording = false;
 
 
@@ -268,6 +295,21 @@ public class FMStats extends Activity  {
 
     private GetNextFreqInterface mNextFreqInterface;
     private CommaSeparatedFreqFileReader mFreqFileReader;
+    private final int SIGNAL_THRESHOLD = 1;
+    private final int GET_CHANNEL_DET_THRESHOLD = 2;
+    private final int DEFAULT_DATA_READ = 3;
+    private final int GET_BLEND_TBL = 4;
+    private final int SET_CHANNEL_DET_THRESHOLD = 5;
+    private final int DEFAULT_DATA_WRITE = 6;
+    private final int SET_BLEND_TBL = 7;
+    private final int GET_STATION_PARAM = 8;
+    private final int GET_STATION_DBG_PARAM = 9;
+    private Object obj = new Object();
+    private int nRssi = 0;
+    private int nIoC = 0;
+    private int nIntDet = 0;
+    private int nMpxDcc = 0;
+    private int nSINR = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -289,8 +331,14 @@ public class FMStats extends Activity  {
                           (this, R.array.band_sweep_methods,
                             android.R.layout.simple_spinner_item);
 
+        Log.d(LOGTAG, "oncreate");
         checkTransportLayer();
-        if (isRomeChip()) {
+        if (isCherokeeChip()) {
+            mSpinCfgRfListener4 = new CfgRfItemSelectedListener4();
+            adaptCfgRf = ArrayAdapter.createFromResource(
+                    this, R.array.cfg_rf4,
+                    android.R.layout.simple_spinner_item);
+        } else if (isRomeChip()) {
             mSpinCfgRfListener3 = new CfgRfItemSelectedListener3();
             adaptCfgRf = ArrayAdapter.createFromResource(
                            this, R.array.cfg_rf3,
@@ -333,12 +381,6 @@ public class FMStats extends Activity  {
             mCurrentFileName = null;
         }
 
-        if (false == bindToService(this, osc)) {
-            Log.d(LOGTAG, "onCreate: Failed to Start Service");
-        }else {
-            Log.d(LOGTAG, "onCreate: Start Service completed successfully");
-        }
-
         /*Initialize the column header with
         constant values*/
         if (isRomeChip()) {
@@ -367,9 +409,104 @@ public class FMStats extends Activity  {
         registerBandSweepDwellExprdListener();
     }
 
+    private final Handler mCallbackHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            Log.e(LOGTAG, "mCallbackHandler: msg.what = " + msg.what);
+            int val, status;
+            tv1 = (TextView)findViewById(R.id.label);
+            switch (msg.what) {
+                case SIGNAL_THRESHOLD:
+                case GET_CHANNEL_DET_THRESHOLD:
+                case GET_BLEND_TBL:
+                    status = msg.arg2;
+                    if (status != 0) {
+                        tv1.setText("Error:"  + String.valueOf(status));
+                    } else {
+                        val = msg.arg1;
+                        tv1.setText(String.valueOf(val));
+                    }
+                    break;
+                case DEFAULT_DATA_READ:
+                    status = msg.arg2;
+                    if (status != 0) {
+                        tv1.setText("Error:"  + String.valueOf(status));
+                    } else {
+                        val = msg.arg1;
+                        if (lastCmdSent == CMD_DEFRD_SEARCH_ALGO  && val == MPX_DCC) {
+                            tv1.setText(R.string.search_algo_mpx);
+                        } else if (lastCmdSent == CMD_DEFRD_SEARCH_ALGO && val == SINR_INTF) {
+                            tv1.setText(R.string.search_algo_sinrint);
+                        } else {
+                            tv1.setText(String.valueOf(val));
+                        }
+                        lastCmdSent = 0;
+                    }
+                    break;
+                case SET_CHANNEL_DET_THRESHOLD:
+                case DEFAULT_DATA_WRITE:
+                case SET_BLEND_TBL:
+                    tv1.setVisibility(View.VISIBLE);
+                    status = msg.arg1;
+                    if (status != 0)
+                        tv1.setText("Error:" + String.valueOf(status));
+                    else
+                        tv1.setText("Success");
+                    break;
+                case GET_STATION_PARAM:
+                    status = msg.arg2;
+                    if (status != 0) {
+                        Log.e(LOGTAG, "GET_STATION_DBG_PARAM: status = " + status);
+                        nRssi = Integer.MAX_VALUE;
+                        nSINR = Integer.MAX_VALUE;
+                    } else {
+                        if (lastCmdSent == CMD_STNPARAM_RSSI)
+                            nRssi = msg.arg1;
+                        if (lastCmdSent == CMD_STNPARAM_SINR)
+                            nSINR = msg.arg1;
+                    }
+                    if (mRunTestThread !=  null) {
+                        synchronized (obj) {
+                            obj.notify();
+                        }
+                    }
+                    lastCmdSent = 0;
+                    break;
+                case GET_STATION_DBG_PARAM:
+                    status = msg.arg2;
+                    if (status != 0) {
+                        Log.e(LOGTAG, "GET_STATION_DBG_PARAM: status = " + status);
+                        nIoC = Integer.MAX_VALUE;
+                        nIntDet = Integer.MAX_VALUE;
+                    } else {
+                        if (lastCmdSent == CMD_STNDBGPARAM_IOVERC)
+                            nIoC = msg.arg1;
+                        if  (lastCmdSent == CMD_STNDBGPARAM_INFDETOUT)
+                            nIntDet = msg.arg1;
+                    }
+                    if (mRunTestThread !=  null) {
+                        synchronized (obj) {
+                            mRunTestThread.notify();
+                        }
+                    }
+                    break;
+                default:
+                    Log.e(LOGTAG, "mCallbackHandler:Default");
+                    break;
+            }
+            Log.e(LOGTAG, "mCallbackHandler--");
+        }
+    };
+
     @Override
     public void onStart() {
        super.onStart();
+
+        if (false == bindToService(this, osc)) {
+            Log.e(LOGTAG, "onCreate: Failed to Start Service");
+        }else {
+            Log.d(LOGTAG, "onCreate: Start Service completed successfully");
+        }
        if(isRecording()) {
           Log.d(LOGTAG, "onStart");
           initiateRecordThread();
@@ -420,24 +557,45 @@ public class FMStats extends Activity  {
         super.onDestroy();
     }
 
+    private Runnable mRunTest = new Runnable(){
+        public void run() {
+              runCurrentTest();
+        }
+    };
+
     private View.OnClickListener mOnRunListener = new View.OnClickListener() {
         public void onClick(View v) {
+            Log.d(LOGTAG, "mTestRunning=" + mTestRunning);
            if(false == mTestRunning) {
               clearPreviousTestResults();
               mTestRunning = true;
               if(mTestSelected == SWEEP_TEST) {
                  disableBandSweepSetting();
               }
-              runCurrentTest();
-           }else {
+              SetButtonState(false);
+              createResult(mColumnHeader);
+              if ((mRunTestThread == null) || (mRunTestThread.getState() == Thread.State.TERMINATED)) {
+                    mRunTestThread = new Thread(mRunTest,
+                            "mRunTestThread");
+              } else {
+                  Log.e(LOGTAG, "Error: Thread is already running");
+                  return;
+              }
+              if (mRunTestThread != null) {
+                  mRunTestThread.start();
+              } else {
+                  SetButtonState(true);
+                  Log.e(LOGTAG, "RunTestThread: new Thread failed");
+                  return;
+              }
+           } else {
               mTestRunning = false;
               SetButtonState(true);
               /*Stop the thread by interrupting it*/
-              if(mMultiUpdateThread != null) {
-                 mMultiUpdateThread.interrupt();
-                 mMultiUpdateThread = null;
+              if (mRunTestThread != null) {
+                  mRunTestThread.interrupt();
+                  mRunTestThread = null;
               }
-
               if(SEARCH_TEST == mTestSelected) {
                  try {
                       mService.cancelSearch();
@@ -495,6 +653,7 @@ public class FMStats extends Activity  {
        szbTestHeader.append("running test:").append
                               (szTestInformation[mTestSelected]);
        String szTestHeader = new String(szbTestHeader);
+       Log.d(LOGTAG, "chooseFMRfoption");
        switch(mTestSelected)
        {
        case 1:
@@ -509,7 +668,10 @@ public class FMStats extends Activity  {
                adaptCfgRf.setDropDownViewResource
                            (android.R.layout.simple_spinner_dropdown_item);
                spinOptionFmRf.setAdapter(adaptCfgRf);
-               if (isRomeChip())
+               if (isCherokeeChip()) {
+                   spinOptionFmRf.setOnItemSelectedListener
+                       (mSpinCfgRfListener4);
+               } else if (isRomeChip())
                   spinOptionFmRf.setOnItemSelectedListener
                                    (mSpinCfgRfListener3);
                else if(isTransportLayerSMD())
@@ -563,14 +725,16 @@ public class FMStats extends Activity  {
             String a;
             a =  txtbox1.getText().toString();
             try {
-                 int count = Integer.parseInt(a);
-                 Log.d(LOGTAG, "Value entered for mOnSetRxRePeatCount: " + count);
-                 if((count < 0) ||
-                     (count > 255))
+                 textBoxVal = Integer.parseInt(a);
+                 Log.d(LOGTAG, "Value entered for mOnSetRxRePeatCount: " + textBoxVal);
+                 if((textBoxVal < 0) ||
+                     (textBoxVal > 255))
                      return;
                  if(mService != null) {
                     try {
-                         mService.setRxRepeatCount(count);
+                        mService.getRxRepeatCount();
+                        setCmdSent = true;
+                        lastCmdSent = CMD_DEFRD_REPEATCOUNT;
                     } catch (RemoteException e) {
                          e.printStackTrace();
                     }
@@ -587,13 +751,15 @@ public class FMStats extends Activity  {
             String a;
             a =  txtbox1.getText().toString();
             try {
-                 byte count = (byte) Integer.parseInt(a);
-                 Log.d(LOGTAG, "Value entered for mOnSetBlendSinrHiListener: " + count);
-                 if((count < MIN_BLEND_SINRHI ) ||
-                     (count > MAX_BLEND_SINRHI))
+                 textBoxVal = (byte) Integer.parseInt(a);
+                 Log.d(LOGTAG, "Value entered for mOnSetBlendSinrHiListener: " + textBoxVal);
+                 if((textBoxVal < MIN_BLEND_SINRHI ) ||
+                     (textBoxVal > MAX_BLEND_SINRHI))
                      return;
                  if(mReceiver != null) {
-                         mReceiver.setBlendSinr(count);
+                     mReceiver.getBlendSinr();
+                     setCmdSent = true;
+                     lastCmdSent = CMD_BLENDTBL_SINR_HI;
                  }
             } catch (NumberFormatException e) {
                  Log.e(LOGTAG, "Value entered is not in correct format : " + a);
@@ -607,13 +773,15 @@ public class FMStats extends Activity  {
             String a;
             a =  txtbox1.getText().toString();
             try {
-                 byte count = (byte)Integer.parseInt(a);
-                 Log.d(LOGTAG, "Value entered for mOnSetBlendRmssiHiListener: " + count);
-                 if((count < MIN_BLEND_RMSSIHI) ||
-                     (count > MAX_BLEND_RMSSIHI))
+                 textBoxVal = (byte)Integer.parseInt(a);
+                 Log.d(LOGTAG, "Value entered for mOnSetBlendRmssiHiListener: " + textBoxVal);
+                 if((textBoxVal < MIN_BLEND_RMSSIHI) ||
+                     (textBoxVal > MAX_BLEND_RMSSIHI))
                      return;
                  if(mReceiver != null) {
-                         mReceiver.setBlendRmssi(count);
+                     mReceiver.getBlendRmssi();
+                     setCmdSent = true;
+                     lastCmdSent = CMD_BLENDTBL_RMSSI_HI;
                  }
             } catch (NumberFormatException e) {
                  Log.e(LOGTAG, "Value entered is not in correct format : " + a);
@@ -646,17 +814,18 @@ public class FMStats extends Activity  {
           String a;
           a = txtbox1.getText().toString();
           try {
-              int rdel = Integer.parseInt(a);
-              Log.d(LOGTAG, "Value of Sinr Samples count is : " + rdel);
+              textBoxVal = Integer.parseInt(a);
+              Log.d(LOGTAG, "Value of Sinr Samples count is : " + textBoxVal);
               if(mService != null) {
                  try {
-                     mService.setSinrSamplesCnt(rdel);
+                     mService.getSinrSamplesCnt();
+                     setCmdSent = true;
+                     lastCmdSent = CMD_CHDET_SINR_SAMPLE;
                  }catch (RemoteException e) {
                      e.printStackTrace();
                  }
               }
           }catch (NumberFormatException e) {
-              Log.e(LOGTAG, "Value entered is not in correct format: " + a);
               txtbox1.setText("");
           }
       }
@@ -668,11 +837,13 @@ public class FMStats extends Activity  {
           String a;
           a = txtbox1.getText().toString();
           try {
-              int rdel = Integer.parseInt(a);
-              Log.d(LOGTAG, "Value of Sinr Th is : " + rdel);
+              textBoxVal = Integer.parseInt(a);
+              Log.d(LOGTAG, "Value of Sinr Th is : " + textBoxVal);
               if(mService != null) {
                  try {
-                     mService.setSinrTh(rdel);
+                     mService.getSinrTh();
+                     setCmdSent = true;
+                     lastCmdSent = CMD_CHDET_SINR_TH;
                  }catch (RemoteException e) {
                      e.printStackTrace();
                  }
@@ -690,11 +861,13 @@ public class FMStats extends Activity  {
           String a;
           a = txtbox1.getText().toString();
           try {
-              int rdel = Integer.parseInt(a);
-              Log.d(LOGTAG, "Value of Intf Det Low Th is : " + rdel);
+              textBoxVal = Integer.parseInt(a);
+              Log.d(LOGTAG, "Value of Intf Det Low Th is : " + textBoxVal);
               if(mService != null) {
                  try {
-                     mService.setIntfDetLowTh(rdel);
+                     mService.getIntfDetLowTh();
+                     setCmdSent =  true;
+                     lastCmdSent = CMD_CHDET_INTF_TH_LOW;
                  }catch (RemoteException e) {
                      e.printStackTrace();
                  }
@@ -711,11 +884,13 @@ public class FMStats extends Activity  {
           String a;
           a = txtbox1.getText().toString();
           try {
-              int rdel = Integer.parseInt(a);
-              Log.d(LOGTAG, "Value of Intf Det Low Th is : " + rdel);
+              textBoxVal = Integer.parseInt(a);
+              Log.d(LOGTAG, "Value of Intf Det Low Th is : " + textBoxVal);
               if(mService != null) {
                  try {
-                     mService.setIntfDetHighTh(rdel);
+                     mService.getIntfDetHighTh();
+                     setCmdSent = true;
+                     lastCmdSent = CMD_CHDET_INTF_TH_HIGH;
                  }catch (RemoteException e) {
                      e.printStackTrace();
                  }
@@ -733,14 +908,16 @@ public class FMStats extends Activity  {
           String a;
           a = txtbox1.getText().toString();
           try {
-              int sinr = Integer.parseInt(a);
-              Log.d(LOGTAG, "Value entered for SINR FIRST STAGE is : " + sinr);
-              if((sinr < MIN_SINR_FIRST_STAGE) ||
-                     (sinr > MAX_SINR_FIRST_STAGE))
+              textBoxVal = Integer.parseInt(a);
+              Log.d(LOGTAG, "Value entered for SINR FIRST STAGE is : " + textBoxVal);
+              if((textBoxVal < MIN_SINR_FIRST_STAGE) ||
+                     (textBoxVal > MAX_SINR_FIRST_STAGE))
                   return;
               if(mService != null) {
                  try {
-                     mService.setSinrFirstStage(sinr);
+                     mService.getSinrFirstStage();
+                     setCmdSent = true;
+                     lastCmdSent = CMD_DEFRD_SINR_FIRST_STAGE;
                  }catch (RemoteException e) {
                      e.printStackTrace();
                  }
@@ -758,14 +935,16 @@ public class FMStats extends Activity  {
           String a;
           a = txtbox1.getText().toString();
           try {
-              int rmssi = Integer.parseInt(a);
-              Log.d(LOGTAG, "Value entered for RMSSI FIRST STAGE is: " + rmssi);
-              if((rmssi < MIN_RMSSI_FIRST_STAGE) ||
-                     (rmssi > MAX_RMSSI_FIRST_STAGE))
+              textBoxVal = Integer.parseInt(a);
+              Log.d(LOGTAG, "Value entered for RMSSI FIRST STAGE is: " + textBoxVal);
+              if((textBoxVal < MIN_RMSSI_FIRST_STAGE) ||
+                     (textBoxVal > MAX_RMSSI_FIRST_STAGE))
                   return;
               if(mService != null) {
                  try {
-                     mService.setRmssiFirstStage(rmssi);
+                     mService.getRmssiFirstStage();
+                     setCmdSent = true;
+                     lastCmdSent = CMD_DEFRD_RMSSI_FIRST_STAGE;
                  }catch (RemoteException e) {
                      e.printStackTrace();
                  }
@@ -783,14 +962,16 @@ public class FMStats extends Activity  {
           String a;
           a = txtbox1.getText().toString();
           try {
-              int cf0 = Integer.parseInt(a);
-              Log.d(LOGTAG, "Value entered for CF0TH12 is: " + cf0);
-              if((cf0 < MIN_CF0TH12) ||
-                     (cf0 > MAX_CF0TH12))
+              textBoxVal = Integer.parseInt(a);
+              Log.d(LOGTAG, "Value entered for CF0TH12 is: " + textBoxVal);
+              if((textBoxVal < MIN_CF0TH12) ||
+                     (textBoxVal > MAX_CF0TH12))
                   return;
               if(mService != null) {
                  try {
-                     mService.setCFOMeanTh(cf0);
+                     mService.getCFOMeanTh();
+                     setCmdSent = true;
+                     lastCmdSent = CMD_DEFRD_CF0TH12;
                  }catch (RemoteException e) {
                      e.printStackTrace();
                  }
@@ -808,9 +989,12 @@ public class FMStats extends Activity  {
           Log.d(LOGTAG, "Value entered for search is: MPX DCC");
           if(mService != null) {
              try {
-                  mService.setSearchAlgoType(MPX_DCC);
+                 mService.getSearchAlgoType();
+                 setCmdSent = true;
+                 algo_type = MPX_DCC;
+                 lastCmdSent = CMD_DEFRD_SEARCH_ALGO;
              }catch (RemoteException e) {
-                  e.printStackTrace();
+                 e.printStackTrace();
              }
           }
        }
@@ -822,7 +1006,10 @@ public class FMStats extends Activity  {
           Log.d(LOGTAG, "Value entered for search is: SINR INTF");
           if(mService != null) {
              try {
-                  mService.setSearchAlgoType(SINR_INTF);
+                 mService.getSearchAlgoType();
+                 setCmdSent = true;
+                 algo_type = SINR_INTF;
+                 lastCmdSent = CMD_DEFRD_SEARCH_ALGO;
              }catch (RemoteException e) {
                   e.printStackTrace();
              }
@@ -836,14 +1023,16 @@ public class FMStats extends Activity  {
           String a;
           a = txtbox1.getText().toString();
           try {
-              int th = Integer.parseInt(a);
-              Log.d(LOGTAG, "Value entered for AfJmpRmssiTh is: " + th);
-              if((th < MIN_AF_JMP_RMSSI_TH) ||
-                     (th > MAX_AF_JMP_RMSSI_TH))
+              textBoxVal = Integer.parseInt(a);
+              Log.d(LOGTAG, "Value entered for AfJmpRmssiTh is: " + textBoxVal);
+              if((textBoxVal < MIN_AF_JMP_RMSSI_TH) ||
+                     (textBoxVal > MAX_AF_JMP_RMSSI_TH))
                   return;
               if(mService != null) {
                  try {
-                     mService.setAfJmpRmssiTh(th);
+                     mService.getAfJmpRmssiTh();
+                     setCmdSent = true;
+                     lastCmdSent = CMD_DEFRD_AF_RMSSI_TH;
                  }catch (RemoteException e) {
                      e.printStackTrace();
                  }
@@ -861,14 +1050,16 @@ public class FMStats extends Activity  {
           String a;
           a = txtbox1.getText().toString();
           try {
-              int th = Integer.parseInt(a);
-              Log.d(LOGTAG, "Value entered for Good channel Rmssi Th is: " + th);
-              if((th < MIN_GD_CH_RMSSI_TH) ||
-                     (th > MAX_GD_CH_RMSSI_TH))
+              textBoxVal = Integer.parseInt(a);
+              Log.d(LOGTAG, "Value entered for Good channel Rmssi Th is: " + textBoxVal);
+              if((textBoxVal < MIN_GD_CH_RMSSI_TH) ||
+                     (textBoxVal > MAX_GD_CH_RMSSI_TH))
                   return;
               if(mService != null) {
                  try {
-                     mService.setGoodChRmssiTh(th);
+                     mService.getGoodChRmssiTh();
+                     setCmdSent = true;
+                     lastCmdSent = CMD_DEFRD_GD_CH_RMSSI_TH;
                  }catch (RemoteException e) {
                      e.printStackTrace();
                  }
@@ -886,14 +1077,16 @@ public class FMStats extends Activity  {
           String a;
           a = txtbox1.getText().toString();
           try {
-              int cnt = Integer.parseInt(a);
-              Log.d(LOGTAG, "Value entered for AfJmpRmssiSamples is: " + cnt);
-              if((cnt < MIN_AF_JMP_RMSSI_SAMPLES) ||
-                     (cnt > MAX_AF_JMP_RMSSI_SAMPLES))
+              textBoxVal = Integer.parseInt(a);
+              Log.d(LOGTAG, "Value entered for AfJmpRmssiSamples is: " + textBoxVal);
+              if((textBoxVal < MIN_AF_JMP_RMSSI_SAMPLES) ||
+                     (textBoxVal > MAX_AF_JMP_RMSSI_SAMPLES))
                   return;
               if(mService != null) {
                  try {
-                     mService.setAfJmpRmssiSamplesCnt(cnt);
+                     mService.getAfJmpRmssiSamplesCnt();
+                     setCmdSent = true;
+                     lastCmdSent = CMD_DEFRD_AF_RMSSI_SAMPLE;
                  }catch (RemoteException e) {
                      e.printStackTrace();
                  }
@@ -1989,6 +2182,621 @@ public class FMStats extends Activity  {
         }
     }
 
+    public class CfgRfItemSelectedListener4 implements OnItemSelectedListener {
+        public void onItemSelected(AdapterView<?> parent,
+                                    View view, int pos, long id) {
+            Log.d("Table","onItemSelected is hit with " + pos);
+            int ret = Integer.MAX_VALUE;
+            byte retval = Byte.MAX_VALUE;
+            txtbox1 = (EditText) findViewById(R.id.txtbox1);
+            tv1 = (TextView) findViewById(R.id.label);
+            button1 = (Button)findViewById(R.id.SearchMpxDcc);
+            button2 = (Button)findViewById(R.id.SearchSinrInt);
+            Button SetButton = (Button)findViewById(R.id.Setbutton);
+            tLayout.setVisibility(View.INVISIBLE);
+            switch(pos)
+            {
+                case 1:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_SinrSmplsCnt);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_SinrSmplsCnt);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetSinrSmplCntListener);
+                    }
+                    break;
+                case 2:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_SinrTh);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_SinrTh);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetSinrThListener);
+                    }
+                    break;
+                case 3:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_IntfLowTh);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_IntfLowTh);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetIntfLowThListener);
+                    }
+                    break;
+                case 4:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_IntfHighTh);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_IntfHighTh);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetIntfHighThListener);
+                    }
+                    break;
+                case 5:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_SinrFirstStage);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_SinrFirstStage);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetSinrFirstStageListener);
+                    }
+                    break;
+                case 6:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_RmssiFirstStage);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_RmssiFirstStage);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetRmssiFirstStageListener);
+                    }
+                    break;
+                case 7:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_CF0Th12);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_CF0Th12);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetCFOMeanThListener);
+                    }
+                    break;
+                case 8:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setText(R.string.search_algo_mpx);
+                       button1.setVisibility(View.VISIBLE);
+                       button1.setOnClickListener(mOnSetSearchMPXDCCListener);
+                    }
+                    if(button2 != null) {
+                       button2.setText(R.string.search_algo_sinrint);
+                       button2.setVisibility(View.VISIBLE);
+                       button2.setOnClickListener(mOnSetSearchSinrIntfListener);
+                    }
+                    break;
+                case 9:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText("");
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    try {
+                        if(mService != null)
+                           ret = mService.getSinrSamplesCnt();
+                           Log.d(LOGTAG, "Get Sinr Samples Count: " + ret);
+                    }catch (RemoteException e) {
+                    }
+                    break;
+                case 10:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText("");
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    try {
+                        if(mService != null)
+                           ret = mService.getSinrTh();
+                           Log.d(LOGTAG, "Get Sinr Threshold: " + ret);
+                    }catch (RemoteException e) {
+
+                    }
+                    break;
+                case 11:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText("");
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    try {
+                        if(mService != null) {
+                           ret = mService.getSinrFirstStage();
+                           Log.d(LOGTAG, "Get Sinr First Stage: " + ret);
+                        }
+                    }catch (RemoteException e) {
+
+                    }
+                    break;
+                case 12:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText("");
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    try {
+                        if(mService != null) {
+                           ret = mService.getRmssiFirstStage();
+                           Log.d(LOGTAG, "Get Rmssi First Stage: " + ret);
+                        }
+                    }catch (RemoteException e) {
+
+                    }
+                    break;
+                case 13:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText("");
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    try {
+                        if(mService != null) {
+                           ret = mService.getCFOMeanTh();
+                           Log.d(LOGTAG, "Get CF0 Threshold: " + ret);
+                        }
+                    }catch (RemoteException e) {
+
+                    }
+                    break;
+                case 14:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText("");
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    try {
+                        if(mService != null) {
+                            ret = mService.getSearchAlgoType();
+                            lastCmdSent = CMD_DEFRD_SEARCH_ALGO;
+                            Log.d(LOGTAG, "Search Type: " + ret);
+                        }
+                    }catch (RemoteException e) {
+
+                    }
+                    break;
+                case 15:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_AfJmpRmssiTh);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_AfJmpRmssiTh);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetAfJmpRmssiThListener);
+                    }
+                    break;
+                case 16:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_GdChRmssiTh);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_GdChRmssiTh);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetGdChRmssiThListener);
+                    }
+                    break;
+                case 17:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_AfJmpRmssiSmplsCnt);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_AfJmpRmssiSmplsCnt);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetAfJmpRmssiSmplsCntListener);
+                    }
+                    break;
+                case 18:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText("");
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    try {
+                        if(mService != null) {
+                           ret = mService.getAfJmpRmssiTh();
+                           Log.d(LOGTAG, "Get Af Jmp Rmssi Th: " + ret);
+                        }
+                    }catch (RemoteException e) {
+
+                    }
+                    break;
+                case 19:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText("");
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    try {
+                        if(mService != null) {
+                           ret = mService.getGoodChRmssiTh();
+                           Log.d(LOGTAG, "Get GoodChRmssi Threshold: " + ret);
+                        }
+                    }catch (RemoteException e) {
+
+                    }
+                    break;
+                case 20:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText("");
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    try {
+                        if(mService != null) {
+                           ret = mService.getAfJmpRmssiSamplesCnt();
+                           Log.d(LOGTAG, "Get AfJmpRmssiSamples count: " + ret);
+                        }
+                    }catch (RemoteException e) {
+
+                    }
+                    break;
+                case 21:
+                    if (txtbox1 != null) {
+                        txtbox1.setText(R.string.type_rd);
+                        txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText(R.string.enter_RxRePeatCount);
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setText(R.string.set_RxRePeatCount);
+                        SetButton.setVisibility(View.VISIBLE);
+                        SetButton.setOnClickListener(mOnSetRxRePeatCount);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    break;
+                case 22:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_BlendSinrHi);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_BlendSinrHi);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetBlendSinrHiListener);
+                    }
+                    break;
+                case 23:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText("");
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    if (mReceiver != null) {
+                        retval = mReceiver.getBlendSinr();
+                        Log.d(LOGTAG, "Get BlendSinrHi: " + retval);
+                    }
+                    break;
+                case 24:
+                    if (txtbox1 != null) {
+                       txtbox1.setText(R.string.type_rd);
+                       txtbox1.setVisibility(View.VISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setText(R.string.enter_BlendRmssiHi);
+                       tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setText(R.string.set_BlendRmssiHi);
+                       SetButton.setVisibility(View.VISIBLE);
+                       SetButton.setOnClickListener(mOnSetBlendRmssiHiListener);
+                    }
+                    break;
+                case 25:
+                    if (txtbox1 != null) {
+                        txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                        tv1.setText("");
+                        tv1.setVisibility(View.VISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                        SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    if (mReceiver != null) {
+                        retval = mReceiver.getBlendRmssi();
+                        Log.d(LOGTAG, "Get BlendRmssiHi: " + retval);
+                    }
+                    break;
+                case 26:
+                    tLayout.removeAllViewsInLayout();
+                    mNewRowIds = NEW_ROW_ID;
+                    tLayout.setVisibility(View.VISIBLE);
+                    if (txtbox1 != null) {
+                       txtbox1.setVisibility(View.INVISIBLE);
+                    }
+                    if (tv1 != null) {
+                       tv1.setVisibility(View.INVISIBLE);
+                    }
+                    if (SetButton != null) {
+                       SetButton.setVisibility(View.INVISIBLE);
+                    }
+                    if(button1 != null) {
+                       button1.setVisibility(View.INVISIBLE);
+                    }
+                    if(button2 != null) {
+                       button2.setVisibility(View.INVISIBLE);
+                    }
+                    adaptRfCfg.setDropDownViewResource(
+                              android.R.layout.simple_spinner_dropdown_item);
+                    spinOptionFmRf.setAdapter(adaptRfCfg);
+                    spinOptionFmRf.setOnItemSelectedListener(mSpinRfCfgListener);
+                    break;
+            }
+        }
+        public void onNothingSelected(AdapterView<?> parent) {
+            // Do Nothing
+        }
+    }
+
     public class RfCfgItemSelectedListener implements OnItemSelectedListener {
         public void onItemSelected(AdapterView<?> parent,
                                     View view, int pos, long id) {
@@ -2030,6 +2838,8 @@ public class FMStats extends Activity  {
                     adaptCfgRf.setDropDownViewResource(
                                      android.R.layout.simple_spinner_dropdown_item);
                     spinOptionFmRf.setAdapter(adaptCfgRf);
+                    if (isCherokeeChip())
+                       spinOptionFmRf.setOnItemSelectedListener(mSpinCfgRfListener4);
                     if (isRomeChip())
                        spinOptionFmRf.setOnItemSelectedListener(mSpinCfgRfListener3);
                     else if(isTransportLayerSMD())
@@ -2066,6 +2876,17 @@ public class FMStats extends Activity  {
     private boolean isTransportLayerSMD() {
         return mIsTransportSMD;
     }
+
+    private boolean isCherokeeChip() {
+        Log.d(LOGTAG, "isCherokeeChip");
+
+		String chip = SystemProperties.get("qcom.bluetooth.soc");
+		if (chip.equals("cherokee"))
+			return true;
+		else
+			return false;
+	}
+
     private boolean isRomeChip() {
         String chip = "";
 
@@ -2079,6 +2900,7 @@ public class FMStats extends Activity  {
         // Get the TableLayout
         TableLayout tl = (TableLayout) findViewById(R.id.maintable);
         if (tl == null) {
+            Log.e(LOGTAG, "Tl is null");
            return;
         }
 
@@ -2112,7 +2934,7 @@ public class FMStats extends Activity  {
             tr2.addView(colIoC);
         }
 
-        if(isTransportLayerSMD() || isRomeChip())
+        if(isTransportLayerSMD() || isRomeChip() || isCherokeeChip())
         {
              TextView colSINR = new TextView(getApplicationContext());
              colSINR.setText(aRes.getSINR());
@@ -2170,6 +2992,8 @@ public class FMStats extends Activity  {
         szbTestHeader.append("running test:").append(szTestInformation[mTestSelected]);
         szbTestHeader.append("\r\n");
         String szTestHeader = new String(szbTestHeader);
+        Message updateStop;
+        int freq;
         if(null != mFileCursor ) {
            try {
                 mFileCursor.write(szTestHeader.getBytes());
@@ -2181,53 +3005,61 @@ public class FMStats extends Activity  {
         {
         case CUR_FREQ_TEST:
              Log.d(LOGTAG,"Current Freq test is going to run");
-             int freq = FmSharedPreferences.getTunedFrequency();
+             freq = FmSharedPreferences.getTunedFrequency();
              Result res = GetFMStatsForFreq(freq);
-             createResult(mColumnHeader);
-             if(res != null)
-                createResult(res);
-              mTestRunning = false;
+             if(res != null) {
+                 Log.e(LOGTAG, "CUR_FREQ_TEST: Updating UI");
+                 Message updateUI = new Message();
+                 updateUI.what = STATUS_UPDATE;
+                 updateUI.obj = (Object)res;
+                 mUIUpdateHandlerHandler.sendMessage(updateUI);
+             }
+             updateStop = new Message();
+             updateStop.what = STATUS_DONE;
+             mUIUpdateHandlerHandler.sendMessage(updateStop);
+             mTestRunning = false;
               break;
         case CUR_MULTI_TEST:
-             /*Set it to ready to Stop*/
-             SetButtonState(false);
-             createResult(mColumnHeader);
 
-             if(mMultiUpdateThread == null) {
-                mMultiUpdateThread = new Thread(null, getMultipleResults,
-                                                 "MultiResultsThread");
-             }
-             /* Launch dummy thread to simulate the transfer progress */
-             Log.d(LOGTAG, "Thread State: " + mMultiUpdateThread.getState());
-             if(mMultiUpdateThread.getState() == Thread.State.TERMINATED) {
-                mMultiUpdateThread = new Thread(null, getMultipleResults,
-                                                 "MultiResultsThread");
-             }
-             /* If the thread state is "new" then the thread has not yet started */
-             if(mMultiUpdateThread.getState() == Thread.State.NEW) {
-                mMultiUpdateThread.start();
-             }
-             // returns and UI in different thread.
-             break;
+              freq = FmSharedPreferences.getTunedFrequency();
+
+              for(int i = 0; i < 20 && !Thread.currentThread().isInterrupted(); i++) {
+                  try {
+                      Thread.sleep(500);
+                      Message updateUI = new Message();
+                      updateUI.what = STATUS_UPDATE;
+                      updateUI.obj = (Object)GetFMStatsForFreq(freq);
+                      if(updateUI.obj == null)
+                          break;
+                      mUIUpdateHandlerHandler.sendMessage(updateUI);
+                  }catch (InterruptedException e) {
+                      /*break the loop*/
+                      break;
+                  }
+              }
+              mTestRunning = false;
+              updateStop = new Message();
+              updateStop.what = STATUS_DONE;
+              mUIUpdateHandlerHandler.sendMessage(updateStop);
+              // returns and UI in different thread.
+
+              break;
         case SEARCH_TEST:
-             try {
-                 Log.d(LOGTAG, "start scanning\n");
-                 if(isTransportLayerSMD()) {
-                    Log.d(LOGTAG,"Scanning with 0 scan time");
-                    if (mReceiver != null)
-                        mIsSearching = mReceiver.searchStations(FmReceiver.FM_RX_SRCH_MODE_SCAN,
-                                           SCAN_DWELL_PERIOD, FmReceiver.FM_RX_SEARCHDIR_UP);
-                 }else {
-                    mIsSearching = mService.scan(0);
-                 }
-             }catch (RemoteException e) {
-                 e.printStackTrace();
-             }
+              try {
+                  Log.e(LOGTAG, "start scanning\n");
+                  if(isTransportLayerSMD() || isCherokeeChip()) {
+                      Log.d(LOGTAG,"Scanning with 0 scan time");
+                      if (mReceiver != null)
+                          mIsSearching = mReceiver.searchStations(FmReceiver.FM_RX_SRCH_MODE_SCAN,
+                                  SCAN_DWELL_PERIOD, FmReceiver.FM_RX_SEARCHDIR_UP);
+                  } else {
+                      mIsSearching = mService.scan(0);
+                  }
+              }catch (RemoteException e) {
+                  e.printStackTrace();
+              }
 
              if(mIsSearching) {
-                 /*Set it to Ready to Stop*/
-                 SetButtonState(false);
-                 createResult(mColumnHeader);
                  Log.d(LOGTAG, "Created the results and cancel UI\n");
              }else {
                  mTestRunning = false;
@@ -2243,9 +3075,7 @@ public class FMStats extends Activity  {
              }catch (RemoteException e) {
                  e.printStackTrace();
              }
-             /* Set it to Ready to stop*/
-             SetButtonState(false);
-             createResult(mColumnHeader);
+
              getFMStatsInBand(lowerFreq, higherFreq, Spacing);
              break;
         }
@@ -2416,98 +3246,144 @@ public class FMStats extends Activity  {
     private Result GetFMStatsForFreq(int freq)
     {
         Result result = new Result();
+        int ret;
         Log.d(LOGTAG,"freq is "+freq);
         result.setFreq(Integer.toString(freq));
-        byte nRssi = 0;
-        int nIoC = 0;
-        int dummy = 0;
-        int nIntDet = 0;
-        int nMpxDcc = 0;
-        byte nSINR = 0;
         if((null != mService)) {
-           try {
-               dummy = mService.getRssi();
-               if (dummy != Integer.MAX_VALUE) {
-                   nRssi = (byte)dummy;
-                   result.setRSSI(Byte.toString(nRssi));
-               } else {
-                   return null;
-               }
-           } catch (RemoteException e) {
-               e.printStackTrace();
-           } catch(Exception e) {
-               e.printStackTrace();
-           }
+            try {
+                ret = mService.getRssi();
+                 if (ret != 0) {
+                     Log.e(LOGTAG, "getrssi cmd failed: ret = " + ret);
+                     return null;
+                 }
+                lastCmdSent = CMD_STNPARAM_RSSI;
+                Log.e(LOGTAG, "wait for response of mService.getRssi");
+                synchronized (obj) {
+                    try {
+                        obj.wait();
+                    } catch (InterruptedException e) {
+                        Log.e(LOGTAG, "getRSSI:THREAD interrupted");
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+                Log.e(LOGTAG, "Got response of mService.getRssi");
+                if (nRssi != Integer.MAX_VALUE) {
+                    result.setRSSI(Integer.toString(nRssi));
+                } else {
+                    return null;
+                }
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
 
-           if(!isRomeChip()) {
-              try {
-                  nIoC = mService.getIoC();
-                  if (nIoC != Integer.MAX_VALUE)
-                      result.setIoC(Integer.toString(nIoC));
-                  else
-                      return null;
-              } catch (RemoteException e) {
-                  e.printStackTrace();
-              } catch(Exception e) {
-                  e.printStackTrace();
-              }
-           }
+            if(!isRomeChip()) {
+                try {
+                    mService.getIoC();
+                    lastCmdSent = CMD_STNDBGPARAM_IOVERC;
+                    Log.e(LOGTAG, "wait for response of mService.getIoC");
+                    synchronized (obj) {
+                        try {
+                            obj.wait();
+                        } catch (InterruptedException e) {
+                            Log.e(LOGTAG, "getIOC:THREAD interrupted");
+                            e.printStackTrace();
+                            return null;
+                        }
+                    }
+                    Log.e(LOGTAG, "GOT response of mService.getIoC");
+                    if (nIoC != Integer.MAX_VALUE)
+                        result.setIoC(Integer.toString(nIoC));
+                    else
+                        return null;
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-           if(isTransportLayerSMD() || isRomeChip()) {
-              try {
-                  dummy = mService.getSINR();
-                  if (dummy != Integer.MAX_VALUE) {
-                      nSINR = (byte)dummy;
-                      result.setSINR(Integer.toString(nSINR));
-                  } else {
-                      return null;
-                  }
-              } catch (RemoteException e) {
-                  e.printStackTrace();
-              } catch(Exception e) {
-                  e.printStackTrace();
-              }
-           } else {
-              try {
-                  nMpxDcc = mService.getMpxDcc();
-                  if (nMpxDcc != Integer.MAX_VALUE)
-                      result.setMpxDcc(Integer.toString(nMpxDcc));
-                  else
-                      return null;
-              } catch (RemoteException e) {
-                  e.printStackTrace();
-              }catch(Exception e) {
-                  e.printStackTrace();
-              }
-           }
+            if(isTransportLayerSMD() || isRomeChip() || isCherokeeChip()) {
+                try {
+                    mService.getSINR();
+                    lastCmdSent = CMD_STNPARAM_SINR;
+                    Log.e(LOGTAG, "wait for response of mService.getSINR");
+                    synchronized (obj) {
+                        try {
+                            obj.wait();
+                        } catch (InterruptedException e) {
+                            Log.e(LOGTAG, "getSINR:THREAD interrupted");
+                            e.printStackTrace();
+                            return null;
+                        }
+                    }
+                    Log.e(LOGTAG, "Got response of mService.getSINR");
+                    if (nSINR != Integer.MAX_VALUE) {
+                        result.setSINR(Integer.toString(nSINR));
+                    } else {
+                        return null;
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    nMpxDcc = mService.getMpxDcc();
+                    if (nMpxDcc != Integer.MAX_VALUE)
+                        result.setMpxDcc(Integer.toString(nMpxDcc));
+                    else
+                        return null;
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-           if(!isRomeChip()) {
-              try {
-                  nIntDet = mService.getIntDet();
-                  if (nIntDet != Integer.MAX_VALUE)
-                      result.setIntDet(Integer.toString(nIntDet));
-                  else
-                      return null;
-              } catch (RemoteException e) {
-                  e.printStackTrace();
-              }catch (Exception e) {
-                  e.printStackTrace();
-              }
-           }
+            if(!isRomeChip()) {
+                try {
+                    mService.getIntDet();
+                    lastCmdSent = CMD_STNDBGPARAM_INFDETOUT;
+                    Log.e(LOGTAG, "wait for response of mService.getIntDet");
+                    synchronized (obj) {
+                        try {
+                            obj.wait();
+                        } catch (InterruptedException e) {
+                            Log.e(LOGTAG, "getIntDet:THREAD interrupted");
+                            e.printStackTrace();
+                            return null;
+                        }
+                    }
+                    Log.e(LOGTAG, "Got response of mService.getIntDet");
+                    if (nIntDet != Integer.MAX_VALUE)
+                        result.setIntDet(Integer.toString(nIntDet));
+                    else
+                        return null;
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         } else {
-           return null;
+            return null;
         }
         return result;
-   }
+    }
 
 
     private Handler mUIUpdateHandlerHandler = new Handler() {
             public void handleMessage(Message msg) {
+                Log.d(LOGTAG, "mUIUpdateHandlerHandler: msg.what = " + msg.what);
                switch (msg.what)
                {
                case STATUS_UPDATE:
                     Result myRes = (Result) msg.obj;
-                    Log.d(LOGTAG,"Status update is" +myRes.mFreq);
+                    Log.d(LOGTAG,"Status update is" +myRes.mFreq + "mRSSI=" + myRes.mRSSI + "mSINR=" + myRes.mSINR);
                     createResult(myRes);
                     break;
                case STATUS_DONE:
@@ -2558,7 +3434,7 @@ public class FMStats extends Activity  {
        {
           // presumably there is nobody interested in the service at this point,
           // so don't hang on to the ServiceConnection
-          sService = null;
+          mService = null;
        }
     }
 
@@ -2570,7 +3446,6 @@ public class FMStats extends Activity  {
        }
 
        public void onServiceConnected(ComponentName className, android.os.IBinder service) {
-          sService = IFMRadioService.Stub.asInterface(service);
           if (mCallback != null)
           {
              Log.e(LOGTAG, "onServiceConnected: mCallback");
@@ -2583,7 +3458,7 @@ public class FMStats extends Activity  {
           {
              mCallback.onServiceDisconnected(className);
           }
-          sService = null;
+          mService = null;
        }
     }
 
@@ -2639,7 +3514,7 @@ public class FMStats extends Activity  {
 
           public void onTuneStatusChanged()
           {
-             Log.d(LOGTAG, "mServiceCallbacks.onTuneStatusChanged :");
+             Log.d(LOGTAG, "mServiceCallbacks.onTuneStatusChanged :" + mTestRunning);
              if (mTestRunning)
                  mHandler.post(mTuneComplete);
           }
@@ -2729,6 +3604,138 @@ public class FMStats extends Activity  {
           public void onFmAudioPathStopped() {
              Log.d(LOGTAG, "mServiceCallbacks.onFmAudioPathStopped:");
           }
+          public void getSigThCb(int val, int status) {
+              Log.d(LOGTAG, "getSigThCb ");
+
+              if (setCmdSent) {
+                  setCmdSent = false;
+                  if (mService != null) {
+                      try {
+                          mService.setSinrSamplesCnt(textBoxVal);
+                      } catch (RemoteException e) {
+                          e.printStackTrace();
+                      }
+                  } else {
+                      Log.e(LOGTAG, "getSigTh: Service is null");
+                  }
+              } else {
+                  Log.e(LOGTAG, "Send message: SIGNAL_THRESHOLD");
+                  mCallbackHandler.obtainMessage(SIGNAL_THRESHOLD, val, status).sendToTarget();
+              }
+          }
+
+          public void getChDetThCb(int val, int status) {
+              Log.d(LOGTAG, "getChDetThCb");
+
+              if (setCmdSent) {
+                  setCmdSent = false;
+                  if (mService != null) {
+                      try {
+                          if (lastCmdSent == CMD_CHDET_SINR_TH)
+                              mService.setSinrTh(textBoxVal);
+                          else if (lastCmdSent == CMD_CHDET_SINR_SAMPLE)
+                              mService.setSinrSamplesCnt(textBoxVal);
+                          else if (lastCmdSent == CMD_CHDET_INTF_TH_LOW)
+                              mService.setIntfDetLowTh(textBoxVal);
+                          else if (lastCmdSent == CMD_CHDET_INTF_TH_HIGH)
+                              mService.setIntfDetHighTh(textBoxVal);
+                      } catch (RemoteException e) {
+                          Log.e(LOGTAG, "getChDetTh: exception");
+                          e.printStackTrace();
+                      }
+                  }
+                  lastCmdSent = 0;
+              } else {
+                  Log.e(LOGTAG, "Send message: GET_CHANNEL_DET_THRESHOLD");
+                  mCallbackHandler.obtainMessage(GET_CHANNEL_DET_THRESHOLD, val, status).sendToTarget();
+              }
+          }
+
+          public void setChDetThCb(int status)
+          {
+              Log.d(LOGTAG, "setChDetTh++");
+              mCallbackHandler.obtainMessage(SET_CHANNEL_DET_THRESHOLD, status).sendToTarget();
+          }
+
+          public void DefDataRdCb(int val, int status) {
+              Log.d(LOGTAG, "DefDataRdCb");
+
+              if (setCmdSent) {
+                  setCmdSent = false;
+                  if (mService != null) {
+                      try {
+                          if (lastCmdSent == CMD_DEFRD_AF_RMSSI_TH)
+                               mService.setAfJmpRmssiTh(textBoxVal);
+                          else if (lastCmdSent == CMD_DEFRD_AF_RMSSI_SAMPLE)
+                              mService.setAfJmpRmssiSamplesCnt(textBoxVal);
+                          else if (lastCmdSent == CMD_DEFRD_GD_CH_RMSSI_TH)
+                              mService.setGoodChRmssiTh(textBoxVal);
+                          else if (lastCmdSent == CMD_DEFRD_SEARCH_ALGO)
+                              mService.setSearchAlgoType(algo_type);
+                          else if (lastCmdSent == CMD_DEFRD_SINR_FIRST_STAGE)
+                              mService.setSinrFirstStage(textBoxVal);
+                          else if (lastCmdSent == CMD_DEFRD_RMSSI_FIRST_STAGE)
+                              mService.setRmssiFirstStage(textBoxVal);
+                          else if (lastCmdSent == CMD_DEFRD_CF0TH12)
+                              mService.setCFOMeanTh(textBoxVal);
+                          else if (lastCmdSent == CMD_DEFRD_REPEATCOUNT)
+                              mService.setRxRepeatCount(textBoxVal);
+                      } catch (RemoteException e) {
+                          Log.e(LOGTAG,"DefDataRd: exception");
+                          lastCmdSent = 0;
+                          e.printStackTrace();
+                      }
+                  } else {
+                      Log.e(LOGTAG, "DefDataRd:Service is null");
+                  }
+                  lastCmdSent = 0;
+              } else {
+                  Log.e(LOGTAG, "Send message: DEFAULT_DATA_READ");
+                  mCallbackHandler.obtainMessage(DEFAULT_DATA_READ, val, status).sendToTarget();
+              }
+          }
+
+          public void DefDataWrtCb(int status)
+          {
+              Log.d(LOGTAG, "DefDataWrtCb");
+              mCallbackHandler.obtainMessage(DEFAULT_DATA_WRITE, status).sendToTarget();
+          }
+
+          public void getBlendCb(int val, int status) {
+              Log.d(LOGTAG, "getBlend");
+
+              if (setCmdSent) {
+                  setCmdSent = false;
+                  if (mReceiver != null) {
+                      if (lastCmdSent == CMD_BLENDTBL_SINR_HI)
+                          mReceiver.setBlendSinr(textBoxVal);
+                      else if (lastCmdSent == CMD_BLENDTBL_RMSSI_HI)
+                          mReceiver.setBlendRmssi(textBoxVal);
+                  } else {
+                      Log.e(LOGTAG, "getBlend: Service is null");
+                  }
+                  lastCmdSent = 0;
+              } else {
+                  Log.e(LOGTAG, "Send message: GET_BLEND_TBL");
+                  mCallbackHandler.obtainMessage(GET_BLEND_TBL, val, status).sendToTarget();
+              }
+          }
+
+          public void setBlendCb(int status)
+          {
+              Log.d(LOGTAG, "setBlendCb");
+              mCallbackHandler.obtainMessage(SET_BLEND_TBL, status).sendToTarget();
+          }
+          public void getStationParamCb(int val, int status)
+          {
+              Log.d(LOGTAG, "getStationParamCb");
+              mCallbackHandler.obtainMessage(GET_STATION_PARAM, val, status).sendToTarget();
+          }
+          public void getStationDbgParamCb(int val, int status)
+          {
+              Log.d(LOGTAG, "getStationDbgParamCb");
+              mCallbackHandler.obtainMessage(GET_STATION_DBG_PARAM, val, status).sendToTarget();
+          }
       };
       /* Radio Vars */
      private Handler mHandler = new Handler();
@@ -2756,6 +3763,9 @@ public class FMStats extends Activity  {
      };
 
      private void stopCurTest() {
+         if (mRunTestThread != null) {
+             mRunTestThread.interrupt();
+         }
          if (mTestRunning) {
              switch(mTestSelected) {
              case CUR_FREQ_TEST:

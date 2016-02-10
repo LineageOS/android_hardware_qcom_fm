@@ -1455,7 +1455,7 @@ public class FmReceiver extends FmTransceiver
       try
       {
 
-	 String rdsStr = new String(buff, 5, numOfPs*8 );
+     String rdsStr = new String(buff, 5, numOfPs*8 );
          mRdsData.setPrgmServices (rdsStr);
 
       } catch (StringIndexOutOfBoundsException x)
@@ -2018,6 +2018,16 @@ public class FmReceiver extends FmTransceiver
       return mControl.setPSRxRepeatCount(sFd, count);
    }
 
+   public boolean getPSRxRepeatCount() {
+      int state = getFMState();
+      /* Check current state of FM device */
+      if (state == FMState_Turned_Off){
+          Log.d(TAG, "setRxRepeatcount failed");
+          return false;
+      }
+      return mControl.getPSRxRepeatCount(sFd);
+   }
+
    public byte getBlendSinr() {
       int state = getFMState();
       if ((state == FMState_Turned_Off) || (state == FMState_Srch_InProg)) {
@@ -2027,7 +2037,7 @@ public class FmReceiver extends FmTransceiver
       return mControl.getBlendSinr(sFd);
    }
 
-   public boolean setBlendSinr(byte sinrHi) {
+   public boolean setBlendSinr(int sinrHi) {
       int state = getFMState();
       if ((state == FMState_Turned_Off) || (state == FMState_Srch_InProg)) {
           Log.d(TAG, "setBlendSinr: Device currently busy in executing another command.");
@@ -2045,7 +2055,7 @@ public class FmReceiver extends FmTransceiver
       return mControl.getBlendRmssi(sFd);
    }
 
-   public boolean setBlendRmssi(byte rmssiHi) {
+   public boolean setBlendRmssi(int rmssiHi) {
       int state = getFMState();
       if ((state == FMState_Turned_Off) || (state == FMState_Srch_InProg)) {
           Log.d(TAG, "setBlendRmssi: Device currently busy in executing another command.");
@@ -2318,7 +2328,7 @@ public class FmReceiver extends FmTransceiver
    *
    *    <p>
    *    @return    IOVERC of currently tuned station on Success.
-   *		   -1 on failure to retrieve the current IoverC.
+   *           -1 on failure to retrieve the current IoverC.
    */
    public int getIoverc()
    {
@@ -2339,7 +2349,7 @@ public class FmReceiver extends FmTransceiver
    *
    *    <p>
    *    @return    IntDet of currently tuned station.
-   *		   -1 on failure to retrieve the current IntDet
+   *           -1 on failure to retrieve the current IntDet
    */
    public int getIntDet()
    {
@@ -2510,9 +2520,14 @@ public class FmReceiver extends FmTransceiver
    *
    *    <p>
    */
-   public int getOnChannelThreshold()
+   public boolean getOnChannelThreshold()
    {
-      return mControl.getOnChannelThreshold(sFd);
+       int re = mControl.getOnChannelThreshold(sFd);
+
+       if (re != 0)
+           return false;
+       else
+           return true;
    }
 
 /*==============================================================
@@ -2545,9 +2560,14 @@ public class FmReceiver extends FmTransceiver
    *
    *    <p>
    */
-   public int getOffChannelThreshold()
+   public boolean  getOffChannelThreshold()
    {
-      return mControl.getOffChannelThreshold(sFd);
+       int re = mControl.getOffChannelThreshold(sFd);
+
+       if (re != 0)
+           return false;
+       else
+           return true;
    }
 /*===============================================================
    FUNCTION:  getSINR
