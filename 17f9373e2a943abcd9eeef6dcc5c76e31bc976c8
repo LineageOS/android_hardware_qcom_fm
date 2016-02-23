@@ -16,6 +16,24 @@
       "revId": "17f9373e2a943abcd9eeef6dcc5c76e31bc976c8",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_b013990d",
+        "filename": "fmapp2/src/com/caf/fmradio/FmSharedPreferences.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 14187
+      },
+      "writtenOn": "2016-02-23T05:36:25Z",
+      "side": 1,
+      "message": "This line will set the value for mRecordDuration first time when it was not set initially.\n\nIn the next line, mRecordDuration value equals LAST_RECORD_DURATION if set and if not, then it will pick the value stored originally by SetRecordDuration.(This case will be true only first time load of FM app when LAST_RECORD_DURATION is not set.)",
+      "parentUuid": "ffb9cba7_9059b5ff",
+      "revId": "17f9373e2a943abcd9eeef6dcc5c76e31bc976c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
