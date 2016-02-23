@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffb9cba7_9059b5ff",
+        "filename": "fmapp2/src/com/caf/fmradio/FmSharedPreferences.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 940
+      },
+      "writtenOn": "2016-02-23T05:21:03Z",
+      "side": 1,
+      "message": "Is this step necessary ?\n\nThe line below will override mRecordDuration anyway.",
+      "revId": "17f9373e2a943abcd9eeef6dcc5c76e31bc976c8",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
