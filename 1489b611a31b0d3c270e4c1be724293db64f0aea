@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ffb9cba7_cfb538f0",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1650,
+      "author": {
+        "id": 10631
+      },
+      "writtenOn": "2016-03-04T03:32:54Z",
+      "side": 1,
+      "message": "Shouldn\u0027t the seeking state be handled by the service itself?  Seems wrong at this layer given the new design.",
+      "revId": "1489b611a31b0d3c270e4c1be724293db64f0aea",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_cf277864",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2225,
+      "author": {
+        "id": 10631
+      },
+      "writtenOn": "2016-03-04T03:32:54Z",
+      "side": 1,
+      "message": "if (!mService.SeekNextStation(false))",
+      "revId": "1489b611a31b0d3c270e4c1be724293db64f0aea",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_efba7cdc",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2231,
+      "author": {
+        "id": 10631
+      },
+      "writtenOn": "2016-03-04T03:32:54Z",
+      "side": 1,
+      "message": "Maybe we should opt for a friendlier log message?  No need to dump the stack trace here I don\u0027t believe.",
+      "revId": "1489b611a31b0d3c270e4c1be724293db64f0aea",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_ef2cbc48",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2241,
+      "author": {
+        "id": 10631
+      },
+      "writtenOn": "2016-03-04T03:32:54Z",
+      "side": 1,
+      "message": "if (!mService.SeekNextStation(true))",
+      "revId": "1489b611a31b0d3c270e4c1be724293db64f0aea",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_8f218050",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2280,
+      "author": {
+        "id": 10631
+      },
+      "writtenOn": "2016-03-04T03:32:54Z",
+      "side": 1,
+      "message": "if (!mService.initiatePISearch(pi))",
+      "revId": "1489b611a31b0d3c270e4c1be724293db64f0aea",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_4f1b881a",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 811,
+      "author": {
+        "id": 10631
+      },
+      "writtenOn": "2016-03-04T03:32:54Z",
+      "side": 1,
+      "message": "Replace tabs with 4 spaces each",
+      "revId": "1489b611a31b0d3c270e4c1be724293db64f0aea",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_4ff068ca",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 10631
+      },
+      "writtenOn": "2016-03-04T03:32:54Z",
+      "side": 1,
+      "message": "...this method is pretty messy...\n\nisSeekActive returns mIsSeeking...then you set mIsSeeking then check mIsSeeking again?\n\nif not seeking then try to seek and if still not seeking return false otherwise if see is active return false. So it seems the path to return true is determined by condition of 808 being true and 810 being false??",
+      "revId": "1489b611a31b0d3c270e4c1be724293db64f0aea",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_6fed2cee",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 831,
+      "author": {
+        "id": 10631
+      },
+      "writtenOn": "2016-03-04T03:32:54Z",
+      "side": 1,
+      "message": "braces.  I imagine this could be simplified?",
+      "revId": "1489b611a31b0d3c270e4c1be724293db64f0aea",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_0fbcb0da",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 843,
+      "author": {
+        "id": 10631
+      },
+      "writtenOn": "2016-03-04T03:32:54Z",
+      "side": 1,
+      "message": "Line over length.\n\nAlso do we not care about the MEDIA_PLAY_PAUSE?",
+      "revId": "1489b611a31b0d3c270e4c1be724293db64f0aea",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_2fc17455",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 10631
+      },
+      "writtenOn": "2016-03-04T03:32:54Z",
+      "side": 1,
+      "message": "tabs need to be 4 spaces each",
+      "revId": "1489b611a31b0d3c270e4c1be724293db64f0aea",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_af1ec409",
+        "filename": "fmapp2/src/com/caf/fmradio/IFMRadioService.aidl",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 10631
+      },
+      "writtenOn": "2016-03-04T03:32:54Z",
+      "side": 1,
+      "message": "Should follow method naming convention (start with lowercase)\n\nboolean seekNextStation(boolean dir);",
+      "revId": "1489b611a31b0d3c270e4c1be724293db64f0aea",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
