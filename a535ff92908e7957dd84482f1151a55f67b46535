@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "ffb9cba7_c59e7706",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2065,
+      "author": {
+        "id": 14096
+      },
+      "writtenOn": "2016-03-05T04:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb9cba7_e574db9b",
+      "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffb9cba7_85695fbf",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2016-03-04T23:54:41Z",
       "side": 1,
       "message": "indentations, space between try{",
+      "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_e5a37b4e",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2223,
+      "author": {
+        "id": 14096
+      },
+      "writtenOn": "2016-03-05T04:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb9cba7_85695fbf",
       "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "ffb9cba7_85887fc6",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 2246,
+      "author": {
+        "id": 14096
+      },
+      "writtenOn": "2016-03-05T04:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb9cba7_a566e3ec",
+      "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffb9cba7_059b2fc9",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2016-03-04T23:54:41Z",
       "side": 1,
       "message": "I would do something like\n\nboolean result \u003d !isSeekActive() \u0026\u0026 seek(dir);\nsetIsSeeking(result);\nreturn result;",
+      "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_652b0b94",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 14096
+      },
+      "writtenOn": "2016-03-05T04:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb9cba7_059b2fc9",
       "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "ffb9cba7_051a4f7c",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 813,
+      "author": {
+        "id": 14096
+      },
+      "writtenOn": "2016-03-05T04:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb9cba7_0576cfa5",
+      "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffb9cba7_65e30b35",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
         "patchSetId": 3
@@ -98,6 +188,24 @@
       "writtenOn": "2016-03-04T23:54:41Z",
       "side": 1,
       "message": "Same for this logic (see above suggested simplification)",
+      "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_251f536d",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 823,
+      "author": {
+        "id": 14096
+      },
+      "writtenOn": "2016-03-05T04:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb9cba7_65e30b35",
       "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "ffb9cba7_c513d765",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 844,
+      "author": {
+        "id": 14096
+      },
+      "writtenOn": "2016-03-05T04:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb9cba7_25899374",
+      "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffb9cba7_a5ab43d4",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
         "patchSetId": 3
@@ -132,6 +258,24 @@
       "writtenOn": "2016-03-04T23:54:41Z",
       "side": 1,
       "message": "} else if",
+      "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_e5185b82",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 14096
+      },
+      "writtenOn": "2016-03-05T04:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb9cba7_a5ab43d4",
       "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "ffb9cba7_850ddf3f",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 853,
+      "author": {
+        "id": 14096
+      },
+      "writtenOn": "2016-03-05T04:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb9cba7_257bd38c",
+      "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ffb9cba7_c56f57c3",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
         "patchSetId": 3
@@ -166,6 +328,24 @@
       "writtenOn": "2016-03-04T23:54:41Z",
       "side": 1,
       "message": "extra space",
+      "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffb9cba7_a50a6323",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1806,
+      "author": {
+        "id": 14096
+      },
+      "writtenOn": "2016-03-05T04:30:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffb9cba7_c56f57c3",
       "revId": "a535ff92908e7957dd84482f1151a55f67b46535",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
