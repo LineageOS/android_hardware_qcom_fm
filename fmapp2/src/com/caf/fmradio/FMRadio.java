@@ -1679,7 +1679,6 @@ public class FMRadio extends Activity
 
    private void disableRadio() {
       boolean bStatus = false;
-      boolean bSpeakerPhoneOn = isSpeakerEnabled();
 
       cancelSearch();
       endSleepTimer();
@@ -1698,11 +1697,6 @@ public class FMRadio extends Activity
             }
 
             enableRadioOnOffUI();
-            // restore default wired headset on FM power off
-            if (bSpeakerPhoneOn) {
-               mService.enableSpeaker(false);
-               mSpeakerButton.setImageResource(R.drawable.btn_earphone);
-            }
          }catch (RemoteException e) {
             e.printStackTrace();
          }
