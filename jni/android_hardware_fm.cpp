@@ -47,15 +47,6 @@
 #define RADIO "/dev/radio0"
 #define FM_JNI_SUCCESS 0L
 #define FM_JNI_FAILURE -1L
-
-static JNIEnv *g_jEnv = NULL;
-static JavaVM *g_jVM = NULL;
-
-namespace android {
-char *FM_LIBRARY_NAME = "fm_helium.so";
-char *FM_LIBRARY_SYMBOL_NAME = "FM_HELIUM_LIB_INTERFACE";
-void *lib_handle;
-
 #define SEARCH_DOWN 0
 #define SEARCH_UP 1
 #define HIGH_BAND 2
@@ -86,6 +77,19 @@ enum search_dir_t {
     SCAN_UP,
     SCAN_DN
 };
+
+
+static JNIEnv *g_jEnv = NULL;
+static JavaVM *g_jVM = NULL;
+
+namespace android {
+
+#ifdef FM_SOC_TYPE_CHEROKEE
+char *FM_LIBRARY_NAME = "fm_helium.so";
+char *FM_LIBRARY_SYMBOL_NAME = "FM_HELIUM_LIB_INTERFACE";
+void *lib_handle;
+
+
 typedef void (*enb_result_cb)();
 typedef void (*tune_rsp_cb)(int Freq);
 typedef void (*seek_rsp_cb)(int Freq);
@@ -405,7 +409,7 @@ static   fm_vendor_callbacks_t fm_callbacks = {
     fm_ch_det_th_rsp_cb,
     fm_thread_evt_cb
 };
-
+#endif
 /* native interface */
 static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
         (JNIEnv* env, jobject thiz, jstring path)
@@ -505,9 +509,10 @@ static jint android_hardware_fmradio_FmReceiverJNI_getFreqNative
 {
     int err;
     long freq;
-
+#ifdef FM_SOC_TYPE_CHEROKEE
     err = vendor_interface->get_fm_ctrl(V4L2_CID_PRV_IRIS_FREQ, freq);
-/*    if (fd >= 0) {
+#else
+    if (fd >= 0) {
         err = FmIoctlsInterface :: get_cur_freq(fd, freq);
         if(err < 0) {
            err = FM_JNI_FAILURE;
@@ -519,7 +524,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_getFreqNative
         ALOGE("%s: get freq failed because fd is negative, fd: %d\n",
               LOG_TAG, fd);
         err = FM_JNI_FAILURE;
-    } */
+    }
+#endif
     return err;
 }
 
@@ -528,9 +534,10 @@ static jint android_hardware_fmradio_FmReceiverJNI_setFreqNative
     (JNIEnv * env, jobject thiz, jint fd, jint freq)
 {
     int err;
-
+#ifdef FM_SOC_TYPE_CHEROKEE
     err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_IRIS_FREQ, freq);
-/*    if ((fd >= 0) && (freq > 0)) {
+#else
+    if ((fd >= 0) && (freq > 0)) {
         err = FmIoctlsInterface :: set_freq(fd, freq);
         if (err < 0) {
             ALOGE("%s: set freq failed, freq: %d\n", LOG_TAG, freq);
@@ -540,9 +547,10 @@ static jint android_hardware_fmradio_FmReceiverJNI_setFreqNative
         }
     } else {
         ALOGE("%s: set freq failed because either fd/freq is negative,\
-              fd: %d, freq: %d\n", LOG_TAG, fd, freq);
+               fd: %d, freq: %d\n", LOG_TAG, fd, freq);
         err = FM_JNI_FAILURE;
-    } */
+    }
+#endif
     return err;
 }
 
@@ -552,8 +560,10 @@ static jint android_hardware_fmradio_FmReceiverJNI_setControlNative
 {
     int err;
     ALOGE("id(%x) value: %x\n", id, value);
-
-/*    if ((fd >= 0) && (id >= 0)) {
+#ifdef FM_SOC_TYPE_CHEROKEE
+	err = vendor_interface->set_fm_ctrl(id, value);
+#else
+    if ((fd >= 0) && (id >= 0)) {
         err = FmIoctlsInterface :: set_control(fd, id, value);
         if (err < 0) {
             ALOGE("%s: set control failed, id: %d\n", LOG_TAG, id);
@@ -565,9 +575,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_setControlNative
         ALOGE("%s: set control failed because either fd/id is negavtive,\
                fd: %d, id: %d\n", LOG_TAG, fd, id);
         err = FM_JNI_FAILURE;
-    } */
-    err = vendor_interface->set_fm_ctrl(id, value);
-
+    }
+#endif
     return err;
 }
 
@@ -590,7 +599,6 @@ static jint android_hardware_fmradio_FmReceiverJNI_SetCalibrationNative
               LOG_TAG, fd);
        err = FM_JNI_FAILURE;
    }
-
    return err;
 }
 /* native interface */
@@ -598,10 +606,10 @@ static jint android_hardware_fmradio_FmReceiverJNI_getControlNative
     (JNIEnv * env, jobject thiz, jint fd, jint id)
 {
     int err;
-    int val;
+    long val;
 
     ALOGE("id(%x)\n", id);
-
+#ifdef FM_SOC_TYPE_CHEROKEE
     err = vendor_interface->get_fm_ctrl(id, val);
     if (err < 0) {
         ALOGE("%s: get control failed, id: %d\n", LOG_TAG, id);
@@ -609,7 +617,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_getControlNative
     } else {
         err = val;
     }
-/*    if ((fd >= 0) && (id >= 0)) {
+#else
+    if ((fd >= 0) && (id >= 0)) {
         err = FmIoctlsInterface :: get_control(fd, id, val);
         if (err < 0) {
             ALOGE("%s: get control failed, id: %d\n", LOG_TAG, id);
@@ -621,7 +630,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_getControlNative
         ALOGE("%s: get control failed because either fd/id is negavtive,\
                fd: %d, id: %d\n", LOG_TAG, fd, id);
         err = FM_JNI_FAILURE;
-    } */
+    }
+#endif
 
     return err;
 }
@@ -631,7 +641,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
     (JNIEnv * env, jobject thiz, jint fd, jint dir)
 {
     int err;
-
+#ifdef FM_SOC_TYPE_CHEROKEE
     err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_IRIS_SEEK, dir);
     if (err < 0) {
         ALOGE("%s: search failed, dir: %d\n", LOG_TAG, dir);
@@ -639,7 +649,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
     } else {
         err = FM_JNI_SUCCESS;
     }
-/*    if ((fd >= 0) && (dir >= 0)) {
+#else
+    if ((fd >= 0) && (dir >= 0)) {
         ALOGD("startSearchNative: Issuing the VIDIOC_S_HW_FREQ_SEEK");
         err = FmIoctlsInterface :: start_search(fd, dir);
         if (err < 0) {
@@ -652,8 +663,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
         ALOGE("%s: search failed because either fd/dir is negative,\
                fd: %d, dir: %d\n", LOG_TAG, fd, dir);
         err = FM_JNI_FAILURE;
-    } */
-
+    }
+#endif
     return err;
 }
 
@@ -663,6 +674,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_cancelSearchNative
 {
     int err;
 
+#ifdef FM_SOC_TYPE_CHEROKEE
     err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_SRCHON, 0);
     if (err < 0) {
         ALOGE("%s: cancel search failed\n", LOG_TAG);
@@ -670,7 +682,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_cancelSearchNative
     } else {
         err = FM_JNI_SUCCESS;
     }
-/*    if (fd >= 0) {
+#else
+    if (fd >= 0) {
         err = FmIoctlsInterface :: set_control(fd, V4L2_CID_PRV_SRCHON, 0);
         if (err < 0) {
             ALOGE("%s: cancel search failed\n", LOG_TAG);
@@ -682,8 +695,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_cancelSearchNative
         ALOGE("%s: cancel search failed because fd is negative, fd: %d\n",
                LOG_TAG, fd);
         err = FM_JNI_FAILURE;
-    } */
-
+    }
+#endif
     return err;
 }
 
@@ -716,7 +729,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setBandNative
     (JNIEnv * env, jobject thiz, jint fd, jint low, jint high)
 {
     int err;
-
+#ifdef FM_SOC_TYPE_CHEROKEE
     err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_IRIS_UPPER_BAND, high);
     if (err < 0) {
         ALOGE("%s: set band failed, high: %d\n", LOG_TAG, high);
@@ -730,7 +743,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_setBandNative
     } else {
         err = FM_JNI_SUCCESS;
     }
-/*    if ((fd >= 0) && (low >= 0) && (high >= 0)) {
+#else
+    if ((fd >= 0) && (low >= 0) && (high >= 0)) {
         err = FmIoctlsInterface :: set_band(fd, low, high);
         if (err < 0) {
             ALOGE("%s: set band failed, low: %d, high: %d\n",
@@ -743,8 +757,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_setBandNative
         ALOGE("%s: set band failed because either fd/band is negative,\
                fd: %d, low: %d, high: %d\n", LOG_TAG, fd, low, high);
         err = FM_JNI_FAILURE;
-    } */
-
+    }
+#endif
     return err;
 }
 
@@ -754,7 +768,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getLowerBandNative
 {
     int err;
     ULINT freq;
-
+#ifdef FM_SOC_TYPE_CHEROKEE
     err = vendor_interface->get_fm_ctrl(V4L2_CID_PRV_IRIS_LOWER_BAND, freq);
     if (err < 0) {
         ALOGE("%s: get lower band failed\n", LOG_TAG);
@@ -762,7 +776,9 @@ static jint android_hardware_fmradio_FmReceiverJNI_getLowerBandNative
     } else {
         err = freq;
     }
-/*    if (fd >= 0) {
+	return err;
+#endif
+    if (fd >= 0) {
         err = FmIoctlsInterface :: get_lowerband_limit(fd, freq);
         if (err < 0) {
             ALOGE("%s: get lower band failed\n", LOG_TAG);
@@ -774,7 +790,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getLowerBandNative
         ALOGE("%s: get lower band failed because fd is negative,\
                fd: %d\n", LOG_TAG, fd);
         err = FM_JNI_FAILURE;
-    } */
+    }
 
     return err;
 }
@@ -785,6 +801,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getUpperBandNative
 {
     int err;
     ULINT freq;
+#ifdef FM_SOC_TYPE_CHEROKEE
 
     err = vendor_interface->get_fm_ctrl(V4L2_CID_PRV_IRIS_UPPER_BAND, freq);
     if (err < 0) {
@@ -793,7 +810,9 @@ static jint android_hardware_fmradio_FmReceiverJNI_getUpperBandNative
     } else {
         err = freq;
     }
-/*    if (fd >= 0) {
+	return err;
+#endif
+    if (fd >= 0) {
         err = FmIoctlsInterface :: get_upperband_limit(fd, freq);
         if (err < 0) {
             ALOGE("%s: get lower band failed\n", LOG_TAG);
@@ -805,8 +824,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getUpperBandNative
         ALOGE("%s: get lower band failed because fd is negative,\
                fd: %d\n", LOG_TAG, fd);
         err = FM_JNI_FAILURE;
-    } */
-
+    }
     return err;
 }
 
@@ -815,7 +833,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setMonoStereoNative
 {
 
     int err;
-
+#ifdef FM_SOC_TYPE_CHEROKEE
     err = vendor_interface->get_fm_ctrl(V4L2_CID_PRV_IRIS_AUDIO_MODE, val);
     if (err < 0) {
         ALOGE("%s: set audio mode failed\n", LOG_TAG);
@@ -823,7 +841,9 @@ static jint android_hardware_fmradio_FmReceiverJNI_setMonoStereoNative
     } else {
         err = FM_JNI_SUCCESS;
     }
-/*    if (fd >= 0) {
+	return err;
+#endif
+    if (fd >= 0) {
         err = FmIoctlsInterface :: set_audio_mode(fd, (enum AUDIO_MODE)val);
         if (err < 0) {
             err = FM_JNI_FAILURE;
@@ -832,8 +852,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setMonoStereoNative
         }
     } else {
         err = FM_JNI_FAILURE;
-    } */
-
+    }
     return err;
 }
 
@@ -1315,7 +1334,9 @@ static jint android_hardware_fmradio_FmReceiverJNI_setSpurDataNative
 
 static void classInitNative(JNIEnv* env, jclass clazz) {
 
-    ALOGE("ClassInit native called \n");
+    ALOGI("ClassInit native called \n");
+#ifdef FM_SOC_TYPE_CHEROKEE
+
     jclass dataClass = env->FindClass("qcom/fmradio/FmReceiverJNI");
     javaClassRef = (jclass) env->NewGlobalRef(dataClass);
     lib_handle = dlopen(FM_LIBRARY_NAME, RTLD_NOW);
@@ -1353,15 +1374,17 @@ error:
     if (lib_handle)
         dlclose(lib_handle);
     lib_handle = NULL;
+#endif
 }
 
 static void initNative(JNIEnv *env, jobject object) {
 
+#ifdef FM_SOC_TYPE_CHEROKEE
     int status;
-    ALOGE("Init native called \n");
+    ALOGI("Init native called \n");
 
     if (vendor_interface) {
-        ALOGE("Initializing the FM HAL module & registering the JNI callback functions...");
+        ALOGI("Initializing the FM HAL module & registering the JNI callback functions...");
         status = vendor_interface->hal_init(&fm_callbacks);
         if (status) {
             ALOGE("%s unable to initialize vendor library: %d", __func__, status);
@@ -1371,16 +1394,16 @@ static void initNative(JNIEnv *env, jobject object) {
     }
     ALOGE("object =%p, env = %p\n",object,env);
     mCallbacksObj = env->NewGlobalRef(object);
-    ALOGE("mCallbackobject =%p, \n",mCallbacksObj);
-
-
+#endif
 }
 static void cleanupNative(JNIEnv *env, jobject object) {
 
+#ifdef FM_SOC_TYPE_CHEROKEE
     if (mCallbacksObj != NULL) {
         env->DeleteGlobalRef(mCallbacksObj);
         mCallbacksObj = NULL;
     }
+#endif
 }
 /*
  * JNI registration.

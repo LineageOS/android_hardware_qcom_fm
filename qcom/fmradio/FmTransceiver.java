@@ -404,10 +404,13 @@ public class FmTransceiver
 
       boolean status;
       int ret;
-      //Acquire the deviceon Enable
-//      if( !acquire("/dev/radio0")){
-//         return false;
-//      }
+
+      if (!FmReceiver.isCherokeeChip()) {
+          //Acquire the deviceon Enable
+          if (!acquire("/dev/radio0")) {
+              return false;
+          }
+      }
       if (new File("/etc/fm/SpurTableFile.txt").isFile()) {
           Log.d(TAG, "Send Spur roation table");
           FmConfig.fmSpurConfig(sFd);

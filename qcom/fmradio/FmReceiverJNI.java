@@ -48,10 +48,10 @@ class FmReceiverJNI {
      * @return The file descriptor of the device
      *
      */
-      private static final String TAG = "FmReceiverJNI";
+    private static final String TAG = "FmReceiverJNI";
 
     static {
-        Log.e(TAG, "classinit native called");
+        Log.d(TAG, "classinit native called");
         classInitNative();
     }
     static native void classInitNative();
@@ -63,9 +63,9 @@ class FmReceiverJNI {
     static private byte[] mRdsBuffer = new byte[STD_BUF_SIZE];
 
     public static  byte[]  getPsBuffer(byte[] buff) {
-        Log.e(TAG, "getPsBuffer enter");
+        Log.d(TAG, "getPsBuffer enter");
         buff = Arrays.copyOf(mRdsBuffer, mRdsBuffer.length);
-        Log.e(TAG, "getPsBuffer exit");
+        Log.d(TAG, "getPsBuffer exit");
         return buff;
     }
 
@@ -81,40 +81,40 @@ class FmReceiverJNI {
     }
 
     public void RtPlusCallback(byte[] rtplus) {
-        Log.e(TAG, "RtPlusCallback enter " );
+        Log.d(TAG, "RtPlusCallback enter " );
         if (rtplus == null) {
             Log.e(TAG, "psInfo null return  ");
             return;
         }
         mRdsBuffer = Arrays.copyOf(rtplus, rtplus.length);
         FmReceiver.mCallback.FmRxEvRTPlus();
-        Log.e(TAG, "RtPlusCallback exit " );
+        Log.d(TAG, "RtPlusCallback exit " );
     }
 
     public void RtCallback(byte[] rt) {
-        Log.e(TAG, "RtCallback enter " );
+        Log.d(TAG, "RtCallback enter " );
         if (rt == null) {
             Log.e(TAG, "psInfo null return  ");
             return;
         }
         mRdsBuffer = Arrays.copyOf(rt, rt.length);
         FmReceiver.mCallback.FmRxEvRdsRtInfo();
-        Log.e(TAG, "RtCallback exit " );
+        Log.d(TAG, "RtCallback exit " );
     }
 
     public void ErtCallback(byte[] ert) {
-        Log.e(TAG, "ErtCallback enter " );
+        Log.d(TAG, "ErtCallback enter " );
         if (ert == null) {
             Log.e(TAG, "ERT null return  ");
             return;
         }
         mRdsBuffer = Arrays.copyOf(ert, ert.length);
         FmReceiver.mCallback.FmRxEvERTInfo();
-        Log.e(TAG, "RtCallback exit " );
+        Log.d(TAG, "RtCallback exit " );
     }
 
     public void PsInfoCallback(byte[] psInfo) {
-        Log.e(TAG, "PsInfoCallback enter " );
+        Log.d(TAG, "PsInfoCallback enter " );
         if (psInfo == null) {
             Log.e(TAG, "psInfo null return  ");
             return;
@@ -122,21 +122,21 @@ class FmReceiverJNI {
         Log.e(TAG, "length =  " +psInfo.length);
         mRdsBuffer = Arrays.copyOf(psInfo, psInfo.length);
         FmReceiver.mCallback.FmRxEvRdsPsInfo();
-        Log.e(TAG, "PsInfoCallback exit");
+        Log.d(TAG, "PsInfoCallback exit");
     }
 
     public void enableCallback() {
-        Log.e(TAG, "enableCallback enter");
+        Log.d(TAG, "enableCallback enter");
         FmTransceiver.setFMPowerState(FmTransceiver.FMState_Rx_Turned_On);
         Log.v(TAG, "RxEvtList: CURRENT-STATE : FMRxStarting ---> NEW-STATE : FMRxOn");
         FmReceiver.mCallback.FmRxEvEnableReceiver();
-        Log.e(TAG, "enableCallback exit");
+        Log.d(TAG, "enableCallback exit");
     }
 
     public void tuneCallback(int freq) {
         int state;
 
-        Log.e(TAG, "tuneCallback enter");
+        Log.d(TAG, "tuneCallback enter");
         state = FmReceiver.getSearchState();
         switch(state) {
         case FmTransceiver.subSrchLevel_SrchAbort:
@@ -156,13 +156,13 @@ class FmReceiverJNI {
                 Log.e(TAG, "get frequency command failed");
             break;
         }
-        Log.e(TAG, "tuneCallback exit");
+        Log.d(TAG, "tuneCallback exit");
     }
 
     public void seekCmplCallback(int freq) {
         int state;
 
-        Log.e(TAG, "seekCmplCallback enter");
+        Log.d(TAG, "seekCmplCallback enter");
         state = FmReceiver.getSearchState();
         switch(state) {
         case FmTransceiver.subSrchLevel_ScanInProg:
@@ -179,29 +179,29 @@ class FmReceiverJNI {
             FmReceiver.mCallback.FmRxEvSearchComplete(freq);
             break;
         }
-        Log.e(TAG, "seekCmplCallback exit");
+        Log.d(TAG, "seekCmplCallback exit");
     }
 
     public void scanNxtCallback() {
-        Log.e(TAG, "scanNxtCallback enter");
+        Log.d(TAG, "scanNxtCallback enter");
         FmReceiver.mCallback.FmRxEvSearchInProgress();
-        Log.e(TAG, "scanNxtCallback exit");
+        Log.d(TAG, "scanNxtCallback exit");
     }
 
     public void stereostsCallback(boolean stereo) {
-        Log.e(TAG, "stereostsCallback enter");
+        Log.d(TAG, "stereostsCallback enter");
         FmReceiver.mCallback.FmRxEvStereoStatus (stereo);
-        Log.e(TAG, "stereostsCallback exit");
+        Log.d(TAG, "stereostsCallback exit");
     }
 
     public void rdsAvlStsCallback(boolean rdsAvl) {
-        Log.e(TAG, "rdsAvlStsCallback enter");
+        Log.d(TAG, "rdsAvlStsCallback enter");
         FmReceiver.mCallback.FmRxEvRdsLockStatus(rdsAvl);
-        Log.e(TAG, "rdsAvlStsCallback exit");
+        Log.d(TAG, "rdsAvlStsCallback exit");
     }
 
     public void disableCallback() {
-        Log.e(TAG, "disableCallback enter");
+        Log.d(TAG, "disableCallback enter");
         if (FmTransceiver.getFMPowerState() == FmTransceiver.subPwrLevel_FMTurning_Off) {
                  /*Set the state as FMOff */
             FmTransceiver.setFMPowerState(FmTransceiver.FMState_Turned_Off);
@@ -212,7 +212,7 @@ class FmReceiverJNI {
             Log.d(TAG, "Unexpected RADIO_DISABLED recvd");
             Log.v(TAG, "RxEvtList: CURRENT-STATE : FMRxOn ---> NEW-STATE : FMOff");
             FmReceiver.mCallback.FmRxEvRadioReset();
-            Log.e(TAG, "disableCallback exit");
+            Log.d(TAG, "disableCallback exit");
         }
     }
 
@@ -220,7 +220,7 @@ class FmReceiverJNI {
         mCallback = callback;
         if (mCallback == null)
             Log.e(TAG, "mCallback is null in JNI");
-        Log.e(TAG, "satish init native called");
+        Log.d(TAG, "init native called");
         initNative();
     }
 

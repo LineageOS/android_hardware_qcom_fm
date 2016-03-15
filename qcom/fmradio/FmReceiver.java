@@ -306,6 +306,31 @@ public class FmReceiver extends FmTransceiver
    private static final int SEARCH_MPXDCC = 0;
    private static final int SEARCH_SINR_INT = 1;
 
+
+   public boolean isSmdTransportLayer() {
+       String transportLayer = SystemProperties.get("ro.qualcomm.bt.hci_transport");
+       if (transportLayer.equals("smd"))
+           return true;
+       else
+           return false;
+   }
+
+   public static boolean isRomeChip() {
+       String chip = SystemProperties.get("qcom.bluetooth.soc");
+       if (chip.equals("rome"))
+           return true;
+       else
+           return false;
+   }
+
+   public static boolean isCherokeeChip() {
+       String chip = SystemProperties.get("qcom.bluetooth.soc");
+       if (chip.equals("cherokee"))
+           return true;
+       else
+           return false;
+   }
+
    /**
     * Constructor for the receiver Object
     */
@@ -332,9 +357,9 @@ public class FmReceiver extends FmTransceiver
       Log.e(TAG, "FmReceiver constructor");
       //registerClient(callback);
       mCallback = callback;
-     if (mCallback == null)
-         Log.e(TAG, "mCallback is NULL");
-      mFmReceiverJNI = new FmReceiverJNI(mCallback);
+      if (isCherokeeChip()) {
+          mFmReceiverJNI = new FmReceiverJNI(mCallback);
+      }
    }
 
 
@@ -462,10 +487,12 @@ public class FmReceiver extends FmTransceiver
       Log.v(TAG, "enable: CURRENT-STATE : FMOff ---> NEW-STATE : FMRxStarting");
       status = super.enable(configSettings, FmTransceiver.FM_RX);
 
-      if( status == true ) {
-         /* Do Receiver Specific Enable Stuff here.*/
-        // status = registerClient(mCallback);
-         mRdsData = new FmRxRdsData(sFd);
+      if (status == true ) {
+          if (!isCherokeeChip()) {
+              /* Do Receiver Specific Enable Stuff here.*/
+              status = registerClient(mCallback);
+          }
+          mRdsData = new FmRxRdsData(sFd);
       }
       else {
          status = false;
@@ -1408,8 +1435,11 @@ public class FmReceiver extends FmTransceiver
       int piLower = 0;
       int piHigher = 0;
 
-     // FmReceiverJNI.getBufferNative(sFd, buff, 3);
-      buff = FmReceiverJNI.getPsBuffer(buff);
+      if(isCherokeeChip()) {
+          buff = FmReceiverJNI.getPsBuffer(buff);
+      }
+      else
+          FmReceiverJNI.getBufferNative(sFd, buff, 3);
 
       /* byte is signed ;(
       *  knock down signed bits
@@ -1462,8 +1492,12 @@ public class FmReceiver extends FmTransceiver
       int piLower = 0;
       int piHigher = 0;
 
-     // FmReceiverJNI.getBufferNative(sFd, buff, 2);
-      buff = FmReceiverJNI.getPsBuffer(buff);
+      if (isCherokeeChip()) {
+          buff = FmReceiverJNI.getPsBuffer(buff);
+      }
+      else {
+          FmReceiverJNI.getBufferNative(sFd, buff, 2);
+      }
       String rdsStr = new String(buff);
       /* byte is signed ;(
       *  knock down signed bit
@@ -1492,9 +1526,13 @@ public class FmReceiver extends FmTransceiver
       int rt_len;
       int i, j = 2;
       byte tag_code, tag_len, tag_start_pos;
-
-//      bytes_read = FmReceiverJNI.getBufferNative(sFd, rt_plus, BUF_RTPLUS);
-      rt_plus = FmReceiverJNI.getPsBuffer(rt_plus);
+      if (isCherokeeChip()) {
+          rt_plus = FmReceiverJNI.getPsBuffer(rt_plus);
+      }
+      else
+      {
+          bytes_read = FmReceiverJNI.getBufferNative(sFd, rt_plus, BUF_RTPLUS);
+      }
       bytes_read = rt_plus[0];
       if (bytes_read > 0) {
           if (rt_plus[RT_OR_ERT_IND] == 0)
@@ -1531,8 +1569,14 @@ public class FmReceiver extends FmTransceiver
       String encoding_type = "UCS-2";
       int bytes_read;
 
-  //    bytes_read = FmReceiverJNI.getBufferNative(sFd, raw_ert, BUF_ERT);
-     raw_ert = FmReceiverJNI.getPsBuffer(raw_ert);
+      if(isCherokeeChip())
+      {
+         raw_ert = FmReceiverJNI.getPsBuffer(raw_ert);
+      }
+      else
+      {
+         bytes_read = FmReceiverJNI.getBufferNative(sFd, raw_ert, BUF_ERT);
+      }
       bytes_read = raw_ert[0];
       if (bytes_read > 0) {
           ert_text = new byte[raw_ert[LEN_IND]];
@@ -1556,21 +1600,6 @@ public class FmReceiver extends FmTransceiver
       return mRdsData;
    }
 
-   public boolean IsSmdTransportLayer() {
-       String transportLayer = SystemProperties.get("ro.qualcomm.bt.hci_transport");
-       if (transportLayer.equals("smd"))
-           return true;
-       else
-           return false;
-   }
-
-   public boolean IsRomeChip() {
-       String chip = SystemProperties.get("qcom.bluetooth.soc");
-       if (chip.equals("rome"))
-           return true;
-       else
-           return false;
-   }
    /*==============================================================
    FUNCTION:  getAFInfo
    ==============================================================*/
@@ -1599,11 +1628,14 @@ public class FmReceiver extends FmTransceiver
       int  [] AfList = new int [50];
       int lowerBand, i;
       int tunedFreq, PI, size_AFLIST;
-
-    // FmReceiverJNI.getBufferNative(sFd, buff, TAVARUA_BUF_AF_LIST);
-      buff = FmReceiverJNI.getPsBuffer(buff);
-
-      if (IsSmdTransportLayer() || IsRomeChip()) {
+      if (isCherokeeChip()) {
+          buff = FmReceiverJNI.getPsBuffer(buff);
+      }
+      else
+      {
+          FmReceiverJNI.getBufferNative(sFd, buff, TAVARUA_BUF_AF_LIST);
+      }
+      if (isSmdTransportLayer() || isRomeChip() || isCherokeeChip()) {
           Log.d(TAG, "SMD transport layer or Rome chip");
 
           tunedFreq = (buff[0] & 0xFF) |
