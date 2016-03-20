@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7faddb67_469de757",
+        "filename": "fmapp2/res/values-te-rIN/strings.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 848
+      },
+      "writtenOn": "2016-03-20T01:10:54Z",
+      "side": 1,
+      "message": "Missing apostrophe here (\\\u0027)",
+      "range": {
+        "startLine": 46,
+        "startChar": 34,
+        "endLine": 46,
+        "endChar": 36
+      },
+      "revId": "cf1e7aed0275065630b511a89f73818b81116ec1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
