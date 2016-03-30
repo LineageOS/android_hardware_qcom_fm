@@ -101,7 +101,6 @@ void dequeue_fm_tx_cmd()
         lib_running = 0;
         return;
     }
-
     /*
      * Save the 'first' pointer and make it NULL.
      * This is to allow the FM-HAL to enqueue more CMDs to the TX_Q
@@ -240,13 +239,13 @@ static int read_fm_event(int fd, FM_EVT_HDR *pbuf, int len)
                     ALOGV("%s: read() returned %d bytes of FM event/data\n", __func__, ret);
                     while (ret > 0) {
                         if (pbuf->evt_code == FM_CMD_COMPLETE) {
-                            ALOGV("\n\t%s: Received %d bytes of CC event data from WCNSS FILTER!!!\n\t"
+                            ALOGI("\n\t%s: Received %d bytes of CC event data from WCNSS FILTER!!!\n\t"
                                 "Evt type\t: 0x%x \n\tEvt Code\t: 0x%x \n\tEvt len\t\t: 0x%x \n\topcode\t\t: 0x%x%x \n\tCmd Credits\t: 0x%x \n\tStatus\t\t: 0x%x\n",
                                 __func__, ret, pbuf->protocol_byte, pbuf->evt_code, pbuf->evt_len, pbuf->cmd_params[2], pbuf->cmd_params[1],
                             pbuf->cmd_params[0], pbuf->cmd_params[3]);
                             evt_type = FM_CMD_COMPLETE;
                         } else if (pbuf->evt_code == FM_CMD_STATUS) {
-                            ALOGV("\n\t%s: Received %d bytes of CS event data from WCNSS FILTER!!!\n\t"
+                            ALOGI("\n\t%s: Received %d bytes of CS event data from WCNSS FILTER!!!\n\t"
                                 "Evt type\t: 0x%x \n\tEvt Code\t: 0x%x \n\tEvt len\t\t: 0x%x \n\topcode\t\t: 0x%x%x \n\tCmd Credits\t: 0x%x \n\tStatus\t\t: 0x%x\n",
                                 __func__, ret, pbuf->protocol_byte, pbuf->evt_code, pbuf->evt_len, pbuf->cmd_params[3], pbuf->cmd_params[2],
                             pbuf->cmd_params[1], pbuf->cmd_params[0]);
@@ -320,13 +319,13 @@ static void *userial_read_thread(void *arg)
 
     FM_EVT_HDR *evt_buf = (FM_EVT_HDR *) malloc(sizeof(FM_EVT_HDR) + MAX_FM_EVT_PARAMS);
 
-    ALOGE("%s: Wait for events from the WCNSS Filter", __func__);
+    ALOGD("%s: Wait for events from the WCNSS Filter", __func__);
     length = read_fm_event(fm_fd, evt_buf, sizeof(FM_EVT_HDR) + MAX_FM_EVT_PARAMS);
-    ALOGE("length=%d\n",length);
+    ALOGD("length=%d\n",length);
     if(length <=0) {
        lib_running =0;
     }
-    ALOGE("%s: Leaving userial_read_thread()", __func__);
+    ALOGD("%s: Leaving userial_read_thread()", __func__);
     pthread_exit(NULL);
     return arg;
 }
@@ -358,15 +357,6 @@ static void* fmHCITask(void *arg)
     }
 
     ALOGE("%s: ##### Exiting fmHCITask Worker thread!!! #####", __func__);
-    ret = pthread_mutex_unlock(&fmHCIControlBlock.credit_lock);
-    ALOGE("%s: credit lock ret value =%d #####", __func__, ret);
-    pthread_mutex_destroy(&fmHCIControlBlock.credit_lock);
-    ret = pthread_mutex_unlock(&fmHCIControlBlock.tx_q_lock);
-    ALOGE("%s: tx queue lock ret value =%d #####", __func__, ret);
-    pthread_mutex_destroy(&fmHCIControlBlock.tx_q_lock);
-    ret = pthread_mutex_unlock(&fmHCIControlBlock.event_lock);
-    ALOGE("%s: event lock ret value =%d #####", __func__, ret);
-    pthread_mutex_destroy(&fmHCIControlBlock.event_lock);
     return arg;
 }
 
@@ -469,9 +459,7 @@ int open_serial_port()
         lib_running = 0;
         return FM_HC_STATUS_FAIL;
     }
-
     return 0;
-
 err:
     ALOGI("%s: Closing the TTy Serial port due to error!!!", __func__);
     ret = fm_vnd_if->op(BT_VND_OP_FM_USERIAL_CLOSE, NULL);
@@ -519,6 +507,22 @@ int transmit(FM_HDR *pbuf)
 
     if ((status = enqueue_fm_tx_cmd(pbuf)) == FM_HC_STATUS_SUCCESS)
         event_notification(HC_EVENT_TX);
+    /* Cleanup Threads if Disable command sent */
+    if ((pbuf->opcode == hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
+                    HCI_OCF_FM_DISABLE_RECV_REQ))) {
+        ALOGD("FM Disable cmd. Waiting for threads to finish");
+        if ((status = pthread_join(fmHCIControlBlock.fmHCITaskThreadId, NULL)))
+            ALOGE("Failed to join HCI task thread. err = %d", status);
+        if ((status = pthread_join(fmHCIControlBlock.fmRxTaskThreadId, NULL)))
+            ALOGE("Failed to join HCI reader thread. err = %d", status);
+        pthread_cond_destroy(&fmHCIControlBlock.cmd_credits_cond);
+        pthread_cond_destroy(&fmHCIControlBlock.event_cond);
+        pthread_mutex_destroy(&fmHCIControlBlock.event_lock);
+        pthread_mutex_destroy(&fmHCIControlBlock.credit_lock);
+        pthread_mutex_destroy(&fmHCIControlBlock.tx_q_lock);
+        ALOGD("All Threads are done. Exiting.");
+    }
+
     return status;
 }
 
@@ -536,22 +540,12 @@ void userial_close_reader(void) {
 
 void fm_userial_close(void) {
 
-    pthread_cond_signal(&fmHCIControlBlock.event_cond);
-    pthread_cond_destroy(&fmHCIControlBlock.event_cond);
-    pthread_cond_signal(&fmHCIControlBlock.cmd_credits_cond);
-    pthread_cond_destroy(&fmHCIControlBlock.cmd_credits_cond);
-
-    // Join the reader thread if it's still running.
-    if (lib_running) {
-        fm_send_event(USERIAL_RX_EXIT);
-        int result = pthread_join(fmHCIControlBlock.fmRxTaskThreadId, NULL);
-        if (result)
-            ALOGE("%s failed to join reader thread: %d", __func__, result);
-    }
-    lib_running =0;
-    ALOGE("%s  close fm userial ", __func__);
+    ALOGD("%s  close fm userial ", __func__);
+    lib_running = 0;
     fm_vnd_if->op(BT_VND_OP_FM_USERIAL_CLOSE, NULL);
-    // Free all buffers still waiting in the RX queue.
-    //  TODO: use list data structure and clean this up.
     fm_fd = -1;
+    ready_events = HC_EVENT_EXIT;
+    pthread_cond_signal(&fmHCIControlBlock.event_cond);
+    pthread_cond_signal(&fmHCIControlBlock.cmd_credits_cond);
+    // Free all buffers still waiting in the RX queue.
 }
