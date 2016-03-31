@@ -732,11 +732,6 @@ public class FMRadioService extends Service
                         String cmd = intent.getStringExtra("command");
                         Log.d(LOGTAG, "Music Service command : "+cmd+ " received");
                         if (cmd != null && cmd.equals("pause")) {
-                            if (mA2dpDisconnected) {
-                                Log.d(LOGTAG, "not to pause,this is a2dp disconnected's pause");
-                                mA2dpDisconnected = false;
-                                return;
-                            }
                             if (isFmOn()) {
                                 fmOperationsOff();
                                 mStoppedOnFocusLoss = true;
