@@ -967,7 +967,8 @@ public class FMRadioService extends Service
                     if (isFmOn() && getResources()
                             .getBoolean(R.bool.def_headset_next_enabled)) {
                         try {
-                            mCallbacks.onSeekNextStation();
+                            if ((mServiceInUse) && (mCallbacks != null))
+                                mCallbacks.onSeekNextStation();
                         }catch (RemoteException e) {
                         }
                     }
@@ -1012,7 +1013,7 @@ public class FMRadioService extends Service
         }
    };
 
-   private void startFM(){
+   private void startFM() {
        Log.d(LOGTAG, "In startFM");
        if(true == mAppShutdown) { // not to send intent to AudioManager in Shutdown
            return;
@@ -1065,12 +1066,24 @@ public class FMRadioService extends Service
        }
        mPlaybackInProgress = true;
        configureAudioDataPath(true);
+       try {
+           if ((mServiceInUse) && (mCallbacks != null))
+               mCallbacks.onFmAudioPathStarted();
+       } catch(RemoteException e) {
+           e.printStackTrace();
+       }
    }
 
-   private void stopFM(){
+   private void stopFM() {
        Log.d(LOGTAG, "In stopFM");
        configureAudioDataPath(false);
        mPlaybackInProgress = false;
+       try {
+           if ((mServiceInUse) && (mCallbacks != null))
+               mCallbacks.onFmAudioPathStopped();
+       } catch(RemoteException e) {
+           e.printStackTrace();
+       }
    }
 
    private void resetFM(){
@@ -1092,6 +1105,32 @@ public class FMRadioService extends Service
        }
        procInfos.clear();
        return status;
+   }
+
+    private File createTempFile(String prefix, String suffix, File directory)
+            throws IOException {
+        // Force a prefix null check first
+        if (prefix.length() < 3) {
+            throw new IllegalArgumentException("prefix must be at least 3 characters");
+        }
+        if (suffix == null) {
+            suffix = ".tmp";
+        }
+        File tmpDirFile = directory;
+        if (tmpDirFile == null) {
+            String tmpDir = System.getProperty("java.io.tmpdir", ".");
+            tmpDirFile = new File(tmpDir);
+        }
+
+        String nameFormat = getResources().getString(R.string.def_save_name_format);
+        SimpleDateFormat df = new SimpleDateFormat(nameFormat);
+        String currentTime = df.format(System.currentTimeMillis());
+
+        File result;
+        do {
+            result = new File(tmpDirFile, prefix + currentTime + suffix);
+        } while (!result.createNewFile());
+        return result;
    }
 
    public boolean startRecording() {
@@ -1137,12 +1176,27 @@ public class FMRadioService extends Service
         }
 
         mSampleFile = null;
-        File sampleDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() +"/FMRecording");
+        File sampleDir = null;
+        if (!"".equals(getResources().getString(R.string.def_fmRecord_savePath))) {
+            String fmRecordSavePath = getResources().getString(R.string.def_fmRecord_savePath);
+            sampleDir = new File(Environment.getExternalStorageDirectory().toString()
+                    + fmRecordSavePath);
+        } else {
+            sampleDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/FMRecording");
+        }
+
         if(!(sampleDir.mkdirs() || sampleDir.isDirectory()))
             return false;
         try {
-            mSampleFile = File
-                    .createTempFile("FMRecording", ".3gpp", sampleDir);
+            if (getResources().getBoolean(R.bool.def_save_name_format_enabled)) {
+                String suffix = getResources().getString(R.string.def_save_name_suffix);
+                suffix = "".equals(suffix) ? ".3gpp" : suffix;
+                String prefix = getResources().getString(R.string.def_save_name_prefix) + '-';
+                mSampleFile = createTempFile(prefix, suffix, sampleDir);
+            } else {
+                mSampleFile = File.createTempFile("FMRecording", ".3gpp", sampleDir);
+            }
         } catch (IOException e) {
             Log.e(LOGTAG, "Not able to access SD Card");
             Toast.makeText(this, "Not able to access SD Card", Toast.LENGTH_SHORT).show();
@@ -2127,6 +2181,7 @@ public class FMRadioService extends Service
    * Turn OFF FM Operations: This disables all the current FM operations             .
    */
    private void fmOperationsOff() {
+      // stop recording
       if (isFmRecordingOn())
       {
           stopRecording();
@@ -2137,14 +2192,19 @@ public class FMRadioService extends Service
                return;
           }
       }
+      // disable audio path
       AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
       if(audioManager != null)
       {
          Log.d(LOGTAG, "audioManager.setFmRadioOn = false \n" );
          stopFM();
-         //audioManager.setParameters("FMRadioOn=false");
          Log.d(LOGTAG, "audioManager.setFmRadioOn false done \n" );
       }
+      // reset FM audio settings
+      if (isSpeakerEnabled() == true)
+          enableSpeaker(false);
+      if (isMuted() == true)
+          unMute();
 
       if (isAnalogModeEnabled()) {
               SystemProperties.set("hw.fm.isAnalog","false");

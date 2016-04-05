@@ -1679,7 +1679,6 @@ public class FMRadio extends Activity
 
    private void disableRadio() {
       boolean bStatus = false;
-      boolean bSpeakerPhoneOn = isSpeakerEnabled();
 
       cancelSearch();
       endSleepTimer();
@@ -1698,11 +1697,6 @@ public class FMRadio extends Activity
             }
 
             enableRadioOnOffUI();
-            // restore default wired headset on FM power off
-            if (bSpeakerPhoneOn) {
-               mService.enableSpeaker(false);
-               mSpeakerButton.setImageResource(R.drawable.btn_earphone);
-            }
          }catch (RemoteException e) {
             e.printStackTrace();
          }
@@ -3196,6 +3190,16 @@ public class FMRadio extends Activity
       public void onA2DPConnectionstateChanged(boolean state){
           Log.d(LOGTAG, "mServiceCallbacks.onA2DPConnectionstateChanged :");
           A2DPConnectionState(state);
+      }
+      public void onFmAudioPathStarted() {
+          Log.d(LOGTAG, "mServiceCallbacks.onFmAudioPathStarted:");
+          mSpeakerButton.setClickable(true);
+          mMuteButton.setClickable(true);
+      }
+      public void onFmAudioPathStopped() {
+          Log.d(LOGTAG, "mServiceCallbacks.onFmAudioPathStopped:");
+          mSpeakerButton.setClickable(false);
+          mMuteButton.setClickable(false);
       }
    };
 
