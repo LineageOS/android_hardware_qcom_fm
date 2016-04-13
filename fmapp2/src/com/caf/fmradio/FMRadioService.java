@@ -739,6 +739,7 @@ public class FMRadioService extends Service
                             }
                             if (isFmOn()) {
                                 fmOperationsOff();
+                                mStoppedOnFocusLoss = true;
                                 if (isOrderedBroadcast()) {
                                     abortBroadcast();
                                 }
