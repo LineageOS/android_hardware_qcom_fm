@@ -283,6 +283,7 @@ struct radio_hci_dev {
 #define HCI_OCF_FM_GET_CH_DET_THRESHOLD     0x0018
 #define HCI_OCF_FM_SET_BLND_TBL             0x001B
 #define HCI_OCF_FM_GET_BLND_TBL             0x001C
+#define HCI_OCF_FM_LOW_PASS_FILTER_CTRL     0x001F
 /* HCI trans control commans opcode*/
 #define HCI_OCF_FM_ENABLE_TRANS_REQ         0x0001
 #define HCI_OCF_FM_DISABLE_TRANS_REQ        0x0002
@@ -1275,6 +1276,7 @@ int set_ch_det_thresholds_req(struct hci_fm_ch_det_threshold *ch_det_th);
 int hci_fm_default_data_read_req(struct hci_fm_def_data_rd_req *def_data_rd);
 int hci_fm_get_blend_req();
 int hci_fm_set_blend_tbl_req(struct hci_fm_blend_table *blnd_tbl);
+int hci_fm_enable_lpf(int enable);
 int hci_fm_default_data_write_req(struct hci_fm_def_data_wr_req * data_wrt);
 int hci_fm_get_station_dbg_param_req();
 int hci_fm_get_station_cmd_param_req();

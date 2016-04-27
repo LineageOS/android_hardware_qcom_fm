@@ -488,6 +488,11 @@ static inline void hci_cmd_complete_event(char *buff)
             hci_cc_station_rsp(pbuf);
             break;
 
+    case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_LOW_PASS_FILTER_CTRL):
+            ALOGI("%s: recived LPF enable event", __func__);
+            hci_cc_rsp(pbuf);
+            break;
+
     case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_STATION_DBG_PARAM):
             hci_cc_dbg_param_rsp(pbuf);
             break;
@@ -1558,6 +1563,12 @@ static int set_fm_ctrl(int cmd, int val)
          }
          radio->blend_tbl.BlendRmssiHi = val;
          ret = hci_fm_set_blend_tbl_req(&radio->blend_tbl);
+         break;
+    case HCI_FM_HELIUM_ENABLE_LPF:
+         ALOGI("%s: val: %x", __func__, val);
+         if (!(ret = hci_fm_enable_lpf(val))) {
+             ALOGI("%s: command sent sucessfully", __func__, val);
+         }
          break;
     default:
         ALOGE("%s:%s: Not a valid FM CMD!!", LOG_TAG, __func__);

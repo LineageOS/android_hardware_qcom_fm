@@ -447,3 +447,15 @@ int hci_fm_get_station_dbg_param_req()
             HCI_OCF_FM_STATION_DBG_PARAM);
     return send_fm_cmd_pkt(opcode, 0, NULL);
 }
+
+int hci_fm_enable_lpf(int enable)
+{
+    ALOGI("%s: enable: %x", __func__, enable);
+
+    uint16_t opcode = 0;
+    int enable_lpf = enable;
+
+    opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
+                                  HCI_OCF_FM_LOW_PASS_FILTER_CTRL);
+    return send_fm_cmd_pkt(opcode, sizeof(enable_lpf), &enable_lpf);
+}

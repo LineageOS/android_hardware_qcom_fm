@@ -28,10 +28,15 @@
 
 package qcom.fmradio;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.telephony.PhoneStateListener;
 import android.util.Log;
 import android.os.SystemProperties;
 import java.util.Arrays;
 import java.lang.Runnable;
+
 /**
  * This class contains all interfaces and types needed to
  * Control the FM receiver.
@@ -45,6 +50,12 @@ public class FmReceiver extends FmTransceiver
    static final int STD_BUF_SIZE = 256;
    static final int GRP_3A = 64;
    private static final String TAG = "FMRadio";
+
+   private static boolean mEnableLpfGsm = false;
+   private static boolean mEnableLpfCdma = false;
+   private static boolean mEnableLpfWcdma = false;
+   private static boolean mEnableLpfLte = false;
+   private static boolean mEnableLpfScdma = false;
 
    /**
    * Search (seek/scan/searchlist) by decrementing the frequency
@@ -306,7 +317,6 @@ public class FmReceiver extends FmTransceiver
    private static final int SEARCH_MPXDCC = 0;
    private static final int SEARCH_SINR_INT = 1;
 
-
    public boolean isSmdTransportLayer() {
        String transportLayer = SystemProperties.get("ro.qualcomm.bt.hci_transport");
        if (transportLayer.equals("smd"))
@@ -329,6 +339,31 @@ public class FmReceiver extends FmTransceiver
            return true;
        else
            return false;
+   }
+
+   public PhoneStateListener  mDataConnectionStateListener = new PhoneStateListener(){
+        public void onDataConnectionStateChanged(int state, int networkType) {
+              Log.d (TAG, "state: " + Integer.toString(state) +  " networkType: " + Integer.toString(networkType));
+              if (state == TelephonyManager.DATA_CONNECTED) {
+                  FMcontrolLowPassFilter(state, networkType, 1);
+              } else {
+                  FMcontrolLowPassFilter(state, networkType, 0);
+              }
+       }
+   };
+
+   /* Register for wan state changes to support wan-fm concurrency */
+   public void registerDataConnectionStateListener(Context mContext) {
+       Log.d (TAG, "registerDataConnectionStateListener");
+       TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+       tm.listen(mDataConnectionStateListener, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
+   }
+
+   /* UnRegister */
+   public void unregisterDataConnectionStateListener(Context mContext) {
+       Log.d (TAG, "unregisterDataConnectionStateListener: ");
+       TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+       tm.listen(mDataConnectionStateListener, PhoneStateListener.LISTEN_NONE);
    }
 
    /**
@@ -461,7 +496,7 @@ public class FmReceiver extends FmTransceiver
    *    @see #disable
    *
    */
-   public boolean enable (FmConfig configSettings){
+   public boolean enable (FmConfig configSettings, Context app_context){
       boolean status = false;
       /*
        * Check for FM State.
@@ -493,6 +528,7 @@ public class FmReceiver extends FmTransceiver
               status = registerClient(mCallback);
           }
           mRdsData = new FmRxRdsData(sFd);
+          registerDataConnectionStateListener(app_context);
       }
       else {
          status = false;
@@ -559,7 +595,7 @@ public class FmReceiver extends FmTransceiver
    *    @see #enable
    *    @see #registerClient
    */
-   public boolean disable(){
+   public boolean disable(Context app_context){
       boolean status = false;
       /*
        * Check for FM State. If search is in progress, then cancel the search prior
@@ -617,7 +653,7 @@ public class FmReceiver extends FmTransceiver
       setFMPowerState(subPwrLevel_FMTurning_Off);
       Log.v(TAG, "disable: CURRENT-STATE : FMRxOn ---> NEW-STATE : FMTurningOff");
       super.disable();
-
+      unregisterDataConnectionStateListener(app_context);
       return true;
    }
 
@@ -2819,5 +2855,41 @@ public class FmReceiver extends FmTransceiver
          Log.d (TAG, "spur level: " +buff[(i * 4) + 7]);
      }
      return;
+   }
+   public void FMcontrolLowPassFilter(int state, int net_type, int enable) {
+       switch (net_type)
+       {
+           case TelephonyManager.NETWORK_TYPE_CDMA:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      mEnableLpfCdma == true) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_LTE:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      mEnableLpfLte == true) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_GSM:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      mEnableLpfGsm == true) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      mEnableLpfScdma == true) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           default:
+               Log.d (TAG, "net_type " + Integer.toString(net_type) + " doesn't need LPF enabling");
+               break;
+       }
    }
 }
