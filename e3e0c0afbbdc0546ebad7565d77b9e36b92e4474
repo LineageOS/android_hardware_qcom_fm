@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5faad753_638eba79",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2016-04-29T14:19:59Z",
+      "side": 1,
+      "message": "This should be safe (and no need for mService null check) if in isScanActive() you move mIsScaning \u003d true; beside the service check. In addition, doesn\u0027t made sense to start an scan if the service is not active yet.",
+      "range": {
+        "startLine": 630,
+        "startChar": 25,
+        "endLine": 630,
+        "endChar": 37
+      },
+      "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5faad753_9891e555",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
         "patchSetId": 2
@@ -48,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "5faad753_c3f20e07",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 693,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2016-04-29T14:19:59Z",
+      "side": 1,
+      "message": "See my isScanActive above",
+      "parentUuid": "5faad753_389eb163",
+      "range": {
+        "startLine": 693,
+        "startChar": 14,
+        "endLine": 693,
+        "endChar": 67
+      },
+      "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5faad753_589b6d71",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
         "patchSetId": 2
@@ -64,6 +111,53 @@
         "startChar": 25,
         "endLine": 1219,
         "endChar": 78
+      },
+      "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5faad753_e3f70af5",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1219,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2016-04-29T14:19:59Z",
+      "side": 1,
+      "message": "See Michael W comment. It\u0027s more easy to read",
+      "parentUuid": "5faad753_589b6d71",
+      "range": {
+        "startLine": 1219,
+        "startChar": 25,
+        "endLine": 1219,
+        "endChar": 78
+      },
+      "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5faad753_83dc1675",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2067,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2016-04-29T14:19:59Z",
+      "side": 1,
+      "message": "See my isScanActive above",
+      "range": {
+        "startLine": 2067,
+        "startChar": 25,
+        "endLine": 2067,
+        "endChar": 37
       },
       "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
