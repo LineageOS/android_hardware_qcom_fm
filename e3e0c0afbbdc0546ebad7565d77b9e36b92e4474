@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5faad753_233c4292",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 14390
+      },
+      "writtenOn": "2016-04-29T14:37:55Z",
+      "side": 1,
+      "message": "A null pointer exception was reported at this line. This is because mService can be set to null asynchronously. For this reason, mService is protected with a null pointer check at most places. I have added the checks for the places where it is missed out.",
+      "parentUuid": "5faad753_638eba79",
+      "range": {
+        "startLine": 630,
+        "startChar": 25,
+        "endLine": 630,
+        "endChar": 37
+      },
+      "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5faad753_9891e555",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
         "patchSetId": 2
