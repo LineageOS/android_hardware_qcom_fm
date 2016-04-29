@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5faad753_f8757999",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2016-04-29T04:34:24Z",
+      "side": 1,
+      "message": "May want to name it \u0027e\u0027 instead of \u0027ex\u0027 to remain consistent with the exception below?",
+      "revId": "c97f75debb5cf58c455daabec90dc72f10006e50",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5faad753_5847ed4c",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadioService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1293,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2016-04-29T04:34:24Z",
+      "side": 1,
+      "message": "Extraneous space.",
+      "revId": "c97f75debb5cf58c455daabec90dc72f10006e50",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
