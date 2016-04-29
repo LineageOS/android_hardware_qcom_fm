@@ -104,6 +104,8 @@ typedef void (*ert_cb)(char *ert);
 typedef void (*disable_cb)();
 typedef void (*callback_thread_event)(unsigned int evt);
 typedef void (*rds_grp_cntrs_cb)(char *rds_params);
+typedef void (*rds_grp_cntrs_ext_cb)(char *rds_params);
+
 typedef void (*fm_peek_cb)(char *peek_rsp);
 typedef void (*fm_ssbi_peek_cb)(char *ssbi_peek_rsp);
 typedef void (*fm_agc_gain_cb)(char *agc_gain_rsp);
@@ -363,6 +365,11 @@ void rds_grp_cntrs_rsp_cb(char * evt_buffer)
    ALOGD("rds_grp_cntrs_rsp_cb");
 }
 
+void rds_grp_cntrs_ext_rsp_cb(char * evt_buffer)
+{
+   ALOGE("rds_grp_cntrs_ext_rsp_cb");
+}
+
 void fm_disabled_cb()
 {
     ALOGE("DISABLE");
@@ -485,6 +492,7 @@ typedef struct {
    ert_cb  ert_update_cb;
    disable_cb  disabled_cb;
    rds_grp_cntrs_cb rds_grp_cntrs_rsp_cb;
+   rds_grp_cntrs_ext_cb rds_grp_cntrs_ext_rsp_cb;
    fm_peek_cb fm_peek_rsp_cb;
    fm_ssbi_peek_cb fm_ssbi_peek_rsp_cb;
    fm_agc_gain_cb fm_agc_gain_rsp_cb;
@@ -527,6 +535,7 @@ static   fm_vendor_callbacks_t fm_callbacks = {
     fm_ert_update_cb,
     fm_disabled_cb,
     rds_grp_cntrs_rsp_cb,
+    rds_grp_cntrs_ext_rsp_cb,
     fm_peek_rsp_cb,
     fm_ssbi_peek_rsp_cb,
     fm_agc_gain_rsp_cb,

@@ -105,7 +105,7 @@ static void hci_cc_conf_rsp(char *ev_rsp)
 static void hci_cc_fm_disable_rsp(char *ev_buff)
 {
     char status;
-	int ret;
+    int ret;
 
     if (ev_buff == NULL) {
         ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
@@ -115,15 +115,13 @@ static void hci_cc_fm_disable_rsp(char *ev_buff)
     status = (char) *ev_buff;
     radio_hci_req_complete(status);
     if (radio->mode == FM_TURNING_OFF) {
-        jni_cb->disabled_cb();
         radio->mode = FM_OFF;
         jni_cb->disabled_cb();
         jni_cb->thread_evt_cb(1);
         //close the userial port and power off the chip
         ret = fm_power(FM_RADIO_DISABLE);
         ALOGI("fm power off status = %d", ret);
-    	ALOGE("%s:calling fm userial close\n", LOG_TAG );
-	//	sleep(1);
+        ALOGI("%s:calling fm userial close\n", LOG_TAG );
         fm_userial_close();
     //  fm_power(FM_RADIO_DISABLE);
     }
@@ -150,12 +148,27 @@ static void hci_cc_rds_grp_cntrs_rsp(char *ev_buff)
         return;
     }
     status = ev_buff[0];
-    ALOGE("%s:%s, status =%d\n", LOG_TAG, __func__,status);
-    if(status < 0)
-    {
+    ALOGI("%s:%s, status =%d\n", LOG_TAG, __func__,status);
+    if (status < 0) {
         ALOGE("%s:%s, read rds_grp_cntrs failed status=%d\n", LOG_TAG, __func__,status);
     }
     jni_cb->rds_grp_cntrs_rsp_cb(&ev_buff[1]);
+}
+
+static void hci_cc_rds_grp_cntrs_ext_rsp(char *ev_buff)
+{
+    char status;
+    int i;
+    if (ev_buff == NULL) {
+        ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
+        return;
+    }
+    status = ev_buff[0];
+    ALOGI("%s:%s, status =%d\n", LOG_TAG, __func__,status);
+    if (status < 0) {
+        ALOGE("%s:%s, read rds_grp_cntrs_ext failed status=%d\n", LOG_TAG, __func__,status);
+    }
+    jni_cb->rds_grp_cntrs_ext_rsp_cb(&ev_buff[1]);
 }
 
 static void hci_cc_riva_peek_rsp(char *ev_buff)
@@ -439,6 +452,9 @@ static inline void hci_cmd_complete_event(char *buff)
             break;
     case hci_status_param_op_pack(HCI_OCF_FM_READ_GRP_COUNTERS):
             hci_cc_rds_grp_cntrs_rsp(pbuf);
+            break;
+    case hci_status_param_op_pack(HCI_OCF_FM_READ_GRP_COUNTERS_EXT):
+            hci_cc_rds_grp_cntrs_ext_rsp(pbuf);
             break;
     case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_PEEK_DATA):
             hci_cc_riva_peek_rsp(buff);
@@ -761,7 +777,7 @@ static void hci_ev_rt_plus_tag(char *buff)
 static void  hci_ev_ext_country_code(char *buff)
 {
     char *data = NULL;
-    int len = 15;
+    int len = ECC_EVENT_BUFSIZE;
     ALOGD("%s:%s: start", LOG_TAG, __func__);
     data = malloc(len);
     if (data != NULL) {
@@ -1290,6 +1306,15 @@ static int set_fm_ctrl(int cmd, int val)
          if (ret < 0) {
              radio->g_rds_grp_proc_ps = saved_val;
              goto end;
+         }
+         break;
+
+    case HCI_FM_HELIUM_RDS_GRP_COUNTERS_EXT:
+         ALOGD("%s: rds_grp counter read  value=%d ", LOG_TAG,val);
+         ret = hci_fm_get_rds_grpcounters_ext_req(val);
+         if (ret < 0) {
+            radio->g_rds_grp_proc_ps = saved_val;
+            goto end ;
          }
          break;
 

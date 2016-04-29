@@ -164,6 +164,7 @@ typedef void (*ert_cb)(char *ert);
 typedef void (*disable_cb)();
 typedef void (*callback_thread_event)(unsigned int evt);
 typedef void (*rds_grp_cntrs_cb)(char *rds_params);
+typedef void (*rds_grp_cntrs_ext_cb)(char *rds_params);
 typedef void (*fm_peek_cb)(char *peek_rsp);
 typedef void (*fm_ssbi_peek_cb)(char *ssbi_peek_rsp);
 typedef void (*fm_agc_gain_cb)(char *agc_gain_rsp);
@@ -197,6 +198,7 @@ typedef struct {
     ert_cb  ert_update_cb;
     disable_cb  disabled_cb;
     rds_grp_cntrs_cb rds_grp_cntrs_rsp_cb;
+	rds_grp_cntrs_ext_cb rds_grp_cntrs_ext_rsp_cb;
     fm_peek_cb fm_peek_rsp_cb;
     fm_ssbi_peek_cb fm_ssbi_peek_rsp_cb;
     fm_agc_gain_cb fm_agc_gain_rsp_cb;
@@ -303,6 +305,9 @@ struct radio_hci_dev {
 
 /*HCI Status parameters commands*/
 #define HCI_OCF_FM_READ_GRP_COUNTERS        0x0001
+
+#define HCI_OCF_FM_READ_GRP_COUNTERS_EXT    0x0002
+
 
 /*HCI Diagnostic commands*/
 #define HCI_OCF_FM_PEEK_DATA                0x0002
@@ -1250,6 +1255,7 @@ int helium_cancel_search_req();
 int hci_fm_set_recv_conf_req (struct hci_fm_recv_conf_req *conf);
 int hci_fm_get_program_service_req ();
 int hci_fm_get_rds_grpcounters_req (int val);
+int hci_fm_get_rds_grpcounters_ext_req (int val);
 int hci_fm_set_notch_filter_req (int val);
 int helium_set_sig_threshold_req(char th);
 int helium_rds_grp_mask_req(struct hci_fm_rds_grp_req *rds_grp_msk);

@@ -178,6 +178,16 @@ int hci_fm_get_rds_grpcounters_req (int val)
     return send_fm_cmd_pkt(opcode, sizeof(val), &val);
 }
 
+int hci_fm_get_rds_grpcounters_ext_req (int val)
+{
+    uint16_t opcode = 0;
+
+   opcode = hci_opcode_pack(HCI_OGF_FM_STATUS_PARAMETERS_CMD_REQ,
+                         HCI_OCF_FM_READ_GRP_COUNTERS_EXT);
+    return send_fm_cmd_pkt(opcode, sizeof(val), &val);
+}
+
+
 int hci_fm_set_notch_filter_req (int val)
 {
     uint16_t opcode = 0;
