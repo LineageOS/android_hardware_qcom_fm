@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "5faad753_2333e2ad",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 14390
+      },
+      "writtenOn": "2016-04-29T15:09:26Z",
+      "side": 1,
+      "message": "Can you please describe the change with a code snippet. I am unable to get a clear picture from the text. Are you asking me to check for mService \u003d\u003d null and service.isSeekActive() inside isScanActive() ?",
+      "parentUuid": "5faad753_c30e8ee4",
+      "range": {
+        "startLine": 630,
+        "startChar": 25,
+        "endLine": 630,
+        "endChar": 37
+      },
+      "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5faad753_9891e555",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
         "patchSetId": 2
