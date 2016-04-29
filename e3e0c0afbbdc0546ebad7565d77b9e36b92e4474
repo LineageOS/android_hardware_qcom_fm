@@ -282,6 +282,29 @@
       "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5faad753_c3dc4e48",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2259,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2016-04-29T15:30:23Z",
+      "side": 1,
+      "message": "Move this line before mService check\n\nif (mService !\u003d null) {\n    mIsScaning \u003d true;\n    ...\n}\n\nThen isScanning() will be protected from mService being null.",
+      "range": {
+        "startLine": 2259,
+        "startChar": 9,
+        "endLine": 2259,
+        "endChar": 19
+      },
+      "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
