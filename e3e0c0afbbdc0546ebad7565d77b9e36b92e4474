@@ -305,6 +305,30 @@
       "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5faad753_43c93e76",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 2259,
+      "author": {
+        "id": 14390
+      },
+      "writtenOn": "2016-04-29T15:41:43Z",
+      "side": 1,
+      "message": "Had thought of this. But my thought was: mIsScaning is a \u0027local state variable\u0027. It is modified a lot inside this code. I am not sure if all places it resets the \u0027Service State\u0027 which is outside the scope of this file. The service also could be in scanning state if some other app or service requests it to scan. Honestly speaking the state diagrams are not very crisp and some state machines interfere with others eg mService and sService. I do not want to introduce unintended side effects and cause some corner case bugs to prop up. The null pointer check at places where mService is used, will help avoid the current crash without messing up  any state machines.",
+      "parentUuid": "5faad753_c3dc4e48",
+      "range": {
+        "startLine": 2259,
+        "startChar": 9,
+        "endLine": 2259,
+        "endChar": 19
+      },
+      "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
