@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "5faad753_c30e8ee4",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 630,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2016-04-29T15:00:14Z",
+      "side": 1,
+      "message": "Yeah, I understood that mService could be null, but if as i said you move mIsScaning \u003d true; a line below in isScanActive then mService cannot be null here because is ensure by isScanActive (because isScanActive can only be true if the mService is not null). This simplifies the logic in all these lines",
+      "parentUuid": "5faad753_233c4292",
+      "range": {
+        "startLine": 630,
+        "startChar": 25,
+        "endLine": 630,
+        "endChar": 37
+      },
+      "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5faad753_9891e555",
         "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
         "patchSetId": 2
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "I\u0027ll upload my next patchset with this comment incorporated. However the last two changes do not deal with booleans; so thinking of leaving them as is.",
       "parentUuid": "5faad753_9891e555",
+      "range": {
+        "startLine": 631,
+        "startChar": 14,
+        "endLine": 631,
+        "endChar": 67
+      },
+      "revId": "e3e0c0afbbdc0546ebad7565d77b9e36b92e4474",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5faad753_e3138a0c",
+        "filename": "fmapp2/src/com/caf/fmradio/FMRadio.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 631,
+      "author": {
+        "id": 3134
+      },
+      "writtenOn": "2016-04-29T15:00:14Z",
+      "side": 1,
+      "message": "That other lines required the inline if doesn\u0027t mean we cannot simplified other lines that doesn\u0027t required it ;)",
+      "parentUuid": "5faad753_834ad624",
       "range": {
         "startLine": 631,
         "startChar": 14,
