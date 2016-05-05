@@ -53,7 +53,7 @@ enum helium_cmd_t {
     HCI_FM_HELIUM_PSALL,
 
     /*v4l2 Tx controls*/
-    HCI_FM_HELIUM_IOVERC,
+    HCI_FM_HELIUM_IOVERC = 0x8000000 + 24,
     HCI_FM_HELIUM_INTDET,
     HCI_FM_HELIUM_MPX_DCC,
     HCI_FM_HELIUM_AF_JUMP,
@@ -95,5 +95,4 @@ enum helium_cmd_t {
     HCI_FM_HELIUM_AUDIO_MODE,
     HCI_FM_HELIUM_AUDIO_MUTE,
 };
-
 #endif /* __RADIO_CHEROKEE_COMMANDS_H */

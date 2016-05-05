@@ -262,11 +262,11 @@ static int read_fm_event(int fd, FM_EVT_HDR *pbuf, int len)
                             /* Provide command credits to allow fmHCITask to send cmds */
                             pthread_mutex_lock(&fmHCIControlBlock.credit_lock);
                             if (evt_type == FM_CMD_COMPLETE) {
-                                ALOGE("\n%s: Command Credit(s): '%d' received as part of CC Event for FM-CMD: 0x%x%x \n", __func__, pbuf->cmd_params[0], 
+                                ALOGE("\n%s: Command Credit(s): '%d' received as part of CC Event for FM-CMD: 0x%x%x \n", __func__, pbuf->cmd_params[0],
                                      pbuf->cmd_params[2], pbuf->cmd_params[1]);
                                 command_credits = pbuf->cmd_params[0];
                             } else if (evt_type == FM_CMD_STATUS) {
-                                ALOGE("\n%s: Command Credit(s): '%d' received as part of CS Event for FM-CMD: 0x%x%x \n", __func__, pbuf->cmd_params[1], 
+                                ALOGE("\n%s: Command Credit(s): '%d' received as part of CS Event for FM-CMD: 0x%x%x \n", __func__, pbuf->cmd_params[1],
                                     pbuf->cmd_params[3], pbuf->cmd_params[2]);
                                 command_credits = pbuf->cmd_params[1];
                             }
@@ -275,12 +275,12 @@ static int read_fm_event(int fd, FM_EVT_HDR *pbuf, int len)
                         }
 
                         ret = ret - (evt_len + 3);
-                        ALOGE("%s: Length of available bytes @ HCI Layer: %d", __func__, ret);
+                        ALOGD("%s: Length of available bytes @ HCI Layer: %d", __func__, ret);
 
                         if (ret > 0) {
-                            ALOGE("%s: Remaining bytes of event/data: %d", __func__, ret);
+                            ALOGD("%s: Remaining bytes of event/data: %d", __func__, ret);
                             pbuf = (FM_EVT_HDR *)&pbuf->cmd_params[evt_len];
-                            ALOGE("%s: Protocol byte of next packet: 0x%2x", __func__, pbuf[0]);
+                            ALOGD("%s: Protocol byte of next packet: 0x%2x", __func__, pbuf[0]);
                         }
 
                     }

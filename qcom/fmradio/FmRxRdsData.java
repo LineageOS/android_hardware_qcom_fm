@@ -141,25 +141,16 @@ public class FmRxRdsData {
 
         int re=0;
 
-        byte rds_group_mask = (byte)FmReceiverJNI.getControlNative(mFd, V4L2_CID_PRIVATE_TAVARUA_RDSGROUP_PROC);
+        int rds_group_mask = FmReceiverJNI.getControlNative(mFd, V4L2_CID_PRIVATE_TAVARUA_RDSGROUP_PROC);
         byte rdsFilt = 0;
         int  psAllVal=rdsMask & RDS_PS_ALL;
 
         Log.d(LOGTAG, "In rdsOptions: rdsMask: " + rdsMask);
 
-
-        rds_group_mask &= 0xC7;
-
-
-        rds_group_mask  |= ((rdsMask & 0x07) << 3);
-
+         rds_group_mask  = ((rdsMask & 0x000000FF));
 
         re = FmReceiverJNI.setControlNative(mFd, V4L2_CID_PRIVATE_TAVARUA_RDSGROUP_PROC, rds_group_mask);
-
-        re = FmReceiverJNI.setControlNative(mFd, V4L2_CID_PRIVATE_TAVARUA_PSALL, psAllVal >> 4 );
-
         return re;
-
     }
 
     /* Enable auto seek to alternate frequency */

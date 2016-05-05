@@ -254,8 +254,11 @@ public class FmReceiver extends FmTransceiver
     */
    public static final int FM_RX_RDS_GRP_RT_EBL         =1;
    public static final int FM_RX_RDS_GRP_PS_EBL         =2;
-   public static final int FM_RX_RDS_GRP_AF_EBL         =4;
-   public static final int FM_RX_RDS_GRP_PS_SIMPLE_EBL  =16;
+   public static final int FM_RX_RDS_GRP_PS_SIMPLE_EBL  =4;
+   public static final int FM_RX_RDS_GRP_AF_EBL         =8;
+   public static final int FM_RX_RDS_GRP_ECC_EBL        =32;
+   public static final int FM_RX_RDS_GRP_PTYN_EBL       =64;
+   public static final int FM_RX_RDS_GRP_RT_PLUS_EBL    =128;
 
 
    private static final int V4L2_CID_PRIVATE_BASE = 0x8000000;

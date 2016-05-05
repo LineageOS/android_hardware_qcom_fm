@@ -2146,7 +2146,10 @@ public class FMRadioService extends Service
                 bStatus = mReceiver.registerRdsGroupProcessing(FmReceiver.FM_RX_RDS_GRP_RT_EBL|
                                                            FmReceiver.FM_RX_RDS_GRP_PS_EBL|
                                                            FmReceiver.FM_RX_RDS_GRP_AF_EBL|
-                                                           FmReceiver.FM_RX_RDS_GRP_PS_SIMPLE_EBL);
+                                                           FmReceiver.FM_RX_RDS_GRP_PS_SIMPLE_EBL|
+                                                           FmReceiver.FM_RX_RDS_GRP_ECC_EBL|
+                                                           FmReceiver.FM_RX_RDS_GRP_PTYN_EBL|
+                                                           FmReceiver.FM_RX_RDS_GRP_RT_PLUS_EBL);
                 Log.d(LOGTAG, "registerRdsGroupProcessing done, Status :" +  bStatus);
             }
             bStatus = enableAutoAF(FmSharedPreferences.getAutoAFSwitch());

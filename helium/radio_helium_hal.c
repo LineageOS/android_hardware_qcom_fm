@@ -430,76 +430,51 @@ static inline void hci_ev_srch_st_list_compl(char *buff)
     free(ev);
 }
 
-static void hci_ev_rt_plus(struct rds_grp_data rds_buf)
+static inline void hci_ev_rt_plus_id(char *buff)
 {
-    char tag_type1, tag_type2;
     char *data = NULL;
-    int len = 0;
+    int len = 15;
     unsigned short int agt;
 
-    agt = AGT(rds_buf.rdsBlk[1].rdsLsb);
-    /*right most 3 bits of Lsb of block 2
-     * and left most 3 bits of Msb of block 3
-     */
-    tag_type1 = (((agt & TAG1_MSB_MASK) << TAG1_MSB_OFFSET) |
-                 (rds_buf.rdsBlk[2].rdsMsb >> TAG1_LSB_OFFSET));
-
-    /*right most 1 bit of lsb of 3rd block
-     * and left most 5 bits of Msb of 4th block
-     */
-    tag_type2 = (((rds_buf.rdsBlk[2].rdsLsb & TAG2_MSB_MASK) << TAG2_MSB_OFFSET) |
-                 (rds_buf.rdsBlk[3].rdsMsb >> TAG2_LSB_OFFSET));
-
-    if (tag_type1 != DUMMY_CLASS)
-        len += RT_PLUS_LEN_1_TAG;
-    if (tag_type2 != DUMMY_CLASS)
-        len += RT_PLUS_LEN_1_TAG;
-
-    if (len != 0) {
-        len += 2;
-        data = malloc(len);
-    } else {
-        ALOGE("%s:Len is zero\n", LOG_TAG);
-        return ;
-    }
+    ALOGD("%s:%s: start", LOG_TAG, __func__);
+    data = malloc(len);
     if (data != NULL) {
-        data[0] = len;
-        len = 1;
-        data[len++] = rt_ert_flag;
-        if (tag_type1 != DUMMY_CLASS) {
-            data[len++] = tag_type1;
-            /*start position of tag1
-             *right most 5 bits of msb of 3rd block
-             *and left most bit of lsb of 3rd block
-             */
-            data[len++] = (((rds_buf.rdsBlk[2].rdsMsb & TAG1_POS_MSB_MASK)
-                                            << TAG1_POS_MSB_OFFSET)|
-                            (rds_buf.rdsBlk[2].rdsLsb >> TAG1_POS_LSB_OFFSET));
-            /*length of tag1
-             *left most 6 bits of lsb of 3rd block
-             */
-            data[len++] = ((rds_buf.rdsBlk[2].rdsLsb >> TAG1_LEN_OFFSET) &
-                                                         TAG1_LEN_MASK) + 1;
-        }
-        if (tag_type2 != DUMMY_CLASS) {
-            data[len++] = tag_type2;
-            /*start position of tag2
-             *right most 3 bit of msb of 4th block
-             *and left most 3 bits of lsb of 4th block
-             */
-            data[len++] = (((rds_buf.rdsBlk[3].rdsMsb & TAG2_POS_MSB_MASK)
-                                                << TAG2_POS_MSB_OFFSET) |
-                           (rds_buf.rdsBlk[3].rdsLsb >> TAG2_POS_LSB_OFFSET));
-            /*length of tag2
-             *right most 5 bits of lsb of 4th block
-             */
-            data[len++] = (rds_buf.rdsBlk[3].rdsLsb & TAG2_LEN_MASK) + 1;
-        }
-       jni_cb->rt_plus_update_cb(data);
-        free(data);
+       data[0] = len;
+       data[1] = buff[RDS_PTYPE];
+       data[2] = buff[RDS_PID_LOWER];
+       data[3] = buff[RDS_PID_HIGHER];
+       data[4] = buff[3];
+
+      memcpy(&data[RDS_OFFSET], &buff[4], len-RDS_OFFSET);
+      ALOGD("%s:%s: RT+ ID grouptype=0x%x%x\n", LOG_TAG, __func__,data[4]);
+      free(data);
     } else {
         ALOGE("%s:memory allocation failed\n", LOG_TAG);
     }
+}
+
+static void hci_ev_rt_plus_tag(char *buff)
+{
+    char *data = NULL;
+    int len = 15;
+    unsigned short int agt;
+
+    ALOGD("%s:%s: start", LOG_TAG, __func__);
+    data = malloc(len);
+    if (data != NULL) {
+        data[0] = len;
+        ALOGE("%s:%s: data length=%d\n", LOG_TAG, __func__,data[0]);
+        data[1] = buff[RDS_PTYPE];
+        data[2] = buff[RDS_PID_LOWER];
+        data[3] = buff[RDS_PID_HIGHER];
+        data[4] = buff[3];
+        memcpy(&data[RDS_OFFSET], &buff[4], len-RDS_OFFSET);
+        // data[len] = 0x00;
+        jni_cb->rt_plus_update_cb(data);
+        free(data);
+     } else {
+        ALOGE("%s:memory allocation failed\n", LOG_TAG);
+     }
 }
 
 static void hci_ev_ert()
@@ -637,10 +612,13 @@ static void hci_ev_raw_rds_group_data(char *buff)
         }
     } else {
         carrier = gtc;
-        if ((carrier == rt_plus_carrier))
-             hci_ev_rt_plus(temp);
-        else if (carrier == ert_carrier)
+        if ((carrier == rt_plus_carrier)) {
+         //    hci_ev_rt_plus(temp);
+        }
+        else if (carrier == ert_carrier) {
+             ALOGE("%s:: calling event ert", __func__);
              hci_buff_ert(&temp);
+       }
     }
 }
 
@@ -696,6 +674,12 @@ void radio_hci_event_packet(char *evt_buf)
         break;
     case HCI_EV_SEARCH_LIST_COMPLETE:
         hci_ev_srch_st_list_compl(((FM_EVT_HDR *)evt_buf)->cmd_params);
+        break;
+    case HCI_EV_RADIO_TEXT_PLUS_ID:
+        hci_ev_rt_plus_id(((FM_EVT_HDR *)evt_buf)->cmd_params);
+        break;
+    case HCI_EV_RADIO_TEXT_PLUS_TAG:
+        hci_ev_rt_plus_tag(((FM_EVT_HDR *)evt_buf)->cmd_params);
         break;
     default:
         break;
@@ -790,15 +774,16 @@ int set_low_power_mode(int lp_mode)
                ALOGE("%s:Disable RDS failed", LOG_TAG);
                return retval;
            }
-           retval = helium_set_event_mask_req(&radio->event_mask);
+           retval = helium_set_event_mask_req(radio->event_mask);
        } else {
            radio->event_mask = SIG_LEVEL_INTR | RDS_SYNC_INTR | AUDIO_CTRL_INTR;
-           retval = helium_set_event_mask_req(&radio->event_mask);
+           retval = helium_set_event_mask_req(radio->event_mask);
            if (retval < 0) {
                ALOGE("%s:Enable Async events failed", LOG_TAG);
                return retval;
            }
-           retval = helium_rds_grp_process_req(&radio->g_rds_grp_proc_ps);
+           radio->g_rds_grp_proc_ps = 0x000000FF;
+           retval = helium_rds_grp_process_req(radio->g_rds_grp_proc_ps);
        }
        radio->power_mode = lp_mode;
     }
@@ -955,8 +940,8 @@ static int set_fm_ctrl(int cmd, int val)
         break;
     case HCI_FM_HELIUM_RDSGROUP_PROC:
          saved_val = radio->g_rds_grp_proc_ps;
-         rds_grps_proc = radio->g_rds_grp_proc_ps | val;
-         radio->g_rds_grp_proc_ps = (rds_grps_proc >> RDS_CONFIG_OFFSET);
+         rds_grps_proc = radio->g_rds_grp_proc_ps | (val & 0xFF);
+         radio->g_rds_grp_proc_ps = rds_grps_proc;
          ret = helium_rds_grp_process_req(radio->g_rds_grp_proc_ps);
          if (ret < 0) {
              radio->g_rds_grp_proc_ps = saved_val;

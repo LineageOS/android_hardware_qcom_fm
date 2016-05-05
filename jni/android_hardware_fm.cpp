@@ -213,7 +213,8 @@ void fm_rt_update_cb(char *rt)
         return;
     }
 
-    len  = (int)(rt[0] & 0x0F);
+    len  = (int)(rt[0] & 0xFF);
+    ALOGV(" rt data len=%d :",len);
     len = len+5;
 
     ALOGE(" rt data len=%d :",len);
@@ -240,7 +241,7 @@ void fm_ps_update_cb(char *ps)
         return;
     }
 
-    numPs  = (int)(ps[0] & 0x0F);
+    numPs  = (int)(ps[0] & 0xFF);
     len = (numPs *8)+5;
 
     ALOGE(" ps data len=%d :",len);
@@ -267,7 +268,7 @@ void fm_rt_plus_update_cb(char *rt_plus)
     ALOGE("RT_PLUS");
     int len;
 
-    len =  (int)(rt_plus[0] & 0x0F);
+    len =  (int)(rt_plus[0] & 0xFF);
     ALOGE(" rt plus len=%d :",len);
     RtPlus = mCallbackEnv->NewByteArray(len);
     if (RtPlus == NULL) {
@@ -290,7 +291,7 @@ void fm_ert_update_cb(char *ert)
         return;
     }
 
-    len = (int)(ert[0] & 0x0F);
+    len = (int)(ert[0] & 0xFF);
     len = len+3;
 
     ALOGE(" ert data len=%d :",len);
@@ -569,7 +570,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getControlNative
     (JNIEnv * env, jobject thiz, jint fd, jint id)
 {
     int err;
-    long val;
+    int val;
 
     ALOGE("id(%x)\n", id);
 
