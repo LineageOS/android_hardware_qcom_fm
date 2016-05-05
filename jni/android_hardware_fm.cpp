@@ -30,20 +30,32 @@
 
 #include "jni.h"
 #include "JNIHelp.h"
-#include "android_runtime/AndroidRuntime.h"
 #include "utils/Log.h"
 #include "utils/misc.h"
 #include "FmIoctlsInterface.h"
 #include "ConfigFmThs.h"
 #include <cutils/properties.h>
 #include <fcntl.h>
+#include <math.h>
 #include <sys/ioctl.h>
 #include <linux/videodev2.h>
-#include <math.h>
+#include <assert.h>
+#include <dlfcn.h>
+#include "android_runtime/Log.h"
+#include "android_runtime/AndroidRuntime.h"
 
 #define RADIO "/dev/radio0"
 #define FM_JNI_SUCCESS 0L
 #define FM_JNI_FAILURE -1L
+
+static JNIEnv *g_jEnv = NULL;
+static JavaVM *g_jVM = NULL;
+
+namespace android {
+char *FM_LIBRARY_NAME = "fm_helium.so";
+char *FM_LIBRARY_SYMBOL_NAME = "FM_HELIUM_LIB_INTERFACE";
+void *lib_handle;
+
 #define SEARCH_DOWN 0
 #define SEARCH_UP 1
 #define HIGH_BAND 2
@@ -74,9 +86,296 @@ enum search_dir_t {
     SCAN_UP,
     SCAN_DN
 };
+typedef void (*enb_result_cb)();
+typedef void (*tune_rsp_cb)(int Freq);
+typedef void (*seek_rsp_cb)(int Freq);
+typedef void (*scan_rsp_cb)();
+typedef void (*srch_list_rsp_cb)(uint16_t *scan_tbl);
+typedef void (*stereo_mode_cb)(bool status);
+typedef void (*rds_avl_sts_cb)(bool status);
+typedef void (*af_list_cb)(uint16_t *af_list);
+typedef void (*rt_cb)(char *rt);
+typedef void (*ps_cb)(char *ps);
+typedef void (*oda_cb)();
+typedef void (*rt_plus_cb)(char *rt_plus);
+typedef void (*ert_cb)(char *ert);
+typedef void (*disable_cb)();
+typedef void (*callback_thread_event)(unsigned int evt);
 
 
-using namespace android;
+static JNIEnv *mCallbackEnv = NULL;
+static jobject mCallbacksObj = NULL;
+static jfieldID sCallbacksField;
+
+jclass javaClassRef;
+static jmethodID method_psInfoCallback;
+static jmethodID method_rtCallback;
+static jmethodID method_ertCallback;
+static jmethodID method_aflistCallback;
+static jmethodID method_rtplusCallback;
+
+jmethodID method_enableCallback;
+jmethodID method_tuneCallback;
+jmethodID method_seekCmplCallback;
+jmethodID method_scanNxtCallback;
+jmethodID method_srchListCallback;
+jmethodID method_stereostsCallback;
+jmethodID method_rdsAvlStsCallback;
+jmethodID method_disableCallback;
+
+static bool checkCallbackThread() {
+   JNIEnv* env = AndroidRuntime::getJNIEnv();
+   ALOGE("Callback env check fail: env: %p, callback: %p", env, mCallbackEnv);
+   if (mCallbackEnv != env || mCallbackEnv == NULL)
+   {
+       ALOGE("Callback env check fail: env: %p, callback: %p", env, mCallbackEnv);
+       return false;
+   }
+    return true;
+}
+
+void fm_enabled_cb() {
+    ALOGE("Entered %s", __func__);
+    if (mCallbackEnv != NULL) {
+        ALOGE("javaObjectRef creating");
+        jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_enableCallback);
+        mCallbacksObj = javaObjectRef;
+        ALOGE("javaObjectRef = %p mCallbackobject =%p \n",javaObjectRef,mCallbacksObj);
+    }
+    ALOGE("exit  %s", __func__);
+}
+
+void fm_tune_cb(int Freq)
+{
+    ALOGE("TUNE:Freq:%d", Freq);
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_tuneCallback, (jint) Freq);
+}
+
+void fm_seek_cmpl_cb(int Freq)
+{
+    ALOGE("SEEK_CMPL: Freq: %d", Freq);
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_seekCmplCallback, (jint) Freq);
+}
+
+void fm_scan_next_cb()
+{
+    ALOGE("SCAN_NEXT");
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_scanNxtCallback);
+}
+
+void fm_srch_list_cb(uint16_t *scan_tbl)
+{
+    ALOGE("SRCH_LIST");
+    //mCallbackEnv->CallVoidMethod(javaObjectRef, method_srchListCallback);
+}
+
+void fm_stereo_status_cb(bool stereo)
+{
+    ALOGE("STEREO: %d", stereo);
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_stereostsCallback, (jboolean) stereo);
+}
+
+void fm_rds_avail_status_cb(bool rds_avl)
+{
+    ALOGE("fm_rds_avail_status_cb: %d", rds_avl);
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_rdsAvlStsCallback, (jboolean) rds_avl);
+}
+
+void fm_af_list_update_cb(uint16_t *af_list)
+{
+    ALOGE("AF_LIST");
+    jbyteArray af_buffer = NULL;
+
+    if (!checkCallbackThread()) {
+        ALOGE("Callback: '%s' is not called on the correct thread", __FUNCTION__);
+        return;
+    }
+
+    af_buffer = mCallbackEnv->NewByteArray(STD_BUF_SIZE);
+    if (af_buffer == NULL) {
+        ALOGE(" af list allocate failed :");
+        return;
+    }
+
+    mCallbackEnv->SetByteArrayRegion(af_buffer, 0, STD_BUF_SIZE,(jbyte *)af_list);
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_aflistCallback,af_buffer);
+    mCallbackEnv->DeleteLocalRef(af_buffer);
+}
+
+void fm_rt_update_cb(char *rt)
+{
+    ALOGE("RT_EVT: " );
+    jbyteArray rt_buff = NULL;
+    int i,len;
+
+    if (!checkCallbackThread()) {
+        ALOGE("Callback: '%s' is not called on the correct thread", __FUNCTION__);
+        return;
+    }
+
+    len  = (int)(rt[0] & 0x0F);
+    len = len+5;
+
+    ALOGE(" rt data len=%d :",len);
+    rt_buff = mCallbackEnv->NewByteArray(len);
+    if (rt_buff == NULL) {
+        ALOGE(" ps data allocate failed :");
+        return;
+    }
+
+    mCallbackEnv->SetByteArrayRegion(rt_buff, 0, len,(jbyte *)rt);
+    jbyte* bytes= mCallbackEnv->GetByteArrayElements(rt_buff,0);
+
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_rtCallback,rt_buff);
+    mCallbackEnv->DeleteLocalRef(rt_buff);
+}
+
+void fm_ps_update_cb(char *ps)
+{
+    jbyteArray ps_data = NULL;
+    int i,len;
+    int numPs;
+    if (!checkCallbackThread()) {
+        ALOGE("Callback: '%s' is not called on the correct thread", __FUNCTION__);
+        return;
+    }
+
+    numPs  = (int)(ps[0] & 0x0F);
+    len = (numPs *8)+5;
+
+    ALOGE(" ps data len=%d :",len);
+    ps_data = mCallbackEnv->NewByteArray(len);
+    if(ps_data == NULL) {
+       ALOGE(" ps data allocate failed :");
+       return;
+    }
+
+    mCallbackEnv->SetByteArrayRegion(ps_data, 0, len,(jbyte *)ps);
+    jbyte* bytes= mCallbackEnv->GetByteArrayElements(ps_data,0);
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_psInfoCallback,ps_data);
+    mCallbackEnv->DeleteLocalRef(ps_data);
+}
+
+void fm_oda_update_cb()
+{
+    ALOGE("ODA_EVT");
+}
+
+void fm_rt_plus_update_cb(char *rt_plus)
+{
+    jbyteArray RtPlus = NULL;
+    ALOGE("RT_PLUS");
+    int len;
+
+    len =  (int)(rt_plus[0] & 0x0F);
+    ALOGE(" rt plus len=%d :",len);
+    RtPlus = mCallbackEnv->NewByteArray(len);
+    if (RtPlus == NULL) {
+        ALOGE(" rt plus data allocate failed :");
+        return;
+    }
+    mCallbackEnv->SetByteArrayRegion(RtPlus, 0, len,(jbyte *)rt_plus);
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_rtplusCallback,RtPlus);
+    mCallbackEnv->DeleteLocalRef(RtPlus);
+}
+
+void fm_ert_update_cb(char *ert)
+{
+    ALOGE("ERT_EVT");
+    jbyteArray ert_buff = NULL;
+    int i,len;
+
+    if (!checkCallbackThread()) {
+        ALOGE("Callback: '%s' is not called on the correct thread", __FUNCTION__);
+        return;
+    }
+
+    len = (int)(ert[0] & 0x0F);
+    len = len+3;
+
+    ALOGE(" ert data len=%d :",len);
+    ert_buff = mCallbackEnv->NewByteArray(len);
+    if (ert_buff == NULL) {
+        ALOGE(" ps data allocate failed :");
+        return;
+    }
+
+    mCallbackEnv->SetByteArrayRegion(ert_buff, 0, len,(jbyte *)ert);
+    jbyte* bytes= mCallbackEnv->GetByteArrayElements(ert_buff,0);
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_ertCallback,ert_buff);
+    mCallbackEnv->DeleteLocalRef(ert_buff);
+}
+
+void fm_disabled_cb()
+{
+   ALOGE("DISABLE");
+   mCallbackEnv->CallVoidMethod(mCallbacksObj, method_disableCallback);
+}
+
+static void fm_thread_evt_cb(unsigned int event) {
+    JavaVM* vm = AndroidRuntime::getJavaVM();
+    if (event  == 0) {
+        JavaVMAttachArgs args;
+        char name[] = "FM Service Callback Thread";
+        args.version = JNI_VERSION_1_6;
+        args.name = name;
+        args.group = NULL;
+       vm->AttachCurrentThread(&mCallbackEnv, &args);
+        ALOGE("satish: Callback thread attached: %p", mCallbackEnv);
+    } else if (event == 1) {
+        if (!checkCallbackThread()) {
+            ALOGE("Callback: '%s' is not called on the correct thread", __FUNCTION__);
+            return;
+        }
+        vm->DetachCurrentThread();
+    }
+}
+typedef struct {
+   size_t  size;
+
+   enb_result_cb  enabled_cb;
+   tune_rsp_cb tune_cb;
+   seek_rsp_cb  seek_cmpl_cb;
+   scan_rsp_cb  scan_next_cb;
+   srch_list_rsp_cb  srch_list_cb;
+   stereo_mode_cb  stereo_status_cb;
+   rds_avl_sts_cb  rds_avail_status_cb;
+   af_list_cb  af_list_update_cb;
+   rt_cb  rt_update_cb;
+   ps_cb  ps_update_cb;
+   oda_cb  oda_update_cb;
+   rt_plus_cb  rt_plus_update_cb;
+   ert_cb  ert_update_cb;
+   disable_cb  disabled_cb;
+   callback_thread_event thread_evt_cb;
+} fm_vendor_callbacks_t;
+
+typedef struct {
+    int (*hal_init)(fm_vendor_callbacks_t *p_cb);
+
+    int (*set_fm_ctrl)(int ioctl, int val);
+    int (*get_fm_ctrl) (int ioctl, int val);
+} fm_interface_t;
+
+fm_interface_t *vendor_interface;
+static   fm_vendor_callbacks_t fm_callbacks = {
+    sizeof(fm_callbacks),
+    fm_enabled_cb,
+    fm_tune_cb,
+    fm_seek_cmpl_cb,
+    fm_scan_next_cb,
+    fm_srch_list_cb,
+    fm_stereo_status_cb,
+    fm_rds_avail_status_cb,
+    fm_af_list_update_cb,
+    fm_rt_update_cb,
+    fm_ps_update_cb,
+    fm_oda_update_cb,
+    fm_rt_plus_update_cb,
+    fm_ert_update_cb,
+    fm_disabled_cb,
+    fm_thread_evt_cb
+};
 
 /* native interface */
 static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
@@ -178,7 +477,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_getFreqNative
     int err;
     long freq;
 
-    if (fd >= 0) {
+    err = vendor_interface->get_fm_ctrl(V4L2_CID_PRV_IRIS_FREQ, freq);
+/*    if (fd >= 0) {
         err = FmIoctlsInterface :: get_cur_freq(fd, freq);
         if(err < 0) {
            err = FM_JNI_FAILURE;
@@ -190,7 +490,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getFreqNative
         ALOGE("%s: get freq failed because fd is negative, fd: %d\n",
               LOG_TAG, fd);
         err = FM_JNI_FAILURE;
-    }
+    } */
     return err;
 }
 
@@ -200,7 +500,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_setFreqNative
 {
     int err;
 
-    if ((fd >= 0) && (freq > 0)) {
+    err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_IRIS_FREQ, freq);
+/*    if ((fd >= 0) && (freq > 0)) {
         err = FmIoctlsInterface :: set_freq(fd, freq);
         if (err < 0) {
             ALOGE("%s: set freq failed, freq: %d\n", LOG_TAG, freq);
@@ -212,7 +513,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setFreqNative
         ALOGE("%s: set freq failed because either fd/freq is negative,\
               fd: %d, freq: %d\n", LOG_TAG, fd, freq);
         err = FM_JNI_FAILURE;
-    }
+    } */
     return err;
 }
 
@@ -223,7 +524,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setControlNative
     int err;
     ALOGE("id(%x) value: %x\n", id, value);
 
-    if ((fd >= 0) && (id >= 0)) {
+/*    if ((fd >= 0) && (id >= 0)) {
         err = FmIoctlsInterface :: set_control(fd, id, value);
         if (err < 0) {
             ALOGE("%s: set control failed, id: %d\n", LOG_TAG, id);
@@ -235,7 +536,8 @@ static jint android_hardware_fmradio_FmReceiverJNI_setControlNative
         ALOGE("%s: set control failed because either fd/id is negavtive,\
                fd: %d, id: %d\n", LOG_TAG, fd, id);
         err = FM_JNI_FAILURE;
-    }
+    } */
+    err = vendor_interface->set_fm_ctrl(id, value);
 
     return err;
 }
@@ -271,7 +573,14 @@ static jint android_hardware_fmradio_FmReceiverJNI_getControlNative
 
     ALOGE("id(%x)\n", id);
 
-    if ((fd >= 0) && (id >= 0)) {
+    err = vendor_interface->get_fm_ctrl(id, val);
+    if (err < 0) {
+        ALOGE("%s: get control failed, id: %d\n", LOG_TAG, id);
+        err = FM_JNI_FAILURE;
+    } else {
+        err = val;
+    }
+/*    if ((fd >= 0) && (id >= 0)) {
         err = FmIoctlsInterface :: get_control(fd, id, val);
         if (err < 0) {
             ALOGE("%s: get control failed, id: %d\n", LOG_TAG, id);
@@ -283,7 +592,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getControlNative
         ALOGE("%s: get control failed because either fd/id is negavtive,\
                fd: %d, id: %d\n", LOG_TAG, fd, id);
         err = FM_JNI_FAILURE;
-    }
+    } */
 
     return err;
 }
@@ -294,7 +603,14 @@ static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
 {
     int err;
 
-    if ((fd >= 0) && (dir >= 0)) {
+    err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_IRIS_SEEK, dir);
+    if (err < 0) {
+        ALOGE("%s: search failed, dir: %d\n", LOG_TAG, dir);
+        err = FM_JNI_FAILURE;
+    } else {
+        err = FM_JNI_SUCCESS;
+    }
+/*    if ((fd >= 0) && (dir >= 0)) {
         ALOGD("startSearchNative: Issuing the VIDIOC_S_HW_FREQ_SEEK");
         err = FmIoctlsInterface :: start_search(fd, dir);
         if (err < 0) {
@@ -307,7 +623,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
         ALOGE("%s: search failed because either fd/dir is negative,\
                fd: %d, dir: %d\n", LOG_TAG, fd, dir);
         err = FM_JNI_FAILURE;
-    }
+    } */
 
     return err;
 }
@@ -318,7 +634,14 @@ static jint android_hardware_fmradio_FmReceiverJNI_cancelSearchNative
 {
     int err;
 
-    if (fd >= 0) {
+    err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_SRCHON, 0);
+    if (err < 0) {
+        ALOGE("%s: cancel search failed\n", LOG_TAG);
+        err = FM_JNI_FAILURE;
+    } else {
+        err = FM_JNI_SUCCESS;
+    }
+/*    if (fd >= 0) {
         err = FmIoctlsInterface :: set_control(fd, V4L2_CID_PRV_SRCHON, 0);
         if (err < 0) {
             ALOGE("%s: cancel search failed\n", LOG_TAG);
@@ -330,7 +653,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_cancelSearchNative
         ALOGE("%s: cancel search failed because fd is negative, fd: %d\n",
                LOG_TAG, fd);
         err = FM_JNI_FAILURE;
-    }
+    } */
 
     return err;
 }
@@ -365,7 +688,20 @@ static jint android_hardware_fmradio_FmReceiverJNI_setBandNative
 {
     int err;
 
-    if ((fd >= 0) && (low >= 0) && (high >= 0)) {
+    err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_IRIS_UPPER_BAND, high);
+    if (err < 0) {
+        ALOGE("%s: set band failed, high: %d\n", LOG_TAG, high);
+        err = FM_JNI_FAILURE;
+        return err;
+    }
+    err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_IRIS_LOWER_BAND, low);
+    if (err < 0) {
+        ALOGE("%s: set band failed, low: %d\n", LOG_TAG, low);
+        err = FM_JNI_FAILURE;
+    } else {
+        err = FM_JNI_SUCCESS;
+    }
+/*    if ((fd >= 0) && (low >= 0) && (high >= 0)) {
         err = FmIoctlsInterface :: set_band(fd, low, high);
         if (err < 0) {
             ALOGE("%s: set band failed, low: %d, high: %d\n",
@@ -378,7 +714,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setBandNative
         ALOGE("%s: set band failed because either fd/band is negative,\
                fd: %d, low: %d, high: %d\n", LOG_TAG, fd, low, high);
         err = FM_JNI_FAILURE;
-    }
+    } */
 
     return err;
 }
@@ -390,7 +726,14 @@ static jint android_hardware_fmradio_FmReceiverJNI_getLowerBandNative
     int err;
     ULINT freq;
 
-    if (fd >= 0) {
+    err = vendor_interface->get_fm_ctrl(V4L2_CID_PRV_IRIS_LOWER_BAND, freq);
+    if (err < 0) {
+        ALOGE("%s: get lower band failed\n", LOG_TAG);
+        err = FM_JNI_FAILURE;
+    } else {
+        err = freq;
+    }
+/*    if (fd >= 0) {
         err = FmIoctlsInterface :: get_lowerband_limit(fd, freq);
         if (err < 0) {
             ALOGE("%s: get lower band failed\n", LOG_TAG);
@@ -402,7 +745,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getLowerBandNative
         ALOGE("%s: get lower band failed because fd is negative,\
                fd: %d\n", LOG_TAG, fd);
         err = FM_JNI_FAILURE;
-    }
+    } */
 
     return err;
 }
@@ -414,7 +757,14 @@ static jint android_hardware_fmradio_FmReceiverJNI_getUpperBandNative
     int err;
     ULINT freq;
 
-    if (fd >= 0) {
+    err = vendor_interface->get_fm_ctrl(V4L2_CID_PRV_IRIS_UPPER_BAND, freq);
+    if (err < 0) {
+        ALOGE("%s: get upper band failed\n", LOG_TAG);
+        err = FM_JNI_FAILURE;
+    } else {
+        err = freq;
+    }
+/*    if (fd >= 0) {
         err = FmIoctlsInterface :: get_upperband_limit(fd, freq);
         if (err < 0) {
             ALOGE("%s: get lower band failed\n", LOG_TAG);
@@ -426,7 +776,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getUpperBandNative
         ALOGE("%s: get lower band failed because fd is negative,\
                fd: %d\n", LOG_TAG, fd);
         err = FM_JNI_FAILURE;
-    }
+    } */
 
     return err;
 }
@@ -437,7 +787,14 @@ static jint android_hardware_fmradio_FmReceiverJNI_setMonoStereoNative
 
     int err;
 
-    if (fd >= 0) {
+    err = vendor_interface->get_fm_ctrl(V4L2_CID_PRV_IRIS_AUDIO_MODE, val);
+    if (err < 0) {
+        ALOGE("%s: set audio mode failed\n", LOG_TAG);
+        err = FM_JNI_FAILURE;
+    } else {
+        err = FM_JNI_SUCCESS;
+    }
+/*    if (fd >= 0) {
         err = FmIoctlsInterface :: set_audio_mode(fd, (enum AUDIO_MODE)val);
         if (err < 0) {
             err = FM_JNI_FAILURE;
@@ -446,7 +803,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setMonoStereoNative
         }
     } else {
         err = FM_JNI_FAILURE;
-    }
+    } */
 
     return err;
 }
@@ -927,11 +1284,83 @@ static jint android_hardware_fmradio_FmReceiverJNI_setSpurDataNative
     return FM_JNI_SUCCESS;
 }
 
+static void classInitNative(JNIEnv* env, jclass clazz) {
+
+    ALOGE("ClassInit native called \n");
+    jclass dataClass = env->FindClass("qcom/fmradio/FmReceiverJNI");
+    javaClassRef = (jclass) env->NewGlobalRef(dataClass);
+    lib_handle = dlopen(FM_LIBRARY_NAME, RTLD_NOW);
+    if (!lib_handle) {
+        ALOGE("%s unable to open %s: %s", __func__, FM_LIBRARY_NAME, dlerror());
+        goto error;
+    }
+    ALOGE("Opened %s shared object library successfully", FM_LIBRARY_NAME);
+
+    ALOGI("Obtaining handle: '%s' to the shared object library...", FM_LIBRARY_SYMBOL_NAME);
+    vendor_interface = (fm_interface_t *)dlsym(lib_handle, FM_LIBRARY_SYMBOL_NAME);
+    if (!vendor_interface) {
+        ALOGE("%s unable to find symbol %s in %s: %s", __func__, FM_LIBRARY_SYMBOL_NAME, FM_LIBRARY_NAME, dlerror());
+        goto error;
+    }
+
+    method_psInfoCallback = env->GetMethodID(javaClassRef, "PsInfoCallback", "([B)V");
+    method_rtCallback = env->GetMethodID(javaClassRef, "RtCallback", "([B)V");
+    method_ertCallback = env->GetMethodID(javaClassRef, "ErtCallback", "([B)V");
+    method_rtplusCallback = env->GetMethodID(javaClassRef, "RtPlusCallback", "([B)V");
+    method_aflistCallback = env->GetMethodID(javaClassRef, "AflistCallback", "([B)V");
+    ALOGI("method_psInfoCallback: '%p' env =%p...", method_psInfoCallback, env);
+    method_enableCallback = env->GetMethodID(javaClassRef, "enableCallback", "()V");
+    method_tuneCallback = env->GetMethodID(javaClassRef, "tuneCallback", "(I)V");
+    method_seekCmplCallback = env->GetMethodID(javaClassRef, "seekCmplCallback", "(I)V");
+    method_scanNxtCallback = env->GetMethodID(javaClassRef, "scanNxtCallback", "()V");
+    //method_srchListCallback = env->GetMethodID(javaClassRef, "srchListCallback", "([B)V");
+    method_stereostsCallback = env->GetMethodID(javaClassRef, "stereostsCallback", "(Z)V");
+    method_rdsAvlStsCallback = env->GetMethodID(javaClassRef, "rdsAvlStsCallback", "(Z)V");
+    method_disableCallback = env->GetMethodID(javaClassRef, "disableCallback", "()V");
+
+    return;
+error:
+    vendor_interface = NULL;
+    if (lib_handle)
+        dlclose(lib_handle);
+    lib_handle = NULL;
+}
+
+static void initNative(JNIEnv *env, jobject object) {
+
+    int status;
+    ALOGE("Init native called \n");
+
+    if (vendor_interface) {
+        ALOGE("Initializing the FM HAL module & registering the JNI callback functions...");
+        status = vendor_interface->hal_init(&fm_callbacks);
+        if (status) {
+            ALOGE("%s unable to initialize vendor library: %d", __func__, status);
+            return;
+        }
+        ALOGE("***** FM HAL Initialization complete *****\n");
+    }
+    ALOGE("object =%p, env = %p\n",object,env);
+    mCallbacksObj = env->NewGlobalRef(object);
+    ALOGE("mCallbackobject =%p, \n",mCallbacksObj);
+
+
+}
+static void cleanupNative(JNIEnv *env, jobject object) {
+
+    if (mCallbacksObj != NULL) {
+        env->DeleteGlobalRef(mCallbacksObj);
+        mCallbacksObj = NULL;
+    }
+}
 /*
  * JNI registration.
  */
 static JNINativeMethod gMethods[] = {
         /* name, signature, funcPtr */
+        { "classInitNative", "()V", (void*)classInitNative},
+        { "initNative", "()V", (void*)initNative},
+        {"cleanupNative", "()V", (void *) cleanupNative},
         { "acquireFdNative", "(Ljava/lang/String;)I",
             (void*)android_hardware_fmradio_FmReceiverJNI_acquireFdNative},
         { "closeFdNative", "(I)I",
@@ -996,21 +1425,24 @@ int register_android_hardware_fm_fmradio(JNIEnv* env)
 {
         return jniRegisterNativeMethods(env, "qcom/fmradio/FmReceiverJNI", gMethods, NELEM(gMethods));
 }
+} // end namespace
+
 
 jint JNI_OnLoad(JavaVM *jvm, void *reserved)
 {
-  JNIEnv *e;
-  int status;
-   ALOGE("FM : loading QCOMM FM-JNI\n");
-  
-   if(jvm->GetEnv((void **)&e, JNI_VERSION_1_6)) {
-       ALOGE("JNI version mismatch error");
-      return JNI_ERR;
-   }
+    JNIEnv *e;
+    int status;
+    g_jVM = jvm;
 
-   if ((status = register_android_hardware_fm_fmradio(e)) < 0) {
-       ALOGE("jni adapter service registration failure, status: %d", status);
-      return JNI_ERR;
-   }
-   return JNI_VERSION_1_6;
+    ALOGE("FM : Loading QCOMM FM-JNI");
+    if (jvm->GetEnv((void **)&e, JNI_VERSION_1_6)) {
+        ALOGE("JNI version mismatch error");
+        return JNI_ERR;
+    }
+
+    if ((status = android::register_android_hardware_fm_fmradio(e)) < 0) {
+        ALOGE("jni adapter service registration failure, status: %d", status);
+        return JNI_ERR;
+    }
+    return JNI_VERSION_1_6;
 }

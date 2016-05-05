@@ -30,7 +30,8 @@ package qcom.fmradio;
 
 import android.util.Log;
 import android.os.SystemProperties;
-
+import java.util.Arrays;
+import java.lang.Runnable;
 /**
  * This class contains all interfaces and types needed to
  * Control the FM receiver.
@@ -271,7 +272,9 @@ public class FmReceiver extends FmTransceiver
    private static final int TAVARUA_BUF_AF_LIST=5;
    private static final int TAVARUA_BUF_MAX=6;
 
-   private FmRxEvCallbacksAdaptor mCallback;
+   public static FmRxEvCallbacksAdaptor mCallback;
+   static FmRxEvCallbacks callback;
+   static FmReceiverJNI mFmReceiverJNI;
   /**
     *  Internal Constants for Signal thresholds
     *
@@ -323,8 +326,12 @@ public class FmReceiver extends FmTransceiver
       mControl = new FmRxControls();
       mRxEvents = new FmRxEventListner();
 
+      Log.e(TAG, "FmReceiver constructor");
       //registerClient(callback);
       mCallback = callback;
+     if (mCallback == null)
+         Log.e(TAG, "mCallback is NULL");
+      mFmReceiverJNI = new FmReceiverJNI(mCallback);
    }
 
 
@@ -454,7 +461,7 @@ public class FmReceiver extends FmTransceiver
 
       if( status == true ) {
          /* Do Receiver Specific Enable Stuff here.*/
-         status = registerClient(mCallback);
+        // status = registerClient(mCallback);
          mRdsData = new FmRxRdsData(sFd);
       }
       else {
@@ -1398,16 +1405,20 @@ public class FmReceiver extends FmTransceiver
       int piLower = 0;
       int piHigher = 0;
 
-      FmReceiverJNI.getBufferNative(sFd, buff, 3);
+     // FmReceiverJNI.getBufferNative(sFd, buff, 3);
+      buff = FmReceiverJNI.getPsBuffer(buff);
+
       /* byte is signed ;(
       *  knock down signed bits
       */
       piLower = buff[3] & 0xFF;
       piHigher = buff[2] & 0xFF;
       int pi = ((piHigher << 8) | piLower);
+      Log.d (TAG, "PI= " + pi);
       mRdsData.setPrgmId (pi);
       mRdsData.setPrgmType ( (int)( buff[1] & 0x1F));
       int numOfPs = (int)(buff[0] & 0x0F);
+      Log.d (TAG, "numofpsI= " + numOfPs);
       try
       {
 
@@ -1448,7 +1459,8 @@ public class FmReceiver extends FmTransceiver
       int piLower = 0;
       int piHigher = 0;
 
-      FmReceiverJNI.getBufferNative(sFd, buff, 2);
+     // FmReceiverJNI.getBufferNative(sFd, buff, 2);
+      buff = FmReceiverJNI.getPsBuffer(buff);
       String rdsStr = new String(buff);
       /* byte is signed ;(
       *  knock down signed bit
@@ -1478,7 +1490,9 @@ public class FmReceiver extends FmTransceiver
       int i, j = 2;
       byte tag_code, tag_len, tag_start_pos;
 
-      bytes_read = FmReceiverJNI.getBufferNative(sFd, rt_plus, BUF_RTPLUS);
+//      bytes_read = FmReceiverJNI.getBufferNative(sFd, rt_plus, BUF_RTPLUS);
+      rt_plus = FmReceiverJNI.getPsBuffer(rt_plus);
+      bytes_read = rt_plus[0];
       if (bytes_read > 0) {
           if (rt_plus[RT_OR_ERT_IND] == 0)
               rt = mRdsData.getRadioText();
@@ -1514,7 +1528,9 @@ public class FmReceiver extends FmTransceiver
       String encoding_type = "UCS-2";
       int bytes_read;
 
-      bytes_read = FmReceiverJNI.getBufferNative(sFd, raw_ert, BUF_ERT);
+  //    bytes_read = FmReceiverJNI.getBufferNative(sFd, raw_ert, BUF_ERT);
+     raw_ert = FmReceiverJNI.getPsBuffer(raw_ert);
+      bytes_read = raw_ert[0];
       if (bytes_read > 0) {
           ert_text = new byte[raw_ert[LEN_IND]];
           for(i = 3; (i - 3) < raw_ert[LEN_IND]; i++) {
@@ -1581,7 +1597,8 @@ public class FmReceiver extends FmTransceiver
       int lowerBand, i;
       int tunedFreq, PI, size_AFLIST;
 
-      FmReceiverJNI.getBufferNative(sFd, buff, TAVARUA_BUF_AF_LIST);
+    // FmReceiverJNI.getBufferNative(sFd, buff, TAVARUA_BUF_AF_LIST);
+      buff = FmReceiverJNI.getPsBuffer(buff);
 
       if (IsSmdTransportLayer() || IsRomeChip()) {
           Log.d(TAG, "SMD transport layer or Rome chip");

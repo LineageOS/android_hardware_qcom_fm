@@ -10,7 +10,9 @@ ConfigFmThs.cpp \
 FmIoctlsInterface.cpp \
 FmPerformanceParams.cpp
 
+LOCAL_LDLIBS += -ldl
 LOCAL_SHARED_LIBRARIES := \
+        libandroid_runtime \
         libnativehelper \
         libcutils
 
