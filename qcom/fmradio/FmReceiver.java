@@ -36,6 +36,10 @@ import android.util.Log;
 import android.os.SystemProperties;
 import java.util.Arrays;
 import java.lang.Runnable;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.net.wifi.WifiManager;
+import android.content.IntentFilter;
 
 /**
  * This class contains all interfaces and types needed to
@@ -46,9 +50,12 @@ public class FmReceiver extends FmTransceiver
 {
 
    public static int mSearchState = subSrchLevel_NoSearch;
+   private IntentFilter mIntentFilter;
 
    static final int STD_BUF_SIZE = 256;
    static final int GRP_3A = 64;
+   static final int ENABLE_LPF = 1;
+   static final int DISABLE_LPF = 0;
    private static final String TAG = "FMRadio";
 
    private static boolean mEnableLpfGsm = false;
@@ -345,9 +352,9 @@ public class FmReceiver extends FmTransceiver
         public void onDataConnectionStateChanged(int state, int networkType) {
               Log.d (TAG, "state: " + Integer.toString(state) +  " networkType: " + Integer.toString(networkType));
               if (state == TelephonyManager.DATA_CONNECTED) {
-                  FMcontrolLowPassFilter(state, networkType, 1);
+                  FMcontrolLowPassFilter(state, networkType, ENABLE_LPF);
               } else {
-                  FMcontrolLowPassFilter(state, networkType, 0);
+                  FMcontrolLowPassFilter(state, networkType, DISABLE_LPF);
               }
        }
    };
@@ -365,6 +372,29 @@ public class FmReceiver extends FmTransceiver
        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
        tm.listen(mDataConnectionStateListener, PhoneStateListener.LISTEN_NONE);
    }
+
+   private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+       @Override
+       public void onReceive(Context context, Intent intent) {
+
+           Log.d (TAG, "onReceive: Wifi State change intent");
+
+           if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {
+               int newState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
+                        WifiManager.WIFI_STATE_UNKNOWN);
+               if (newState == WifiManager.WIFI_STATE_ENABLED) {
+                   Log.d (TAG, "enable LPF on wifi enabled " + newState);
+                   mControl.enableLPF(sFd, ENABLE_LPF);
+               } else {
+                   Log.d (TAG, "Disable LPF on wifi state other than enabled " + newState);
+                   mControl.enableLPF(sFd, DISABLE_LPF);
+               }
+           } else {
+               Log.d (TAG, "WIFI_STATE_CHANGED_ACTION failed");
+           }
+       }
+   };
 
    /**
     * Constructor for the receiver Object
@@ -503,6 +533,9 @@ public class FmReceiver extends FmTransceiver
        * If FMRx already on, then return.
       */
       int state = getFMState();
+
+      mIntentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+
       if (state == FMState_Rx_Turned_On || state == FMState_Srch_InProg) {
          Log.d(TAG, "enable: FM already turned On and running");
          return status;
@@ -529,6 +562,7 @@ public class FmReceiver extends FmTransceiver
           }
           mRdsData = new FmRxRdsData(sFd);
           registerDataConnectionStateListener(app_context);
+          app_context.registerReceiver(mReceiver, mIntentFilter);
       }
       else {
          status = false;
@@ -2864,12 +2898,16 @@ public class FmReceiver extends FmTransceiver
                       mEnableLpfCdma == true) {
                    Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
                    mControl.enableLPF(sFd, enable);
+               } else {
+                   mControl.enableLPF(sFd, enable);
                }
                break;
            case TelephonyManager.NETWORK_TYPE_LTE:
                if ((state == TelephonyManager.DATA_CONNECTED) &&
                       mEnableLpfLte == true) {
                    Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               } else {
                    mControl.enableLPF(sFd, enable);
                }
                break;
@@ -2878,6 +2916,8 @@ public class FmReceiver extends FmTransceiver
                       mEnableLpfGsm == true) {
                    Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
                    mControl.enableLPF(sFd, enable);
+               } else {
+                   mControl.enableLPF(sFd, enable);
                }
                break;
            case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
@@ -2885,10 +2925,13 @@ public class FmReceiver extends FmTransceiver
                       mEnableLpfScdma == true) {
                    Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
                    mControl.enableLPF(sFd, enable);
+               } else {
+                   mControl.enableLPF(sFd, enable);
                }
                break;
            default:
                Log.d (TAG, "net_type " + Integer.toString(net_type) + " doesn't need LPF enabling");
+               mControl.enableLPF(sFd, enable);
                break;
        }
    }
