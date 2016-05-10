@@ -37,13 +37,26 @@
 #include "userial.h"
 #include "fm_hci.h"
 #include "wcnss_hci.h"
+#include <stdlib.h>
 #include <dlfcn.h>
 #include <sys/eventfd.h>
 #include <errno.h>
 #include <string.h>
+#include <sys/socket.h>
+#include <cutils/sockets.h>
+#include <pthread.h>
+#include <sys/select.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/un.h>
+#include <cutils/properties.h>
 
 int fm_fd;
+static int fm_hal_fd =0;
 fm_hal_cb *hal_cb;
+
+#define FM_VND_SERVICE_START "wc_transport.start_fmhci"
+#define WAIT_TIMEOUT 200000 /* 200*1000us */
 
 // The set of events one can send to the userial read thread.
 // Note that the values must be >= 0x8000000000000000 to guarantee delivery
@@ -51,6 +64,7 @@ fm_hal_cb *hal_cb;
 enum {
     USERIAL_RX_EXIT     = 0x8000000000000000ULL
 };
+bt_vendor_interface_t *fm_vnd_if = NULL;
 
 void event_notification(uint16_t event)
 {
@@ -60,8 +74,6 @@ void event_notification(uint16_t event)
     ALOGI("%s: Notifying worker thread with event: %d", __func__, event);
     pthread_mutex_unlock(&fmHCIControlBlock.event_lock);
 }
-
-bt_vendor_interface_t *fm_vnd_if = NULL;
 void init_vnd_if()
 {
     void *dlhandle;
@@ -254,7 +266,7 @@ static int read_fm_event(int fd, FM_EVT_HDR *pbuf, int len)
                               ALOGI("%s: FM H/w Err Event Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
                               lib_running =0;
                               // commented till bt vendor include added
-                             // fm_vnd_if->ssr_cleanup();
+                             // fm_vnd_if->ssr_cleanup(0x22);
                         } else {
                             ALOGI("%s: Not CS/CC Event: Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
                             evt_type = -1;
@@ -289,13 +301,11 @@ static int read_fm_event(int fd, FM_EVT_HDR *pbuf, int len)
 
                         ret = ret - (evt_len + 3);
                         ALOGD("%s: Length of available bytes @ HCI Layer: %d", __func__, ret);
-
                         if (ret > 0) {
                             ALOGD("%s: Remaining bytes of event/data: %d", __func__, ret);
                             pbuf = (FM_EVT_HDR *)&pbuf->cmd_params[evt_len];
                             ALOGD("%s: Protocol byte of next packet: 0x%2x", __func__, pbuf[0]);
                         }
-
                     }
                 } //end of processing the event
 
@@ -330,6 +340,28 @@ static void *userial_read_thread(void *arg)
     return arg;
 }
 
+int connect_to_local_fmsocket(char* name) {
+       socklen_t len; int sk = -1;
+
+       ALOGE("%s: ACCEPT ", __func__);
+       sk  = socket(AF_LOCAL, SOCK_STREAM, 0);
+       if (sk < 0) {
+           ALOGE("Socket creation failure");
+           return -1;
+       }
+
+        if(socket_local_client_connect(sk, name,
+            ANDROID_SOCKET_NAMESPACE_ABSTRACT, SOCK_STREAM) < 0)
+        {
+             ALOGE("failed to connect (%s)", strerror(errno));
+             close(sk);
+             sk = -1;
+        } else {
+             ALOGE("%s: Connection succeeded\n", __func__);
+        }
+        return sk;
+}
+
 /*
  * Reads the FM-CMDs from the TX_Q and sends it down to WCNSS Filter
  * Reads events sent by the WCNSS Filter and copies onto RX_Q
@@ -360,6 +392,50 @@ static void* fmHCITask(void *arg)
     return arg;
 }
 
+void stop_fmhal_service() {
+       char value[PROPERTY_VALUE_MAX] = {'\0'};
+       ALOGI("%s: Entry ", __func__);
+       property_get(FM_VND_SERVICE_START, value, "false");
+       if (strcmp(value, "false") == 0) {
+           ALOGI("%s: fmhal service  has been stopped already", __func__);
+//         return;
+       }
+       close(fm_hal_fd);
+       fm_hal_fd = -1;
+       property_set(FM_VND_SERVICE_START, "false");
+       property_set("wc_transport.fm_service_status", "0");
+       ALOGI("%s: Exit ", __func__);
+}
+
+void start_fmhal_service() {
+       ALOGI("%s: Entry ", __func__);
+       int i, init_success = 0;
+       char value[PROPERTY_VALUE_MAX] = {'\0'};
+
+       property_get(FM_VND_SERVICE_START, value, false);
+
+       if (strcmp(value, "true") == 0) {
+           ALOGI("%s: hci_filter has been started already", __func__);
+           return;
+       }
+  //     property_set("wc_transport.fm_service_status", "0");
+       property_set(FM_VND_SERVICE_START, "true");
+       ALOGI("%s: %s set to true ", __func__, FM_VND_SERVICE_START );
+       for(i=0; i<45; i++) {
+          property_get("wc_transport.fm_service_status", value, "0");
+          if (strcmp(value, "1") == 0) {
+               ALOGI("%s: wc_transport.fm_service_status set to %s", __func__,value);
+               init_success = 1;
+               break;
+           } else {
+               usleep(WAIT_TIMEOUT);
+           }
+        }
+        ALOGI("start_fmhal_service status:%d after %f seconds \n", init_success, 0.2*i);
+
+        ALOGI("%s: Exit ", __func__);
+}
+
 int fm_hci_init(fm_hal_cb *p_cb)
 {
     pthread_attr_t thread_attr;
@@ -367,13 +443,17 @@ int fm_hci_init(fm_hal_cb *p_cb)
     int policy, result, hci_type;
 
     ALOGI("FM-HCI: init");
-
+    start_fmhal_service();
     /* Save the FM-HAL event notofication callback func. */
     hal_cb = p_cb;
-
-    ALOGI("FM-HCI: Loading the WCNSS HAL library...");
-    init_vnd_if();
-
+    fm_hal_fd =  connect_to_local_fmsocket("fmhal_sock");
+	if(fm_hal_fd != -1)
+    {
+       ALOGI("FM hal service socket connect success..");
+    }
+    ALOGI("fm_hal_fd = %d", fm_hal_fd);
+	//if(fm_hal_fd == -1)
+   //      return FM_HC_STATUS_FAIL;
     ALOGI("%s: Initializing FM-HCI layer...", __func__);
     lib_running = 1;
     ready_events = 0;
@@ -413,23 +493,61 @@ int fm_hci_init(fm_hal_cb *p_cb)
     } else
         ALOGI("FM-HCI: Failed to get the Scheduling parameters!!!");
 
+	ALOGI("FM-HCI: Loading the WCNSS HAL library...");
+    init_vnd_if();
     return FM_HC_STATUS_SUCCESS;
 }
 
 
-void fm_power(fm_power_state state)
+int fm_power(fm_power_state state)
 {
-    int val;
-
-    if (state) {
-        ALOGI("FM-HCI: %s: Turning FM ON", __func__);
-        val = state;
-        fm_vnd_if->op(FM_VND_OP_POWER_CTRL, &val);
-    } else {
-        ALOGI("FM-HCI: %s: Turning FM OFF", __func__);
-        val = state;
-        fm_vnd_if->op(FM_VND_OP_POWER_CTRL, &val);
+    int i,opcode,ret;
+ 	int init_success = 0;
+    char value[PROPERTY_VALUE_MAX] = {'\0'};
+    if (fm_hal_fd)
+    {
+        if (state)
+            opcode = 2;
+        else {
+            opcode = 1;
+        }
+        ALOGI("%s:opcode: %x", LOG_TAG, opcode);
+        ret = write(fm_hal_fd,&opcode, 1);
+	    if (ret < 0)
+	 	{
+            ALOGE("failed to write fm hal socket");
+	 	}
     }
+    else {
+  	    ALOGE("Connect to socket failed ..");
+           ret = -1;
+    }
+    if(state == FM_RADIO_DISABLE) {
+		for (i=0; i<10; i++) {
+	       property_get("wc_transport.fm_power_status", value, "0");
+		   if (strcmp(value, "0") == 0) {
+			   init_success = 1;
+			   break;
+           } else {
+                usleep(WAIT_TIMEOUT);
+           }
+       }
+        ALOGI("fm power OFF status:%d after %f seconds \n", init_success, 0.2*i);
+	 	stop_fmhal_service();
+    }
+    if (state == FM_RADIO_ENABLE) {
+	   for (i=0; i<10; i++) {
+	       property_get("wc_transport.fm_power_status", value, "0");
+		   if (strcmp(value, "1") == 0) {
+			   init_success = 1;
+			   break;
+           } else {
+                usleep(WAIT_TIMEOUT);
+           }
+       }
+       ALOGI("fm power ON status:%d after %f seconds \n", init_success, 0.2*i);
+    }
+     return ret;
 }
 
 #define CH_MAX 3

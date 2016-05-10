@@ -140,6 +140,7 @@ pthread_mutex_t fm_hal;
 /* HCI timeouts */
 #define RADIO_HCI_TIMEOUT   (10000) /* 10 seconds */
 
+#define ECC_EVENT_BUFSIZE   12
 typedef enum {
     ASSOCIATE_JVM,
     DISASSOCIATE_JVM

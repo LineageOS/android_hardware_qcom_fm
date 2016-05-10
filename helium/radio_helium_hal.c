@@ -105,6 +105,7 @@ static void hci_cc_conf_rsp(char *ev_rsp)
 static void hci_cc_fm_disable_rsp(char *ev_buff)
 {
     char status;
+	int ret;
 
     if (ev_buff == NULL) {
         ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
@@ -119,7 +120,10 @@ static void hci_cc_fm_disable_rsp(char *ev_buff)
         jni_cb->disabled_cb();
         jni_cb->thread_evt_cb(1);
         //close the userial port and power off the chip
-        ALOGE("%s:calling fm userial close\n", LOG_TAG );
+        ret = fm_power(FM_RADIO_DISABLE);
+        ALOGI("fm power off status = %d", ret);
+    	ALOGE("%s:calling fm userial close\n", LOG_TAG );
+	//	sleep(1);
         fm_userial_close();
     //  fm_power(FM_RADIO_DISABLE);
     }
@@ -1105,7 +1109,7 @@ int hal_init( fm_vendor_callbacks_t *p_cb)
     ret = fm_hci_init(&hal_cb);
 
     ALOGE("%s:%s: Turning FM ON...", LOG_TAG, __func__);
-    fm_power(FM_RADIO_ENABLE);
+    ret = fm_power(FM_RADIO_ENABLE);
 
     ALOGE("%s:%s: Firmware download and HCI Initialization in-progress...", LOG_TAG, __func__);
     /* TODO : Start the preload timer */
