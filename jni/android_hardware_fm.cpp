@@ -106,6 +106,7 @@ typedef void (*callback_thread_event)(unsigned int evt);
 typedef void (*rds_grp_cntrs_cb)(char *rds_params);
 typedef void (*fm_peek_cb)(char *peek_rsp);
 typedef void (*fm_ssbi_peek_cb)(char *ssbi_peek_rsp);
+typedef void (*fm_agc_gain_cb)(char *agc_gain_rsp);
 typedef void (*fm_ch_det_th_cb)(char *ch_det_rsp);
 typedef void (*fm_ecc_evt_cb)(char *ecc);
 typedef void (*fm_sig_thr_cb)(int val, int status);
@@ -376,6 +377,10 @@ void fm_ssbi_peek_rsp_cb(char *ssbi_peek_rsp){
     ALOGD("fm_ssbi_peek_rsp_cb");
 }
 
+void fm_agc_gain_rsp_cb(char *agc_gain_rsp){
+    ALOGE("fm_agc_gain_rsp_cb");
+}
+
 void fm_ch_det_th_rsp_cb(char *ch_det_rsp){
     ALOGD("fm_ch_det_th_rsp_cb");
 }
@@ -482,6 +487,7 @@ typedef struct {
    rds_grp_cntrs_cb rds_grp_cntrs_rsp_cb;
    fm_peek_cb fm_peek_rsp_cb;
    fm_ssbi_peek_cb fm_ssbi_peek_rsp_cb;
+   fm_agc_gain_cb fm_agc_gain_rsp_cb;
    fm_ch_det_th_cb fm_ch_det_th_rsp_cb;
    fm_ecc_evt_cb   ext_country_code_cb;
    callback_thread_event thread_evt_cb;
@@ -523,6 +529,7 @@ static   fm_vendor_callbacks_t fm_callbacks = {
     rds_grp_cntrs_rsp_cb,
     fm_peek_rsp_cb,
     fm_ssbi_peek_rsp_cb,
+    fm_agc_gain_rsp_cb,
     fm_ch_det_th_rsp_cb,
     fm_ext_country_code_cb,
     fm_thread_evt_cb,

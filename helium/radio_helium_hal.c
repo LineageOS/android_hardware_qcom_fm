@@ -192,6 +192,24 @@ static void hci_cc_ssbi_peek_rsp(char *ev_buff)
     radio_hci_req_complete(status);
 }
 
+static void hci_cc_agc_rsp(char *ev_buff)
+{
+    char status;
+    ALOGV("inside hci_cc_agc_rsp");
+    if (ev_buff == NULL) {
+        ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
+        return;
+    }
+    status = ev_buff[0];
+    ALOGV("%s:%s, status =%d\n", LOG_TAG, __func__,status);
+    if (status != 0) {
+        ALOGE("%s:%s,agc gain failed=%d\n", LOG_TAG, __func__, status);
+    } else {
+        jni_cb->fm_agc_gain_rsp_cb(&ev_buff[1]);
+    }
+    radio_hci_req_complete(status);
+}
+
 static void hci_cc_get_ch_det_threshold_rsp(char *ev_buff)
 {
     int status;
@@ -378,9 +396,9 @@ static inline void hci_cmd_complete_event(char *buff)
         ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
         return;
     }
-    ALOGE("%s:buff[1] = 0x%x buff[2] = 0x%x", LOG_TAG, buff[1], buff[2]);
+    ALOGV("%s:buff[1] = 0x%x buff[2] = 0x%x", LOG_TAG, buff[1], buff[2]);
     opcode = ((buff[2] << 8) | buff[1]);
-    ALOGE("%s: Received HCI CMD COMPLETE EVENT for opcode: 0x%x", __func__, opcode);
+    ALOGV("%s: Received HCI CMD COMPLETE EVENT for the opcode: 0x%x", __func__, opcode);
     pbuf = &buff[3];
 
     switch (opcode) {
@@ -427,6 +445,9 @@ static inline void hci_cmd_complete_event(char *buff)
             break;
     case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_SSBI_PEEK_REG):
             hci_cc_ssbi_peek_rsp(buff);
+            break;
+    case hci_diagnostic_cmd_op_pack(HCI_FM_SET_GET_RESET_AGC):
+            hci_cc_agc_rsp(pbuf);
             break;
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_GET_CH_DET_THRESHOLD):
             hci_cc_get_ch_det_threshold_rsp(pbuf);
@@ -1128,7 +1149,6 @@ static int set_fm_ctrl(int cmd, int val)
     char *data;
     struct hci_fm_def_data_wr_req def_data_wrt;
 
-
     ALOGE("%s:cmd: %x, val: %d",LOG_TAG, cmd, val);
 
     switch (cmd) {
@@ -1383,6 +1403,13 @@ static int set_fm_ctrl(int cmd, int val)
     case HCI_FM_HELIUM_SSBI_PEEK:
         radio->ssbi_peek_reg.start_address = val;
         hci_ssbi_peek_reg(&radio->ssbi_peek_reg);
+        break;
+    case HCI_FM_HELIUM_AGC_UCCTRL:
+        radio->set_get_reset_agc.ucctrl = val;
+        break;
+    case HCI_FM_HELIUM_AGC_GAIN_STATE:
+        radio->set_get_reset_agc.ucgainstate = val;
+        hci_get_set_reset_agc_req(&radio->set_get_reset_agc);
         break;
     case HCI_FM_HELIUM_SINR_SAMPLES:
          if (!is_valid_sinr_samples(val)) {

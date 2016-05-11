@@ -166,6 +166,7 @@ typedef void (*callback_thread_event)(unsigned int evt);
 typedef void (*rds_grp_cntrs_cb)(char *rds_params);
 typedef void (*fm_peek_cb)(char *peek_rsp);
 typedef void (*fm_ssbi_peek_cb)(char *ssbi_peek_rsp);
+typedef void (*fm_agc_gain_cb)(char *agc_gain_rsp);
 typedef void (*fm_ch_det_th_cb)(char *ch_det_rsp);
 typedef void (*fm_ecc_evt_cb)(char *ecc_rsp);
 typedef void (*fm_sig_thr_cb) (int val, int status);
@@ -198,6 +199,7 @@ typedef struct {
     rds_grp_cntrs_cb rds_grp_cntrs_rsp_cb;
     fm_peek_cb fm_peek_rsp_cb;
     fm_ssbi_peek_cb fm_ssbi_peek_rsp_cb;
+    fm_agc_gain_cb fm_agc_gain_rsp_cb;
     fm_ch_det_th_cb fm_ch_det_th_rsp_cb;
     fm_ecc_evt_cb	ext_country_code_cb;
     callback_thread_event thread_evt_cb;
@@ -309,6 +311,7 @@ struct radio_hci_dev {
 #define HCI_OCF_FM_SSBI_POKE_REG            0x0005
 #define HCI_OCF_FM_STATION_DBG_PARAM        0x0007
 #define HCI_FM_SET_INTERNAL_TONE_GENRATOR   0x0008
+#define HCI_FM_SET_GET_RESET_AGC            0x000D
 
 /* Opcode OGF */
 #define HCI_OGF_FM_RECV_CTRL_CMD_REQ            0x0013
@@ -319,20 +322,19 @@ struct radio_hci_dev {
 #define HCI_OGF_FM_DIAGNOSTIC_CMD_REQ           0x003F
 
 /* Command opcode pack/unpack */
-#define hci_opcode_pack(ogf, ocf)    (short) ((ocf & 0x03ff)|(ogf << 10))
+#define hci_opcode_pack(ogf, ocf)    (uint16_t) (((ocf) & 0x03ff)|((ogf) << 10))
 #define hci_opcode_ogf(op)    (op >> 10)
 #define hci_opcode_ocf(op)    (op & 0x03ff)
 #define hci_recv_ctrl_cmd_op_pack(ocf) \
-     (short) hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ, ocf)
+     (uint16_t) hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ, ocf)
 #define hci_trans_ctrl_cmd_op_pack(ocf) \
-     (short) hci_opcode_pack(HCI_OGF_FM_TRANS_CTRL_CMD_REQ, ocf)
+     (uint16_t) hci_opcode_pack(HCI_OGF_FM_TRANS_CTRL_CMD_REQ, ocf)
 #define hci_common_cmd_op_pack(ocf) \
-     (short) hci_opcode_pack(HCI_OGF_FM_COMMON_CTRL_CMD_REQ, ocf)
+     (uint16_t) hci_opcode_pack(HCI_OGF_FM_COMMON_CTRL_CMD_REQ, ocf)
 #define hci_status_param_op_pack(ocf)   \
-     (short) hci_opcode_pack(HCI_OGF_FM_STATUS_PARAMETERS_CMD_REQ, ocf)
+     (uint16_t) hci_opcode_pack(HCI_OGF_FM_STATUS_PARAMETERS_CMD_REQ, ocf)
 #define hci_diagnostic_cmd_op_pack(ocf) \
-     (short) hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ, ocf)
-
+     (uint16_t) hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ, ocf)
 
 /* HCI commands with no arguments*/
 #define HCI_FM_ENABLE_RECV_CMD 1
@@ -482,6 +484,11 @@ struct hci_fm_ssbi_req {
 } ;
 struct hci_fm_ssbi_peek {
     short start_address;
+} ;
+
+struct hci_fm_set_get_reset_agc {
+    char ucctrl;
+    char ucgainstate;
 } ;
 
 struct hci_fm_ch_det_threshold {
@@ -1195,6 +1202,7 @@ struct helium_device {
     struct hci_fm_riva_poke   riva_data_req;
     struct hci_fm_ssbi_req    ssbi_data_accs;
     struct hci_fm_ssbi_peek   ssbi_peek_reg;
+    struct hci_fm_set_get_reset_agc set_get_reset_agc;
     struct hci_fm_ch_det_threshold ch_det_threshold;
     struct hci_fm_data_rd_rsp def_data;
     struct hci_fm_blend_table blend_tbl;
@@ -1255,6 +1263,7 @@ int hci_peek_data(struct hci_fm_riva_data *data);
 int hci_poke_data(struct hci_fm_riva_poke *data);
 int hci_ssbi_poke_reg(struct hci_fm_ssbi_req *data);
 int hci_ssbi_peek_reg(struct hci_fm_ssbi_peek *data);
+int hci_get_set_reset_agc_req(struct hci_fm_set_get_reset_agc *data);
 int hci_fm_get_ch_det_th();
 int set_ch_det_thresholds_req(struct hci_fm_ch_det_threshold *ch_det_th);
 int hci_fm_default_data_read_req(struct hci_fm_def_data_rd_req *def_data_rd);

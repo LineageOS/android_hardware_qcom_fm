@@ -42,7 +42,7 @@ static int send_fm_cmd_pkt(uint16_t opcode,  uint32_t len, void *param)
 {
     int p_len = 4 + len;
     int ret = 0;
-
+    ALOGV("Send_fm_cmd_pkt, opcode: %x", opcode);
 //    pthread_mutex_lock(&fm_hal);
     FM_HDR *hdr = (FM_HDR *) malloc(p_len);
     if (!hdr) {
@@ -331,6 +331,18 @@ int hci_ssbi_peek_reg(struct hci_fm_ssbi_peek *data)
     opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
                 HCI_OCF_FM_SSBI_PEEK_REG);
    return send_fm_cmd_pkt(opcode, sizeof((*data)), data);
+}
+
+int hci_get_set_reset_agc_req(struct hci_fm_set_get_reset_agc *data)
+{
+    uint16_t opcode = 0;
+    if (data == NULL) {
+        ALOGE("%s:%s,AGC set get reset req is null\n", LOG_TAG, __func__);
+        return -EINVAL;
+    }
+    opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
+    HCI_FM_SET_GET_RESET_AGC);
+    return send_fm_cmd_pkt(opcode, sizeof((*data)), data);
 }
 
 int hci_fm_get_ch_det_th()
