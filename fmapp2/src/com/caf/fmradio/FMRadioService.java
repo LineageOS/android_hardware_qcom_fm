@@ -2217,6 +2217,9 @@ public class FMRadioService extends Service
       {
          Log.d(LOGTAG, "audioManager.setFmRadioOn = false \n" );
          stopFM();
+         unMute();
+         audioManager.abandonAudioFocus(mAudioFocusListener);
+         //audioManager.setParameters("FMRadioOn=false");
          Log.d(LOGTAG, "audioManager.setFmRadioOn false done \n" );
       }
       // reset FM audio settings
@@ -2268,14 +2271,13 @@ public class FMRadioService extends Service
    private boolean fmOff() {
       boolean bStatus=false;
 
-      fmOperationsOff();
-
       // This will disable the FM radio device
       if (mReceiver != null)
       {
          bStatus = mReceiver.disable();
          mReceiver = null;
       }
+      fmOperationsOff();
       stop();
       return(bStatus);
    }
@@ -2285,11 +2287,6 @@ public class FMRadioService extends Service
        if (off_from == FM_OFF_FROM_APPLICATION || off_from == FM_OFF_FROM_ANTENNA) {
            Log.d(LOGTAG, "FM application close button pressed or antenna removed");
            mSession.setActive(false);
-           AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-           if (audioManager != null)
-               audioManager.abandonAudioFocus(mAudioFocusListener);
-           else
-               Log.d(LOGTAG, "Failed to get Audio Service");
        }
        return fmOff();
    }
