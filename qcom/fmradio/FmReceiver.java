@@ -58,11 +58,11 @@ public class FmReceiver extends FmTransceiver
    static final int DISABLE_LPF = 0;
    private static final String TAG = "FMRadio";
 
-   private static boolean mEnableLpfGsm = false;
-   private static boolean mEnableLpfCdma = false;
-   private static boolean mEnableLpfWcdma = false;
-   private static boolean mEnableLpfLte = false;
-   private static boolean mEnableLpfScdma = false;
+   private static int  mEnableLpfGsm = 0x1;
+   private static int  mEnableLpfCdma = 0x2;
+   private static int  mEnableLpfWcdma = 0x4;
+   private static int  mEnableLpfLte = 0x8;
+   private static int  mEnableLpfScdma = 0x10;
 
    /**
    * Search (seek/scan/searchlist) by decrementing the frequency
@@ -2891,11 +2891,13 @@ public class FmReceiver extends FmTransceiver
      return;
    }
    public void FMcontrolLowPassFilter(int state, int net_type, int enable) {
+       int RatConf = SystemProperties.getInt("persist.fm_wan.ratconf", 0);
+       Log.v (TAG, "FMcontrolLowPassFilter " + RatConf);
        switch (net_type)
        {
            case TelephonyManager.NETWORK_TYPE_CDMA:
                if ((state == TelephonyManager.DATA_CONNECTED) &&
-                      mEnableLpfCdma == true) {
+                      ((mEnableLpfCdma & RatConf) == mEnableLpfCdma)) {
                    Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
                    mControl.enableLPF(sFd, enable);
                } else {
@@ -2904,7 +2906,7 @@ public class FmReceiver extends FmTransceiver
                break;
            case TelephonyManager.NETWORK_TYPE_LTE:
                if ((state == TelephonyManager.DATA_CONNECTED) &&
-                      mEnableLpfLte == true) {
+                      ((mEnableLpfLte & RatConf) == mEnableLpfLte)) {
                    Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
                    mControl.enableLPF(sFd, enable);
                } else {
@@ -2913,7 +2915,7 @@ public class FmReceiver extends FmTransceiver
                break;
            case TelephonyManager.NETWORK_TYPE_GSM:
                if ((state == TelephonyManager.DATA_CONNECTED) &&
-                      mEnableLpfGsm == true) {
+                      ((mEnableLpfGsm & RatConf) == mEnableLpfGsm)) {
                    Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
                    mControl.enableLPF(sFd, enable);
                } else {
@@ -2922,7 +2924,7 @@ public class FmReceiver extends FmTransceiver
                break;
            case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
                if ((state == TelephonyManager.DATA_CONNECTED) &&
-                      mEnableLpfScdma == true) {
+                      ((mEnableLpfScdma & RatConf) == mEnableLpfScdma)) {
                    Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
                    mControl.enableLPF(sFd, enable);
                } else {
