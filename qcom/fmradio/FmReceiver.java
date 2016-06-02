@@ -40,6 +40,7 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.content.IntentFilter;
+import android.bluetooth.BluetoothAdapter;
 
 /**
  * This class contains all interfaces and types needed to
@@ -51,6 +52,7 @@ public class FmReceiver extends FmTransceiver
 
    public static int mSearchState = subSrchLevel_NoSearch;
    private IntentFilter mIntentFilter;
+   private IntentFilter mBtIntentFilter;
 
    static final int STD_BUF_SIZE = 256;
    static final int GRP_3A = 64;
@@ -64,6 +66,8 @@ public class FmReceiver extends FmTransceiver
    private static int  mEnableLpfLte = 0x8;
    private static int  mEnableLpfScdma = 0x10;
 
+   private static int  mIsBtLpfEnabled = 0x01;
+   private static int  mIsWlanLpfEnabled = 0x2;
    /**
    * Search (seek/scan/searchlist) by decrementing the frequency
    *
@@ -385,13 +389,38 @@ public class FmReceiver extends FmTransceiver
                         WifiManager.WIFI_STATE_UNKNOWN);
                if (newState == WifiManager.WIFI_STATE_ENABLED) {
                    Log.d (TAG, "enable LPF on wifi enabled " + newState);
-                   mControl.enableLPF(sFd, ENABLE_LPF);
+                   int mBtWlanLpf = SystemProperties.getInt("persist.btwlan.lpfenabler", 0);
+                   if ((mBtWlanLpf & mIsWlanLpfEnabled) == mIsWlanLpfEnabled)
+                       mControl.enableLPF(sFd, ENABLE_LPF);
                } else {
                    Log.d (TAG, "Disable LPF on wifi state other than enabled " + newState);
                    mControl.enableLPF(sFd, DISABLE_LPF);
                }
            } else {
                Log.d (TAG, "WIFI_STATE_CHANGED_ACTION failed");
+           }
+       }
+   };
+
+   private final BroadcastReceiver mBtReceiver = new BroadcastReceiver() {
+       @Override
+       public void onReceive(Context context, Intent intent) {
+
+           Log.d (TAG, "onReceive: Bluetooth State change intent");
+
+           if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(intent.getAction())) {
+               int newState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+               if (newState == BluetoothAdapter.STATE_ON) {
+                   Log.d (TAG, "enable LPF on BT enabled " + newState);
+                   int mBtWlanLpf = SystemProperties.getInt("persist.btwlan.lpfenabler", 0);
+                   if ((mBtWlanLpf & mIsBtLpfEnabled) == mIsBtLpfEnabled)
+                       mControl.enableLPF(sFd, ENABLE_LPF);
+               } else {
+                   Log.d (TAG, "Disable LPF on BT state other than enabled " + newState);
+                   mControl.enableLPF(sFd, DISABLE_LPF);
+               }
+           } else {
+               Log.d (TAG, "ACTION_STATE_CHANGED failed");
            }
        }
    };
@@ -535,6 +564,7 @@ public class FmReceiver extends FmTransceiver
       int state = getFMState();
 
       mIntentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+      mBtIntentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
 
       if (state == FMState_Rx_Turned_On || state == FMState_Srch_InProg) {
          Log.d(TAG, "enable: FM already turned On and running");
@@ -563,6 +593,7 @@ public class FmReceiver extends FmTransceiver
           mRdsData = new FmRxRdsData(sFd);
           registerDataConnectionStateListener(app_context);
           app_context.registerReceiver(mReceiver, mIntentFilter);
+          app_context.registerReceiver(mBtReceiver, mBtIntentFilter);
       }
       else {
          status = false;
