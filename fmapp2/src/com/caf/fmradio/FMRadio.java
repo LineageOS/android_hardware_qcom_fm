@@ -1413,6 +1413,11 @@ public class FMRadio extends Activity
        return(dlgBuilder.create());
     }
    private void RestoreDefaults() {
+      try {
+          mService.restoreDefaults();
+      } catch (RemoteException e) {
+          e.printStackTrace();
+      }
       FmSharedPreferences.SetDefaults();
       mPrefs.Save();
    }

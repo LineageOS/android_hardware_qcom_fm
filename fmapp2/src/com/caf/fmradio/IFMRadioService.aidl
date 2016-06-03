@@ -79,5 +79,6 @@ interface IFMRadioService
     boolean getIntfDetLowTh();
     boolean getIntfDetHighTh();
     boolean getRxRepeatCount();
+    void restoreDefaults();
 }
 

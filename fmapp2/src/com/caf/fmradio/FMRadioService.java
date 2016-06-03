@@ -157,6 +157,7 @@ public class FMRadioService extends Service
    //Track FM playback for reenter App usecases
    private boolean mPlaybackInProgress = false;
    private boolean mStoppedOnFocusLoss = false;
+   private boolean mStoppedOnFactoryReset = false;
    private File mSampleFile = null;
    long mSampleStart = 0;
    // Messages handled in FM Service
@@ -673,8 +674,6 @@ public class FMRadioService extends Service
                 }
             };
             AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-            mA2dpConnected = am.isBluetoothA2dpOn();
-            mA2dpDisconnected = !mA2dpConnected;
             IntentFilter iFilter = new IntentFilter();
             iFilter.addAction(Intent.ACTION_HEADSET_PLUG);
             iFilter.addAction(mA2dpDeviceState.getActionSinkStateChangedString());
@@ -1046,23 +1045,14 @@ public class FMRadioService extends Service
 
        mStoppedOnFocusLoss = false;
 
-       if (!mA2dpDeviceState.isDeviceAvailable()) {
-           Log.d(LOGTAG, "FMRadio: Requesting to start FM");
-           //reason for resending the Speaker option is we are sending
-           //ACTION_FM=1 to AudioManager, the previous state of Speaker we set
-           //need not be retained by the Audio Manager.
-           if (isSpeakerEnabled()) {
-               mSpeakerPhoneOn = true;
-               Log.d(LOGTAG, "Audio source set it as speaker");
+       if (mStoppedOnFactoryReset) {
+           mStoppedOnFactoryReset = false;
+           mSpeakerPhoneOn = false;
+       // In FM stop, the audio route is set to default audio device
+       } else if (mSpeakerPhoneOn) {
+               String temp = mA2dpConnected ? "A2DP HS" : "Speaker";
+               Log.d(LOGTAG, "Route audio to " + temp);
                AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_SPEAKER);
-           } else {
-               Log.d(LOGTAG, "Audio source set it as headset");
-               AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
-           }
-       } else {
-               Log.d(LOGTAG, "A2DP is connected, set audio source to A2DP HS");
-               AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_SPEAKER);
-               mSpeakerPhoneOn = true;
        }
 
        mPlaybackInProgress = true;
@@ -1829,6 +1819,7 @@ public class FMRadioService extends Service
 
       public void enableSpeaker(boolean speakerOn)
       {
+
           mService.get().enableSpeaker(speakerOn);
       }
 
@@ -2045,12 +2036,10 @@ public class FMRadioService extends Service
       {
            return (mService.get().isSleepTimerActive());
       }
-
       public boolean isSSRInProgress()
       {
          return(mService.get().isSSRInProgress());
       }
-
       public boolean isA2DPConnected()
       {
          return(mService.get().isA2DPConnected());
@@ -2059,6 +2048,11 @@ public class FMRadioService extends Service
       public int getExtenCountryCode()
       {
          return(mService.get().getExtenCountryCode());
+      }
+
+      public void restoreDefaults()
+      {
+         mService.get().restoreDefaults();
       }
    }
    private final IBinder mBinder = new ServiceStub(this);
@@ -2197,6 +2191,18 @@ public class FMRadioService extends Service
       return(bStatus);
    }
 
+   private void resetAudioRoute() {
+       if (isSpeakerEnabled() == true) {
+           if (mA2dpConnected == true) {
+               Log.d(LOGTAG, "A2DP connected, de-select BT");
+               AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NO_BT_A2DP);
+           } else {
+               Log.d(LOGTAG, "A2DP is not connected, force none");
+               AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
+           }
+       }
+   }
+
   /*
    * Turn OFF FM Operations: This disables all the current FM operations             .
    */
@@ -2224,8 +2230,8 @@ public class FMRadioService extends Service
          Log.d(LOGTAG, "audioManager.setFmRadioOn false done \n" );
       }
       // reset FM audio settings
-      if (isSpeakerEnabled() == true)
-          enableSpeaker(false);
+      resetAudioRoute();
+
       if (isMuted() == true)
           unMute();
 
@@ -3736,11 +3742,12 @@ public class FMRadioService extends Service
            mA2dpProfile = (BluetoothA2dp) proxy;
            mA2dpDeviceList = mA2dpProfile.getConnectedDevices();
 
-           if (mA2dpDeviceList == null)
+           if (mA2dpDeviceList.isEmpty())
                mA2dpConnected = false;
            else
                mA2dpConnected = true;
            mA2dpDisconnected = !mA2dpConnected;
+           mSpeakerPhoneOn = mA2dpConnected;
            Log.d(LOGTAG, "A2DP Status: " + mA2dpConnected);
        }
 
@@ -3757,5 +3764,9 @@ public class FMRadioService extends Service
                                        BluetoothProfile.A2DP)) {
            Log.d(LOGTAG, "Failed to get A2DP profile proxy");
        }
+   }
+
+   private void restoreDefaults () {
+        mStoppedOnFactoryReset = true;
    }
 }
