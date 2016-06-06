@@ -3741,11 +3741,11 @@ public class FMRadioService extends Service
        public void onServiceConnected(int profile, BluetoothProfile proxy) {
            mA2dpProfile = (BluetoothA2dp) proxy;
            mA2dpDeviceList = mA2dpProfile.getConnectedDevices();
-
-           if (mA2dpDeviceList.isEmpty())
+           if (mA2dpDeviceList == null || mA2dpDeviceList.size() == 0)
                mA2dpConnected = false;
            else
                mA2dpConnected = true;
+
            mA2dpDisconnected = !mA2dpConnected;
            mSpeakerPhoneOn = mA2dpConnected;
            Log.d(LOGTAG, "A2DP Status: " + mA2dpConnected);
