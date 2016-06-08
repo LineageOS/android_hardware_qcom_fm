@@ -486,7 +486,7 @@ public class FMStats extends Activity  {
                     }
                     if (mRunTestThread !=  null) {
                         synchronized (obj) {
-                            mRunTestThread.notify();
+                            obj.notify();
                         }
                     }
                     break;
