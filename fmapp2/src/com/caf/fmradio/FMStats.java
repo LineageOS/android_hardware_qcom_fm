@@ -276,6 +276,7 @@ public class FMStats extends Activity  {
 
     private Thread mRecordUpdateHandlerThread = null;
     private Thread mRunTestThread = null;
+    private Thread mTuneCompleteThread = null;
     boolean mRecording = false;
 
 
@@ -465,12 +466,10 @@ public class FMStats extends Activity  {
                         if (lastCmdSent == CMD_STNPARAM_SINR)
                             nSINR = msg.arg1;
                     }
-                    if (mRunTestThread !=  null) {
-                        synchronized (obj) {
-                            obj.notify();
-                        }
-                    }
-                    lastCmdSent = 0;
+					synchronized (obj) {
+						obj.notify();
+					}
+					lastCmdSent = 0;
                     break;
                 case GET_STATION_DBG_PARAM:
                     status = msg.arg2;
@@ -484,12 +483,10 @@ public class FMStats extends Activity  {
                         if  (lastCmdSent == CMD_STNDBGPARAM_INFDETOUT)
                             nIntDet = msg.arg1;
                     }
-                    if (mRunTestThread !=  null) {
-                        synchronized (obj) {
-                            obj.notify();
-                        }
-                    }
-                    break;
+					synchronized (obj) {
+						obj.notify();
+					}
+					break;
                 default:
                     Log.e(LOGTAG, "mCallbackHandler:Default");
                     break;
@@ -535,9 +532,6 @@ public class FMStats extends Activity  {
         if(mUIUpdateHandlerHandler != null) {
            mUIUpdateHandlerHandler.removeCallbacksAndMessages(null);
         }
-        if(mHandler != null) {
-           mHandler.removeCallbacksAndMessages(null);
-        }
         unRegisterBroadcastReceiver(mBandSweepDelayExprdListener);
         unRegisterBroadcastReceiver(mBandSweepDwellExprdListener);
         if(null != mFileCursor ) {
@@ -562,6 +556,28 @@ public class FMStats extends Activity  {
               runCurrentTest();
         }
     };
+
+     private Runnable mTuneComplete = new Runnable(){
+         public void run(){
+             if((null != mMultiUpdateThread) &&(null != mSync))
+             {
+                 synchronized(mSync){
+                     mSync.notify();
+                 }
+             }
+            if((mTestSelected == SEARCH_TEST) && (mService != null)) {
+                /* On every Tune Complete generate the result for the current
+                Frequency*/
+                Message updateUI = new Message();
+                updateUI.what = STATUS_UPDATE;
+                int freq = FmSharedPreferences.getTunedFrequency();
+                updateUI.obj = (Object)GetFMStatsForFreq(freq);
+                if (updateUI.obj == null)
+                    updateUI.what = STATUS_DONE;
+                mUIUpdateHandlerHandler.sendMessage(updateUI);
+            }
+         }
+     };
 
     private View.OnClickListener mOnRunListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -2880,12 +2896,12 @@ public class FMStats extends Activity  {
     private boolean isCherokeeChip() {
         Log.d(LOGTAG, "isCherokeeChip");
 
-		String chip = SystemProperties.get("qcom.bluetooth.soc");
-		if (chip.equals("cherokee"))
-			return true;
-		else
-			return false;
-	}
+        String chip = SystemProperties.get("qcom.bluetooth.soc");
+        if (chip.equals("cherokee"))
+            return true;
+        else
+            return false;
+    }
 
     private boolean isRomeChip() {
         String chip = "";
@@ -3515,8 +3531,21 @@ public class FMStats extends Activity  {
           public void onTuneStatusChanged()
           {
              Log.d(LOGTAG, "mServiceCallbacks.onTuneStatusChanged :" + mTestRunning);
-             if (mTestRunning)
-                 mHandler.post(mTuneComplete);
+             if (mTestRunning) {
+                 if ((mTuneCompleteThread == null) || (mTuneCompleteThread.getState() == Thread.State.TERMINATED)) {
+                     mTuneCompleteThread = new Thread(mTuneComplete,
+                                                "mTuneCompleteThread");
+                 } else {
+                     Log.e(LOGTAG, "mTuneCompleteThread is already running");
+                     return;
+                 }
+                 if (mTuneCompleteThread != null) {
+                     mTuneCompleteThread.start();
+                 } else {
+                     Log.e(LOGTAG, "mTuneCompleteThread: new thread create failed");
+                     return;
+                 }
+             }
           }
 
           public void onProgramServiceChanged()
@@ -3737,30 +3766,6 @@ public class FMStats extends Activity  {
               mCallbackHandler.obtainMessage(GET_STATION_DBG_PARAM, val, status).sendToTarget();
           }
       };
-      /* Radio Vars */
-     private Handler mHandler = new Handler();
-
-     private Runnable mTuneComplete = new Runnable(){
-         public void run(){
-             if((null != mMultiUpdateThread) &&(null != mSync))
-             {
-                 synchronized(mSync){
-                     mSync.notify();
-                 }
-             }
-            if((mTestSelected == SEARCH_TEST) && (mService != null)) {
-                /* On every Tune Complete generate the result for the current
-                Frequency*/
-                Message updateUI = new Message();
-                updateUI.what = STATUS_UPDATE;
-                int freq = FmSharedPreferences.getTunedFrequency();
-                updateUI.obj = (Object)GetFMStatsForFreq(freq);
-                if (updateUI.obj == null)
-                    updateUI.what = STATUS_DONE;
-                mUIUpdateHandlerHandler.sendMessage(updateUI);
-            }
-         }
-     };
 
      private void stopCurTest() {
          if (mRunTestThread != null) {
@@ -3779,7 +3784,8 @@ public class FMStats extends Activity  {
                       mMultiUpdateThread.interrupt();
                   break;
              case SEARCH_TEST:
-                  mHandler.removeCallbacks(mTuneComplete);
+                  if (mTuneCompleteThread != null)
+                      mTuneCompleteThread.interrupt();
                   if (mService != null) {
                       try {
                            Message updateStop = new Message();
