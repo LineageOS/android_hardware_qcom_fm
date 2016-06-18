@@ -265,8 +265,7 @@ static int read_fm_event(int fd, FM_EVT_HDR *pbuf, int len)
                         } else if (pbuf->evt_code == FM_HW_ERR_EVENT) {
                               ALOGI("%s: FM H/w Err Event Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
                               lib_running =0;
-                              // commented till bt vendor include added
-                             // fm_vnd_if->ssr_cleanup(0x22);
+                              fm_vnd_if->ssr_cleanup(0x22);
                         } else {
                             ALOGI("%s: Not CS/CC Event: Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
                             evt_type = -1;
