@@ -100,6 +100,7 @@ enum helium_cmd_t {
     HCI_FM_HELIUM_RDS_GRP_COUNTERS_EXT,
     HCI_FM_HELIUM_AGC_UCCTRL = 0x8000043, /* 0x8000043 */
     HCI_FM_HELIUM_AGC_GAIN_STATE,
+    HCI_FM_HELIUM_ENABLE_LPF,
 
     /*using private CIDs under userclass*/
     HCI_FM_HELIUM_READ_DEFAULT = 0x00980928,

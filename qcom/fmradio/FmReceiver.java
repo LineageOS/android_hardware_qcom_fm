@@ -28,10 +28,20 @@
 
 package qcom.fmradio;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.telephony.TelephonyManager;
+import android.telephony.PhoneStateListener;
 import android.util.Log;
 import android.os.SystemProperties;
 import java.util.Arrays;
 import java.lang.Runnable;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
+import android.net.wifi.WifiManager;
+import android.content.IntentFilter;
+import android.bluetooth.BluetoothAdapter;
+
 /**
  * This class contains all interfaces and types needed to
  * Control the FM receiver.
@@ -41,11 +51,38 @@ public class FmReceiver extends FmTransceiver
 {
 
    public static int mSearchState = subSrchLevel_NoSearch;
+   private IntentFilter mIntentFilter;
+   private IntentFilter mBtIntentFilter;
 
    static final int STD_BUF_SIZE = 256;
    static final int GRP_3A = 64;
+   static final int ENABLE_LPF = 1;
+   static final int DISABLE_LPF = 0;
    private static final String TAG = "FMRadio";
 
+
+   private static int  mEnableLpfGprs = 0x1;
+   private static int  mEnableLpfEdge = 0x2;
+   private static int  mEnableLpfUmts = 0x4;
+   private static int  mEnableLpfCdma = 0x8;
+   private static int  mEnableLpfEvdo0 = 0x10;
+   private static int  mEnableLpfEvdoA = 0x20;
+   private static int  mEnableLpf1xRtt = 0x40;
+   private static int  mEnableLpfHsdpa = 0x80;
+   private static int  mEnableLpfHsupa = 0x100;
+   private static int  mEnableLpfHspa = 0x200;
+   private static int  mEnableLpfIden = 0x400;
+   private static int  mEnableLpfEvdoB = 0x800;
+   private static int  mEnableLpfLte = 0x1000;
+   private static int  mEnableLpfEhrpd = 0x2000;
+   private static int  mEnableLpfHspap = 0x4000;
+   private static int  mEnableLpfGsm = 0x8000;
+   private static int  mEnableLpfScdma = 0x10000;
+   private static int  mEnableLpfIwlan = 0x20000;
+   private static int  mEnableLpfLteCa = 0x40000;
+
+   private static int  mIsBtLpfEnabled = 0x01;
+   private static int  mIsWlanLpfEnabled = 0x2;
    /**
    * Search (seek/scan/searchlist) by decrementing the frequency
    *
@@ -306,7 +343,6 @@ public class FmReceiver extends FmTransceiver
    private static final int SEARCH_MPXDCC = 0;
    private static final int SEARCH_SINR_INT = 1;
 
-
    public boolean isSmdTransportLayer() {
        String transportLayer = SystemProperties.get("ro.qualcomm.bt.hci_transport");
        if (transportLayer.equals("smd"))
@@ -330,6 +366,79 @@ public class FmReceiver extends FmTransceiver
        else
            return false;
    }
+
+   public PhoneStateListener  mDataConnectionStateListener = new PhoneStateListener(){
+        public void onDataConnectionStateChanged(int state, int networkType) {
+              Log.d (TAG, "state: " + Integer.toString(state) +  " networkType: " + Integer.toString(networkType));
+              if (state == TelephonyManager.DATA_CONNECTED) {
+                  FMcontrolLowPassFilter(state, networkType, ENABLE_LPF);
+              } else {
+                  mControl.enableLPF(sFd, DISABLE_LPF);
+              }
+       }
+   };
+
+   /* Register for wan state changes to support wan-fm concurrency */
+   public void registerDataConnectionStateListener(Context mContext) {
+       Log.d (TAG, "registerDataConnectionStateListener");
+       TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+       tm.listen(mDataConnectionStateListener, PhoneStateListener.LISTEN_DATA_CONNECTION_STATE);
+   }
+
+   /* UnRegister */
+   public void unregisterDataConnectionStateListener(Context mContext) {
+       Log.d (TAG, "unregisterDataConnectionStateListener: ");
+       TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+       tm.listen(mDataConnectionStateListener, PhoneStateListener.LISTEN_NONE);
+   }
+
+   private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
+       @Override
+       public void onReceive(Context context, Intent intent) {
+
+           Log.d (TAG, "onReceive: Wifi State change intent");
+
+           if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {
+               int newState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE,
+                        WifiManager.WIFI_STATE_UNKNOWN);
+               if (newState == WifiManager.WIFI_STATE_ENABLED) {
+                   Log.d (TAG, "enable LPF on wifi enabled " + newState);
+                   int mBtWlanLpf = SystemProperties.getInt("persist.btwlan.lpfenabler", 0);
+                   if ((mBtWlanLpf & mIsWlanLpfEnabled) == mIsWlanLpfEnabled)
+                       mControl.enableLPF(sFd, ENABLE_LPF);
+               } else {
+                   Log.d (TAG, "Disable LPF on wifi state other than enabled " + newState);
+                   mControl.enableLPF(sFd, DISABLE_LPF);
+               }
+           } else {
+               Log.d (TAG, "WIFI_STATE_CHANGED_ACTION failed");
+           }
+       }
+   };
+
+   private final BroadcastReceiver mBtReceiver = new BroadcastReceiver() {
+       @Override
+       public void onReceive(Context context, Intent intent) {
+
+           Log.d (TAG, "onReceive: Bluetooth State change intent");
+
+           if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(intent.getAction())) {
+               int newState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR);
+               if (newState == BluetoothAdapter.STATE_ON) {
+                   Log.d (TAG, "enable LPF on BT enabled " + newState);
+                   int mBtWlanLpf = SystemProperties.getInt("persist.btwlan.lpfenabler", 0);
+                   if ((mBtWlanLpf & mIsBtLpfEnabled) == mIsBtLpfEnabled)
+                       mControl.enableLPF(sFd, ENABLE_LPF);
+               } else {
+                   Log.d (TAG, "Disable LPF on BT state other than enabled " + newState);
+                   mControl.enableLPF(sFd, DISABLE_LPF);
+               }
+           } else {
+               Log.d (TAG, "ACTION_STATE_CHANGED failed");
+           }
+       }
+   };
 
    /**
     * Constructor for the receiver Object
@@ -461,13 +570,17 @@ public class FmReceiver extends FmTransceiver
    *    @see #disable
    *
    */
-   public boolean enable (FmConfig configSettings){
+   public boolean enable (FmConfig configSettings, Context app_context){
       boolean status = false;
       /*
        * Check for FM State.
        * If FMRx already on, then return.
       */
       int state = getFMState();
+
+      mIntentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+      mBtIntentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+
       if (state == FMState_Rx_Turned_On || state == FMState_Srch_InProg) {
          Log.d(TAG, "enable: FM already turned On and running");
          return status;
@@ -493,6 +606,19 @@ public class FmReceiver extends FmTransceiver
               status = registerClient(mCallback);
           }
           mRdsData = new FmRxRdsData(sFd);
+          registerDataConnectionStateListener(app_context);
+          app_context.registerReceiver(mReceiver, mIntentFilter);
+         WifiManager wifiManager = (WifiManager)app_context.getSystemService(app_context.WIFI_SERVICE);
+         if (wifiManager.getWifiState() == WifiManager.WIFI_STATE_ENABLED) {
+               Log.d(TAG, "enable LPF if WIFI is already on");
+               mControl.enableLPF(sFd, ENABLE_LPF);
+         }
+         app_context.registerReceiver(mBtReceiver, mBtIntentFilter);
+         BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+         if (btAdapter != null) {
+               Log.d(TAG, "enable LPF if BT is already on");
+               mControl.enableLPF(sFd, ENABLE_LPF);
+         }
       }
       else {
          status = false;
@@ -559,7 +685,7 @@ public class FmReceiver extends FmTransceiver
    *    @see #enable
    *    @see #registerClient
    */
-   public boolean disable(){
+   public boolean disable(Context app_context){
       boolean status = false;
       /*
        * Check for FM State. If search is in progress, then cancel the search prior
@@ -617,7 +743,9 @@ public class FmReceiver extends FmTransceiver
       setFMPowerState(subPwrLevel_FMTurning_Off);
       Log.v(TAG, "disable: CURRENT-STATE : FMRxOn ---> NEW-STATE : FMTurningOff");
       super.disable();
-
+      unregisterDataConnectionStateListener(app_context);
+      app_context.unregisterReceiver(mBtReceiver);
+      app_context.unregisterReceiver(mReceiver);
       return true;
    }
 
@@ -2819,5 +2947,150 @@ public class FmReceiver extends FmTransceiver
          Log.d (TAG, "spur level: " +buff[(i * 4) + 7]);
      }
      return;
+   }
+   public void FMcontrolLowPassFilter(int state, int net_type, int enable) {
+       int RatConf = SystemProperties.getInt("persist.fm_wan.ratconf", 0);
+       Log.v (TAG, "FMcontrolLowPassFilter " + RatConf);
+       switch (net_type)
+       {
+
+           case TelephonyManager.NETWORK_TYPE_GPRS:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfGprs  & RatConf) == mEnableLpfGprs)) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_EDGE:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfEdge  & RatConf) == mEnableLpfEdge)) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_UMTS:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfUmts  & RatConf) == mEnableLpfUmts )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_CDMA:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfCdma & RatConf) == mEnableLpfCdma)) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_EVDO_0:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfEvdo0  & RatConf) == mEnableLpfEvdo0 )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_EVDO_A:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfEvdoA  & RatConf) == mEnableLpfEvdoA )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_1xRTT:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpf1xRtt  & RatConf) == mEnableLpf1xRtt )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_HSDPA:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfHsdpa  & RatConf) == mEnableLpfHsdpa )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_HSUPA:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfHsupa & RatConf) == mEnableLpfHsupa)) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_HSPA:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfHspa  & RatConf) == mEnableLpfHspa )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_IDEN:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfIden  & RatConf) == mEnableLpfIden )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_EVDO_B:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfEvdoB  & RatConf) == mEnableLpfEvdoB )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_LTE:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfLte  & RatConf) == mEnableLpfLte )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_EHRPD:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfEhrpd  & RatConf) == mEnableLpfEhrpd )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_HSPAP:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfHspap  & RatConf) == mEnableLpfHspap)) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_GSM:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfGsm & RatConf) == mEnableLpfGsm)) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfScdma & RatConf) == mEnableLpfScdma)) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+          case TelephonyManager.NETWORK_TYPE_IWLAN:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfIwlan  & RatConf) == mEnableLpfIwlan )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+          case TelephonyManager.NETWORK_TYPE_LTE_CA:
+               if ((state == TelephonyManager.DATA_CONNECTED) &&
+                      ((mEnableLpfLteCa  & RatConf) == mEnableLpfLteCa )) {
+                   Log.d (TAG, "enabling LPF for net_type: " + Integer.toString(net_type));
+                   mControl.enableLPF(sFd, enable);
+               }
+               break;
+           default:
+               Log.d (TAG, "net_type " + Integer.toString(net_type) + " doesn't need LPF enabling");
+               mControl.enableLPF(sFd, enable);
+               break;
+       }
    }
 }

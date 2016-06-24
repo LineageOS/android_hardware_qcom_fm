@@ -2123,7 +2123,7 @@ public class FMRadioService extends Service
             Log.d(LOGTAG, "fmOn: RdsStd      :"+ config.getRdsStd());
             Log.d(LOGTAG, "fmOn: LowerLimit  :"+ config.getLowerLimit());
             Log.d(LOGTAG, "fmOn: UpperLimit  :"+ config.getUpperLimit());
-            bStatus = mReceiver.enable(FmSharedPreferences.getFMConfiguration());
+            bStatus = mReceiver.enable(FmSharedPreferences.getFMConfiguration(), this);
             if (isSpeakerEnabled()) {
                 setAudioPath(false);
             } else {
@@ -2281,7 +2281,7 @@ public class FMRadioService extends Service
       // This will disable the FM radio device
       if (mReceiver != null)
       {
-         bStatus = mReceiver.disable();
+         bStatus = mReceiver.disable(this);
          mReceiver = null;
       }
       fmOperationsOff();

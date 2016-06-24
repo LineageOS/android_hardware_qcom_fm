@@ -100,6 +100,7 @@ class FmRxControls
    private static final int V4L2_CID_PRIVATE_AF_JUMP_RSSI_TH               = V4L2_CID_PRIVATE_BASE + 0x3F;
    private static final int V4L2_CID_PRIVATE_BLEND_SINRHI                  = V4L2_CID_PRIVATE_BASE + 0x40;
    private static final int V4L2_CID_PRIVATE_BLEND_RMSSIHI                 = V4L2_CID_PRIVATE_BASE + 0x41;
+   private static final int ENABLE_LOW_PASS_FILTER                         = V4L2_CID_PRIVATE_BASE + 0x45;
 
    private static final int V4L2_CTRL_CLASS_USER = 0x980000;
    private static final int V4L2_CID_BASE        = V4L2_CTRL_CLASS_USER | 0x900;
@@ -193,6 +194,14 @@ class FmRxControls
       int re = FmReceiverJNI.setControlNative(fd, V4L2_CID_PRIVATE_TAVARUA_ON_CHANNEL_THRESHOLD, sBuff);
       if ( re < 0)
          Log.e(TAG, "Failed to set On channel threshold data");
+      return re;
+   }
+
+   public int enableLPF(int fd, int sBuff)
+   {
+      int re = FmReceiverJNI.setControlNative(fd, ENABLE_LOW_PASS_FILTER, sBuff);
+      if ( re < 0)
+         Log.e(TAG, "Failed to enable LPF");
       return re;
    }
 
