@@ -214,9 +214,9 @@ class FmRxEventListner {
                                 Log.d(TAG, "Got RADIO_DISABLED");
                                 if (FmTransceiver.getFMPowerState() == FmTransceiver.subPwrLevel_FMTurning_Off) {
                                     FmTransceiver.release("/dev/radio0");
-                                    cb.FmRxEvDisableReceiver();
                                     /*Set the state as FMOff */
                                     FmTransceiver.setFMPowerState(FmTransceiver.FMState_Turned_Off);
+                                    cb.FmRxEvDisableReceiver();
                                     Log.v(TAG, "RxEvtList: CURRENT-STATE : FMTurningOff ---> NEW-STATE : FMOff");
                                     Thread.currentThread().interrupt();
                                 } else {
