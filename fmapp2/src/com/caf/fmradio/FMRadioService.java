@@ -1580,12 +1580,14 @@ public class FMRadioService extends Service
                               setAudioPath(false);
                       }
                       mStoppedOnFocusLoss = true;
+                      mSession.setActive(false);
                       break;
                   case AudioManager.AUDIOFOCUS_GAIN:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN");
                       if(false == mPlaybackInProgress)
                           startFM();
                       mStoppedOnFocusLoss = false;
+                      mSession.setActive(true);
                       break;
                   default:
                       Log.e(LOGTAG, "Unknown audio focus change code"+msg.arg1);
