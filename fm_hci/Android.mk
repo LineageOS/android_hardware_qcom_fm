@@ -16,7 +16,7 @@ BDROID_DIR:= system/bt
 LOCAL_CFLAGS += $(bdroid_CFLAGS)
 
 LOCAL_SRC_FILES := \
-	fm_hci.c
+    fm_hci.c
 
 LOCAL_SHARED_LIBRARIES := \
          libdl \
@@ -30,7 +30,8 @@ LOCAL_C_INCLUDES += \
         $(BDROID_DIR)/hci/include \
         $(BDROID_DIR)/stack/include \
         $(BDROID_DIR)/osi/include \
-        $(LOCAL_PATH)/../helium
+        $(LOCAL_PATH)/../helium \
+        $(LOCAL_PATH)/fm_hci
 
 LOCAL_MODULE := libfm-hci
 LOCAL_MODULE_TAGS := optional

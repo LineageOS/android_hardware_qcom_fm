@@ -512,7 +512,6 @@ typedef struct {
 
 typedef struct {
     int (*hal_init)(fm_vendor_callbacks_t *p_cb);
-
     int (*set_fm_ctrl)(int ioctl, int val);
     int (*get_fm_ctrl) (int ioctl, int val);
 } fm_interface_t;
@@ -704,7 +703,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setControlNative
     int err;
     ALOGE("id(%x) value: %x\n", id, value);
 #ifdef FM_SOC_TYPE_CHEROKEE
-	err = vendor_interface->set_fm_ctrl(id, value);
+    err = vendor_interface->set_fm_ctrl(id, value);
 #else
     if ((fd >= 0) && (id >= 0)) {
         err = FmIoctlsInterface :: set_control(fd, id, value);
@@ -928,7 +927,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getLowerBandNative
     } else {
         err = freq;
     }
-	return err;
+    return err;
 #endif
     if (fd >= 0) {
         err = FmIoctlsInterface :: get_lowerband_limit(fd, freq);
@@ -962,7 +961,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getUpperBandNative
     } else {
         err = freq;
     }
-	return err;
+    return err;
 #endif
     if (fd >= 0) {
         err = FmIoctlsInterface :: get_upperband_limit(fd, freq);
@@ -993,7 +992,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setMonoStereoNative
     } else {
         err = FM_JNI_SUCCESS;
     }
-	return err;
+    return err;
 #endif
     if (fd >= 0) {
         err = FmIoctlsInterface :: set_audio_mode(fd, (enum AUDIO_MODE)val);

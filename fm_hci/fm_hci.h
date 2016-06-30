@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2015-2016 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -30,24 +30,9 @@
 #ifndef __FM_HCI__
 #define __FM_HCI__
 
-#pragma pack(1)
-
-#include <radio-helium.h>
-
-/** Host/Controller Library Return Status */
-typedef enum {
-    FM_HC_STATUS_SUCCESS,
-    FM_HC_STATUS_FAIL,
-    FM_HC_STATUS_NOT_READY,
-    FM_HC_STATUS_NOMEM,
-    FM_HC_STATUS_BUSY,
-    FM_HC_STATUS_CORRUPTED_BUFFER
-} fm_hc_status_t;
-
-typedef enum {
-    FM_RADIO_DISABLE,
-    FM_RADIO_ENABLE
-}fm_power_state;
+#include "bt_hci_bdroid.h"
+#include "bt_vendor_lib.h"
+#include "fm_hci_api.h"
 
 /* Host/Controller lib internal event ID */
 #define HC_EVENT_PRELOAD               0x0001
@@ -71,56 +56,46 @@ typedef enum {
 #define FM_CMD_STATUS   0x10
 #define FM_HW_ERR_EVENT 0x1A
 
-static pthread_mutex_t utils_mutex;
-
+/* TODO: move inside context */
 static volatile uint8_t lib_running = 0;
 static volatile uint16_t ready_events = 0;
 
-FILE *fd_wcnss_filter;
+// The set of events one can send to the userial read thread.
+// Note that the values must be >= 0x8000000000000000 to guarantee delivery
+// of the message (see eventfd(2) for details on blocking behaviour).
+enum {
+    USERIAL_RX_EXIT     = 0x8000000000000000ULL
+};
 
-typedef struct {
-    uint8_t protocol_byte;
-    uint16_t opcode;
-    uint8_t plen;
-    uint8_t cmd_params[];
-} FM_HDR;
+struct transmit_queue_t {
+    struct fm_command_header_t *hdr;
+    struct transmit_queue_t *next;
+};
 
-typedef struct {
-    uint8_t protocol_byte;
-    uint8_t evt_code;
-    uint8_t evt_len;
-    uint8_t cmd_params[];
-} FM_EVT_HDR;
-
-typedef struct hdr
-{
-    FM_HDR  *hdr;
-    struct hdr *next;
-} TX_Q;
-
-int transmit(FM_HDR *pbuf);
-int  fm_hci_init(fm_hal_cb *);
-int fm_power(fm_power_state state);
-int open_serial_port(void);
-void fm_userial_close(void);
-
-typedef struct {
-    pthread_mutex_t tx_q_lock;
+struct fm_hci_t {
+    int fd;
     pthread_mutex_t credit_lock;
-    pthread_mutex_t event_lock;
-
-    pthread_cond_t event_cond;
     pthread_cond_t cmd_credits_cond;
 
-    pthread_t fmHALTaskThreadId;
-    pthread_t fmHCITaskThreadId;
-    pthread_t fmRxTaskThreadId;
+    pthread_mutex_t event_lock;
+    pthread_cond_t event_cond;
 
-    TX_Q *first;
-    TX_Q *last;
+    pthread_t hal_thread;
+    pthread_t tx_thread;
+    pthread_t rx_thread;
+    pthread_t mon_thread;
 
-} fmHCIControlStructure;
+    pthread_mutex_t tx_q_lock;
+    struct transmit_queue_t *first;
+    struct transmit_queue_t *last;
 
-fmHCIControlStructure fmHCIControlBlock;
+    void *dlhandle;
+    bt_vendor_interface_t *vendor;
+
+    struct fm_hci_callbacks_t *cb;
+    void *private_data;
+    volatile uint16_t command_credits;
+};
 
 #endif
+

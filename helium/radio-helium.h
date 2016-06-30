@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2015, The Linux Foundation. All rights reserved.
+Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -27,14 +27,11 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef __UAPI_RADIO_HCI_CORE_H
-#define __UAPI_RADIO_HCI_CORE_H
-
-#pragma pack(1)
+#ifndef __RADIO_HELIUM_H__
+#define __RADIO_HELIUM_H__
 
 #include <stdbool.h>
 
-pthread_mutex_t fm_hal;
 #define MIN_TX_TONE_VAL  0x00
 #define MAX_TX_TONE_VAL  0x07
 #define MIN_HARD_MUTE_VAL  0x00
@@ -81,11 +78,6 @@ pthread_mutex_t fm_hal;
 #define MAX_SINR_SAMPLES  0xFF
 #define MIN_BLEND_HI  -128
 #define MAX_BLEND_HI  127
-
-
-/* ---- HCI Packet structures ---- */
-#define RADIO_HCI_COMMAND_HDR_SIZE sizeof(struct radio_hci_command_hdr)
-#define RADIO_HCI_EVENT_HDR_SIZE   sizeof(struct radio_hci_event_hdr)
 
 /* HCI data types */
 #define RADIO_HCI_COMMAND_PKT   0x11
@@ -198,12 +190,12 @@ typedef struct {
     ert_cb  ert_update_cb;
     disable_cb  disabled_cb;
     rds_grp_cntrs_cb rds_grp_cntrs_rsp_cb;
-	rds_grp_cntrs_ext_cb rds_grp_cntrs_ext_rsp_cb;
+    rds_grp_cntrs_ext_cb rds_grp_cntrs_ext_rsp_cb;
     fm_peek_cb fm_peek_rsp_cb;
     fm_ssbi_peek_cb fm_ssbi_peek_rsp_cb;
     fm_agc_gain_cb fm_agc_gain_rsp_cb;
     fm_ch_det_th_cb fm_ch_det_th_rsp_cb;
-    fm_ecc_evt_cb	ext_country_code_cb;
+    fm_ecc_evt_cb  ext_country_code_cb;
     callback_thread_event thread_evt_cb;
     fm_sig_thr_cb fm_get_sig_thres_cb;
     fm_get_ch_det_thrs_cb fm_get_ch_det_thr_cb;
@@ -214,46 +206,7 @@ typedef struct {
     fm_set_blnd_cb fm_set_blend_cb;
     fm_get_stn_prm_cb fm_get_station_param_cb;
     fm_get_stn_dbg_prm_cb fm_get_station_debug_param_cb;
-} fm_vendor_callbacks_t;
-
-pthread_mutex_t radio_fm_cmd;
-typedef struct {
-    int (*init)(const fm_vendor_callbacks_t *p_cb);
-    int (*set_fm_ctrl)(int opcode, int val);
-    void (*Get_fm_ctrl) (int opcode, int val);
-} fm_interface_t;
-
-typedef int (*fm_evt_notify_cb)(unsigned char *p_buf);
-
-typedef struct {
-    fm_evt_notify_cb fm_evt_notify;
-} fm_hal_cb;
-
-struct radio_hci_command_hdr {
-    short  opcode; /* OCF & OGF */
-    char   plen;
-} ;
-
-struct radio_hci_event_hdr {
-    char  evt;
-    char  plen;
-} ;
-
-struct radio_hci_dev {
-    char  name[8];
-    unsigned long  flags;
-    short  id;
-    char  bus;
-    char  dev_type;
-    char  dev_name[248];
-    char  dev_class[3];
-    char  features[8];
-    char  commands[64];
-    unsigned int  data_block_len;
-    unsigned long  cmd_last_tx;
-    int  req_status;
-    int  req_result;
-};
+} fm_hal_callbacks_t;
 
 /* Opcode OCF */
 /* HCI recv control commands opcode */
@@ -383,7 +336,6 @@ struct hci_fm_trans_conf_req_struct {
     int   band_low_limit;
     int   band_high_limit;
 } ;
-
 
 /* ----- HCI Command request ----- */
 struct hci_fm_tx_ps {
@@ -612,7 +564,7 @@ struct hci_ev_tune_status {
     char    mute_mode;
     char    sinr;
     char    intf_det_th;
-} ;
+}__attribute__((packed)) ;
 
 struct rds_blk_data {
     char  rdsMsb;
@@ -653,25 +605,25 @@ struct hci_ev_af_list {
     short   pi_code;
     char    af_size;
     char    af_list[FM_AF_LIST_MAX_SIZE];
-} ;
+} __attribute__((packed)) ;
 
 struct hci_ev_cmd_complete {
     char    num_hci_cmd_pkts;
     short   cmd_opcode;
-} ;
+} __attribute((packed));
 
 struct hci_ev_cmd_status {
     char    status;
     char    num_hci_cmd_pkts;
     short   status_opcode;
-} ;
+} __attribute__((packed));
 
 struct hci_ev_srch_st {
     int    station_freq;
     char    rds_cap;
     char   pty;
     short   status_opcode;
-} ;
+} __attribute__((packed));
 
 struct hci_ev_rel_freq {
     char  rel_freq_msb;
@@ -687,18 +639,19 @@ struct hci_ev_srch_list_compl {
 struct hci_fm_conf_rsp {
     char    status;
     struct hci_fm_recv_conf_req recv_conf_rsp;
-} ;
+} __attribute__((packed));
 
 struct hci_fm_rds_grp_cntrs_rsp {
     char    status;
     struct hci_fm_rds_grp_cntrs_params recv_rds_grp_cntrs_rsp;
-} ;
+} __attribute__((packed));
 
 
 struct hci_fm_get_trans_conf_rsp {
     char    status;
     struct hci_fm_trans_conf_req_struct trans_conf_rsp;
-} ;
+} __attribute__((packed));
+
 struct hci_fm_sig_threshold_rsp {
     char    status;
     char    sig_threshold;
@@ -711,17 +664,17 @@ struct hci_fm_station_rsp {
 struct hci_fm_prgm_srv_rsp {
     char    status;
     struct hci_ev_prg_service prg_srv;
-} ;
+} __attribute__((packed));
 
 struct hci_fm_radio_txt_rsp {
     char    status;
     struct hci_ev_radio_text rd_txt;
-} ;
+} __attribute__((packed));
 
 struct hci_fm_af_list_rsp {
     char    status;
     struct hci_ev_af_list rd_txt;
-} ;
+} __attribute__((packed));
 
 struct hci_fm_data_rd_rsp {
     char    data_len;
@@ -763,8 +716,7 @@ struct hci_fm_spur_data {
     int   freq[MAX_SPUR_FREQ_LIMIT];
     char  rmssi[MAX_SPUR_FREQ_LIMIT];
     char  enable[MAX_SPUR_FREQ_LIMIT];
-} ;
-
+} __attribute__((packed));
 
 /* HCI dev events */
 #define RADIO_HCI_DEV_REG           1
@@ -960,7 +912,6 @@ int hci_def_data_read(struct hci_fm_def_data_rd_req *arg,
        struct radio_hci_dev *hdev);
 int hci_def_data_write(struct hci_fm_def_data_wr_req *arg,
        struct radio_hci_dev *hdev);
-int hci_fm_do_calibration(char *arg, struct radio_hci_dev *hdev);
 int hci_fm_do_calibration(char *arg, struct radio_hci_dev *hdev);
 
 static inline int is_valid_tone(int tone)
@@ -1177,7 +1128,7 @@ static inline int is_valid_blend_value(int val)
         return 0;
 }
 
-struct helium_device {
+struct radio_helium_device {
     int tune_req;
     unsigned int mode;
     short pi;
@@ -1212,7 +1163,7 @@ struct helium_device {
     struct hci_fm_ch_det_threshold ch_det_threshold;
     struct hci_fm_data_rd_rsp def_data;
     struct hci_fm_blend_table blend_tbl;
-};
+} __attribute__((packed));
 
 #define set_bit(flag, bit_pos)      ((flag) |= (1 << (bit_pos)))
 #define clear_bit(flag, bit_pos)    ((flag) &= (~(1 << (bit_pos))))
@@ -1281,4 +1232,17 @@ int hci_fm_default_data_write_req(struct hci_fm_def_data_wr_req * data_wrt);
 int hci_fm_get_station_dbg_param_req();
 int hci_fm_get_station_cmd_param_req();
 
+struct fm_hal_t {
+    struct radio_helium_device *radio;
+    fm_hal_callbacks_t *jni_cb;
+    void *private_data;
+};
+
+struct fm_interface_t {
+    int (*init)(const fm_hal_callbacks_t *p_cb);
+    int (*set_fm_ctrl)(int opcode, int val);
+    void (*Get_fm_ctrl) (int opcode, int val);
+};
+
 #endif /* __UAPI_RADIO_HCI_CORE_H */
+

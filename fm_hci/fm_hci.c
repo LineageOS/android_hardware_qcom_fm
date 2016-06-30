@@ -39,7 +39,6 @@
 #include "wcnss_hci.h"
 #include <stdlib.h>
 #include <dlfcn.h>
-#include <sys/eventfd.h>
 #include <errno.h>
 #include <string.h>
 #include <sys/socket.h>
@@ -50,260 +49,205 @@
 #include <sys/stat.h>
 #include <sys/un.h>
 #include <cutils/properties.h>
+#include <signal.h>
 
-int fm_fd;
 static int fm_hal_fd =0;
-fm_hal_cb *hal_cb;
 
 #define FM_VND_SERVICE_START "wc_transport.start_fmhci"
 #define WAIT_TIMEOUT 200000 /* 200*1000us */
 
-// The set of events one can send to the userial read thread.
-// Note that the values must be >= 0x8000000000000000 to guarantee delivery
-// of the message (see eventfd(2) for details on blocking behaviour).
-enum {
-    USERIAL_RX_EXIT     = 0x8000000000000000ULL
-};
-bt_vendor_interface_t *fm_vnd_if = NULL;
+static void fm_hci_exit(void *arg);
 
-void event_notification(uint16_t event)
+static void event_notification(struct fm_hci_t *hci, uint16_t event)
 {
-    pthread_mutex_lock(&fmHCIControlBlock.event_lock);
-    ready_events |= event;
-    pthread_cond_signal(&fmHCIControlBlock.event_cond);
+    pthread_mutex_lock(&hci->event_lock);
     ALOGI("%s: Notifying worker thread with event: %d", __func__, event);
-    pthread_mutex_unlock(&fmHCIControlBlock.event_lock);
+    ready_events |= event;
+    pthread_cond_broadcast(&hci->event_cond);
+    pthread_mutex_unlock(&hci->event_lock);
 }
-void init_vnd_if()
+
+static void rx_thread_exit_handler(int sig)
 {
-    void *dlhandle;
+    ALOGD("%s: sig = 0x%x", __func__, sig);
+    if (sig == SIGUSR1) {
+    ALOGE("Got the signal.. exiting");
+    pthread_exit(NULL);
+    }
+}
+
+static int vendor_init(struct fm_hci_t *hci)
+{
+    void *dlhandle = hci->dlhandle = NULL;
     unsigned char bdaddr[] = {0xaa, 0xbb, 0xcc, 0x11, 0x22, 0x33};
 
     dlhandle = dlopen("libbt-vendor.so", RTLD_NOW);
-    if (!dlhandle)
-    {
+    if (!dlhandle) {
         ALOGE("!!! Failed to load libbt-vendor.so !!!");
-        return;
+        goto err;
     }
 
-    fm_vnd_if = (bt_vendor_interface_t *) dlsym(dlhandle, "BLUETOOTH_VENDOR_LIB_INTERFACE");
-    if (!fm_vnd_if)
-    {
+    hci->vendor = (bt_vendor_interface_t *) dlsym(dlhandle, "BLUETOOTH_VENDOR_LIB_INTERFACE");
+    if (!hci->vendor) {
         ALOGE("!!! Failed to get bt vendor interface !!!");
-        return;
+        goto err;
     }
 
     ALOGI("FM-HCI: Registering the WCNSS HAL library by passing CBs and BD addr.");
-    fm_vnd_if->init(&fm_vendor_callbacks, bdaddr);
+    if (hci->vendor->init(&fm_vendor_callbacks, bdaddr) !=
+                FM_HC_STATUS_SUCCESS) {
+        ALOGE("FM vendor interface init failed");
+        goto err;
+    }
+
+    return FM_HC_STATUS_SUCCESS;
+
+err:
+    return FM_HC_STATUS_FAIL;
 }
 
-volatile uint16_t command_credits;
-
-/* De-queues the FM CMD from the TX_Q */
-void dequeue_fm_tx_cmd()
+static void vendor_close(struct fm_hci_t *hci)
 {
-    TX_Q *new_first, *new_last;
-    static int cmd_count = 0;
-    static uint8_t credits = 0;
-    uint8_t i;
-    uint8_t temp_1 = 0x11;
+    void *dlhandle = hci->dlhandle;
 
-    if (cmd_count >= MAX_FM_CMD_CNT) {
-        ALOGI("\n\n\t\tReached Max. CMD COUNT!!\n\n");
-        lib_running = 0;
-        return;
+    if (hci->vendor)
+        hci->vendor->cleanup();
+    if (dlhandle) {
+        dlclose(dlhandle);
+        dlhandle = NULL;
     }
-    /*
-     * Save the 'first' pointer and make it NULL.
-     * This is to allow the FM-HAL to enqueue more CMDs to the TX_Q
-     * without having to contend for the 'tx_q_lock' with the FM-HCI thread.
-     * Once the pointer to the 'first' element in the TX_Q is available,
-     * send all the commands in the queue to WCNSS FILTER based on the
-     * command credits provided by the Controller. If command credits are
-     * not available, then wait for the same.
-     */
-    pthread_mutex_lock(&fmHCIControlBlock.tx_q_lock);
-    if (!fmHCIControlBlock.first) {
-        ALOGI("No FM CMD available in the Q\n");
-        pthread_mutex_unlock(&fmHCIControlBlock.tx_q_lock);
-        return;
-    }
-    else {
-        new_first = fmHCIControlBlock.first;
-        new_last  = fmHCIControlBlock.last;
-        fmHCIControlBlock.first = fmHCIControlBlock.last = NULL;
-    }
-    pthread_mutex_unlock(&fmHCIControlBlock.tx_q_lock);
+    hci->vendor = NULL;
+}
 
-    //credits = command_credits;
+/* De-queues the FM CMD from the struct transmit_queue_t */
+static void dequeue_fm_tx_cmd(struct fm_hci_t *hci)
+{
+    struct transmit_queue_t *temp;
+    uint16_t count = 0, len = 0;
 
-    TX_Q *temp = new_first;
-    while(temp != NULL) {
+    ALOGD("%s", __func__);
+    while (1) {
+        pthread_mutex_lock(&hci->tx_q_lock);
+        temp = hci->first;
+        if (!temp) {
+            ALOGI("No FM CMD available in the Queue\n");
+            pthread_mutex_unlock(&hci->tx_q_lock);
+            return;
+        } else {
+            hci->first = temp->next;
+        }
+        pthread_mutex_unlock(&hci->tx_q_lock);
 
 wait_for_cmd_credits:
-        pthread_mutex_lock(&fmHCIControlBlock.credit_lock);
-        while (command_credits == 0) {
-              ALOGI("\n\n\t\tWaiting for COMMAND CREDITS from CONTROLLER\n\n");
-              pthread_cond_wait(&fmHCIControlBlock.cmd_credits_cond, &fmHCIControlBlock.credit_lock);
+        pthread_mutex_lock(&hci->credit_lock);
+        while (hci->command_credits == 0) {
+              pthread_cond_wait(&hci->cmd_credits_cond, &hci->credit_lock);
         }
-        pthread_mutex_unlock(&fmHCIControlBlock.credit_lock);
+        pthread_mutex_unlock(&hci->credit_lock);
 
         /* Check if we really got the command credits */
-        //REVISIT this area
-        //if (credits) {
-        if (command_credits) {
-            ALOGI("%s: Sending the FM-CMD(prot_byte: 0x%x): 0x%x dequeued from TX_Q\n", __func__, temp->hdr->protocol_byte, temp->hdr->opcode);
+        if (hci->command_credits) {
 
-            if (temp->hdr->plen) {
-                ALOGI("%s: CMD-PARAMS:", __func__);
-                for (i = 0; i < temp->hdr->plen; i++)
-                    ALOGI(" <0x%x> ", temp->hdr->cmd_params[i]);
-            } else
-                ALOGE("%s: NO CMD-PARAMS available for this command", __func__);
-
-            ALOGE("%s: Sizeof FM_HDR: %d", __func__, (int)sizeof(temp->hdr));
+            len = sizeof(struct fm_command_header_t) + temp->hdr->len;
+again:
             /* Use socket 'fd' to send the command down to WCNSS Filter */
-            write(fm_fd, (uint8_t *)temp->hdr, (sizeof(FM_HDR) + temp->hdr->plen));
-            //write(fd, &temp_1, 1);
+            count = write(hci->fd, (uint8_t *)temp->hdr + count, len);
+
+            if (count < len) {
+                len -= count;
+                goto again;
+            }
+            count = 0;
 
             /* Decrement cmd credits by '1' after sending the cmd*/
-            command_credits--;
-
-            /* TODO:
-             * Initialize 'cmd_cnt' to MAX_FM_CMD(?). Should we have any limit on the
-             * number of outstanding commands in the TX-Q ??
-             */
-            cmd_count--;
-
-            /* Fetch the next cmd to be sent */
-            temp = temp->next;
+            pthread_mutex_lock(&hci->credit_lock);
+            hci->command_credits--;
+            pthread_mutex_unlock(&hci->credit_lock);
         } else {
             if (!lib_running)
                 break;
-
-            ALOGI("\n\n\t\tFalse wakeup: Yet to get COMMAND CREDITS from CONTROLLER\n\n");
             goto wait_for_cmd_credits;
         }
     }
 }
 
-
-static int event_fd = -1;
-
-static inline int add_event_fd(fd_set *set) {
-    if (event_fd == -1) {
-      event_fd = eventfd(0, 0);
-      if (event_fd == -1) {
-          ALOGE("%s unable to create event fd: %s", __func__, strerror(errno));
-          return -1;
-      }
-    }
-
-    FD_SET(event_fd, set);
-    return event_fd;
-}
-
-static inline uint64_t read_event() {
-    assert(event_fd != -1);
-
-    uint64_t value = 0;
-    eventfd_read(event_fd, &value);
-    return value;
-}
-static inline void fm_send_event(uint64_t event_id) {
-    assert(event_fd != -1);
-    eventfd_write(event_fd, event_id);
-}
-
-static int read_fm_event(int fd, FM_EVT_HDR *pbuf, int len)
+static int read_fm_event(struct fm_hci_t *hci, struct fm_event_header_t *pbuf, int len)
 {
     fd_set readFds;
-    int n = 0, ret = -1, evt_type = -1, evt_len = -1;
+    sigset_t sigmask, emptymask;
+    int n = 0, ret = -1, evt_len = -1;
+    volatile int fd = hci->fd;
+    struct sigaction action;
+
+    sigemptyset(&sigmask);
+    sigaddset(&sigmask, SIGUSR1);
+    if (sigprocmask(SIG_BLOCK, &sigmask, NULL) == -1) {
+    ALOGE("failed to sigprocmask");
+    }
+    memset(&action, 0, sizeof(struct sigaction));
+    sigemptyset(&action.sa_mask);
+    action.sa_flags = 0;
+    action.sa_handler = rx_thread_exit_handler;
+
+    sigemptyset(&emptymask);
+
+    if (sigaction(SIGUSR1, &action, NULL) < 0) {
+    ALOGE("%s:sigaction failed", __func__);
+    }
 
     while (lib_running)
     {
         FD_ZERO(&readFds);
         FD_SET(fd, &readFds);
 
-        if (event_fd == -1) {
-            event_fd = eventfd(0, 0);
-            if (event_fd == -1) {
-                ALOGE("%s: unable to create event fd: %s", __func__, strerror(errno));
-                return -1;
-            }
-        }
-        FD_SET(event_fd, &readFds);
-        int fd_max = (event_fd > fd ? event_fd : fd);
-
         ALOGV("%s: Waiting for events from WCNSS FILTER...\n", __func__);
 
         /* Wait for event/data from WCNSS Filter */
-        n = select(fd_max+1, &readFds, NULL, NULL, NULL);
+        n = pselect(fd+1, &readFds, NULL, NULL, NULL, &emptymask);
         if (n > 0)
         {
             /* Check if event is available or not */
             if (FD_ISSET(fd, &readFds)) {
-                ret = read(fd, (uint8_t *)pbuf, (size_t)(sizeof(FM_EVT_HDR) + MAX_FM_EVT_PARAMS));
+                ret = read(fd, (uint8_t *)pbuf, (size_t)(sizeof(struct fm_event_header_t) + MAX_FM_EVT_PARAMS));
                 if (0 == ret) {
-                    ALOGD("%s: read() returned '0' bytes\n", __func__);
+                    ALOGV("%s: read() returned '0' bytes\n", __func__);
+                    break;
                 }
                 else {
                     ALOGV("%s: read() returned %d bytes of FM event/data\n", __func__, ret);
                     while (ret > 0) {
+                        pthread_mutex_lock(&hci->credit_lock);
                         if (pbuf->evt_code == FM_CMD_COMPLETE) {
-                            ALOGI("\n\t%s: Received %d bytes of CC event data from WCNSS FILTER!!!\n\t"
-                                "Evt type\t: 0x%x \n\tEvt Code\t: 0x%x \n\tEvt len\t\t: 0x%x \n\topcode\t\t: 0x%x%x \n\tCmd Credits\t: 0x%x \n\tStatus\t\t: 0x%x\n",
-                                __func__, ret, pbuf->protocol_byte, pbuf->evt_code, pbuf->evt_len, pbuf->cmd_params[2], pbuf->cmd_params[1],
-                            pbuf->cmd_params[0], pbuf->cmd_params[3]);
-                            evt_type = FM_CMD_COMPLETE;
+                            hci->command_credits = pbuf->params[0];
+                            pthread_cond_signal(&hci->cmd_credits_cond);
                         } else if (pbuf->evt_code == FM_CMD_STATUS) {
-                            ALOGI("\n\t%s: Received %d bytes of CS event data from WCNSS FILTER!!!\n\t"
-                                "Evt type\t: 0x%x \n\tEvt Code\t: 0x%x \n\tEvt len\t\t: 0x%x \n\topcode\t\t: 0x%x%x \n\tCmd Credits\t: 0x%x \n\tStatus\t\t: 0x%x\n",
-                                __func__, ret, pbuf->protocol_byte, pbuf->evt_code, pbuf->evt_len, pbuf->cmd_params[3], pbuf->cmd_params[2],
-                            pbuf->cmd_params[1], pbuf->cmd_params[0]);
-                            evt_type = FM_CMD_STATUS;
+                            hci->command_credits = pbuf->params[1];
+                            pthread_cond_signal(&hci->cmd_credits_cond);
                         } else if (pbuf->evt_code == FM_HW_ERR_EVENT) {
                               ALOGI("%s: FM H/w Err Event Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
                               lib_running =0;
-                              fm_vnd_if->ssr_cleanup(0x22);
+                              hci->vendor->ssr_cleanup(0x22);
                         } else {
-                            ALOGI("%s: Not CS/CC Event: Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
-                            evt_type = -1;
+                            ALOGE("%s: Not CS/CC Event: Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
                         }
+                        pthread_mutex_unlock(&hci->credit_lock);
 
                         evt_len = pbuf->evt_len;
 
-                        /* Notify 'fmHCITask' about availability of event or data */
-                        ALOGI("%s: \nNotifying 'fmHCITask' availability of FM event or data...\n", __func__);
-                        event_notification(HC_EVENT_RX);
+                        /* Notify 'hci_tx_thread' about availability of event or data */
+                        ALOGI("%s: \nNotifying 'hci_tx_thread' availability of FM event or data...\n", __func__);
+                        event_notification(hci, HC_EVENT_RX);
 
-                        if (hal_cb && hal_cb->fm_evt_notify != NULL)
-                            hal_cb->fm_evt_notify((uint8_t *)pbuf);
+                        if (hci->cb && hci->cb->process_event)
+                            hci->cb->process_event(hci->private_data, (uint8_t *)pbuf);
                         else
                             ALOGE("%s: ASSERT $$$$$$ Callback function NULL $$$$$", __func__);
-
-                        if((evt_type == FM_CMD_STATUS) || (evt_type == FM_CMD_COMPLETE)) {
-                            /* Provide command credits to allow fmHCITask to send cmds */
-                            pthread_mutex_lock(&fmHCIControlBlock.credit_lock);
-                            if (evt_type == FM_CMD_COMPLETE) {
-                                ALOGD("\n%s: Command Credit(s): '%d' received as part of CC Event for FM-CMD: 0x%x%x \n", __func__, pbuf->cmd_params[0],
-                                     pbuf->cmd_params[2], pbuf->cmd_params[1]);
-                                command_credits = pbuf->cmd_params[0];
-                            } else if (evt_type == FM_CMD_STATUS) {
-                                ALOGI("\n%s: Command Credit(s): '%d' received as part of CS Event for FM-CMD: 0x%x%x \n", __func__, pbuf->cmd_params[1],
-                                    pbuf->cmd_params[3], pbuf->cmd_params[2]);
-                                command_credits = pbuf->cmd_params[1];
-                            }
-                            pthread_cond_signal(&fmHCIControlBlock.cmd_credits_cond);
-                            pthread_mutex_unlock(&fmHCIControlBlock.credit_lock);
-                        }
 
                         ret = ret - (evt_len + 3);
                         ALOGD("%s: Length of available bytes @ HCI Layer: %d", __func__, ret);
                         if (ret > 0) {
-                            ALOGD("%s: Remaining bytes of event/data: %d", __func__, ret);
-                            pbuf = (FM_EVT_HDR *)&pbuf->cmd_params[evt_len];
-                            ALOGD("%s: Protocol byte of next packet: 0x%2x", __func__, pbuf[0]);
+                            ALOGE("%s: Remaining bytes of event/data: %d", __func__, ret);
+                            pbuf = (struct fm_event_header_t *)&pbuf->params[evt_len];
                         }
                     }
                 } //end of processing the event
@@ -322,19 +266,19 @@ static int read_fm_event(int fd, FM_EVT_HDR *pbuf, int len)
     return ret;
 }
 
-static void *userial_read_thread(void *arg)
+static void *hci_read_thread(void *arg)
 {
     int length;
+    struct fm_hci_t *hci = (struct fm_hci_t *)arg;
 
-    FM_EVT_HDR *evt_buf = (FM_EVT_HDR *) malloc(sizeof(FM_EVT_HDR) + MAX_FM_EVT_PARAMS);
+    struct fm_event_header_t *evt_buf = (struct fm_event_header_t *) malloc(sizeof(struct fm_event_header_t) + MAX_FM_EVT_PARAMS);
 
-    ALOGD("%s: Wait for events from the WCNSS Filter", __func__);
-    length = read_fm_event(fm_fd, evt_buf, sizeof(FM_EVT_HDR) + MAX_FM_EVT_PARAMS);
+    length = read_fm_event(hci, evt_buf, sizeof(struct fm_event_header_t) + MAX_FM_EVT_PARAMS);
     ALOGD("length=%d\n",length);
     if(length <=0) {
        lib_running =0;
     }
-    ALOGD("%s: Leaving userial_read_thread()", __func__);
+    ALOGV("%s: Leaving hci_read_thread()", __func__);
     pthread_exit(NULL);
     return arg;
 }
@@ -362,33 +306,39 @@ int connect_to_local_fmsocket(char* name) {
 }
 
 /*
- * Reads the FM-CMDs from the TX_Q and sends it down to WCNSS Filter
+ * Reads the FM-CMDs from the struct transmit_queue_t and sends it down to WCNSS Filter
  * Reads events sent by the WCNSS Filter and copies onto RX_Q
  */
-static void* fmHCITask(void *arg)
+static void* hci_tx_thread(void *arg)
 {
-    static uint16_t events;
-    uint16_t ret;
-    while (lib_running) {
-        pthread_mutex_lock(&fmHCIControlBlock.event_lock);
-        while (ready_events == 0) {
-            pthread_cond_wait(&fmHCIControlBlock.event_cond, &fmHCIControlBlock.event_lock);
-        }
-        events = ready_events;
-        ready_events = 0;
-        pthread_mutex_unlock(&fmHCIControlBlock.event_lock);
+    uint16_t events;
+    struct fm_hci_t *hci = (struct fm_hci_t *)arg;
 
-        if ((events & 0xFFF8) == HC_EVENT_TX) {
-        ALOGI("\n@@@@@ FM-HCI Task : EVENT_TX available @@@@@\n");
-        dequeue_fm_tx_cmd();
+    while (lib_running) {
+        pthread_mutex_lock(&hci->event_lock);
+        pthread_cond_wait(&hci->event_cond, &hci->event_lock);
+        ALOGE("%s: ready_events= %d", __func__, ready_events);
+        events = ready_events;
+        if (ready_events & HC_EVENT_TX)
+            ready_events &= (~HC_EVENT_TX);
+        if (ready_events & HC_EVENT_RX)
+            ready_events &= (~HC_EVENT_RX);
+        pthread_mutex_unlock(&hci->event_lock);
+
+        if (events & HC_EVENT_TX) {
+            dequeue_fm_tx_cmd(hci);
         }
-        if ((events & 0xFFF4) == HC_EVENT_RX) {
+        if (events & HC_EVENT_RX) {
              ALOGI("\n##### FM-HCI Task : EVENT_RX available #####\n");
+        }
+        if (events & HC_EVENT_EXIT) {
+            ALOGE("GOT HC_EVENT_EXIT.. exiting");
+            break;
         }
     }
 
-    ALOGE("%s: ##### Exiting fmHCITask Worker thread!!! #####", __func__);
-    return arg;
+    ALOGV("%s: ##### Exiting hci_tx_thread Worker thread!!! #####", __func__);
+    return NULL;
 }
 
 void stop_fmhal_service() {
@@ -435,122 +385,193 @@ void start_fmhal_service() {
         ALOGI("%s: Exit ", __func__);
 }
 
-int fm_hci_init(fm_hal_cb *p_cb)
+static int start_tx_thread(struct fm_hci_t *hci)
 {
-    pthread_attr_t thread_attr;
     struct sched_param param;
-    int policy, result, hci_type;
-
-    ALOGI("FM-HCI: init");
-    start_fmhal_service();
-    /* Save the FM-HAL event notofication callback func. */
-    hal_cb = p_cb;
-    fm_hal_fd =  connect_to_local_fmsocket("fmhal_sock");
-	if(fm_hal_fd != -1)
-    {
-       ALOGI("FM hal service socket connect success..");
-    }
-    ALOGI("fm_hal_fd = %d", fm_hal_fd);
-	//if(fm_hal_fd == -1)
-   //      return FM_HC_STATUS_FAIL;
-    ALOGI("%s: Initializing FM-HCI layer...", __func__);
-    lib_running = 1;
-    ready_events = 0;
-    command_credits = 1;
-
-    pthread_mutex_init(&fmHCIControlBlock.tx_q_lock, NULL);
-    pthread_mutex_init(&fmHCIControlBlock.credit_lock, NULL);
-    pthread_mutex_init(&fmHCIControlBlock.event_lock, NULL);
-
-    pthread_cond_init(&fmHCIControlBlock.event_cond, NULL);
-    pthread_cond_init(&fmHCIControlBlock.cmd_credits_cond, NULL);
-
-    pthread_attr_init(&thread_attr);
+    int policy, result;
 
     ALOGI("FM-HCI: Creating the FM-HCI TASK...");
-    if (pthread_create(&fmHCIControlBlock.fmHCITaskThreadId, &thread_attr, \
-                       fmHCITask, NULL) != 0)
+    if (pthread_create(&hci->tx_thread, NULL, hci_tx_thread, hci) != 0)
     {
         ALOGE("pthread_create failed!");
         lib_running = 0;
         return FM_HC_STATUS_FAIL;
     }
 
-    ALOGI("FM-HCI: Configuring the scheduling policy and priority of the FM HCI thread");
-    if(pthread_getschedparam(fmHCIControlBlock.fmHCITaskThreadId, &policy, &param)==0)
+    if(pthread_getschedparam(hci->tx_thread, &policy, &param)==0)
     {
         policy = SCHED_NORMAL;
 #if (BTHC_LINUX_BASE_POLICY!=SCHED_NORMAL)
         param.sched_priority = BTHC_MAIN_THREAD_PRIORITY;
 #endif
-        result = pthread_setschedparam(fmHCIControlBlock.fmHCITaskThreadId, policy, &param);
+        result = pthread_setschedparam(hci->tx_thread, policy, &param);
         if (result != 0)
         {
-            ALOGW("libbt-hci init: pthread_setschedparam failed (%s)", \
-                  strerror(result));
+            ALOGW("libbt-hci init: pthread_setschedparam failed (%d)", \
+                  result);
         }
     } else
         ALOGI("FM-HCI: Failed to get the Scheduling parameters!!!");
 
-	ALOGI("FM-HCI: Loading the WCNSS HAL library...");
-    init_vnd_if();
     return FM_HC_STATUS_SUCCESS;
 }
 
-
-int fm_power(fm_power_state state)
+static void stop_tx_thread(struct fm_hci_t *hci)
 {
-    int i,opcode,ret;
- 	int init_success = 0;
-    char value[PROPERTY_VALUE_MAX] = {'\0'};
-    if (fm_hal_fd)
-    {
-        if (state)
-            opcode = 2;
-        else {
-            opcode = 1;
+    int ret;
+
+    ALOGV("%s++", __func__);
+    if ((ret = pthread_kill(hci->tx_thread, SIGUSR1))
+            == FM_HC_STATUS_SUCCESS) {
+        ALOGE("%s:pthread_join", __func__);
+         if ((ret = pthread_join(hci->tx_thread, NULL)) != FM_HC_STATUS_SUCCESS)
+             ALOGE("Error joining tx thread, error = %d (%s)",
+                     ret, strerror(ret));
+    } else {
+        ALOGE("Error killing tx thread, error = %d (%s)",
+                ret, strerror(ret));
+    }
+}
+
+static void *hci_mon_thread(void *arg)
+{
+    struct fm_hci_t *hci = (struct fm_hci_t *)arg;
+    uint16_t events;
+    ALOGV("%s", __func__);
+
+    while (lib_running) {
+        pthread_mutex_lock(&hci->event_lock);
+        if (!(ready_events & HC_EVENT_EXIT))
+            pthread_cond_wait(&hci->event_cond, &hci->event_lock);
+        events = ready_events;
+        if (ready_events & HC_EVENT_EXIT)
+            ready_events &= (~HC_EVENT_EXIT);
+        pthread_mutex_unlock(&hci->event_lock);
+
+        ALOGD("events = 0x%x", events);
+        if (events & HC_EVENT_EXIT) {
+            ALOGD("Got Exit event.. Exiting HCI");
+            fm_hci_exit(hci);
+            break;
         }
-        ALOGI("%s:opcode: %x", LOG_TAG, opcode);
-        ret = write(fm_hal_fd,&opcode, 1);
-	    if (ret < 0)
-	 	{
-            ALOGE("failed to write fm hal socket");
-	 	}
     }
-    else {
-  	    ALOGE("Connect to socket failed ..");
-           ret = -1;
+    ALOGV("%s--", __func__);
+    return NULL;
+}
+
+static int start_mon_thread(struct fm_hci_t *hci)
+{
+    int ret = FM_HC_STATUS_SUCCESS;
+    ALOGD("%s", __func__);
+    if ((ret = pthread_create(&hci->mon_thread, NULL,
+                    hci_mon_thread, hci)) !=0) {
+        ALOGE("pthread_create failed! status = %d (%s)",
+                ret, strerror(ret));
+        lib_running = 0;
     }
-    if(state == FM_RADIO_DISABLE) {
-		for (i=0; i<10; i++) {
-	       property_get("wc_transport.fm_power_status", value, "0");
-		   if (strcmp(value, "0") == 0) {
-			   init_success = 1;
-			   break;
-           } else {
-                usleep(WAIT_TIMEOUT);
-           }
-       }
-        ALOGI("fm power OFF status:%d after %f seconds \n", init_success, 0.2*i);
-	 	stop_fmhal_service();
+    return ret;
+}
+
+static void stop_mon_thread(struct fm_hci_t *hci)
+{
+    int ret;
+    ALOGV("%s++", __func__);
+    if ((ret = pthread_kill(hci->mon_thread, SIGUSR1))
+            == FM_HC_STATUS_SUCCESS) {
+        ALOGE("%s:pthread_join", __func__);
+        if ((ret = pthread_join(hci->mon_thread, NULL)) != FM_HC_STATUS_SUCCESS)
+            ALOGE("Error joining mon thread, error = %d (%s)",
+                    ret, strerror(ret));
+    } else {
+        ALOGE("Error killing mon thread, error = %d (%s)",
+                ret, strerror(ret));
     }
-    if (state == FM_RADIO_ENABLE) {
-	   for (i=0; i<10; i++) {
-	       property_get("wc_transport.fm_power_status", value, "0");
-		   if (strcmp(value, "1") == 0) {
-			   init_success = 1;
-			   break;
-           } else {
-                usleep(WAIT_TIMEOUT);
-           }
-       }
-       ALOGI("fm power ON status:%d after %f seconds \n", init_success, 0.2*i);
+}
+
+static int start_rx_thread(struct fm_hci_t *hci)
+{
+    int ret = FM_HC_STATUS_SUCCESS;
+    ALOGV("%s++", __func__);
+
+    ALOGD("%s: Starting the userial read thread....", __func__);
+    if ((ret = pthread_create(&hci->rx_thread, NULL, \
+                       hci_read_thread, hci)) != 0) {
+        ALOGE("pthread_create failed! status = %d (%s)",
+                ret, strerror(ret));
+        lib_running = 0;
     }
-     return ret;
+    return ret;
+}
+
+static void stop_rx_thread(struct fm_hci_t *hci)
+{
+    int ret;
+    ALOGV("%s++", __func__);
+    if ((ret = pthread_kill(hci->rx_thread, SIGUSR1))
+            == FM_HC_STATUS_SUCCESS) {
+        ALOGE("%s:pthread_join", __func__);
+        if ((ret = pthread_join(hci->rx_thread, NULL)) != FM_HC_STATUS_SUCCESS)
+            ALOGE("Error joining rx thread, error = %d (%s)",
+                    ret, strerror(ret));
+    } else {
+        ALOGE("Error killing rx thread, error = %d (%s)",
+                ret, strerror(ret));
+    }
+}
+
+static int power(struct fm_hci_t *hci, fm_power_state_t state)
+{
+        int i,opcode,ret;
+        int init_success = 0;
+        char value[PROPERTY_VALUE_MAX] = {'\0'};
+        if (fm_hal_fd)
+        {
+            if (state)
+                opcode = 2;
+            else {
+                opcode = 1;
+            }
+            ALOGI("%s:opcode: %x", LOG_TAG, opcode);
+            ret = write(fm_hal_fd,&opcode, 1);
+            if (ret < 0) {
+                ALOGE("failed to write fm hal socket");
+            } else {
+                ret = FM_HC_STATUS_SUCCESS;
+            }
+        } else {
+            ALOGE("Connect to socket failed ..");
+            ret = -1;
+        }
+        if (state == FM_RADIO_DISABLE) {
+            for (i=0; i<10; i++) {
+                property_get("wc_transport.fm_power_status", value, "0");
+                if (strcmp(value, "0") == 0) {
+                    init_success = 1;
+                    break;
+                } else {
+                    usleep(WAIT_TIMEOUT);
+                }
+            }
+            ALOGI("fm power OFF status:%d after %f seconds \n", init_success, 0.2*i);
+            stop_fmhal_service();
+        }
+        if (state == FM_RADIO_ENABLE) {
+            for (i=0; i<10; i++) {
+                property_get("wc_transport.fm_power_status", value, "0");
+                if (strcmp(value, "1") == 0) {
+                    init_success = 1;
+                    break;
+                } else {
+                    usleep(WAIT_TIMEOUT);
+                }
+            }
+            ALOGI("fm power ON status:%d after %f seconds \n", init_success, 0.2*i);
+        }
+        return ret;
 }
 
 #define CH_MAX 3
-int open_serial_port()
+static int serial_port_init(struct fm_hci_t *hci)
 {
     int i, ret;
     int fd_array[CH_MAX];
@@ -559,110 +580,198 @@ int open_serial_port()
         fd_array[i] = -1;
 
     ALOGI("%s: Opening the TTy Serial port...", __func__);
-    ret = fm_vnd_if->op(BT_VND_OP_FM_USERIAL_OPEN, &fd_array);
+    ret = hci->vendor->op(BT_VND_OP_FM_USERIAL_OPEN, &fd_array);
 
-    fm_fd = fd_array[0];
-    if (fm_fd == -1) {
+    if (fd_array[0] == -1) {
         ALOGE("%s unable to open TTY serial port", __func__);
         goto err;
     }
+    hci->fd = fd_array[0];
 
-    //TODO: Start the userial read thread here
-    ALOGE("%s: Starting the userial read thread....", __func__);
-    if (pthread_create(&fmHCIControlBlock.fmRxTaskThreadId, NULL, \
-                       userial_read_thread, NULL) != 0)
-    {
-        ALOGE("pthread_create failed!");
-        lib_running = 0;
-        return FM_HC_STATUS_FAIL;
-    }
-    return 0;
+    return FM_HC_STATUS_SUCCESS;
+
 err:
-    ALOGI("%s: Closing the TTy Serial port due to error!!!", __func__);
-    ret = fm_vnd_if->op(BT_VND_OP_FM_USERIAL_CLOSE, NULL);
-    return -1;
+    return FM_HC_STATUS_FAIL;
 }
 
-int enqueue_fm_tx_cmd(FM_HDR *pbuf)
+static void serial_port_close(struct fm_hci_t *hci)
 {
+    //TODO: what if hci/fm_vnd_if is null.. need to take lock and check
+    ALOGI("%s: Closing the TTy Serial port!!!", __func__);
+    hci->vendor->op(BT_VND_OP_FM_USERIAL_CLOSE, NULL);
+    hci->fd = -1;
+}
 
-    pthread_mutex_lock(&fmHCIControlBlock.tx_q_lock);
+static int enqueue_fm_tx_cmd(struct fm_hci_t *hci, struct fm_command_header_t *pbuf)
+{
+    struct transmit_queue_t *element =  (struct transmit_queue_t *) malloc(sizeof(struct transmit_queue_t));
 
-    if (!fmHCIControlBlock.first) {
-        fmHCIControlBlock.first = (TX_Q *) malloc(sizeof(TX_Q));
-        if (!fmHCIControlBlock.first) {
-            ALOGI("Failed to allocate memory for first!!\n");
-            pthread_mutex_unlock(&fmHCIControlBlock.tx_q_lock);
-            return FM_HC_STATUS_NOMEM;
-        }
-        fmHCIControlBlock.first->hdr = pbuf;
-        fmHCIControlBlock.first->next = NULL;
-        fmHCIControlBlock.last = fmHCIControlBlock.first;
-        ALOGI("%s: FM-CMD ENQUEUED SUCCESSFULLY", __func__);
-    } else {
-        TX_Q *element =  (TX_Q *) malloc(sizeof(TX_Q));
-        if (!element) {
-            ALOGI("Failed to allocate memory for element!!\n");
-            pthread_mutex_unlock(&fmHCIControlBlock.tx_q_lock);
-            return FM_HC_STATUS_NOMEM;
-        }
-        fmHCIControlBlock.last->next = element;
-        element->hdr = pbuf;
-        element->next = NULL;
-        fmHCIControlBlock.last = element;
-        ALOGI("%s: fm-cmd enqueued successfully", __func__);
+    if (!element) {
+        ALOGI("Failed to allocate memory for element!!\n");
+        return FM_HC_STATUS_NOMEM;
     }
+    element->hdr = pbuf;
+    element->next = NULL;
 
-    pthread_mutex_unlock(&fmHCIControlBlock.tx_q_lock);
+    pthread_mutex_lock(&hci->tx_q_lock);
+
+    if (!hci->first) {
+        hci->last = hci->first = element;
+    } else {
+        hci->last->next = element;
+        hci->last = element;
+    }
+    ALOGI("%s: FM-CMD ENQUEUED SUCCESSFULLY", __func__);
+
+    pthread_mutex_unlock(&hci->tx_q_lock);
+
     return FM_HC_STATUS_SUCCESS;
 }
 
-/** Transmit frame */
-int transmit(FM_HDR *pbuf)
+int fm_hci_transmit(void *hci, struct fm_command_header_t *buf)
 {
     int status = FM_HC_STATUS_FAIL;
 
-    if ((status = enqueue_fm_tx_cmd(pbuf)) == FM_HC_STATUS_SUCCESS)
-        event_notification(HC_EVENT_TX);
-    /* Cleanup Threads if Disable command sent */
-    if ((pbuf->opcode == hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
-                    HCI_OCF_FM_DISABLE_RECV_REQ))) {
-        ALOGD("FM Disable cmd. Waiting for threads to finish");
-        if ((status = pthread_join(fmHCIControlBlock.fmHCITaskThreadId, NULL)))
-            ALOGE("Failed to join HCI task thread. err = %d", status);
-        if ((status = pthread_join(fmHCIControlBlock.fmRxTaskThreadId, NULL)))
-            ALOGE("Failed to join HCI reader thread. err = %d", status);
-        pthread_cond_destroy(&fmHCIControlBlock.cmd_credits_cond);
-        pthread_cond_destroy(&fmHCIControlBlock.event_cond);
-        pthread_mutex_destroy(&fmHCIControlBlock.event_lock);
-        pthread_mutex_destroy(&fmHCIControlBlock.credit_lock);
-        pthread_mutex_destroy(&fmHCIControlBlock.tx_q_lock);
-        ALOGD("All Threads are done. Exiting.");
+    if (!hci || !buf) {
+        ALOGE("NULL input arguments");
+        return FM_HC_STATUS_NULL_POINTER;
     }
+
+    if ((status = enqueue_fm_tx_cmd((struct fm_hci_t *)hci, buf))
+            == FM_HC_STATUS_SUCCESS)
+        event_notification(hci, HC_EVENT_TX);
 
     return status;
 }
 
-void userial_close_reader(void) {
-    // Join the reader thread if it is still running.
-    if (lib_running) {
-        fm_send_event(USERIAL_RX_EXIT);
-        int result = pthread_join(fmHCIControlBlock.fmRxTaskThreadId, NULL);
-        if (result)
-            ALOGE("%s failed to join reader thread: %d", __func__, result);
+void fm_hci_close(void *arg) {
+
+    ALOGV("%s  close fm userial ", __func__);
+
+    struct fm_hci_t *hci = (struct fm_hci_t *)arg;
+    if (!hci) {
+        ALOGE("NULL arguments");
         return;
     }
-    ALOGW("%s Already closed userial reader thread", __func__);
+    event_notification(hci, HC_EVENT_EXIT);
 }
 
-void fm_userial_close(void) {
+int fm_hci_init(fm_hci_hal_t *hci_hal)
+{
+    int ret = FM_HC_STATUS_FAIL;
+    struct fm_hci_t *hci = NULL;
+    ALOGV("++%s", __func__);
 
-    ALOGD("%s  close fm userial ", __func__);
+    if (!hci_hal || !hci_hal->hal) {
+        ALOGE("NULL input argument");
+        return FM_HC_STATUS_NULL_POINTER;
+    }
+
+    hci = malloc(sizeof(struct fm_hci_t));
+    if (!hci) {
+        ALOGE("Failed to malloc hci context");
+        return FM_HC_STATUS_NOMEM;
+    }
+    memset(hci, 0, sizeof(struct fm_hci_t));
+
+    lib_running = 1;
+    ready_events = 0;
+    hci->command_credits = 1;
+    hci->fd = -1;
+
+    pthread_mutex_init(&hci->tx_q_lock, NULL);
+    pthread_mutex_init(&hci->credit_lock, NULL);
+    pthread_mutex_init(&hci->event_lock, NULL);
+
+    pthread_cond_init(&hci->event_cond, NULL);
+    pthread_cond_init(&hci->cmd_credits_cond, NULL);
+
+    start_fmhal_service();
+    fm_hal_fd = connect_to_local_fmsocket("fmhal_sock");
+    if (fm_hal_fd == -1) {
+        ALOGI("FM hal service socket connect failed..");
+        goto err_socket;
+    }
+    ALOGI("fm_hal_fd = %d", fm_hal_fd);
+
+    ret = vendor_init(hci);
+    if (ret)
+        goto err_vendor;
+    ret = power(hci, FM_RADIO_ENABLE);
+    if (ret)
+        goto err_power;
+    ret = serial_port_init(hci);
+    if (ret)
+        goto err_serial;
+    ret = start_mon_thread(hci);
+    if (ret)
+        goto err_thread_mon;
+    ret = start_tx_thread(hci);
+    if (ret)
+        goto err_thread_tx;
+    ret = start_rx_thread(hci);
+    if (ret)
+        goto err_thread_rx;
+
+    hci->cb = hci_hal->cb;
+    hci->private_data = hci_hal->hal;
+    hci_hal->hci = hci;
+    ALOGD("--%s success", __func__);
+    return FM_HC_STATUS_SUCCESS;
+
+err_thread_rx:
+    stop_rx_thread(hci);
+err_thread_tx:
+    stop_tx_thread(hci);
+err_thread_mon:
+    stop_mon_thread(hci);
+err_serial:
+    serial_port_close(hci);
+err_power:
+    power(hci, FM_RADIO_DISABLE);
+err_vendor:
+    vendor_close(hci);
+err_socket:
+    stop_fmhal_service();
+
+    pthread_mutex_destroy(&hci->tx_q_lock);
+    pthread_mutex_destroy(&hci->credit_lock);
+    pthread_mutex_destroy(&hci->event_lock);
+    pthread_cond_destroy(&hci->event_cond);
+    pthread_cond_destroy(&hci->cmd_credits_cond);
+
     lib_running = 0;
-    fm_vnd_if->op(BT_VND_OP_FM_USERIAL_CLOSE, NULL);
-    fm_fd = -1;
-    ready_events = HC_EVENT_EXIT;
-    pthread_cond_signal(&fmHCIControlBlock.event_cond);
-    pthread_cond_signal(&fmHCIControlBlock.cmd_credits_cond);
-    // Free all buffers still waiting in the RX queue.
+    ready_events = 0;
+    hci->command_credits = 0;
+    free(hci);
+
+    ALOGE("--%s fail", __func__);
+    return ret;
 }
+
+static void fm_hci_exit(void *arg)
+{
+    struct fm_hci_t *hci = (struct fm_hci_t *)arg;
+    ALOGE("%s", __func__);
+
+    lib_running = 0;
+    ready_events = HC_EVENT_EXIT;
+    hci->command_credits = 0;
+    serial_port_close(hci);
+    power(hci, FM_RADIO_DISABLE);//need to address this
+    vendor_close(hci);
+    pthread_cond_broadcast(&hci->event_cond);
+    pthread_cond_broadcast(&hci->cmd_credits_cond);
+    stop_rx_thread(hci);
+    stop_tx_thread(hci);
+    ALOGD("Tx, Rx Threads join done");
+    pthread_mutex_destroy(&hci->tx_q_lock);
+    pthread_mutex_destroy(&hci->credit_lock);
+    pthread_mutex_destroy(&hci->event_lock);
+    pthread_cond_destroy(&hci->event_cond);
+    pthread_cond_destroy(&hci->cmd_credits_cond);
+
+    free(hci);
+    hci = NULL;
+}
+

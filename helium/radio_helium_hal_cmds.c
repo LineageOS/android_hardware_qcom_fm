@@ -34,9 +34,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <errno.h>
 #include "radio-helium-commands.h"
 #include "radio-helium.h"
-#include "fm_hci.h"
+#include "fm_hci_api.h"
 #include <dlfcn.h>
 #define LOG_TAG "radio_helium"
+extern struct fm_hal_t *hal;
 
 static int send_fm_cmd_pkt(uint16_t opcode,  uint32_t len, void *param)
 {
@@ -44,7 +45,7 @@ static int send_fm_cmd_pkt(uint16_t opcode,  uint32_t len, void *param)
     int ret = 0;
     ALOGV("Send_fm_cmd_pkt, opcode: %x", opcode);
 //    pthread_mutex_lock(&fm_hal);
-    FM_HDR *hdr = (FM_HDR *) malloc(p_len);
+    struct fm_command_header_t *hdr = (struct fm_command_header_t *) malloc(p_len);
     if (!hdr) {
         ALOGE("%s:hdr allocation failed", LOG_TAG);
         return -FM_HC_STATUS_NOMEM;
@@ -52,12 +53,13 @@ static int send_fm_cmd_pkt(uint16_t opcode,  uint32_t len, void *param)
 
     ALOGV("%s:opcode: %x", LOG_TAG, opcode);
 
-    hdr->protocol_byte = RADIO_HCI_COMMAND_PKT;
+    hdr->pi = RADIO_HCI_COMMAND_PKT;
     hdr->opcode = opcode;
-    hdr->plen = len;
+    hdr->len = len;
     if (len)
-        memcpy(hdr->cmd_params, (uint8_t *)param, len);
-    ret = transmit(hdr);
+        memcpy(hdr->params, (uint8_t *)param, len);
+    ret = fm_hci_transmit(hal->private_data, hdr);
+
     ALOGV("%s:transmit done. status = %d", __func__, ret);
     return ret;
 }
