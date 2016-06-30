@@ -41,7 +41,6 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.content.IntentFilter;
 import android.bluetooth.BluetoothAdapter;
-import java.lang.Object;
 
 /**
  * This class contains all interfaces and types needed to
@@ -440,8 +439,6 @@ public class FmReceiver extends FmTransceiver
            }
        }
    };
-   private volatile int mState;
-   public static Object mLockObject = new Object();
 
    /**
     * Constructor for the receiver Object
@@ -449,7 +446,7 @@ public class FmReceiver extends FmTransceiver
    public FmReceiver(){
       mControl = new FmRxControls();
       mRdsData = new FmRxRdsData (sFd);
-      mRxEvents = new FmRxEventListner(this);
+      mRxEvents = new FmRxEventListner();
    }
 
    /**
@@ -464,7 +461,7 @@ public class FmReceiver extends FmTransceiver
    public FmReceiver(String devicePath,
                      FmRxEvCallbacksAdaptor callback) throws InstantiationException {
       mControl = new FmRxControls();
-      mRxEvents = new FmRxEventListner(this);
+      mRxEvents = new FmRxEventListner();
 
       Log.e(TAG, "FmReceiver constructor");
       //registerClient(callback);
@@ -579,32 +576,22 @@ public class FmReceiver extends FmTransceiver
        * Check for FM State.
        * If FMRx already on, then return.
       */
-
-      int mState = getFMState();
+      int state = getFMState();
 
       mIntentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
       mBtIntentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
 
-      if (mState == FMState_Rx_Turned_On || mState == FMState_Srch_InProg) {
-
+      if (state == FMState_Rx_Turned_On || state == FMState_Srch_InProg) {
          Log.d(TAG, "enable: FM already turned On and running");
          return status;
-      }else if (mState == subPwrLevel_FMTurning_Off) {
+      }else if (state == subPwrLevel_FMTurning_Off) {
          Log.v(TAG, "FM is in the process of turning off.Pls wait for sometime.");
-         synchronized(mLockObject){
-                try {
-                    if (getFMState() != FMState_Turned_Off) {
-                        mLockObject.wait();
-                    }
-                } catch (InterruptedException e) {
-                    Log.e(TAG, "Error in waiting on mLockObject" + e);
-                }
-         }
-      }else if (mState == subPwrLevel_FMRx_Starting) {
+         return status;
+      }else if (state == subPwrLevel_FMRx_Starting) {
          Log.v(TAG, "FM is in the process of turning On.Pls wait for sometime.");
          return status;
-      }else if ((mState == FMState_Tx_Turned_On)
-                || (mState == subPwrLevel_FMTx_Starting)) {
+      }else if ((state == FMState_Tx_Turned_On)
+                || (state == subPwrLevel_FMTx_Starting)) {
          Log.v(TAG, "FM Tx is turned on or in the process of turning on.");
          return status;
       }
