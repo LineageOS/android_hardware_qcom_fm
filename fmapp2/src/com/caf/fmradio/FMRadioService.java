@@ -976,13 +976,28 @@ public class FMRadioService extends Service
                        && (key_action == KeyEvent.ACTION_DOWN)) {
                 Log.d(LOGTAG, "SessionCallback: MEDIA_PLAY");
                 if (isAntennaAvailable() && mServiceInUse) {
-                    fmOn();
-                    try {
-                        if (mCallbacks != null ) {
-                            mCallbacks.onEnabled();
+                    if (isFmOn()){
+                        //FM should be off when Headset hook pressed.
+                        fmOff();
+                        try {
+                            /* Notify the UI/Activity, only if the service is "bound"
+                             * by an activity and if Callbacks are registered
+                             * */
+                            if ((mServiceInUse) && (mCallbacks != null) ) {
+                                mCallbacks.onDisabled();
+                            }
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
                         }
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
+                    } else {
+                        fmOn();
+                        try {
+                            if (mCallbacks != null ) {
+                                mCallbacks.onEnabled();
+                            }
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
                     }
                     return true;
                 }
