@@ -212,11 +212,13 @@ public class FMRadioService extends Service
    private boolean mIsRecordSink = false;
    private static final int AUDIO_FRAMES_COUNT_TO_IGNORE = 3;
    private Object mRecordSinkLock = new Object();
+   private Object mEventWaitLock = new Object();
    private boolean mIsFMDeviceLoopbackActive = false;
    private File mStoragePath = null;
 
    private static final int FM_OFF_FROM_APPLICATION = 1;
    private static final int FM_OFF_FROM_ANTENNA = 2;
+   private static final int RADIO_TIMEOUT = 1500;
 
    private static Object mNotchFilterLock = new Object();
 
@@ -2284,13 +2286,27 @@ public class FMRadioService extends Service
       if (mReceiver != null)
       {
          bStatus = mReceiver.disable(this);
+         if (bStatus &&
+                 (mReceiver.getFMState() == mReceiver.subPwrLevel_FMTurning_Off)) {
+             synchronized (mEventWaitLock) {
+                 Log.d(LOGTAG, "waiting for disable event");
+                 try {
+                     mEventWaitLock.wait(RADIO_TIMEOUT);
+                 } catch (IllegalMonitorStateException e) {
+                     Log.e(LOGTAG, "Exception caught while waiting for event");
+                     e.printStackTrace();
+                 } catch (InterruptedException ex) {
+                     Log.e(LOGTAG, "Exception caught while waiting for event");
+                     ex.printStackTrace();
+                 }
+             }
+         }
          mReceiver = null;
       }
       fmOperationsOff();
       stop();
       return(bStatus);
    }
-
 
    private boolean fmOff(int off_from) {
        if (off_from == FM_OFF_FROM_APPLICATION || off_from == FM_OFF_FROM_ANTENNA) {
@@ -3025,6 +3041,9 @@ public class FMRadioService extends Service
          Log.d(LOGTAG, "FmRxEvDisableReceiver");
          mFMOn = false;
          FmSharedPreferences.clearTags();
+         synchronized (mEventWaitLock) {
+             mEventWaitLock.notify();
+         }
       }
       public void FmRxEvRadioReset()
       {
