@@ -323,7 +323,7 @@ static void hci_cc_default_data_write_rsp(char *ev_buff)
 
 static void hci_cc_get_blend_tbl_rsp(char *ev_buff)
 {
-    int status, val;
+    int status, val = -1;
 
     if (ev_buff == NULL) {
         ALOGE("%s:response buffer in null", LOG_TAG);
@@ -360,11 +360,13 @@ static void hci_cc_set_blend_tbl_rsp(char *ev_buff)
 
 static void hci_cc_station_rsp(char *ev_buff)
 {
-    int val, status = ev_buff[0];
+    int val = -1, status = ev_buff[0];
+    unsigned char *tmp = (unsigned char *)(&hal->radio->fm_st_rsp.station_rsp)
+                                             + sizeof(char);
 
     if (status == FM_HC_STATUS_SUCCESS) {
-        memcpy(&hal->radio->fm_st_rsp.station_rsp.station_freq, &ev_buff[1],
-                sizeof(struct hci_fm_station_rsp) - sizeof(char));
+        memcpy(tmp, &ev_buff[1],
+                sizeof(struct hci_ev_tune_status) - sizeof(char));
         if (test_bit(station_param_mask_flag, CMD_STNPARAM_RSSI)) {
                 val = hal->radio->fm_st_rsp.station_rsp.rssi;
         } else if (test_bit(station_param_mask_flag, CMD_STNPARAM_SINR)) {
@@ -379,7 +381,7 @@ static void hci_cc_station_rsp(char *ev_buff)
 
 static void hci_cc_dbg_param_rsp(char *ev_buff)
 {
-    int val, status = ev_buff[0];
+    int val = -1, status = ev_buff[0];
 
     if (status == FM_HC_STATUS_SUCCESS) {
         memcpy(&hal->radio->st_dbg_param, &ev_buff[1],
@@ -652,8 +654,10 @@ static inline void hci_ev_radio_text(char *buff)
     data[3] = buff[RDS_PID_HIGHER];
     data[4] = buff[RT_A_B_FLAG_OFFSET];
 
-    memcpy(data+RDS_OFFSET, &buff[RDS_OFFSET], len);
-    data[len+RDS_OFFSET] = 0x00;
+    if (len > 0) {
+        memcpy(data+RDS_OFFSET, &buff[RDS_OFFSET], len);
+        data[len+RDS_OFFSET] = 0x00;
+    }
 
     hal->jni_cb->rt_update_cb(data);
     free(data);

@@ -342,7 +342,7 @@ void vnd_load_if()
 
 int main()  {
    fd_set client_fds;
-    int retval, n;
+    int retval = -1, n;
 
     ALOGI("%s: Entry ", __func__);
     ALOGI("FM HAL SERVICE: Loading the WCNSS HAL library...");

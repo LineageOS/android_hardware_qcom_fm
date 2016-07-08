@@ -268,12 +268,14 @@ static int read_fm_event(struct fm_hci_t *hci, struct fm_event_header_t *pbuf, i
 
 static void *hci_read_thread(void *arg)
 {
-    int length;
+    int length = 0;
     struct fm_hci_t *hci = (struct fm_hci_t *)arg;
 
     struct fm_event_header_t *evt_buf = (struct fm_event_header_t *) malloc(sizeof(struct fm_event_header_t) + MAX_FM_EVT_PARAMS);
 
-    length = read_fm_event(hci, evt_buf, sizeof(struct fm_event_header_t) + MAX_FM_EVT_PARAMS);
+    if (!evt_buf)
+        length = read_fm_event(hci, evt_buf, sizeof(struct fm_event_header_t) + MAX_FM_EVT_PARAMS);
+
     ALOGD("length=%d\n",length);
     if(length <=0) {
        lib_running =0;
