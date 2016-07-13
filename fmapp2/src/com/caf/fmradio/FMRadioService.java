@@ -1574,10 +1574,12 @@ public class FMRadioService extends Service
                   return;
               }
               switch (msg.arg1) {
-                  case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-                      Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
+                      if (true == isFmRecordingOn())
+                          stopRecording();
+                  case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                      Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
                       if (true == mPlaybackInProgress) {
                           stopFM();
                           mStoppedOnFocusLoss = true;
