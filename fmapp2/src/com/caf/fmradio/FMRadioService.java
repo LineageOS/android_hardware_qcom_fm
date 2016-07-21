@@ -671,6 +671,9 @@ public class FMRadioService extends Service
                         }
                     } else if( action.equals(Intent.ACTION_SHUTDOWN)) {
                         mAppShutdown = true;
+                        if (isFmRecordingOn()) {
+                            stopRecording();
+                        }
                     }
 
                 }
