@@ -652,7 +652,8 @@ public class FMRadioService extends Service
                             mA2dpDisconnected = false;
                             mA2dpConnected = true;
                         }
-                        configureAudioDataPath(true);
+                        if (isFmOn())
+                            configureAudioDataPath(true);
                     } else if (action.equals("HDMI_CONNECTED")) {
                         //FM should be off when HDMI is connected.
                         fmOff();
