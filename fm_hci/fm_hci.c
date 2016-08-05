@@ -273,14 +273,26 @@ static void *hci_read_thread(void *arg)
 
     struct fm_event_header_t *evt_buf = (struct fm_event_header_t *) malloc(sizeof(struct fm_event_header_t) + MAX_FM_EVT_PARAMS);
 
-    if (!evt_buf)
-        length = read_fm_event(hci, evt_buf, sizeof(struct fm_event_header_t) + MAX_FM_EVT_PARAMS);
+    if (!evt_buf) {
+        ALOGE("%s: Memory allocation failed for evt_buf", __func__);
+        goto cleanup;
+    }
 
+    length = read_fm_event(hci, evt_buf, sizeof(struct fm_event_header_t) + MAX_FM_EVT_PARAMS);
     ALOGD("length=%d\n",length);
     if(length <=0) {
        lib_running =0;
     }
+    goto exit;
+
+cleanup:
+    lib_running = 0;
+    hci = NULL;
+
+exit:
     ALOGV("%s: Leaving hci_read_thread()", __func__);
+    if (evt_buf)
+        free(evt_buf);
     pthread_exit(NULL);
     return arg;
 }

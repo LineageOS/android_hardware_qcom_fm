@@ -641,8 +641,11 @@ static inline void hci_ev_radio_text(char *buff)
 
     while ((buff[len+RDS_OFFSET] != 0x0d) && (len < MAX_RT_LENGTH))
            len++;
+    if (len == 0)
+        return;
+
     ALOGV("%s:%s: radio text length=%d\n", LOG_TAG, __func__,len);
-    data = malloc(len+RDS_OFFSET);
+    data = malloc(len+RDS_OFFSET+1);
     if (!data) {
         ALOGE("%s:Failed to allocate memory", LOG_TAG);
         return;
@@ -654,11 +657,9 @@ static inline void hci_ev_radio_text(char *buff)
     data[3] = buff[RDS_PID_HIGHER];
     data[4] = buff[RT_A_B_FLAG_OFFSET];
 
-    if (len > 0) {
-        memcpy(data+RDS_OFFSET, &buff[RDS_OFFSET], len);
-        data[len+RDS_OFFSET] = 0x00;
-    }
+    memcpy(data+RDS_OFFSET, &buff[RDS_OFFSET], len);
 
+    data[len+RDS_OFFSET] = 0x00;
     hal->jni_cb->rt_update_cb(data);
     free(data);
 }
