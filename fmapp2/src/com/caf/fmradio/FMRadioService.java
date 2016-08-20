@@ -160,6 +160,7 @@ public class FMRadioService extends Service
    private boolean mStoppedOnFactoryReset = false;
    private File mSampleFile = null;
    long mSampleStart = 0;
+   int mSampleLength = 0;
    // Messages handled in FM Service
    private static final int FM_STOP =1;
    private static final int RESET_NOTCH_FILTER =2;
@@ -215,7 +216,6 @@ public class FMRadioService extends Service
    private Object mEventWaitLock = new Object();
    private boolean mIsFMDeviceLoopbackActive = false;
    private File mStoragePath = null;
-
    private static final int FM_OFF_FROM_APPLICATION = 1;
    private static final int FM_OFF_FROM_ANTENNA = 2;
    private static final int RADIO_TIMEOUT = 1500;
@@ -1277,7 +1277,7 @@ public class FMRadioService extends Service
         });
 
         mSampleStart = SystemClock.elapsedRealtime();
-        Log.d(LOGTAG, "mSampleStart: " +mSampleStart);
+        Log.d(LOGTAG, "Sample start time: " +mSampleStart);
         return true;
   }
 
@@ -1294,8 +1294,10 @@ public class FMRadioService extends Service
        } catch(Exception e) {
              e.printStackTrace();
        }
-       int sampleLength = (int)((System.currentTimeMillis() - mSampleStart)/1000 );
-       if (sampleLength == 0)
+       mSampleLength = (int)(SystemClock.elapsedRealtime() - mSampleStart);
+       Log.d(LOGTAG, "Sample length is " + mSampleLength);
+
+       if (mSampleLength == 0)
            return;
        String state = Environment.getExternalStorageState(mStoragePath);
        Log.d(LOGTAG, "storage state is " + state);
@@ -1340,7 +1342,7 @@ public class FMRadioService extends Service
        // Lets label the recorded audio file as NON-MUSIC so that the file
        // won't be displayed automatically, except for in the playlist.
        cv.put(MediaStore.Audio.Media.IS_MUSIC, "1");
-
+       cv.put(MediaStore.Audio.Media.DURATION, mSampleLength);
        cv.put(MediaStore.Audio.Media.TITLE, title);
        cv.put(MediaStore.Audio.Media.DATA, file.getAbsolutePath());
        cv.put(MediaStore.Audio.Media.DATE_ADDED, (int) (current / 1000));
