@@ -2982,7 +2982,7 @@ public class FMStats extends Activity  {
                      tempStr.append(String.format("%10s", aRes.getIntDet()));
                  }
 
-                 if(isTransportLayerSMD() || isRomeChip())
+                 if(isTransportLayerSMD() || isRomeChip() || isCherokeeChip())
                  {
                     tempStr.append(String.format("%10s", aRes.getSINR()));
                  } else
