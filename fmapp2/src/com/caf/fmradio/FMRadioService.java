@@ -1441,6 +1441,7 @@ public class FMRadioService extends Service
    //any. Similarly once call is ended FM should be unmuted.
        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
        mCallStatus = state;
+       int granted = AudioManager.AUDIOFOCUS_REQUEST_FAILED, count = 0;
 
        if((TelephonyManager.CALL_STATE_OFFHOOK == state)||
           (TelephonyManager.CALL_STATE_RINGING == state)) {
@@ -1475,9 +1476,21 @@ public class FMRadioService extends Service
               if (isAntennaAvailable() && (!isFmOn()) && mServiceInUse)
               {
                    Log.d(LOGTAG, "Resuming after call:");
+                   do {
+                       granted = audioManager.requestAudioFocus(mAudioFocusListener,
+                               AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+                       ++count;
+                       try {
+                           Thread.sleep(100);
+                       } catch (Exception ex) {
+                           Log.d( LOGTAG, "InterruptedException");
+                       }
+                   } while(granted != AudioManager.AUDIOFOCUS_REQUEST_GRANTED && count != 3);
+
                    if(true != fmOn()) {
                        return;
                    }
+
                    mResumeAfterCall = false;
                    if(mCallbacks != null) {
                       try {
