@@ -3265,27 +3265,32 @@ public class FMStats extends Activity  {
         int ret;
         Log.d(LOGTAG,"freq is "+freq);
         result.setFreq(Integer.toString(freq));
+        boolean isCherokeeChip = isCherokeeChip();
         if((null != mService)) {
             try {
-                ret = mService.getRssi();
-                 if (ret != 0) {
-                     Log.e(LOGTAG, "getrssi cmd failed: ret = " + ret);
-                     return null;
-                 }
-                lastCmdSent = CMD_STNPARAM_RSSI;
-                Log.e(LOGTAG, "wait for response of mService.getRssi");
-                synchronized (obj) {
-                    try {
-                        obj.wait();
-                    } catch (InterruptedException e) {
-                        Log.e(LOGTAG, "getRSSI:THREAD interrupted");
-                        e.printStackTrace();
-                        return null;
+                if (isCherokeeChip) {
+                    ret = mService.getRssi();
+                     if (ret != 0) {
+                         Log.e(LOGTAG, "getrssi cmd failed: ret = " + ret);
+                         return null;
+                     }
+                    lastCmdSent = CMD_STNPARAM_RSSI;
+                    Log.e(LOGTAG, "wait for response of mService.getRssi");
+                    synchronized (obj) {
+                        try {
+                            obj.wait();
+                        } catch (InterruptedException e) {
+                            Log.e(LOGTAG, "getRSSI:THREAD interrupted");
+                            e.printStackTrace();
+                            return null;
+                        }
                     }
+                } else {
+                    nRssi = mService.getRssi();
                 }
                 Log.e(LOGTAG, "Got response of mService.getRssi");
                 if (nRssi != Integer.MAX_VALUE) {
-                    result.setRSSI(Integer.toString(nRssi));
+                    result.setRSSI(Integer.toString((byte)nRssi));
                 } else {
                     return null;
                 }
@@ -3297,17 +3302,21 @@ public class FMStats extends Activity  {
 
             if(!isRomeChip()) {
                 try {
-                    mService.getIoC();
-                    lastCmdSent = CMD_STNDBGPARAM_IOVERC;
-                    Log.e(LOGTAG, "wait for response of mService.getIoC");
-                    synchronized (obj) {
-                        try {
-                            obj.wait();
-                        } catch (InterruptedException e) {
-                            Log.e(LOGTAG, "getIOC:THREAD interrupted");
-                            e.printStackTrace();
-                            return null;
+                    if (isCherokeeChip) {
+                        mService.getIoC();
+                        lastCmdSent = CMD_STNDBGPARAM_IOVERC;
+                        Log.e(LOGTAG, "wait for response of mService.getIoC");
+                        synchronized (obj) {
+                            try {
+                                obj.wait();
+                            } catch (InterruptedException e) {
+                                Log.e(LOGTAG, "getIOC:THREAD interrupted");
+                                e.printStackTrace();
+                                return null;
+                            }
                         }
+                    } else {
+                        nIoC = mService.getIoC();
                     }
                     Log.e(LOGTAG, "GOT response of mService.getIoC");
                     if (nIoC != Integer.MAX_VALUE)
@@ -3321,23 +3330,27 @@ public class FMStats extends Activity  {
                 }
             }
 
-            if(isTransportLayerSMD() || isRomeChip() || isCherokeeChip()) {
+            if(isTransportLayerSMD() || isRomeChip() || isCherokeeChip) {
                 try {
-                    mService.getSINR();
-                    lastCmdSent = CMD_STNPARAM_SINR;
-                    Log.e(LOGTAG, "wait for response of mService.getSINR");
-                    synchronized (obj) {
-                        try {
-                            obj.wait();
-                        } catch (InterruptedException e) {
-                            Log.e(LOGTAG, "getSINR:THREAD interrupted");
-                            e.printStackTrace();
-                            return null;
+                    if (isCherokeeChip) {
+                        mService.getSINR();
+                        lastCmdSent = CMD_STNPARAM_SINR;
+                        Log.e(LOGTAG, "wait for response of mService.getSINR");
+                        synchronized (obj) {
+                            try {
+                                obj.wait();
+                            } catch (InterruptedException e) {
+                                Log.e(LOGTAG, "getSINR:THREAD interrupted");
+                                e.printStackTrace();
+                                return null;
+                            }
                         }
+                    } else {
+                        nSINR = mService.getSINR();
                     }
                     Log.e(LOGTAG, "Got response of mService.getSINR");
                     if (nSINR != Integer.MAX_VALUE) {
-                        result.setSINR(Integer.toString(nSINR));
+                        result.setSINR(Integer.toString((byte)nSINR));
                     } else {
                         return null;
                     }
@@ -3362,17 +3375,21 @@ public class FMStats extends Activity  {
 
             if(!isRomeChip()) {
                 try {
-                    mService.getIntDet();
-                    lastCmdSent = CMD_STNDBGPARAM_INFDETOUT;
-                    Log.e(LOGTAG, "wait for response of mService.getIntDet");
-                    synchronized (obj) {
-                        try {
-                            obj.wait();
-                        } catch (InterruptedException e) {
-                            Log.e(LOGTAG, "getIntDet:THREAD interrupted");
-                            e.printStackTrace();
-                            return null;
+                    if (isCherokeeChip) {
+                        mService.getIntDet();
+                        lastCmdSent = CMD_STNDBGPARAM_INFDETOUT;
+                        Log.e(LOGTAG, "wait for response of mService.getIntDet");
+                        synchronized (obj) {
+                            try {
+                                obj.wait();
+                            } catch (InterruptedException e) {
+                                Log.e(LOGTAG, "getIntDet:THREAD interrupted");
+                                e.printStackTrace();
+                                return null;
+                            }
                         }
+                    } else {
+                        nIntDet = mService.getIntDet();
                     }
                     Log.e(LOGTAG, "Got response of mService.getIntDet");
                     if (nIntDet != Integer.MAX_VALUE)
