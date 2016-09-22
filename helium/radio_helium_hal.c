@@ -40,7 +40,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 int hci_fm_get_signal_threshold();
 int hci_fm_enable_recv_req();
-int hci_fm_mute_mode_req(struct hci_fm_mute_mode_req );
+int hci_fm_mute_mode_req(struct hci_fm_mute_mode_req *);
 static int oda_agt;
 static int grp_mask;
 static int rt_plus_carrier = -1;
@@ -1207,9 +1207,9 @@ static int set_fm_ctrl(int cmd, int val)
     case HCI_FM_HELIUM_AUDIO_MUTE:
         saved_val = hal->radio->mute_mode.hard_mute;
         hal->radio->mute_mode.hard_mute = val;
-        ret = hci_fm_mute_mode_req(hal->radio->mute_mode);
+        ret = hci_fm_mute_mode_req(&hal->radio->mute_mode);
         if (ret < 0) {
-            ALOGE("%s:Error while set FM hard mute %d", LOG_TAG, ret);
+            ALOGE("%s:Error while set FM hard mute :%d", LOG_TAG, ret);
             hal->radio->mute_mode.hard_mute = saved_val;
         }
         break;
@@ -1633,6 +1633,9 @@ static int get_fm_ctrl(int cmd, int val)
     case HCI_FM_HELIUM_LOWER_BAND:
         val = hal->radio->recv_conf.band_low_limit;
         break;
+    case HCI_FM_HELIUM_AUDIO_MUTE:
+        val = hal->radio->mute_mode.hard_mute;
+        return val;
     case HCI_FM_HELIUM_SINR_SAMPLES:
         set_bit(ch_det_th_mask_flag, CMD_CHDET_SINR_SAMPLE);
         ret = hci_fm_get_ch_det_th();
