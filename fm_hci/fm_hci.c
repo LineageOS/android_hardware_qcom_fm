@@ -138,12 +138,11 @@ static void dequeue_fm_tx_cmd(struct fm_hci_t *hci)
         }
         pthread_mutex_unlock(&hci->tx_q_lock);
 
-wait_for_cmd_credits:
         pthread_mutex_lock(&hci->credit_lock);
+wait_for_cmd_credits:
         while (hci->command_credits == 0) {
               pthread_cond_wait(&hci->cmd_credits_cond, &hci->credit_lock);
         }
-        pthread_mutex_unlock(&hci->credit_lock);
 
         /* Check if we really got the command credits */
         if (hci->command_credits) {
@@ -160,14 +159,18 @@ again:
             count = 0;
 
             /* Decrement cmd credits by '1' after sending the cmd*/
-            pthread_mutex_lock(&hci->credit_lock);
             hci->command_credits--;
-            pthread_mutex_unlock(&hci->credit_lock);
+            if (temp->hdr)
+                free(temp->hdr);
+            free(temp);
         } else {
-            if (!lib_running)
+            if (!lib_running) {
+                pthread_mutex_unlock(&hci->credit_lock);
                 break;
+            }
             goto wait_for_cmd_credits;
         }
+        pthread_mutex_unlock(&hci->credit_lock);
     }
 }
 
