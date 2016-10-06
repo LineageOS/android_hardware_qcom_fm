@@ -1612,7 +1612,7 @@ end:
     return ret;
 }
 
-static int get_fm_ctrl(int cmd, int val)
+static int get_fm_ctrl(int cmd, int *val)
 {
     int ret = 0;
     struct hci_fm_def_data_rd_req def_data_rd;
@@ -1625,17 +1625,25 @@ static int get_fm_ctrl(int cmd, int val)
     ALOGE("%s: cmd = 0x%x", __func__, cmd);
     switch(cmd) {
     case HCI_FM_HELIUM_FREQ:
-        val = hal->radio->fm_st_rsp.station_rsp.station_freq;
+        if (!val)
+            return -FM_HC_STATUS_NULL_POINTER;
+        *val = hal->radio->fm_st_rsp.station_rsp.station_freq;
         break;
     case HCI_FM_HELIUM_UPPER_BAND:
-        val = hal->radio->recv_conf.band_high_limit;
+        if (!val)
+            return -FM_HC_STATUS_NULL_POINTER;
+        *val = hal->radio->recv_conf.band_high_limit;
         break;
     case HCI_FM_HELIUM_LOWER_BAND:
-        val = hal->radio->recv_conf.band_low_limit;
+        if (!val)
+            return -FM_HC_STATUS_NULL_POINTER;
+        *val = hal->radio->recv_conf.band_low_limit;
         break;
     case HCI_FM_HELIUM_AUDIO_MUTE:
-        val = hal->radio->mute_mode.hard_mute;
-        return val;
+        if (!val)
+            return -FM_HC_STATUS_NULL_POINTER;
+        *val = hal->radio->mute_mode.hard_mute;
+        break;
     case HCI_FM_HELIUM_SINR_SAMPLES:
         set_bit(ch_det_th_mask_flag, CMD_CHDET_SINR_SAMPLE);
         ret = hci_fm_get_ch_det_th();
