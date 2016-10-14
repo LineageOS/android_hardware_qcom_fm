@@ -1241,7 +1241,7 @@ struct fm_hal_t {
 struct fm_interface_t {
     int (*init)(const fm_hal_callbacks_t *p_cb);
     int (*set_fm_ctrl)(int opcode, int val);
-    void (*Get_fm_ctrl) (int opcode, int val);
+    void (*get_fm_ctrl) (int opcode, int *val);
 };
 
 #endif /* __UAPI_RADIO_HCI_CORE_H */
