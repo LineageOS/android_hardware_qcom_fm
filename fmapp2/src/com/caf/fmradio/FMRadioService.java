@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2015, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2009-2016, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -1604,8 +1604,6 @@ public class FMRadioService extends Service
                   case AudioManager.AUDIOFOCUS_LOSS:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
                       //intentional fall through.
-                      if (true == isFmRecordingOn())
-                          stopRecording();
                       if (mSpeakerPhoneOn) {
                          mSpeakerDisableHandler.removeCallbacks(mSpeakerDisableTask);
                          mSpeakerDisableHandler.postDelayed(mSpeakerDisableTask, 0);
@@ -1613,6 +1611,9 @@ public class FMRadioService extends Service
                       if (true == mPlaybackInProgress) {
                           stopFM();
                       }
+                      if (true == isFmRecordingOn())
+                          stopRecording();
+
                       if (mSpeakerPhoneOn) {
                           if (isAnalogModeSupported())
                               setAudioPath(false);
@@ -2247,6 +2248,17 @@ public class FMRadioService extends Service
    * Turn OFF FM Operations: This disables all the current FM operations             .
    */
    private void fmOperationsOff() {
+     // disable audio path
+      AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+      if(audioManager != null)
+      {
+         Log.d(LOGTAG, "audioManager.setFmRadioOn = false \n" );
+         stopFM();
+         unMute();
+         audioManager.abandonAudioFocus(mAudioFocusListener);
+         //audioManager.setParameters("FMRadioOn=false");
+         Log.d(LOGTAG, "audioManager.setFmRadioOn false done \n" );
+      }
       // stop recording
       if (isFmRecordingOn())
       {
@@ -2257,17 +2269,6 @@ public class FMRadioService extends Service
                Log.d( LOGTAG, "RunningThread InterruptedException");
                return;
           }
-      }
-      // disable audio path
-      AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-      if(audioManager != null)
-      {
-         Log.d(LOGTAG, "audioManager.setFmRadioOn = false \n" );
-         stopFM();
-         unMute();
-         audioManager.abandonAudioFocus(mAudioFocusListener);
-         //audioManager.setParameters("FMRadioOn=false");
-         Log.d(LOGTAG, "audioManager.setFmRadioOn false done \n" );
       }
       // reset FM audio settings
       resetAudioRoute();
@@ -2280,6 +2281,7 @@ public class FMRadioService extends Service
               misAnalogPathEnabled = false;
       }
    }
+
 
   /*
    * Reset (OFF) FM Operations: This resets all the current FM operations             .
