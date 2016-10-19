@@ -193,7 +193,6 @@ class FmReceiverJNI {
 
     public void tuneCallback(int freq) {
         int state;
-
         Log.d(TAG, "tuneCallback enter");
         state = FmReceiver.getSearchState();
         switch(state) {
@@ -222,7 +221,7 @@ class FmReceiverJNI {
 
         Log.d(TAG, "seekCmplCallback enter");
         state = FmReceiver.getSearchState();
-        switch(state) {
+        switch (state) {
         case FmTransceiver.subSrchLevel_ScanInProg:
             Log.v(TAG, "Current state is " + state);
             FmReceiver.setSearchState(FmTransceiver.subSrchLevel_SrchComplete);
@@ -239,6 +238,26 @@ class FmReceiverJNI {
         }
         Log.d(TAG, "seekCmplCallback exit");
     }
+
+    public void srchListCallback(byte[] scan_tbl) {
+        int state;
+        state = FmReceiver.getSearchState();
+        switch (state) {
+        case FmTransceiver.subSrchLevel_SrchListInProg:
+            Log.v(TAG, "FmRxEventListener: Current state is AUTO_PRESET_INPROGRESS");
+            FmReceiver.setSearchState(FmTransceiver.subSrchLevel_SrchComplete);
+            Log.v(TAG, "RxEvtList: CURRENT-STATE : Search ---> NEW-STATE : FMRxOn");
+            FmReceiver.mCallback.FmRxEvSearchListComplete();
+            break;
+        case FmTransceiver.subSrchLevel_SrchAbort:
+            Log.v(TAG, "Current state is SRCH_ABORTED");
+            Log.v(TAG, "Aborting on-going SearchList command...");
+            FmReceiver.setSearchState(FmTransceiver.subSrchLevel_SrchComplete);
+            Log.v(TAG, "RxEvtList: CURRENT-STATE : Search ---> NEW-STATE : FMRxOn");
+            FmReceiver.mCallback.FmRxEvSearchCancelled();
+            break;
+       }
+   }
 
     public void scanNxtCallback() {
         Log.d(TAG, "scanNxtCallback enter");
