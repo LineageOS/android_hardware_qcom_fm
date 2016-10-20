@@ -439,7 +439,7 @@ public class FMRadio extends Activity
    public void onRestart() {
       Log.d(LOGTAG, "FMRadio: onRestart");
       try {
-         if (null != mService) {
+         if (null != mService && isAntennaAvailable()) {
               mService.requestFocus();
          }
       } catch (Exception e) {
@@ -505,6 +505,9 @@ public class FMRadio extends Activity
 
       super.onResume();
 
+      if (!isAntennaAvailable()) {
+          return;
+      }
       // TODO: We should return on exception or continue?
       try {
           if (mService != null)
