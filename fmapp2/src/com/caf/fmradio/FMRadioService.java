@@ -608,6 +608,7 @@ public class FMRadioService extends Service
      */
     public void registerHeadsetListener() {
         if (mHeadsetReceiver == null) {
+            boolean fm_a2dp_disabled = SystemProperties.getBoolean("fm.a2dp.conc.disabled",true);
             mHeadsetReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -682,7 +683,9 @@ public class FMRadioService extends Service
             AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             IntentFilter iFilter = new IntentFilter();
             iFilter.addAction(Intent.ACTION_HEADSET_PLUG);
-            iFilter.addAction(mA2dpDeviceState.getActionSinkStateChangedString());
+            if (!fm_a2dp_disabled) {
+                iFilter.addAction(mA2dpDeviceState.getActionSinkStateChangedString());
+            }
             iFilter.addAction("HDMI_CONNECTED");
             iFilter.addAction(Intent.ACTION_SHUTDOWN);
             iFilter.addCategory(Intent.CATEGORY_DEFAULT);
