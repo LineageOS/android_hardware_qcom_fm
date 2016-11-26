@@ -505,16 +505,25 @@ public class FMRadio extends Activity
 
       super.onResume();
 
-      if (!isAntennaAvailable()) {
+      if (mService == null) {
+          Log.d(LOGTAG,"bind callback has not received yet - wait for 100ms");
+          mHandler.postDelayed(UpdateFm, 100);
           return;
       }
-      // TODO: We should return on exception or continue?
-      try {
-          if (mService != null)
-              mService.registerCallbacks(mServiceCallbacks);
-      } catch (RemoteException e) {
-          e.printStackTrace();
-      }
+     mHandler.post(UpdateFm);
+   }
+   Runnable UpdateFm = new Runnable() {
+       public void run() {
+           // TODO: We should return on exception or continue?
+           if (!isAntennaAvailable()) {
+               return;
+           }
+           try {
+               if (mService != null)
+                   mService.registerCallbacks(mServiceCallbacks);
+           } catch (RemoteException e) {
+               e.printStackTrace();
+           }
 
       if (isSleepTimerActive()) {
           Log.d(LOGTAG, "isSleepTimerActive is true");
@@ -559,7 +568,8 @@ public class FMRadio extends Activity
       mUpdatePickerValue = true;
       updateStationInfoToUI();
       enableRadioOnOffUI();
-   }
+       }
+   };
    private static class LoadedDataAndState {
       public LoadedDataAndState(){};
       public boolean onOrOff;

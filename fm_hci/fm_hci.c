@@ -338,7 +338,8 @@ static void* hci_tx_thread(void *arg)
 
     while (lib_running) {
         pthread_mutex_lock(&hci->event_lock);
-        pthread_cond_wait(&hci->event_cond, &hci->event_lock);
+        if (!(ready_events & HC_EVENT_TX))
+            pthread_cond_wait(&hci->event_cond, &hci->event_lock);
         ALOGE("%s: ready_events= %d", __func__, ready_events);
         events = ready_events;
         if (ready_events & HC_EVENT_TX)
