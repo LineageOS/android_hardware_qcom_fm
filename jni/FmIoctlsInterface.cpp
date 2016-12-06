@@ -111,6 +111,9 @@ int  FmIoctlsInterface :: set_calibration
     struct v4l2_ext_controls v4l2_ctls;
     char cal_data[CAL_DATA_SIZE] = {0};
 
+    memset(&v4l2_ctls, 0, sizeof(v4l2_ctls));
+    memset(&ext_ctl, 0, sizeof(ext_ctl));
+
     cal_fp = fopen(CALIB_DATA_NAME, "r");
     if(cal_fp != NULL) {
        if(fread(&cal_data[0], 1, CAL_DATA_SIZE, cal_fp)

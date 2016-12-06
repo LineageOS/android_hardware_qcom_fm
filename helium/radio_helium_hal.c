@@ -623,7 +623,7 @@ static inline void hci_ev_program_service(char *buff)
 
     memcpy(data+RDS_OFFSET, &buff[RDS_PS_DATA_OFFSET], len-RDS_OFFSET);
 
-    ALOGE("SSK call ps-callback");
+    ALOGV("call ps-callback");
     hal->jni_cb->ps_update_cb(data);
 
     free(data);

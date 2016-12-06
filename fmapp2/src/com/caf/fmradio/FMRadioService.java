@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2009-2015, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2009-2016, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -608,6 +608,7 @@ public class FMRadioService extends Service
      */
     public void registerHeadsetListener() {
         if (mHeadsetReceiver == null) {
+            boolean fm_a2dp_disabled = SystemProperties.getBoolean("fm.a2dp.conc.disabled",true);
             mHeadsetReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -682,7 +683,9 @@ public class FMRadioService extends Service
             AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             IntentFilter iFilter = new IntentFilter();
             iFilter.addAction(Intent.ACTION_HEADSET_PLUG);
-            iFilter.addAction(mA2dpDeviceState.getActionSinkStateChangedString());
+            if (!fm_a2dp_disabled) {
+                iFilter.addAction(mA2dpDeviceState.getActionSinkStateChangedString());
+            }
             iFilter.addAction("HDMI_CONNECTED");
             iFilter.addAction(Intent.ACTION_SHUTDOWN);
             iFilter.addCategory(Intent.CATEGORY_DEFAULT);
@@ -1604,8 +1607,6 @@ public class FMRadioService extends Service
                   case AudioManager.AUDIOFOCUS_LOSS:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
                       //intentional fall through.
-                      if (true == isFmRecordingOn())
-                          stopRecording();
                       if (mSpeakerPhoneOn) {
                          mSpeakerDisableHandler.removeCallbacks(mSpeakerDisableTask);
                          mSpeakerDisableHandler.postDelayed(mSpeakerDisableTask, 0);
@@ -1613,6 +1614,9 @@ public class FMRadioService extends Service
                       if (true == mPlaybackInProgress) {
                           stopFM();
                       }
+                      if (true == isFmRecordingOn())
+                          stopRecording();
+
                       if (mSpeakerPhoneOn) {
                           if (isAnalogModeSupported())
                               setAudioPath(false);
@@ -2247,6 +2251,17 @@ public class FMRadioService extends Service
    * Turn OFF FM Operations: This disables all the current FM operations             .
    */
    private void fmOperationsOff() {
+     // disable audio path
+      AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+      if(audioManager != null)
+      {
+         Log.d(LOGTAG, "audioManager.setFmRadioOn = false \n" );
+         stopFM();
+         unMute();
+         audioManager.abandonAudioFocus(mAudioFocusListener);
+         //audioManager.setParameters("FMRadioOn=false");
+         Log.d(LOGTAG, "audioManager.setFmRadioOn false done \n" );
+      }
       // stop recording
       if (isFmRecordingOn())
       {
@@ -2257,17 +2272,6 @@ public class FMRadioService extends Service
                Log.d( LOGTAG, "RunningThread InterruptedException");
                return;
           }
-      }
-      // disable audio path
-      AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-      if(audioManager != null)
-      {
-         Log.d(LOGTAG, "audioManager.setFmRadioOn = false \n" );
-         stopFM();
-         unMute();
-         audioManager.abandonAudioFocus(mAudioFocusListener);
-         //audioManager.setParameters("FMRadioOn=false");
-         Log.d(LOGTAG, "audioManager.setFmRadioOn false done \n" );
       }
       // reset FM audio settings
       resetAudioRoute();
@@ -2280,6 +2284,7 @@ public class FMRadioService extends Service
               misAnalogPathEnabled = false;
       }
    }
+
 
   /*
    * Reset (OFF) FM Operations: This resets all the current FM operations             .
