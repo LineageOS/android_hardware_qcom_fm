@@ -1104,6 +1104,7 @@ public class FMRadioService extends Service
    private void resetFM(){
        Log.d(LOGTAG, "resetFM");
        mPlaybackInProgress = false;
+       configureAudioDataPath(false);
    }
 
    private boolean getRecordServiceStatus() {
@@ -2315,12 +2316,7 @@ public class FMRadioService extends Service
       }
    }
 
-  /*
-   * Turn OFF FM: Disable the FM Host and hardware                                  .
-   *                                                                                 .
-   * @return true if fm Disable api was invoked successfully, false if the api failed.
-   */
-   private boolean fmOff() {
+   private boolean fmOffImpl() {
       boolean bStatus=false;
 
       // This will disable the FM radio device
@@ -2346,7 +2342,58 @@ public class FMRadioService extends Service
       }
       fmOperationsOff();
       stop();
+
       return(bStatus);
+   }
+
+   private boolean fmOffImplCherokee() {
+      boolean bStatus=false;
+
+      fmOperationsOff();
+      stop();
+      try {
+          Thread.sleep(200);
+      } catch (Exception ex) {
+          Log.d( LOGTAG, "RunningThread InterruptedException");
+      }
+
+      // This will disable the FM radio device
+      if (mReceiver != null)
+      {
+         bStatus = mReceiver.disable(this);
+         if (bStatus &&
+                 (mReceiver.getFMState() == mReceiver.subPwrLevel_FMTurning_Off)) {
+             synchronized (mEventWaitLock) {
+                 Log.d(LOGTAG, "waiting for disable event");
+                 try {
+                     mEventWaitLock.wait(RADIO_TIMEOUT);
+                 } catch (IllegalMonitorStateException e) {
+                     Log.e(LOGTAG, "Exception caught while waiting for event");
+                     e.printStackTrace();
+                 } catch (InterruptedException ex) {
+                     Log.e(LOGTAG, "Exception caught while waiting for event");
+                     ex.printStackTrace();
+                 }
+             }
+         }
+         mReceiver = null;
+      }
+      return(bStatus);
+   }
+  /*
+   * Turn OFF FM: Disable the FM Host and hardware                                  .
+   *                                                                                 .
+   * @return true if fm Disable api was invoked successfully, false if the api failed.
+   */
+   private boolean fmOff() {
+       if (mReceiver != null) {
+           if (mReceiver.isCherokeeChip()) {
+               return fmOffImplCherokee();
+           } else {
+              return fmOffImpl();
+           }
+       }
+       return false;
    }
 
    private boolean fmOff(int off_from) {
