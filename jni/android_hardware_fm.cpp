@@ -194,7 +194,16 @@ void fm_scan_next_cb()
 void fm_srch_list_cb(uint16_t *scan_tbl)
 {
     ALOGI("SRCH_LIST");
-    //mCallbackEnv->CallVoidMethod(javaObjectRef, method_srchListCallback);
+    jbyteArray srch_buffer = NULL;
+
+    srch_buffer = mCallbackEnv->NewByteArray(STD_BUF_SIZE);
+    if (srch_buffer == NULL) {
+        ALOGE(" af list allocate failed :");
+        return;
+    }
+    mCallbackEnv->SetByteArrayRegion(srch_buffer, 0, STD_BUF_SIZE, (jbyte *)scan_tbl);
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_srchListCallback, srch_buffer);
+    mCallbackEnv->DeleteLocalRef(srch_buffer);
 }
 
 void fm_stereo_status_cb(bool stereo)
@@ -1519,7 +1528,7 @@ static void classInitNative(JNIEnv* env, jclass clazz) {
     method_tuneCallback = env->GetMethodID(javaClassRef, "tuneCallback", "(I)V");
     method_seekCmplCallback = env->GetMethodID(javaClassRef, "seekCmplCallback", "(I)V");
     method_scanNxtCallback = env->GetMethodID(javaClassRef, "scanNxtCallback", "()V");
-    //method_srchListCallback = env->GetMethodID(javaClassRef, "srchListCallback", "([B)V");
+    method_srchListCallback = env->GetMethodID(javaClassRef, "srchListCallback", "([B)V");
     method_stereostsCallback = env->GetMethodID(javaClassRef, "stereostsCallback", "(Z)V");
     method_rdsAvlStsCallback = env->GetMethodID(javaClassRef, "rdsAvlStsCallback", "(Z)V");
     method_disableCallback = env->GetMethodID(javaClassRef, "disableCallback", "()V");
