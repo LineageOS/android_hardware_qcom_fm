@@ -461,3 +461,13 @@ int hci_fm_enable_lpf(int enable)
                                   HCI_OCF_FM_LOW_PASS_FILTER_CTRL);
     return send_fm_cmd_pkt(opcode, sizeof(enable_lpf), &enable_lpf);
 }
+int hci_fm_enable_slimbus(uint8_t val) {
+    ALOGE("%s", __func__);
+    uint16_t opcode = 0;
+
+    opcode = hci_opcode_pack(HCI_OGF_FM_DIAGNOSTIC_CMD_REQ,
+                                HCI_OCF_FM_ENABLE_SLIMBUS);
+
+    ALOGE("%s:val = %d, uint8 val = %d", __func__, val, (uint8_t)val);
+    return send_fm_cmd_pkt(opcode , sizeof(val), &val);
+}

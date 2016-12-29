@@ -245,6 +245,7 @@ typedef struct {
 #define HCI_OCF_FM_RDS_RT_REQ               0x0008
 #define HCI_OCF_FM_RDS_PS_REQ               0x0009
 
+#define HCI_OCF_FM_ENABLE_SLIMBUS           (0x000E)
 
 /* HCI common control commands opcode */
 #define HCI_OCF_FM_TUNE_STATION_REQ         0x0001
@@ -1231,6 +1232,7 @@ int hci_fm_enable_lpf(int enable);
 int hci_fm_default_data_write_req(struct hci_fm_def_data_wr_req * data_wrt);
 int hci_fm_get_station_dbg_param_req();
 int hci_fm_get_station_cmd_param_req();
+int hci_fm_enable_slimbus(uint8_t enable);
 
 struct fm_hal_t {
     struct radio_helium_device *radio;

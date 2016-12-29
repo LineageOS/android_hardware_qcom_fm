@@ -547,4 +547,5 @@ class FmReceiverJNI {
      */
     static native int setSpurDataNative(int fd, short  buff[], int len);
     static native void configurePerformanceParams(int fd);
+    static native int enableSlimbus(int fd, int val);
 }

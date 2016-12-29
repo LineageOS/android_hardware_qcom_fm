@@ -1604,6 +1604,10 @@ static int set_fm_ctrl(int cmd, int val)
              ALOGI("%s: command sent sucessfully", __func__, val);
          }
          break;
+    case HCI_FM_HELIUM_AUDIO:
+         ALOGE("%s slimbus port", val ? "enable" : "disable");
+         ret = hci_fm_enable_slimbus(val);
+         break;
     default:
         ALOGE("%s:%s: Not a valid FM CMD!!", LOG_TAG, __func__);
         ret = 0;
