@@ -34,7 +34,7 @@ ifeq ($(TARGET_QCOM_NO_FM_FIRMWARE),true)
 endif
 
 LOCAL_MODULE := libfmjni
-#include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
 
 endif
 
