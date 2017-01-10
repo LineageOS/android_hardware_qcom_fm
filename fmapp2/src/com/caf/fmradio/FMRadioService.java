@@ -742,8 +742,10 @@ public class FMRadioService extends Service
                         Log.d(LOGTAG, "Music Service command : "+cmd+ " received");
                         if (cmd != null && cmd.equals("pause")) {
                             if (isFmOn()) {
-                                fmOperationsOff();
-                                mStoppedOnFocusLoss = true;
+                                AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                                audioManager.abandonAudioFocus(mAudioFocusListener);
+                                mDelayedStopHandler.obtainMessage(FOCUSCHANGE, AudioManager.AUDIOFOCUS_LOSS, 0).sendToTarget();
+
                                 if (isOrderedBroadcast()) {
                                     abortBroadcast();
                                 }
