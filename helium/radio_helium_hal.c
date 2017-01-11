@@ -1338,6 +1338,7 @@ static int set_fm_ctrl(int cmd, int val)
 
     case HCI_FM_HELIUM_RDS_GRP_COUNTERS:
          ALOGD("%s: rds_grp counter read  value=%d ", LOG_TAG,val);
+         saved_val = hal->radio->g_rds_grp_proc_ps;
          ret = hci_fm_get_rds_grpcounters_req(val);
          if (ret < 0) {
              hal->radio->g_rds_grp_proc_ps = saved_val;
@@ -1347,6 +1348,7 @@ static int set_fm_ctrl(int cmd, int val)
 
     case HCI_FM_HELIUM_RDS_GRP_COUNTERS_EXT:
          ALOGD("%s: rds_grp counter read  value=%d ", LOG_TAG,val);
+         saved_val = hal->radio->g_rds_grp_proc_ps;
          ret = hci_fm_get_rds_grpcounters_ext_req(val);
          if (ret < 0) {
             hal->radio->g_rds_grp_proc_ps = saved_val;
