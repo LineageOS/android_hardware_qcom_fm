@@ -40,7 +40,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:textColor="#FFF"
         android:singleLine="true"
         android:maxLength="16">
      <requestFocus />
