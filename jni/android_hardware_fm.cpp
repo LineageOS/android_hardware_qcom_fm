@@ -1503,7 +1503,9 @@ static jint android_hardware_fmradio_FmReceiverJNI_enableSlimbusNative
 {
     ALOGD("%s: val = %d\n", __func__, val);
     int err = JNI_ERR;
+#ifdef FM_SOC_TYPE_CHEROKEE
     err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_ENABLE_SLIMBUS, val);
+#endif
     return err;
 }
 
