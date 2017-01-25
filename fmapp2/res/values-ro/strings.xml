@@ -170,12 +170,14 @@
   <string name="fm_cmd_failed_call_on">Operația FM a eșuat. În timpul unui apel, audio al FM nu este permis.</string>
   <!-- Do not translate. Duration format. -->
   <!-- the name under which recordings will be visible in the media database is formatted like this -->
+  <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
   <!-- all recordings will show up in the media database with this 'artist' name -->
   <string name="audio_db_artist_name">Înregistrările mele FM</string>
   <!-- all recordings will show up in the media database with this 'album' name -->
   <string name="audio_db_album_name">Înregistrări FM</string>
   <!-- all recordings will show up in the media database in a playlist with this name -->
   <string name="audio_db_playlist_name">Înregistrări FM</string>
+  <string name="station_name">Stația:</string>
   <string name="station_exists">Această frecvență există deja!</string>
   <string name="station_list_delete_station">Șterg: <xliff:g id="name">%s</xliff:g></string>
   <string name="station_list_delete_station_prompt">Sigur vrei să ștergi \'<xliff:g id="name">%s</xliff:g>\'?</string>
@@ -186,39 +188,61 @@
   <string name="usr_def_band_max">Frecvența maximă (MHz)</string>
   <string name="chanl_spacing">Spațiere pentru canal</string>
   <string name="set">Setați</string>
+  <string name="user_defind_band_msg">Introduceți o frecvență de la 76.0 la 108 MHz cu un spațiu de un canal minimum și 100KHz spațiu între frecvențele min și max</string>
+  <string name="save_record_file">Fișierul cu înregistrarea FM s-a salvat la \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
   <string name="fm_search_no_results">Nu s-au găsit posturi compatibile</string>
   <!-- program types -->
   <string name="typ_All_stations">Toate stațiile</string>
   <string name="typ_Culture">Cultură</string>
   <string name="typ_Current_affairs">Actualități</string>
+  <string name="typ_Children">Programe pentru copii</string>
   <string name="typ_Country">Muzică Country</string>
   <string name="typ_Documentary">Documentar</string>
   <string name="typ_Drama">Dramă</string>
+  <string name="typ_Easy_listening">Muzică ascultată ușor</string>
   <string name="typ_Education">Educație</string>
   <string name="typ_Emergency">Urgență</string>
+  <string name="typ_Emergency_test">Test de urgenţă</string>
   <string name="typ_Finance">Finanțe</string>
+  <string name="typ_Folk">Muzică folk</string>
   <string name="typ_Information">Informație</string>
   <string name="typ_Jazz">Muzică Jazz</string>
+  <string name="typ_Light_classical">Clasică ușoară</string>
+  <string name="typ_Leisure">Timp liber</string>
   <string name="typ_News">Știri</string>
+  <string name="typ_National">Muzică națională</string>
   <string name="typ_Other">Altă muzică</string>
+  <string name="typ_Oldies">Muzică veche</string>
   <string name="typ_Phone_in">Intrare telefon</string>
+  <string name="typ_Pop">Muzică Pop</string>
   <string name="typ_Religion">Religie</string>
   <string name="typ_Rock">Muzică rock</string>
   <string name="typ_Science">Știință</string>
+  <string name="typ_Serious_classical">Clasică serioasă</string>
+  <string name="typ_Social_affairs">Afaceri sociale</string>
   <string name="typ_Sport">Sport</string>
   <string name="typ_Travel">Călătorie</string>
   <string name="typ_Varied">Variate</string>
   <string name="typ_Weather">Vremea</string>
   <!-- RBDS (North America) -->
+  <string name="typ_Adult_hits">Hituri Adult</string>
+  <string name="typ_Classical">Clasică</string>
+  <string name="typ_Classic_Rock">Rock clasic</string>
   <string name="typ_College">Colegiu</string>
   <string name="typ_Foreign_language">Limbă străină</string>
   <string name="typ_Hiphop">Hip Hop</string>
   <string name="typ_Nostalgia">Nostalgie</string>
   <string name="typ_Personality">Personalitate</string>
+  <string name="typ_Public">Public</string>
   <string name="typ_Religious_music">Muzică religioasă</string>
+  <string name="typ_Religious_talk">Conversații religioase</string>
+  <string name="typ_Rhythm_and_Blues">Rhythm și Blues</string>
   <string name="typ_Spanish_music">Muzică spaniolă</string>
   <string name="typ_Spanish_talk">Conversații în spaniolă</string>
   <string name="typ_Soft">Ușoară</string>
+  <string name="typ_Soft_Rock">Rock ușor</string>
+  <string name="typ_Soft_Rhythm_and_Blues">Rhythm și Blues ușor</string>
   <string name="typ_Sports">Sport</string>
+  <string name="typ_Talk">Discuție</string>
   <string name="typ_Top_40">Top 40</string>
 </resources>
