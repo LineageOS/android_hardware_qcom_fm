@@ -219,6 +219,7 @@ public class FMRadioService extends Service
    private static final int FM_OFF_FROM_APPLICATION = 1;
    private static final int FM_OFF_FROM_ANTENNA = 2;
    private static final int RADIO_TIMEOUT = 1500;
+   private static final int RESET_SLIMBUS_DATA_PORT = 1;
 
    private static Object mNotchFilterLock = new Object();
 
@@ -1596,6 +1597,7 @@ public class FMRadioService extends Service
               switch (msg.arg1) {
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
+                      mReceiver.EnableSlimbus(RESET_SLIMBUS_DATA_PORT);
                       if (true == isFmRecordingOn())
                           stopRecording();
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
@@ -1608,6 +1610,8 @@ public class FMRadioService extends Service
                   case AudioManager.AUDIOFOCUS_LOSS:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
                       //intentional fall through.
+                      mReceiver.EnableSlimbus(RESET_SLIMBUS_DATA_PORT);
+
                       if (mSpeakerPhoneOn) {
                          mSpeakerDisableHandler.removeCallbacks(mSpeakerDisableTask);
                          mSpeakerDisableHandler.postDelayed(mSpeakerDisableTask, 0);

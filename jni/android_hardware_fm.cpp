@@ -1498,6 +1498,17 @@ static jint android_hardware_fmradio_FmReceiverJNI_setSpurDataNative
     return FM_JNI_SUCCESS;
 }
 
+static jint android_hardware_fmradio_FmReceiverJNI_enableSlimbusNative
+ (JNIEnv * env, jobject thiz, jint fd, jint val)
+{
+    ALOGD("%s: val = %d\n", __func__, val);
+    int err = JNI_ERR;
+#ifdef FM_SOC_TYPE_CHEROKEE
+    err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_ENABLE_SLIMBUS, val);
+#endif
+    return err;
+}
+
 static void classInitNative(JNIEnv* env, jclass clazz) {
 
     ALOGI("ClassInit native called \n");
@@ -1644,6 +1655,8 @@ static JNINativeMethod gMethods[] = {
             (void*)android_hardware_fmradio_FmReceiverJNI_setSpurDataNative},
         { "configurePerformanceParams", "(I)V",
              (void*)android_hardware_fmradio_FmReceiverJNI_configurePerformanceParams},
+        { "enableSlimbus", "(II)I",
+             (void*)android_hardware_fmradio_FmReceiverJNI_enableSlimbusNative},
 };
 
 int register_android_hardware_fm_fmradio(JNIEnv* env)
