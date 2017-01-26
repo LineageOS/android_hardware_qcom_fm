@@ -36,7 +36,7 @@
   <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
   <string name="access_sd_fail">無法存取 SD 卡。</string>
   <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
-  <string name="spaceIsLow_content">您的 SD 卡儲存空間即將用完，更改品質設定或刪除一些檔案即可增加可用空間。</string>
+  <string name="spaceIsLow_content">您的 SD 卡儲存空間即將用盡，請變更圖片的品質設定，或是刪除部分圖片或其他檔案。</string>
   <!-- The messsage shown when FM record reaches size limit. -->
   <string name="FMRecording_reach_size_limit">已達大小限制。</string>
   <!-- the name under which recordings will be visible in the media database is formatted like this -->
