@@ -40,7 +40,7 @@
     <item>5 minuta</item>
     <item>15 minuta</item>
     <item>30 minuta</item>
-    <item>Kad se zaustavi</item>
+    <item>Dok se ne zaustavi</item>
   </string-array>
   <string-array name="sleep_duration_values">
     <item>15 minuta</item>

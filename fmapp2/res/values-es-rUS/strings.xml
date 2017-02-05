@@ -141,7 +141,7 @@
   <string name="audio_type_mono">Mono</string>
   <string name="record_dur">Duración de grabación</string>
   <string name="auto_select_af">Frecuencia alternativa</string>
-  <string name="settings_revert_defaults_title">Restablecer configuración</string>
+  <string name="settings_revert_defaults_title">Restablecer ajustes de fábrica</string>
   <string name="settings_revert_defaults_summary">Restablecer todos los ajustes</string>
   <string name="settings_revert_confirm_title">Confirmar restablecimiento</string>
   <string name="settings_revert_confirm_msg">Esta acción borrará todos los ajustes de la aplicación, incluidas las emisoras almacenadas. ¿Continuar?</string>
