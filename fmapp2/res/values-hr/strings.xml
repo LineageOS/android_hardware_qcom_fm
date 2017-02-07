@@ -30,7 +30,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">FM Radio</string>
-  <string name="tx_app_name">FM Odašiljač</string>
+  <string name="tx_app_name">FM odašiljač</string>
   <string name="menu_scan_start">Skeniraj</string>
   <string name="menu_scan_stop">Zaustavi pretragu</string>
   <string name="menu_record_start">Snimi</string>
@@ -42,12 +42,12 @@
   <string name="menu_display_tags">Prikaži oznake</string>
   <string name="button_text_stop">Zaustavi</string>
   <string name="msg_seeking">Traženje FM postaje\u2026</string>
-  <string name="msg_scanning">Pretražujem sve FM postaje\u2026</string>
-  <string name="msg_scanning_pty">Tražim \"<xliff:g id="pty_name">%1$s</xliff:g>\"\u2026</string>
+  <string name="msg_scanning">Pretraživanje svih FM postaja\u2026</string>
+  <string name="msg_scanning_pty">Traženje \"<xliff:g id="pty_name">%1$s</xliff:g>\"\u2026</string>
   <string name="msg_search_title"><xliff:g id="frequency_string">%1$s</xliff:g> MHz</string>
-  <string name="msg_searching_title">Automatski odabirem početne</string>
-  <string name="msg_searching">Tražim jake postaje za popis početnih</string>
-  <string name="msg_noantenna">Molim priključite slušalice da biste mogli koristiti FM radio</string>
+  <string name="msg_searching_title">Automatski odabir postave</string>
+  <string name="msg_searching">Traženje jakih postaja da stvorimo popis postava\u2026</string>
+  <string name="msg_noantenna">Priključite slušalice da biste mogli upotrebljavati FM radio</string>
   <string name="dialog_sleep_title">Vrijeme do automatskog isključivanja</string>
   <string name="presetlist_select_name">Odaberi \'<xliff:g id="presetlist_name">%1$s</xliff:g>\'</string>
   <string name="presetlist_add_new">Dodaj novi popis</string>
@@ -56,7 +56,7 @@
   <string name="preset_replace">Zamijeni</string>
   <string name="preset_tune">Podesi</string>
   <string name="preset_rename">Preimenuj</string>
-  <string name="preset_delete">Obriši</string>
+  <string name="preset_delete">Izbriši</string>
   <string name="preset_search">Traži \'<xliff:g id="preset_pi">%1$s</xliff:g>\'</string>
   <string name="stat_notif_frequency">\'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
   <string name="regional_band">Regionalni pojas</string>
@@ -68,8 +68,8 @@
   <string name="regional_band_entry_austria">Austrija</string>
   <string name="regional_band_entry_belgium">Belgija</string>
   <string name="regional_band_entry_brazil">Brazil</string>
-  <string name="regional_band_entry_china">KIna</string>
-  <string name="regional_band_entry_czech_republic">Czech Republic</string>
+  <string name="regional_band_entry_china">Kina</string>
+  <string name="regional_band_entry_czech_republic">Republika Češka</string>
   <string name="regional_band_entry_denmark">Danska</string>
   <string name="regional_band_entry_finland">Finska</string>
   <string name="regional_band_entry_france">Francuska</string>
@@ -77,7 +77,7 @@
   <string name="regional_band_entry_greece">Grčka</string>
   <string name="regional_band_entry_hong_kong">Hong Kong</string>
   <string name="regional_band_entry_india">Indija</string>
-  <string name="regional_band_entry_indonesia">Indonesia</string>
+  <string name="regional_band_entry_indonesia">Indonezija</string>
   <string name="regional_band_entry_ireland">Irska</string>
   <string name="regional_band_entry_italy">Italija</string>
   <string name="regional_band_entry_korea">Koreja</string>
@@ -95,17 +95,17 @@
   <string name="regional_band_entry_sweden">Švedska</string>
   <string name="regional_band_entry_taiwan">Tajvan</string>
   <string name="regional_band_entry_turkey">Turska</string>
-  <string name="regional_band_entry_united_kingdom">United Kingdom</string>
+  <string name="regional_band_entry_united_kingdom">Ujedinjeno Kraljevstvo</string>
   <string name="regional_band_entry_united_states">Sjedinjene Američke Države</string>
   <string name="regional_band_entry_user_defined">Korisnička frekvencija</string>
-  <string name="regional_band_summary_north_america">Sejverna Amerika (87.5MHz to 108.0MHz in 200 KHz steps)</string>
-  <string name="regional_band_summary_europe">Europa (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_japan">Japan (76.0MHz to  90.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_japan_wide">Japan (širokopojasno) (90.0MHz to 108.0MHz in 50 KHz steps)</string>
-  <string name="regional_band_summary_australia">Australija (87.7MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_austria">Austrija (87.5MHz to 108.0MHz in  50 KHz steps)</string>
-  <string name="regional_band_summary_belgium">Belgija (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_brazil">Brazil (87.5MHz to 108.0MHz in 200 KHz steps)</string>
+  <string name="regional_band_summary_north_america">Sejverna Amerika (87.5MHz do 108.0MHz u 200 KHz koracima)</string>
+  <string name="regional_band_summary_europe">Europa (87.5MHz do 108.0MHz u 100 KHz koracima)</string>
+  <string name="regional_band_summary_japan">Japan (76.0MHz do  90.0MHz u 100 KHz koracima)</string>
+  <string name="regional_band_summary_japan_wide">Japan (širokopojasno) (90.0MHz do 108.0MHz u 50 KHz koracima)</string>
+  <string name="regional_band_summary_australia">Australija (87.7MHz do 108.0MHz u 100 KHz koracima)</string>
+  <string name="regional_band_summary_austria">Austrija (87.5MHz do 108.0MHz u 50 KHz koracima)</string>
+  <string name="regional_band_summary_belgium">Belgija (87.5MHz do 108.0MHz u 100 KHz koracima)</string>
+  <string name="regional_band_summary_brazil">Brazil (87.5MHz do 108.0MHz u 200 KHz koracima)</string>
   <string name="regional_band_summary_china">Kina (87.0MHz to 108.0MHz in 100 KHz steps)</string>
   <string name="regional_band_summary_czech_republic">Czech Republic (87.5MHz to 108.0MHz in 100 KHz steps)</string>
   <string name="regional_band_summary_denmark">Danska (87.5MHz to 108.0MHz in 50 KHz steps)</string>
