@@ -154,6 +154,7 @@
   <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
   <string name="spaceIsLow_content">Закінчується місце на вашій SD-карті. Змініть якість в налаштуваннях або ж видаліть зображення чи інші файли.</string>
   <!-- The messsage shown when FM record reaches size limit. -->
+  <string name="FMRecording_reach_size_limit">Досягнуто обмеження розміру.</string>
   <string name="menu_scan_for_preset">Сканувати за попередніми налаштуваннями</string>
   <!-- Off messages -->
   <string name="fm_off">FM-радіо вимкнуто.</string>
@@ -169,9 +170,13 @@
   <string name="fm_cmd_failed_call_on">Використання FM-радіо під час телефонного дзвінка неможливо.</string>
   <!-- Do not translate. Duration format. -->
   <!-- the name under which recordings will be visible in the media database is formatted like this -->
+  <string name="audio_db_title_format"><xliff:g id="format">dd-MM-yyyy HH:mm:ss</xliff:g></string>
   <!-- all recordings will show up in the media database with this 'artist' name -->
+  <string name="audio_db_artist_name">Мої записи з FM</string>
   <!-- all recordings will show up in the media database with this 'album' name -->
+  <string name="audio_db_album_name">Записи з FM</string>
   <!-- all recordings will show up in the media database in a playlist with this name -->
+  <string name="audio_db_playlist_name">Записи з FM</string>
   <string name="station_name">Станція:</string>
   <string name="station_exists">Ця частота вже існує!</string>
   <string name="station_list_delete_station">Вилучити:<xliff:g id="name">%s</xliff:g></string>
@@ -183,6 +188,8 @@
   <string name="usr_def_band_max">Найвищі частоти (МГц)</string>
   <string name="chanl_spacing">Крок каналів</string>
   <string name="set">Встановити</string>
+  <string name="user_defind_band_msg">Введіть частоту у межах 76,0–108,0 МГц, мінімум 1 канал з інтервалом в 100 кГц</string>
+  <string name="save_record_file">Записаний з FM файл збережено до \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
   <string name="fm_search_no_results">Не знайдено сумісних станцій</string>
   <!-- program types -->
   <string name="typ_All_stations">Всі станції</string>
