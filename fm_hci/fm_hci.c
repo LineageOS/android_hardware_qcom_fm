@@ -677,6 +677,12 @@ void fm_hci_close(void *arg) {
         return;
     }
     event_notification(hci, HC_EVENT_EXIT);
+    pthread_mutex_lock(&hci->event_lock);
+again:
+    pthread_cond_wait(&hci->event_cond, &hci->event_lock);
+    if (!(ready_events & HC_EVENT_EXIT_DONE))
+        goto again;
+    pthread_mutex_unlock(&hci->event_lock);
 }
 
 int fm_hci_init(fm_hci_hal_t *hci_hal)
@@ -785,6 +791,7 @@ static void fm_hci_exit(void *arg)
     vendor_close(hci);
     pthread_cond_broadcast(&hci->event_cond);
     pthread_cond_broadcast(&hci->cmd_credits_cond);
+    event_notification(hci, HC_EVENT_EXIT_DONE);
     stop_rx_thread(hci);
     stop_tx_thread(hci);
     ALOGD("Tx, Rx Threads join done");
