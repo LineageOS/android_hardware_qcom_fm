@@ -53,7 +53,7 @@
   <string name="presetlist_add_new">新增清單</string>
   <string name="dialog_presetlist_rename_title">輸入名稱</string>
   <string name="presetlist_autoselect_title">確認自動選擇</string>
-  <string name="preset_replace">取代</string>
+  <string name="preset_replace">替換</string>
   <string name="preset_tune">調整</string>
   <string name="preset_rename">重新命名</string>
   <string name="preset_delete">移除</string>
@@ -69,7 +69,7 @@
   <string name="regional_band_entry_belgium">比利時</string>
   <string name="regional_band_entry_brazil">巴西</string>
   <string name="regional_band_entry_china">中國</string>
-  <string name="regional_band_entry_czech_republic">Czech Republic</string>
+  <string name="regional_band_entry_czech_republic">捷克共和國</string>
   <string name="regional_band_entry_denmark">丹麥</string>
   <string name="regional_band_entry_finland">芬蘭</string>
   <string name="regional_band_entry_france">法國</string>
@@ -77,13 +77,13 @@
   <string name="regional_band_entry_greece">希臘</string>
   <string name="regional_band_entry_hong_kong">香港</string>
   <string name="regional_band_entry_india">印度</string>
-  <string name="regional_band_entry_indonesia">Indonesia</string>
+  <string name="regional_band_entry_indonesia">印尼</string>
   <string name="regional_band_entry_ireland">愛爾蘭</string>
   <string name="regional_band_entry_italy">義大利</string>
   <string name="regional_band_entry_korea">韓國</string>
   <string name="regional_band_entry_mexico">墨西哥</string>
   <string name="regional_band_entry_netherlands">荷蘭</string>
-  <string name="regional_band_entry_new_zealand">新西蘭</string>
+  <string name="regional_band_entry_new_zealand">紐西蘭</string>
   <string name="regional_band_entry_norway">挪威</string>
   <string name="regional_band_entry_poland">波蘭</string>
   <string name="regional_band_entry_portugal">葡萄牙</string>
@@ -95,9 +95,9 @@
   <string name="regional_band_entry_sweden">瑞典</string>
   <string name="regional_band_entry_taiwan">台灣</string>
   <string name="regional_band_entry_turkey">土耳其</string>
-  <string name="regional_band_entry_united_kingdom">United Kingdom</string>
+  <string name="regional_band_entry_united_kingdom">英國</string>
   <string name="regional_band_entry_united_states">美國</string>
-  <string name="regional_band_entry_user_defined">自定義頻段</string>
+  <string name="regional_band_entry_user_defined">使用者定義的頻段</string>
   <string name="regional_band_summary_north_america">北美 (87.5 Mhz - 108.0 MHz 內 200 KHz 頻道距離)</string>
   <string name="regional_band_summary_europe">歐洲 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
   <string name="regional_band_summary_japan">日本 (76.0 Mhz - 90.0 MHz 內 100 KHz 頻道距離)</string>
@@ -107,7 +107,7 @@
   <string name="regional_band_summary_belgium">比利時 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
   <string name="regional_band_summary_brazil">巴西 (87.5 Mhz - 108.0 MHz 內 200 KHz 頻道距離)</string>
   <string name="regional_band_summary_china">中國 (87.0 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
-  <string name="regional_band_summary_czech_republic">Czech Republic (87.5MHz to 108.0MHz in 100 KHz steps)</string>
+  <string name="regional_band_summary_czech_republic">捷克共和國 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
   <string name="regional_band_summary_denmark">丹麥 (87.5 Mhz - 108.0 MHz 內 50 KHz 頻道距離)</string>
   <string name="regional_band_summary_finland">芬蘭 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
   <string name="regional_band_summary_france">法國 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
@@ -115,7 +115,7 @@
   <string name="regional_band_summary_greece">希臘 (87.5 Mhz - 108.0 MHz 內 50 KHz 頻道距離)</string>
   <string name="regional_band_summary_hong_kong">香港 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
   <string name="regional_band_summary_india">印度 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
-  <string name="regional_band_summary_indonesia">Indonesia (87.5MHz to 108.0MHz in 100 KHz steps)</string>
+  <string name="regional_band_summary_indonesia">印尼 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
   <string name="regional_band_summary_ireland">愛爾蘭 (87.5 Mhz - 108.0 MHz 內 50 KHz 頻道距離)</string>
   <string name="regional_band_summary_italy">意大利 (87.5 Mhz - 108.0 MHz 內 50 KHz 頻道距離)</string>
   <string name="regional_band_summary_korea">韓國 (87.5 Mhz - 108.0 MHz 內 200 KHz 頻道距離)</string>
@@ -152,7 +152,7 @@
   <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
   <string name="access_sd_fail">無法存取 SD 卡。</string>
   <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
-  <string name="spaceIsLow_content">您的 SD 卡儲存空間即將用完，更改品質設定或刪除一些檔案即可增加可用空間。</string>
+  <string name="spaceIsLow_content">您的 SD 卡儲存空間即將用完，變更品質設定或刪除一些檔案即可增加可用空間。</string>
   <!-- The messsage shown when FM record reaches size limit. -->
   <string name="FMRecording_reach_size_limit">已達大小上限。</string>
   <string name="menu_scan_for_preset">掃描預設</string>
@@ -181,7 +181,7 @@
   <string name="station_exists">此頻率已存在！</string>
   <string name="station_list_delete_station">刪除：<xliff:g id="name">%s</xliff:g></string>
   <string name="station_list_delete_station_prompt">您確定要刪除「<xliff:g id="name">%s</xliff:g>」嗎？</string>
-  <string name="station_name_empty">電台名字不能為空，請重新輸入。</string>
+  <string name="station_name_empty">電台名稱不能為空，請重新輸入。</string>
   <string name="station_name_exist">「<xliff:g id="name">%s</xliff:g>」已被使用，請輸入其他名稱。</string>
   <string name="rt_plus_tags">標籤</string>
   <string name="usr_def_band_min">最低頻率 (MHz)</string>
@@ -213,7 +213,7 @@
   <string name="typ_National">民族音樂</string>
   <string name="typ_Other">其他音樂</string>
   <string name="typ_Oldies">懷舊音樂</string>
-  <string name="typ_Phone_in">Phone In</string>
+  <string name="typ_Phone_in">撥打電話</string>
   <string name="typ_Pop">流行音樂</string>
   <string name="typ_Religion">宗教</string>
   <string name="typ_Rock">搖滾音樂</string>

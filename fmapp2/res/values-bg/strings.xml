@@ -29,8 +29,8 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="app_name">FM радио</string>
-  <string name="tx_app_name">FM предавател</string>
+  <string name="app_name">Радио</string>
+  <string name="tx_app_name">Радио предавател</string>
   <string name="menu_scan_start">Сканирай</string>
   <string name="menu_scan_stop">Спри търсенето</string>
   <string name="menu_record_start">Запиши</string>
@@ -41,13 +41,13 @@
   <string name="menu_all_channels">Всички канали</string>
   <string name="menu_display_tags">Показване на етикетите</string>
   <string name="button_text_stop">Спри</string>
-  <string name="msg_seeking">Търсене на FM станции\u2026</string>
-  <string name="msg_scanning">Сканиране за всички FM станции\u2026</string>
+  <string name="msg_seeking">Търсене на ръдиостанции\u2026</string>
+  <string name="msg_scanning">Сканиране за всички радиостанции\u2026</string>
   <string name="msg_scanning_pty">Сканиране за \"<xliff:g id="pty_name">%1$s </xliff:g>\" \u2026</string>
   <string name="msg_search_title"><xliff:g id="frequency_string">%1$s </xliff:g> MHz</string>
   <string name="msg_searching_title">Автоматично избиране на станции</string>
-  <string name="msg_searching">Търсене на силни станции, за създаване на списък\u2026</string>
-  <string name="msg_noantenna">Моля включете слушалките, за да използвате FM радиото</string>
+  <string name="msg_searching">Търсене на станции със силен сигнал, за създаване на списък\u2026</string>
+  <string name="msg_noantenna">Моля включете слушалките, за да използвате радиото</string>
   <string name="dialog_sleep_title">Време до самоизключване</string>
   <string name="presetlist_select_name">Изберете \' <xliff:g id="preset_name"> %1$s\' </xliff:g></string>
   <string name="presetlist_add_new">Добавяне на нов списък</string>
@@ -157,33 +157,33 @@
   <string name="FMRecording_reach_size_limit">Достигнат е максималният размер.</string>
   <string name="menu_scan_for_preset">Сканирай запаметените станции</string>
   <!-- Off messages -->
-  <string name="fm_off">FM е изключен.</string>
-  <string name="fm_call">FM не може да се използва при повикване.</string>
+  <string name="fm_off">Радиото е изключено.</string>
+  <string name="fm_call">Радиото не може да се използва при повикване.</string>
   <!-- The messsage shown when long pressed on a station. -->
   <string name="alert_dialog_hint">Въведете име</string>
   <string name="search_dialog_title">Сканиране на станции</string>
   <string name="fm_command_timeout_title">Изчакване</string>
-  <string name="fm_tune_timeout_msg">Не получихме потвърждение за настройката на FM станцията. Ако проблемът продължава, моля изключете FM радиото и го включите отново.</string>
-  <string name="fm_command_failed_title">FM радио грешка</string>
-  <string name="fm_cmd_failed_msg">FM радио грешка. Ако проблемът продължава, моля изключете FM радиото и го включите отново.</string>
+  <string name="fm_tune_timeout_msg">Не получихме потвърждение за настройката на радиостанцията. Ако проблемът продължава, моля изключете радиото и го включите отново.</string>
+  <string name="fm_command_failed_title">Неуспешна операция</string>
+  <string name="fm_cmd_failed_msg">Неуспешна операция. Ако проблемът продължава, моля изключете радиото и го включете отново.</string>
   <string name="fm_cmd_failed_msg_hdmi">FM радио грешка. Системата не разрешава едновременното позване на FM и HDMI.</string>
-  <string name="fm_cmd_failed_call_on">FM радио грешка. FM аудио не е разрешено по време на разговор.</string>
+  <string name="fm_cmd_failed_call_on">Използването на радио по време на телефонен разговор е невъзможно.</string>
   <!-- Do not translate. Duration format. -->
   <!-- the name under which recordings will be visible in the media database is formatted like this -->
   <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
   <!-- all recordings will show up in the media database with this 'artist' name -->
-  <string name="audio_db_artist_name">Моите FM записи</string>
+  <string name="audio_db_artist_name">Моите радиозаписи</string>
   <!-- all recordings will show up in the media database with this 'album' name -->
-  <string name="audio_db_album_name">FM записи</string>
+  <string name="audio_db_album_name">Радиозаписи</string>
   <!-- all recordings will show up in the media database in a playlist with this name -->
-  <string name="audio_db_playlist_name">FM записи</string>
+  <string name="audio_db_playlist_name">Радиозаписи</string>
   <string name="station_name">Станция:</string>
   <string name="station_exists">Тази честота вече съществува!</string>
   <string name="station_list_delete_station">Изтриване: <xliff:g id="name">%s </xliff:g></string>
   <string name="station_list_delete_station_prompt">Наистина ли искате да изтриете \"<xliff:g id="name">%s </xliff:g>\"?</string>
   <string name="station_name_empty">Името на станцията е празно, моля, въведете отново.</string>
   <string name="station_name_exist">\"<xliff:g id="name">%s </xliff:g>\" е вече в употреба, моля въведете друго име.</string>
-  <string name="rt_plus_tags">Тагове</string>
+  <string name="rt_plus_tags">Етикети</string>
   <string name="usr_def_band_min">Най-ниска честота (MHz)</string>
   <string name="usr_def_band_max">Най-високата честота (MHz)</string>
   <string name="chanl_spacing">Канално отстояние</string>
@@ -223,7 +223,7 @@
   <string name="typ_Sport">Спорт</string>
   <string name="typ_Travel">Пътуване</string>
   <string name="typ_Varied">Разнообразни</string>
-  <string name="typ_Weather">Прогноза за времето</string>
+  <string name="typ_Weather">Прогноза на времето</string>
   <!-- RBDS (North America) -->
   <string name="typ_Adult_hits">Стари хитове</string>
   <string name="typ_Classical">Класическа</string>

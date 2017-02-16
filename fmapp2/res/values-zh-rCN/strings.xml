@@ -57,7 +57,7 @@
   <string name="preset_tune">设定频率</string>
   <string name="preset_rename">重命名</string>
   <string name="preset_delete">删除</string>
-  <string name="preset_search">搜索 \'<xliff:g id="preset_pi">%1$s</xliff:g>\'</string>
+  <string name="preset_search">搜索“<xliff:g id="preset_pi">%1$s</xliff:g>”</string>
   <string name="stat_notif_frequency">\'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
   <string name="regional_band">区域波段</string>
   <string name="regional_band_entry_north_america">北美</string>
@@ -106,7 +106,7 @@
   <string name="regional_band_summary_austria">奥地利 (87.5MHz - 108.0MHz ， 步长 50 KHz)</string>
   <string name="regional_band_summary_belgium">比利时 (87.5MHz - 108.0MHz ，步长 100 KHz)</string>
   <string name="regional_band_summary_brazil">巴西 (87.5MHz - 108.0MHz ，步长 200 KHz)</string>
-  <string name="regional_band_summary_china">中国 (87.0MHz - 108.0MHz ，步长 100 KHz)</string>
+  <string name="regional_band_summary_china">中国大陆 (87.0MHz - 108.0MHz ，步长 100 KHz)</string>
   <string name="regional_band_summary_czech_republic">捷克共和国 (87.5MHz - 108.0MHz ，步长 100 KHz)</string>
   <string name="regional_band_summary_denmark">丹麦 (87.5MHz - 108.0MHz ，步长 50 KHz)</string>
   <string name="regional_band_summary_finland">芬兰 (87.5MHz - 108.0MHz ，步长 100 KHz)</string>
@@ -150,9 +150,9 @@
   <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
   <string name="preparing_sd">正在准备 SD 卡\u2026</string>
   <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
-  <string name="access_sd_fail">无法读取 SD 卡。</string>
+  <string name="access_sd_fail">无法访问 SD 卡。</string>
   <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
-  <string name="spaceIsLow_content">您的 SD 存储卡空间不足。更改质量设置或删除一些其他文件以释放空间。</string>
+  <string name="spaceIsLow_content">您的 SD 卡存储空间不足。更改质量设置或删除一些其他文件以释放空间。</string>
   <!-- The messsage shown when FM record reaches size limit. -->
   <string name="FMRecording_reach_size_limit">已达文件大小上限。</string>
   <string name="menu_scan_for_preset">扫描预设</string>
@@ -178,7 +178,7 @@
   <!-- all recordings will show up in the media database in a playlist with this name -->
   <string name="audio_db_playlist_name">FM 录音</string>
   <string name="station_name">电台：</string>
-  <string name="station_exists">此频率已存在!</string>
+  <string name="station_exists">此频率已存在！</string>
   <string name="station_list_delete_station">删除：<xliff:g id="name">%s</xliff:g></string>
   <string name="station_list_delete_station_prompt">您确定要删除“<xliff:g id="name">%s</xliff:g>”？</string>
   <string name="station_name_empty">电台名字不能为空，请新重输入</string>
