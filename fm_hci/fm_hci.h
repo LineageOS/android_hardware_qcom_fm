@@ -46,6 +46,7 @@
 #define HC_EVENT_LPM_IDLE_TIMEOUT      0x0100
 #define HC_EVENT_EXIT                  0x0200
 #define HC_EVENT_EPILOG                0x0400
+#define HC_EVENT_EXIT_DONE             0x8000
 
 #define MAX_FM_CMD_CNT                 100
 #define FM_CMD                         0x11
