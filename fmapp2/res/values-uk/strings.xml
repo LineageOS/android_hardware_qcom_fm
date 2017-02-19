@@ -163,7 +163,7 @@
   <string name="alert_dialog_hint">Вкажіть назву</string>
   <string name="search_dialog_title">Сканувати станції</string>
   <string name="fm_command_timeout_title">Таймаут</string>
-  <string name="fm_tune_timeout_msg">Немає відповіді на команду настройки. Якщо проблема не зникне, вимкніть FM-радіо і увімкніть його знову.</string>
+  <string name="fm_tune_timeout_msg">Немає відповіді на команду налаштування. Якщо проблема не зникне, вимкніть FM-радіо і увімкніть його знову.</string>
   <string name="fm_command_failed_title">Операція неможлива</string>
   <string name="fm_cmd_failed_msg">Операція неможлива. Якщо проблема не зникне, вимкніть FM-радіо і увімкніть його знову.</string>
   <string name="fm_cmd_failed_msg_hdmi">Одночасне використання FM-радіо і HDMI неможливо.</string>
