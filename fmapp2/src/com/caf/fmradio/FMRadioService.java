@@ -1586,7 +1586,8 @@ public class FMRadioService extends Service
               switch (msg.arg1) {
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
-                      mReceiver.EnableSlimbus(RESET_SLIMBUS_DATA_PORT);
+                      if (mReceiver != null)
+                          mReceiver.EnableSlimbus(RESET_SLIMBUS_DATA_PORT);
                       if (true == isFmRecordingOn())
                           stopRecording();
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
@@ -1599,7 +1600,8 @@ public class FMRadioService extends Service
                   case AudioManager.AUDIOFOCUS_LOSS:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
                       //intentional fall through.
-                      mReceiver.EnableSlimbus(RESET_SLIMBUS_DATA_PORT);
+                      if (mReceiver != null)
+                          mReceiver.EnableSlimbus(RESET_SLIMBUS_DATA_PORT);
 
                       if (mSpeakerPhoneOn) {
                          mSpeakerDisableHandler.removeCallbacks(mSpeakerDisableTask);
