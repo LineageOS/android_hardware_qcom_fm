@@ -223,6 +223,8 @@ public class FMRadioService extends Service
 
    private static Object mNotchFilterLock = new Object();
 
+   private boolean mFmA2dpDisabled;
+
    public FMRadioService() {
    }
 
@@ -230,6 +232,7 @@ public class FMRadioService extends Service
    public void onCreate() {
       super.onCreate();
 
+      mFmA2dpDisabled = SystemProperties.getBoolean("fm.a2dp.conc.disabled",false);
       mPrefs = new FmSharedPreferences(this);
       mCallbacks = null;
       TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -270,7 +273,8 @@ public class FMRadioService extends Service
       mA2dpDeviceSupportInHal = valueStr.contains("=true");
       Log.d(LOGTAG, " is A2DP device Supported In HAL"+mA2dpDeviceSupportInHal);
 
-      getA2dpStatusAtStart();
+      if (!mFmA2dpDisabled)
+          getA2dpStatusAtStart();
    }
 
    @Override
@@ -608,7 +612,6 @@ public class FMRadioService extends Service
      */
     public void registerHeadsetListener() {
         if (mHeadsetReceiver == null) {
-            boolean fm_a2dp_disabled = SystemProperties.getBoolean("fm.a2dp.conc.disabled",true);
             mHeadsetReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -683,7 +686,7 @@ public class FMRadioService extends Service
             AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             IntentFilter iFilter = new IntentFilter();
             iFilter.addAction(Intent.ACTION_HEADSET_PLUG);
-            if (!fm_a2dp_disabled) {
+            if (!mFmA2dpDisabled) {
                 iFilter.addAction(mA2dpDeviceState.getActionSinkStateChangedString());
             }
             iFilter.addAction("HDMI_CONNECTED");
