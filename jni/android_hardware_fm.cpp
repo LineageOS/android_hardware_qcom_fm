@@ -634,6 +634,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
        snprintf(versionStr, sizeof(versionStr), "%d", cap.version);
        property_set("hw.fm.version", versionStr);
     } else {
+       close(fd);
        return FM_JNI_FAILURE;
     }
 
