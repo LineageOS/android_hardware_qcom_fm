@@ -223,6 +223,8 @@ public class FMRadioService extends Service
 
    private static Object mNotchFilterLock = new Object();
 
+   private boolean mFmA2dpDisabled;
+
    public FMRadioService() {
    }
 
@@ -230,6 +232,7 @@ public class FMRadioService extends Service
    public void onCreate() {
       super.onCreate();
 
+      mFmA2dpDisabled = SystemProperties.getBoolean("fm.a2dp.conc.disabled",false);
       mPrefs = new FmSharedPreferences(this);
       mCallbacks = null;
       TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
@@ -254,7 +257,6 @@ public class FMRadioService extends Service
       mSession.setFlags(MediaSession.FLAG_EXCLUSIVE_GLOBAL_PRIORITY |
                              MediaSession.FLAG_HANDLES_MEDIA_BUTTONS);
       mSession.setActive(true);
-      registerAudioBecomeNoisy();
       if ( false == SystemProperties.getBoolean("ro.fm.mulinst.recording.support",true)) {
            mSingleRecordingInstanceSupported = true;
       }
@@ -271,7 +273,8 @@ public class FMRadioService extends Service
       mA2dpDeviceSupportInHal = valueStr.contains("=true");
       Log.d(LOGTAG, " is A2DP device Supported In HAL"+mA2dpDeviceSupportInHal);
 
-      getA2dpStatusAtStart();
+      if (!mFmA2dpDisabled)
+          getA2dpStatusAtStart();
    }
 
    @Override
@@ -609,7 +612,6 @@ public class FMRadioService extends Service
      */
     public void registerHeadsetListener() {
         if (mHeadsetReceiver == null) {
-            boolean fm_a2dp_disabled = SystemProperties.getBoolean("fm.a2dp.conc.disabled",true);
             mHeadsetReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
@@ -684,7 +686,7 @@ public class FMRadioService extends Service
             AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             IntentFilter iFilter = new IntentFilter();
             iFilter.addAction(Intent.ACTION_HEADSET_PLUG);
-            if (!fm_a2dp_disabled) {
+            if (!mFmA2dpDisabled) {
                 iFilter.addAction(mA2dpDeviceState.getActionSinkStateChangedString());
             }
             iFilter.addAction("HDMI_CONNECTED");
@@ -1584,7 +1586,8 @@ public class FMRadioService extends Service
               switch (msg.arg1) {
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
-                      mReceiver.EnableSlimbus(RESET_SLIMBUS_DATA_PORT);
+                      if (mReceiver != null)
+                          mReceiver.EnableSlimbus(RESET_SLIMBUS_DATA_PORT);
                       if (true == isFmRecordingOn())
                           stopRecording();
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
@@ -1597,7 +1600,8 @@ public class FMRadioService extends Service
                   case AudioManager.AUDIOFOCUS_LOSS:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
                       //intentional fall through.
-                      mReceiver.EnableSlimbus(RESET_SLIMBUS_DATA_PORT);
+                      if (mReceiver != null)
+                          mReceiver.EnableSlimbus(RESET_SLIMBUS_DATA_PORT);
 
                       if (mSpeakerPhoneOn) {
                          mSpeakerDisableHandler.removeCallbacks(mSpeakerDisableTask);
