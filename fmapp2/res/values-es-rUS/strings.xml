@@ -35,7 +35,7 @@
   <string name="menu_scan_stop">Detener búsqueda</string>
   <string name="menu_record_start">Grabar</string>
   <string name="menu_record_stop">Detener grabación</string>
-  <string name="menu_settings">Opciones</string>
+  <string name="menu_settings">Ajustes</string>
   <string name="menu_sleep">Suspender</string>
   <string name="menu_sleep_cancel">Cancelar suspensión</string>
   <string name="menu_all_channels">Todos los canales</string>
@@ -48,7 +48,7 @@
   <string name="msg_searching_title">Selección automática de estaciones</string>
   <string name="msg_searching">Buscando las estaciones con mejor señal para crear una lista de predefinidas\u2026</string>
   <string name="msg_noantenna">Conectar auriculares para usar la radio FM</string>
-  <string name="dialog_sleep_title">Tiempo de apagado automático</string>
+  <string name="dialog_sleep_title">Tiempo de suspensión automática</string>
   <string name="presetlist_select_name">Seleccionar \'<xliff:g id="presetlist_name">%1$s</xliff:g>\'</string>
   <string name="presetlist_add_new">Añadir nueva lista</string>
   <string name="dialog_presetlist_rename_title">Introducir nombre</string>
