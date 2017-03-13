@@ -1449,31 +1449,33 @@ public class FMRadioService extends Service
        resolver.insert(uri, values);
    }
 
-    private void resumeAfterCall() {
-        if (getCallState() != TelephonyManager.CALL_STATE_IDLE)
-            return;
-
-        // start playing again
-        if (!mResumeAfterCall)
-            return;
-
-        // resume playback only if FM Radio was playing
-        // when the call was answered
-        if (isAntennaAvailable() && (!isFmOn()) && mServiceInUse) {
-            Log.d(LOGTAG, "Resuming after call:");
-            if(!fmOn()) {
+   Runnable resumeAfterCall = new Runnable() {
+        public void run() {
+            if (getCallState() != TelephonyManager.CALL_STATE_IDLE)
                 return;
-            }
-            mResumeAfterCall = false;
-            if (mCallbacks != null) {
-                try {
-                    mCallbacks.onEnabled();
-                } catch (RemoteException e) {
-                    e.printStackTrace();
+
+            // start playing again
+            if (!mResumeAfterCall)
+                return;
+
+            // resume playback only if FM Radio was playing
+            // when the call was answered
+            if (isAntennaAvailable() && (!isFmOn()) && mServiceInUse) {
+                Log.d(LOGTAG, "Resuming after call:");
+                if(!fmOn()) {
+                    return;
+                }
+                mResumeAfterCall = false;
+                if (mCallbacks != null) {
+                    try {
+                        mCallbacks.onEnabled();
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
-    }
+    };
 
    private void fmActionOnCallState( int state ) {
    //if Call Status is non IDLE we need to Mute FM as well stop recording if
@@ -1623,7 +1625,11 @@ public class FMRadioService extends Service
                       mStoppedOnFocusLoss = false;
                       if (mResumeAfterCall) {
                           Log.v(LOGTAG, "resumeAfterCall");
-                          resumeAfterCall();
+                          if (getCallState() != TelephonyManager.CALL_STATE_IDLE) {
+                              mHandler.postDelayed(resumeAfterCall, 100);
+                              return;
+                          }
+                          mHandler.post(resumeAfterCall);
                           break;
                       }
                       if(false == mPlaybackInProgress)
