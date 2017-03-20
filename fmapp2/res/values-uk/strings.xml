@@ -102,7 +102,7 @@
   <string name="regional_band_summary_europe">Європа (від 87.5 МГц до 108.0 МГц з кроком у 100 кГц)</string>
   <string name="regional_band_summary_japan">Японія (76.0 МГц 90.0 МГц з кроком у 100 кГц)</string>
   <string name="regional_band_summary_japan_wide">Японія (широкий) (90.0 МГц до 108.0 МГц з кроком у 50 кГц)</string>
-  <string name="regional_band_summary_australia">Австралія (від 87.7 МГц до 108.0 МГц з кроком у  100 кГц)</string>
+  <string name="regional_band_summary_australia">Австралія (від 87.7 МГц до 108.0 МГц з кроком у 100 кГц)</string>
   <string name="regional_band_summary_austria">Австрія (від 87.5 МГц до 108.0 МГц з кроком у 50 кГц)</string>
   <string name="regional_band_summary_belgium">Бельгія (від 87.5 МГц до 108.0 МГц з кроком у 100 кГц)</string>
   <string name="regional_band_summary_brazil">Бразилія (від 87.5 МГц до 108.0 МГц з кроком у 200 кГц)</string>
@@ -150,14 +150,14 @@
   <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
   <string name="preparing_sd">Підготовка SD-карти\u2026</string>
   <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
-  <string name="access_sd_fail">Не вдалося відкрити SD-картку.</string>
+  <string name="access_sd_fail">Не вдалося відкрити SD-карту.</string>
   <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
   <string name="spaceIsLow_content">Закінчується місце на вашій SD-карті. Змініть якість в налаштуваннях або ж видаліть зображення чи інші файли.</string>
   <!-- The messsage shown when FM record reaches size limit. -->
   <string name="FMRecording_reach_size_limit">Досягнуто обмеження розміру.</string>
   <string name="menu_scan_for_preset">Сканувати за попередніми налаштуваннями</string>
   <!-- Off messages -->
-  <string name="fm_off">FM-радіо вимкнуто.</string>
+  <string name="fm_off">FM-радіо вимкнено.</string>
   <string name="fm_call">FM-радіо не може використовуватись при дзвінках.</string>
   <!-- The messsage shown when long pressed on a station. -->
   <string name="alert_dialog_hint">Вкажіть назву</string>
