@@ -229,7 +229,6 @@ static int read_fm_event(struct fm_hci_t *hci, struct fm_event_header_t *pbuf, i
                             pthread_cond_signal(&hci->cmd_credits_cond);
                         } else if (pbuf->evt_code == FM_HW_ERR_EVENT) {
                               ALOGI("%s: FM H/w Err Event Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
-                              lib_running =0;
                               hci->vendor->ssr_cleanup(0x22);
                               status  = power(hci, FM_RADIO_DISABLE);
                               if (status < 0) {
