@@ -49,8 +49,8 @@
     <item>1 hora</item>
   </string-array>
   <string-array name="channel_spacing_entries">
-    <item>50 Khz</item>
-    <item>100 Khz</item>
-    <item>200 Khz</item>
+    <item>50 kHz</item>
+    <item>100 kHz</item>
+    <item>200 kHz</item>
   </string-array>
 </resources>

@@ -49,8 +49,8 @@
     <item>Ordu 1</item>
   </string-array>
   <string-array name="channel_spacing_entries">
-    <item>50KHz</item>
-    <item>100KHz</item>
-    <item>200KHz</item>
+    <item>50 kHz</item>
+    <item>100 kHz</item>
+    <item>200 kHz</item>
   </string-array>
 </resources>

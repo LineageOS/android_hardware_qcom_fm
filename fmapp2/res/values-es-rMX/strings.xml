@@ -46,7 +46,6 @@
   <string name="audio_db_album_name">Grabaciones FM</string>
   <!-- all recordings will show up in the media database in a playlist with this name -->
   <string name="audio_db_playlist_name">Grabaciones FM</string>
-  <string name="user_defind_band_msg">Ingresa una frecuencia entre 76.0 y 108.0 MHz con al menos 1 canal de espacio y 100KHz entre la frecuencia mínima y máxima</string>
   <string name="save_record_file">Archivo de grabación de FM guardado en \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
   <!-- program types -->
   <!-- RBDS (North America) -->

@@ -48,9 +48,4 @@
     <item>45 minutos</item>
     <item>1 hora</item>
   </string-array>
-  <string-array name="channel_spacing_entries">
-    <item>50KHz</item>
-    <item>100KHz</item>
-    <item>200KHz</item>
-  </string-array>
 </resources>
