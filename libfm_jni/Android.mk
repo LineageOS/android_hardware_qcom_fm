@@ -13,6 +13,7 @@ LOCAL_SRC_FILES := \
     LibfmJni.cpp
 
 LOCAL_C_INCLUDES := $(JNI_H_INCLUDE) \
+    frameworks/base/core/jni/include \
     frameworks/base/include/media
 
 LOCAL_SHARED_LIBRARIES := \
