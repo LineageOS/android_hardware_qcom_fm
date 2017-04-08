@@ -803,7 +803,7 @@ static char line_is_key_value_pair
      ALOGE("line is null or cur group or key file is null or empty\n");
      return FALSE;
   }
-  equal_start = strchr(str, '=');
+  equal_start = (char *)strchr(str, '=');
   key_len = (equal_start - str);
   if((equal_start == NULL) || (equal_start == str)) {
      ALOGE("line does not have '=' character or no key\n");
