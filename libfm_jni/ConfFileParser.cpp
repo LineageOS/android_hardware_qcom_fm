@@ -792,7 +792,7 @@ static char line_is_key_value_pair
   const char *cur_grp
 )
 {
-  char *equal_start;
+  const char *equal_start;
   char *key;
   char *val;
   unsigned key_len;
