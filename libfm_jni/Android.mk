@@ -17,6 +17,7 @@ LOCAL_C_INCLUDES := $(JNI_H_INCLUDE) \
 LOCAL_SHARED_LIBRARIES := \
     libcutils \
     libdl \
+    liblog \
     libmedia \
     libnativehelper \
 
