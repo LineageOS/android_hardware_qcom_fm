@@ -34,7 +34,7 @@ LOCAL_PATH := $(LOCAL_DIR_PATH)
 include $(LOCAL_PATH)/helium/Android.mk
 
 LOCAL_PATH := $(LOCAL_DIR_PATH)
-include $(LOCAL_PATH)/fmhalService/Android.mk
+#include $(LOCAL_PATH)/fmhalService/Android.mk
 
 #endif # is-vendor-board-platform
 #endif # BOARD_HAVE_QCOM_FM

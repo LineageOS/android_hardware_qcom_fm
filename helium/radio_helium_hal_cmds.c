@@ -41,19 +41,19 @@ extern struct fm_hal_t *hal;
 
 static int send_fm_cmd_pkt(uint16_t opcode,  uint32_t len, void *param)
 {
-    int p_len = 4 + len;
+    int p_len = 3 + len;
     int ret = 0;
     ALOGV("Send_fm_cmd_pkt, opcode: %x", opcode);
-//    pthread_mutex_lock(&fm_hal);
+
     struct fm_command_header_t *hdr = (struct fm_command_header_t *) malloc(p_len);
     if (!hdr) {
         ALOGE("%s:hdr allocation failed", LOG_TAG);
         return -FM_HC_STATUS_NOMEM;
     }
 
+    memset(hdr, 0, p_len);
     ALOGV("%s:opcode: %x", LOG_TAG, opcode);
 
-    hdr->pi = RADIO_HCI_COMMAND_PKT;
     hdr->opcode = opcode;
     hdr->len = len;
     if (len)

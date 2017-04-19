@@ -116,9 +116,6 @@ static void hci_cc_fm_disable_rsp(char *ev_buff)
     if (hal->radio->mode == FM_TURNING_OFF) {
         ALOGD("%s:calling fm close\n", LOG_TAG );
         fm_hci_close(hal->private_data);
-        hal->radio->mode = FM_OFF;
-        hal->jni_cb->disabled_cb();
-        hal->jni_cb->thread_evt_cb(1);
     }
 }
 
@@ -823,8 +820,6 @@ static void hci_ev_hw_error(char *buff)
 {
    ALOGE("%s:%s: start", LOG_TAG, __func__);
    fm_hci_close(hal->private_data);
-   hal->jni_cb->disabled_cb();
-   hal->jni_cb->thread_evt_cb(1);
 }
 
 static void hci_buff_ert(struct rds_grp_data *rds_buf)
@@ -1034,6 +1029,18 @@ int process_event(void *hal, unsigned char *evt_buf)
     return 0;
 }
 
+int fm_hci_close_done()
+{
+    ALOGI("fm_hci_close_done");
+    if(hal != NULL){
+        ALOGI("Notifying FM OFF to JNI");
+        hal->radio->mode = FM_OFF;
+        hal->jni_cb->disabled_cb();
+        hal->jni_cb->thread_evt_cb(1);
+    }
+    return 0;
+}
+
 int helium_search_req(int on, int direct)
 {
     int retval = 0;
@@ -1132,7 +1139,8 @@ int set_low_power_mode(int lp_mode)
 
 /* Callback function to be registered with FM-HCI for event notification */
 static struct fm_hci_callbacks_t hal_cb = {
-    process_event
+    process_event,
+    fm_hci_close_done
 };
 
 int hal_init(fm_hal_callbacks_t *cb)

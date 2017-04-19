@@ -5,8 +5,8 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	radio_helium_hal.c \
-	radio_helium_hal_cmds.c
+        radio_helium_hal.c \
+        radio_helium_hal_cmds.c
 
 LOCAL_SHARED_LIBRARIES := \
          libfm-hci \
