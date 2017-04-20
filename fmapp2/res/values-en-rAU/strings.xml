@@ -98,43 +98,43 @@
   <string name="regional_band_entry_united_kingdom">United Kingdom</string>
   <string name="regional_band_entry_united_states">United States</string>
   <string name="regional_band_entry_user_defined">User defined band</string>
-  <string name="regional_band_summary_north_america">North America (87.5MHz to 108.0MHz in 200 KHz steps)</string>
-  <string name="regional_band_summary_europe">Europe (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_japan">Japan (76.0MHz to  90.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_japan_wide">Japan (wide) (90.0MHz to 108.0MHz in 50 KHz steps)</string>
-  <string name="regional_band_summary_australia">Australia (87.7MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_austria">Austria (87.5MHz to 108.0MHz in  50 KHz steps)</string>
-  <string name="regional_band_summary_belgium">Belgium (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_brazil">Brazil (87.5MHz to 108.0MHz in 200 KHz steps)</string>
-  <string name="regional_band_summary_china">China (87.0MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_czech_republic">Czech Republic (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_denmark">Denmark (87.5MHz to 108.0MHz in 50 KHz steps)</string>
-  <string name="regional_band_summary_finland">Finland (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_france">France (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_germany">Germany (87.5MHz to 108.0MHz in 50 KHz steps)</string>
-  <string name="regional_band_summary_greece">Greece (87.5MHz to 108.0MHz in 50 KHz steps)</string>
-  <string name="regional_band_summary_hong_kong">Hong Kong (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_india">India (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_indonesia">Indonesia (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_ireland">Ireland (87.5MHz to 108.0MHz in 50 KHz steps)</string>
-  <string name="regional_band_summary_italy">Italy (87.5MHz to 108.0MHz in 50 KHz steps)</string>
-  <string name="regional_band_summary_korea">Korea (87.5MHz to 108.0MHz in 200 KHz steps)</string>
-  <string name="regional_band_summary_mexico">Mexico (88.1MHz to 107.9MHz in 200 KHz steps)</string>
-  <string name="regional_band_summary_netherlands">Netherlands (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_new_zealand">New Zealand (88.0MHz to 107.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_norway">Norway (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_poland">Poland (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_portugal">Portugal (87.5MHz to 108.0MHz in 50 KHz steps)</string>
-  <string name="regional_band_summary_russia">Russia (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_singapore">Singapore (88.0MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_slovakia">Slovakia (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_spain">Spain (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_switzerland">Switzerland (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_sweden">Sweden (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_taiwan">Taiwan (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_turkey">Turkey (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_united_kingdom">United Kingdom (87.5MHz to 108.0MHz in 100 KHz steps)</string>
-  <string name="regional_band_summary_united_states">United States (88.1MHz to 107.9MHz in 200 KHz steps)</string>
+  <string name="regional_band_summary_north_america">North America (87.5 to 108.0 MHz in 200 kHz steps)</string>
+  <string name="regional_band_summary_europe">Europe (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_japan">Japan (76.0 to 90.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_japan_wide">Japan (wide) (90.0 to 108.0 MHz in 50 kHz steps)</string>
+  <string name="regional_band_summary_australia">Australia (87.7 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_austria">Austria (87.5 to 108.0 MHz in 50 kHz steps)</string>
+  <string name="regional_band_summary_belgium">Belgium (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_brazil">Brazil (87.5 to 108.0 MHz in 200 kHz steps)</string>
+  <string name="regional_band_summary_china">China (87.0 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_czech_republic">Czech Republic (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_denmark">Denmark (87.5 to 108.0 MHz in 50 kHz steps)</string>
+  <string name="regional_band_summary_finland">Finland (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_france">France (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_germany">Germany (87.5 to 108.0 MHz in 50 kHz steps)</string>
+  <string name="regional_band_summary_greece">Greece (87.5 to 108.0 MHz in 50 kHz steps)</string>
+  <string name="regional_band_summary_hong_kong">Hong Kong (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_india">India (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_indonesia">Indonesia (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_ireland">Ireland (87.5 to 108.0 MHz in 50 kHz steps)</string>
+  <string name="regional_band_summary_italy">Italy (87.5 to 108.0 MHz in 50 kHz steps)</string>
+  <string name="regional_band_summary_korea">Korea (87.5 to 108.0 MHz in 200 kHz steps)</string>
+  <string name="regional_band_summary_mexico">Mexico (88.1 to 107.9 MHz in 200 kHz steps)</string>
+  <string name="regional_band_summary_netherlands">Netherlands (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_new_zealand">New Zealand (88.0 to 107.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_norway">Norway (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_poland">Poland (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_portugal">Portugal (87.5 to 108.0 MHz in 50 kHz steps)</string>
+  <string name="regional_band_summary_russia">Russia (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_singapore">Singapore (88.0 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_slovakia">Slovakia (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_spain">Spain (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_switzerland">Switzerland (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_sweden">Sweden (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_taiwan">Taiwan (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_turkey">Turkey (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_united_kingdom">United Kingdom (87.5 to 108.0 MHz in 100 kHz steps)</string>
+  <string name="regional_band_summary_united_states">United States (88.1 to 107.9 MHz in 200 kHz steps)</string>
   <string name="regional_band_summary_user_defined">User defined band</string>
   <string name="aud_output_mode">Audio output mode</string>
   <string name="audio_type_stereo">Stereo</string>
@@ -154,8 +154,11 @@
   <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
   <string name="spaceIsLow_content">Your SD card storage is running out of space. Change the quality setting or delete some other files to free up space.</string>
   <!-- The messsage shown when FM record reaches size limit. -->
+  <string name="FMRecording_reach_size_limit">Size limit reached.</string>
   <string name="menu_scan_for_preset">Scan for presets</string>
   <!-- Off messages -->
+  <string name="fm_off">FM is turned off.</string>
+  <string name="fm_call">FM can\'t be used while calling.</string>
   <!-- The messsage shown when long pressed on a station. -->
   <string name="alert_dialog_hint">Enter a name</string>
   <string name="search_dialog_title">Scan stations</string>
@@ -167,9 +170,14 @@
   <string name="fm_cmd_failed_call_on">FM operation failed. FM audio is not allowed during call.</string>
   <!-- Do not translate. Duration format. -->
   <!-- the name under which recordings will be visible in the media database is formatted like this -->
+  <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
   <!-- all recordings will show up in the media database with this 'artist' name -->
+  <string name="audio_db_artist_name">My FM recordings</string>
   <!-- all recordings will show up in the media database with this 'album' name -->
+  <string name="audio_db_album_name">FM recordings</string>
   <!-- all recordings will show up in the media database in a playlist with this name -->
+  <string name="audio_db_playlist_name">FM recordings</string>
+  <string name="station_name">Station:</string>
   <string name="station_exists">This frequency already exists!</string>
   <string name="station_list_delete_station">Delete: <xliff:g id="name">%s</xliff:g></string>
   <string name="station_list_delete_station_prompt">Are you sure you want to delete \'<xliff:g id="name">%s</xliff:g>\'?</string>
@@ -180,6 +188,61 @@
   <string name="usr_def_band_max">Highest frequency (MHz)</string>
   <string name="chanl_spacing">Channel spacing</string>
   <string name="set">Set</string>
+  <string name="user_defind_band_msg">Enter frequency from 76.0 to 108.0 MHz with minimum 1 channel spacing and 100 kHz space between min and max frequency</string>
+  <string name="save_record_file">FM recorded file saved to \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
+  <string name="fm_search_no_results">No compatible stations found</string>
   <!-- program types -->
+  <string name="typ_All_stations">All Stations</string>
+  <string name="typ_Culture">Culture</string>
+  <string name="typ_Current_affairs">Current Affairs</string>
+  <string name="typ_Children">Children\'s Programs</string>
+  <string name="typ_Country">Country Music</string>
+  <string name="typ_Documentary">Documentary</string>
+  <string name="typ_Drama">Drama</string>
+  <string name="typ_Easy_listening">Easy listening music</string>
+  <string name="typ_Education">Education</string>
+  <string name="typ_Emergency">Emergency</string>
+  <string name="typ_Emergency_test">Emergency test</string>
+  <string name="typ_Finance">Finance</string>
+  <string name="typ_Folk">Folk Music</string>
+  <string name="typ_Information">Information</string>
+  <string name="typ_Jazz">Jazz Music</string>
+  <string name="typ_Light_classical">Light Classical</string>
+  <string name="typ_Leisure">Leisure</string>
+  <string name="typ_News">News</string>
+  <string name="typ_National">National music</string>
+  <string name="typ_Other">Other music</string>
+  <string name="typ_Oldies">Oldies Music</string>
+  <string name="typ_Phone_in">Phone in</string>
+  <string name="typ_Pop">Pop music</string>
+  <string name="typ_Religion">Religion</string>
+  <string name="typ_Rock">Rock music</string>
+  <string name="typ_Science">Science</string>
+  <string name="typ_Serious_classical">Serious classical</string>
+  <string name="typ_Social_affairs">Social affairs</string>
+  <string name="typ_Sport">Sport</string>
+  <string name="typ_Travel">Travel</string>
+  <string name="typ_Varied">Varied</string>
+  <string name="typ_Weather">Weather</string>
   <!-- RBDS (North America) -->
+  <string name="typ_Adult_hits">Adult Hits</string>
+  <string name="typ_Classical">Classical</string>
+  <string name="typ_Classic_Rock">Classic Rock</string>
+  <string name="typ_College">College</string>
+  <string name="typ_Foreign_language">Foreign Language</string>
+  <string name="typ_Hiphop">Hip Hop</string>
+  <string name="typ_Nostalgia">Nostalgia</string>
+  <string name="typ_Personality">Personality</string>
+  <string name="typ_Public">Public</string>
+  <string name="typ_Religious_music">Religious music</string>
+  <string name="typ_Religious_talk">Religious talk</string>
+  <string name="typ_Rhythm_and_Blues">Rhythm and Blues</string>
+  <string name="typ_Spanish_music">Spanish music</string>
+  <string name="typ_Spanish_talk">Spanish talk</string>
+  <string name="typ_Soft">Soft</string>
+  <string name="typ_Soft_Rock">Soft Rock</string>
+  <string name="typ_Soft_Rhythm_and_Blues">Soft Rhythm and Blues</string>
+  <string name="typ_Sports">Sports</string>
+  <string name="typ_Talk">Talk</string>
+  <string name="typ_Top_40">Top 40</string>
 </resources>

@@ -108,7 +108,7 @@
   <string name="regional_band_summary_belgium">Бельгия (87,5–108,0 МГц с шагом в 100 кГц)</string>
   <string name="regional_band_summary_brazil">Бразилия (87,5–108,0 МГц с шагом в 200 кГц)</string>
   <string name="regional_band_summary_china">Китай (87,0–108,0 МГц с шагом в 100 кГц)</string>
-  <string name="regional_band_summary_czech_republic">Чешская Республика (87,5–108,0 МГц с шагом в 100 кГц)</string>
+  <string name="regional_band_summary_czech_republic">Чехия (87,5–108,0 МГц с шагом в 100 кГц)</string>
   <string name="regional_band_summary_denmark">Дания (87,5–108,0 МГц с шагом в 50 кГц)</string>
   <string name="regional_band_summary_finland">Финляндия (87,5–108,0 МГц с шагом в 100 кГц)</string>
   <string name="regional_band_summary_france">Франция (87,5–108,0 МГц с шагом в 100 кГц)</string>
@@ -119,7 +119,7 @@
   <string name="regional_band_summary_indonesia">Индонезия (87,5–108,0 МГц с шагом в 100 кГц)</string>
   <string name="regional_band_summary_ireland">Ирландия (87,5–108,0 МГц с шагом в 50 кГц)</string>
   <string name="regional_band_summary_italy">Италия (87,5–108,0 МГц с шагом в 50 кГц)</string>
-  <string name="regional_band_summary_korea">Республика Корея (87,5–108,0 МГц с шагом в 200 кГц)</string>
+  <string name="regional_band_summary_korea">Корея (87,5–108,0 МГц с шагом в 200 кГц)</string>
   <string name="regional_band_summary_mexico">Мексика (88,1–107,9 МГц с шагом в 200 кГц)</string>
   <string name="regional_band_summary_netherlands">Нидерланды (87,5–108,0 МГц с шагом в 100 кГц)</string>
   <string name="regional_band_summary_new_zealand">Новая Зеландия (88,0–107,0 МГц с шагом в 100 кГц)</string>
@@ -189,7 +189,7 @@
   <string name="usr_def_band_max">Максимальная частота (МГц)</string>
   <string name="chanl_spacing">Шаг каналов</string>
   <string name="set">Установить</string>
-  <string name="user_defind_band_msg">Введите частоту в пределах 76,0–108,0 МГц, минимум 1 канал с интервалом в 100 кГц.</string>
+  <string name="user_defind_band_msg">Введите частоту в пределах 76,0–108,0 МГц с минимальным интервалом в 1 канал и отступом в 100 кГц от минимальной и максимальной частоты</string>
   <string name="save_record_file">Файл радиозаписи сохранён в «<xliff:g id="record_file">%1$s</xliff:g>»</string>
   <string name="fm_search_no_results">Совместимых станций не найдено</string>
   <!-- program types -->

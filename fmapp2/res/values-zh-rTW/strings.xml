@@ -101,7 +101,7 @@
   <string name="regional_band_summary_north_america">北美 (87.5 Mhz - 108.0 MHz 內 200 KHz 頻道距離)</string>
   <string name="regional_band_summary_europe">歐洲 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
   <string name="regional_band_summary_japan">日本 (76.0 Mhz - 90.0 MHz 內 100 KHz 頻道距離)</string>
-  <string name="regional_band_summary_japan_wide">日本 (廣泛地區) (90.0 Mhz - 108.0 MHz 內 50 KHz 頻道距離)</string>
+  <string name="regional_band_summary_japan_wide">日本 (廣泛) (90.0 Mhz - 108.0 MHz 內 50 KHz 頻道距離)</string>
   <string name="regional_band_summary_australia">澳洲 (87.7 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
   <string name="regional_band_summary_austria">奧地利 (87.5 Mhz - 108.0 MHz 內 50 KHz 頻道距離)</string>
   <string name="regional_band_summary_belgium">比利時 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
@@ -117,7 +117,7 @@
   <string name="regional_band_summary_india">印度 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
   <string name="regional_band_summary_indonesia">印尼 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>
   <string name="regional_band_summary_ireland">愛爾蘭 (87.5 Mhz - 108.0 MHz 內 50 KHz 頻道距離)</string>
-  <string name="regional_band_summary_italy">意大利 (87.5 Mhz - 108.0 MHz 內 50 KHz 頻道距離)</string>
+  <string name="regional_band_summary_italy">義大利 (87.5 Mhz - 108.0 MHz 內 50 KHz 頻道距離)</string>
   <string name="regional_band_summary_korea">韓國 (87.5 Mhz - 108.0 MHz 內 200 KHz 頻道距離)</string>
   <string name="regional_band_summary_mexico">墨西哥 (88.1 Mhz - 107.9 MHz 內 200 KHz 頻道距離)</string>
   <string name="regional_band_summary_netherlands">荷蘭 (87.5 Mhz - 108.0 MHz 內 100 KHz 頻道距離)</string>

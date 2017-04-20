@@ -40,12 +40,17 @@
     <item>5 minutos</item>
     <item>15 minutos</item>
     <item>30 minutos</item>
-    <item>Until stopped</item>
+    <item>Hasta qu\'apare</item>
   </string-array>
   <string-array name="sleep_duration_values">
     <item>15 minutos</item>
     <item>30 minutos</item>
     <item>45 minutos</item>
     <item>1 hora</item>
+  </string-array>
+  <string-array name="channel_spacing_entries">
+    <item>50 kHz</item>
+    <item>100 kHz</item>
+    <item>200 kHz</item>
   </string-array>
 </resources>

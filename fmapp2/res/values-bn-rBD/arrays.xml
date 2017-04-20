@@ -48,9 +48,4 @@
     <item>৪৫ মিনিট</item>
     <item>১ ঘণ্টা</item>
   </string-array>
-  <string-array name="channel_spacing_entries">
-    <item>৫০ কিলোহার্টজ</item>
-    <item>১০০ কিলোহার্টজ</item>
-    <item>২০০ কিলোহার্টজ</item>
-  </string-array>
 </resources>

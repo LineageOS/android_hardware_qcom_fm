@@ -48,9 +48,4 @@
     <item>45 хвілін</item>
     <item>1 гадзіна</item>
   </string-array>
-  <string-array name="channel_spacing_entries">
-    <item>50 кГц</item>
-    <item>100 кГц</item>
-    <item>200 кГц</item>
-  </string-array>
 </resources>

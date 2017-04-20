@@ -48,9 +48,4 @@
     <item>۴۵ دقیقه</item>
     <item>۱ ساعت</item>
   </string-array>
-  <string-array name="channel_spacing_entries">
-    <item>۵۰ کیلوهرتز</item>
-    <item>۱۰۰ کیلوهرتز</item>
-    <item>۲۰۰ کیلوهرتز</item>
-  </string-array>
 </resources>

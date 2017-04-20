@@ -188,7 +188,7 @@
   <string name="usr_def_band_max">Najvišja frekvenca (MHz)</string>
   <string name="chanl_spacing">Razmik med kanali</string>
   <string name="set">Nastavi</string>
-  <string name="user_defind_band_msg">Vnesite frekvenco med 76,0 in 108,0 MHz z najmanj enim kanalom razmaka in 100 kHz razmaka med najmanjšo on največjo frekvenco</string>
+  <string name="user_defind_band_msg">Vnesite frekvenco med 76,0 in 108,0 MHz z najmanj enim kanalom razmaka in 100 kHz razmaka med najmanjšo in največjo frekvenco</string>
   <string name="save_record_file">Posneta datoteka FM shranjena v \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
   <string name="fm_search_no_results">Ni bilo najdenih združljivih postaj</string>
   <!-- program types -->
