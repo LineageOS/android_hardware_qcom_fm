@@ -153,7 +153,6 @@ jmethodID method_getStnDbgParamCallback;
 
 static bool checkCallbackThread() {
    JNIEnv* env = AndroidRuntime::getJNIEnv();
-   ALOGE("Callback env check fail: env: %p, callback: %p", env, mCallbackEnv);
    if (mCallbackEnv != env || mCallbackEnv == NULL)
    {
        ALOGE("Callback env check fail: env: %p, callback: %p", env, mCallbackEnv);
@@ -176,18 +175,27 @@ void fm_enabled_cb() {
 void fm_tune_cb(int Freq)
 {
     ALOGD("TUNE:Freq:%d", Freq);
+    if (!checkCallbackThread())
+        return;
+
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_tuneCallback, (jint) Freq);
 }
 
 void fm_seek_cmpl_cb(int Freq)
 {
     ALOGI("SEEK_CMPL: Freq: %d", Freq);
+    if (!checkCallbackThread())
+        return;
+
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_seekCmplCallback, (jint) Freq);
 }
 
 void fm_scan_next_cb()
 {
     ALOGI("SCAN_NEXT");
+    if (!checkCallbackThread())
+        return;
+
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_scanNxtCallback);
 }
 
@@ -195,6 +203,9 @@ void fm_srch_list_cb(uint16_t *scan_tbl)
 {
     ALOGI("SRCH_LIST");
     jbyteArray srch_buffer = NULL;
+
+    if (!checkCallbackThread())
+        return;
 
     srch_buffer = mCallbackEnv->NewByteArray(STD_BUF_SIZE);
     if (srch_buffer == NULL) {
@@ -209,12 +220,18 @@ void fm_srch_list_cb(uint16_t *scan_tbl)
 void fm_stereo_status_cb(bool stereo)
 {
     ALOGI("STEREO: %d", stereo);
+    if (!checkCallbackThread())
+        return;
+
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_stereostsCallback, (jboolean) stereo);
 }
 
 void fm_rds_avail_status_cb(bool rds_avl)
 {
     ALOGD("fm_rds_avail_status_cb: %d", rds_avl);
+    if (!checkCallbackThread())
+        return;
+
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_rdsAvlStsCallback, (jboolean) rds_avl);
 }
 
@@ -223,10 +240,8 @@ void fm_af_list_update_cb(uint16_t *af_list)
     ALOGD("AF_LIST");
     jbyteArray af_buffer = NULL;
 
-    if (!checkCallbackThread()) {
-        ALOGE("Callback: '%s' is not called on the correct thread", __FUNCTION__);
+    if (!checkCallbackThread())
         return;
-    }
 
     af_buffer = mCallbackEnv->NewByteArray(STD_BUF_SIZE);
     if (af_buffer == NULL) {
@@ -245,10 +260,8 @@ void fm_rt_update_cb(char *rt)
     jbyteArray rt_buff = NULL;
     int i,len;
 
-    if (!checkCallbackThread()) {
-        ALOGE("Callback: '%s' is not called on the correct thread", __FUNCTION__);
+    if (!checkCallbackThread())
         return;
-    }
 
     len  = (int)(rt[0] & 0xFF);
     ALOGD(" rt data len=%d :",len);
@@ -273,10 +286,8 @@ void fm_ps_update_cb(char *ps)
     jbyteArray ps_data = NULL;
     int i,len;
     int numPs;
-    if (!checkCallbackThread()) {
-        ALOGE("Callback: '%s' is not called on the correct thread", __FUNCTION__);
+    if (!checkCallbackThread())
         return;
-    }
 
     numPs  = (int)(ps[0] & 0xFF);
     len = (numPs *8)+5;
@@ -307,6 +318,9 @@ void fm_rt_plus_update_cb(char *rt_plus)
 
     len =  (int)(rt_plus[0] & 0xFF);
     ALOGD(" rt plus len=%d :",len);
+    if (!checkCallbackThread())
+        return;
+
     RtPlus = mCallbackEnv->NewByteArray(len);
     if (RtPlus == NULL) {
         ALOGE(" rt plus data allocate failed :");
@@ -323,10 +337,8 @@ void fm_ert_update_cb(char *ert)
     jbyteArray ert_buff = NULL;
     int i,len;
 
-    if (!checkCallbackThread()) {
-        ALOGE("Callback: '%s' is not called on the correct thread", __FUNCTION__);
+    if (!checkCallbackThread())
         return;
-    }
 
     len = (int)(ert[0] & 0xFF);
     len = len+3;
@@ -350,10 +362,8 @@ void fm_ext_country_code_cb(char *ecc)
     jbyteArray ecc_buff = NULL;
     int i,len;
 
-    if (!checkCallbackThread()) {
-        ALOGE("Callback: '%s' is not called on the correct thread", __FUNCTION__);
+    if (!checkCallbackThread())
         return;
-    }
 
     len = (int)(ecc[0] & 0xFF);
 
@@ -382,6 +392,9 @@ void rds_grp_cntrs_ext_rsp_cb(char * evt_buffer)
 void fm_disabled_cb()
 {
     ALOGE("DISABLE");
+    if (!checkCallbackThread())
+        return;
+
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_disableCallback);
 }
 
@@ -424,12 +437,18 @@ static void fm_get_sig_thres_cb(int val, int status)
 {
     ALOGD("Get signal Thres callback");
 
+    if (!checkCallbackThread())
+        return;
+
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_getSigThCallback, val, status);
 }
 
 static void fm_get_ch_det_thr_cb(int val, int status)
 {
     ALOGD("fm_get_ch_det_thr_cb");
+
+    if (!checkCallbackThread())
+        return;
 
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_getChDetThrCallback, val, status);
 }
@@ -438,12 +457,18 @@ static void fm_set_ch_det_thr_cb(int status)
 {
     ALOGD("fm_set_ch_det_thr_cb");
 
+    if (!checkCallbackThread())
+        return;
+
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_setChDetThrCallback, status);
 }
 
 static void fm_def_data_read_cb(int val, int status)
 {
     ALOGD("fm_def_data_read_cb");
+
+    if (!checkCallbackThread())
+        return;
 
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_defDataRdCallback, val, status);
 }
@@ -452,12 +477,18 @@ static void fm_def_data_write_cb(int status)
 {
     ALOGD("fm_def_data_write_cb");
 
+    if (!checkCallbackThread())
+        return;
+
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_defDataWrtCallback, status);
 }
 
 static void fm_get_blend_cb(int val, int status)
 {
     ALOGD("fm_get_blend_cb");
+
+    if (!checkCallbackThread())
+        return;
 
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_getBlendCallback, val, status);
 }
@@ -466,6 +497,9 @@ static void fm_set_blend_cb(int status)
 {
     ALOGD("fm_set_blend_cb");
 
+    if (!checkCallbackThread())
+        return;
+
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_setBlendCallback, status);
 }
 
@@ -473,12 +507,18 @@ static void fm_get_station_param_cb(int val, int status)
 {
     ALOGD("fm_get_station_param_cb");
 
+    if (!checkCallbackThread())
+        return;
+
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_getStnParamCallback, val, status);
 }
 
 static void fm_get_station_debug_param_cb(int val, int status)
 {
     ALOGD("fm_get_station_debug_param_cb");
+
+    if (!checkCallbackThread())
+        return;
 
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_getStnDbgParamCallback, val, status);
 }
@@ -594,6 +634,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
        snprintf(versionStr, sizeof(versionStr), "%d", cap.version);
        property_set("hw.fm.version", versionStr);
     } else {
+       close(fd);
        return FM_JNI_FAILURE;
     }
 
