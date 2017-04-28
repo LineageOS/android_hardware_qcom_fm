@@ -144,7 +144,7 @@
   <string name="settings_revert_defaults_title">Torna als valors predefinits de fàbrica</string>
   <string name="settings_revert_defaults_summary">Restableix totes les configuracions</string>
   <string name="settings_revert_confirm_title">Confirma el restabliment</string>
-  <string name="settings_revert_confirm_msg">Això esborrarà tots els ajustaments de l\'aplicació, incloent-hi les presintonies desades. Vols continuar?</string>
+  <string name="settings_revert_confirm_msg">Això esborrarà totes les configuracions de l\'aplicació, incloent-hi les presintonies desades. Vols continuar?</string>
   <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
   <string name="no_storage">Munta la targeta SD abans de començar a enregistrar.</string>
   <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
@@ -152,7 +152,7 @@
   <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
   <string name="access_sd_fail">No s\'ha pogut accedir a la targeta SD.</string>
   <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
-  <string name="spaceIsLow_content">S\'està acabant l\'espai a la teva targeta SD. Canvia l\'ajustament de qualitat o esborra algunes imatges o altres fitxers.</string>
+  <string name="spaceIsLow_content">S\'està acabant l\'espai a la teva targeta SD. Canvia la configuració de qualitat o esborra algunes imatges o altres fitxers.</string>
   <!-- The messsage shown when FM record reaches size limit. -->
   <string name="FMRecording_reach_size_limit">S\'ha arribat al límit de mida.</string>
   <string name="menu_scan_for_preset">Cerca les Presintonies</string>

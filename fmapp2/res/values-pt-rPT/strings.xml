@@ -93,7 +93,7 @@
   <string name="regional_band_entry_spain">Espanha</string>
   <string name="regional_band_entry_switzerland">Suíça</string>
   <string name="regional_band_entry_sweden">Suécia</string>
-  <string name="regional_band_entry_taiwan">Taiwan</string>
+  <string name="regional_band_entry_taiwan">República da China</string>
   <string name="regional_band_entry_turkey">Turquia</string>
   <string name="regional_band_entry_united_kingdom">Reino Unido</string>
   <string name="regional_band_entry_united_states">Estados Unidos</string>
@@ -131,7 +131,7 @@
   <string name="regional_band_summary_spain">Espanha (87.5 MHz a 108.0 MHz em intervalos de 100 KHz)</string>
   <string name="regional_band_summary_switzerland">Suíça (87.5 MHz a 108.0 MHz em intervalos de 100 KHz)</string>
   <string name="regional_band_summary_sweden">Suécia (87.5 MHz a 108.0 MHz em intervalos de 100 KHz)</string>
-  <string name="regional_band_summary_taiwan">Taiwan (87.5 MHz a 108.0 MHz em intervalos de 100 KHz)</string>
+  <string name="regional_band_summary_taiwan">República da China (87.5 MHz a 108.0 MHz em intervalos de 100 KHz)</string>
   <string name="regional_band_summary_turkey">Turquia (87.5 MHz a 108.0 MHz em intervalos de 100 KHz)</string>
   <string name="regional_band_summary_united_kingdom">Reino Unido (87.5 MHz a 108.0 MHz em intervalos de 100 KHz)</string>
   <string name="regional_band_summary_united_states">Estados Unidos (88.1 MHz a 107.9 MHz em intervalos de 200 KHz)</string>

@@ -36,7 +36,7 @@
   <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
   <string name="access_sd_fail">No se pudo acceder a la tarjeta SD.</string>
   <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
-  <string name="spaceIsLow_content">La tarjeta SD se está quedando sin espacio. Cambiar el ajuste de calidad o eliminar algunas imágenes o archivos.</string>
+  <string name="spaceIsLow_content">La tarjeta SD se está quedando sin espacio. Cambiar el ajuste de calidad o borrar algunas imágenes o archivos.</string>
   <!-- The messsage shown when FM record reaches size limit. -->
   <string name="FMRecording_reach_size_limit">Se alcanzó el límite de tamaño.</string>
   <!-- the name under which recordings will be visible in the media database is formatted like this -->

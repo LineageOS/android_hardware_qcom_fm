@@ -154,6 +154,7 @@
   <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
   <string name="spaceIsLow_content">Your SD card storage is running out of space. Change the quality setting or delete some other files to free up space.</string>
   <!-- The messsage shown when FM record reaches size limit. -->
+  <string name="FMRecording_reach_size_limit">Size limit reached.</string>
   <string name="menu_scan_for_preset">Scan for presets</string>
   <!-- Off messages -->
   <string name="fm_off">FM is turned off.</string>
@@ -169,9 +170,13 @@
   <string name="fm_cmd_failed_call_on">FM operation failed. FM audio is not allowed during call.</string>
   <!-- Do not translate. Duration format. -->
   <!-- the name under which recordings will be visible in the media database is formatted like this -->
+  <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
   <!-- all recordings will show up in the media database with this 'artist' name -->
+  <string name="audio_db_artist_name">My FM recordings</string>
   <!-- all recordings will show up in the media database with this 'album' name -->
+  <string name="audio_db_album_name">FM recordings</string>
   <!-- all recordings will show up in the media database in a playlist with this name -->
+  <string name="audio_db_playlist_name">FM recordings</string>
   <string name="station_name">Station:</string>
   <string name="station_exists">This frequency already exists!</string>
   <string name="station_list_delete_station">Delete: <xliff:g id="name">%s</xliff:g></string>
@@ -183,6 +188,8 @@
   <string name="usr_def_band_max">Highest frequency (MHz)</string>
   <string name="chanl_spacing">Channel spacing</string>
   <string name="set">Set</string>
+  <string name="user_defind_band_msg">Enter frequency from 76.0 to 108.0 MHz with minimum 1 channel spacing and 100KHz space between min and max frequency</string>
+  <string name="save_record_file">FM recorded file saved to \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
   <string name="fm_search_no_results">No compatible stations found</string>
   <!-- program types -->
   <string name="typ_All_stations">All stations</string>

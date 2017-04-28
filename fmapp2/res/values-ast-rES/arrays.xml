@@ -30,7 +30,7 @@
 -->
 <resources>
   <string-array name="ster_mon_entries">
-    <item>Estéreo</item>
+    <item>Estereu</item>
     <item>Mono</item>
   </string-array>
   <string-array name="ster_entries">
@@ -47,10 +47,5 @@
     <item>30 minutos</item>
     <item>45 minutos</item>
     <item>1 hora</item>
-  </string-array>
-  <string-array name="channel_spacing_entries">
-    <item>50 KHz</item>
-    <item>100 KHz</item>
-    <item>200 KHz</item>
   </string-array>
 </resources>
