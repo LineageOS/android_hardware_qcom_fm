@@ -1338,6 +1338,7 @@ static int set_fm_ctrl(int cmd, int val)
 
     case HCI_FM_HELIUM_RDS_GRP_COUNTERS:
          ALOGD("%s: rds_grp counter read  value=%d ", LOG_TAG,val);
+         saved_val = hal->radio->g_rds_grp_proc_ps;
          ret = hci_fm_get_rds_grpcounters_req(val);
          if (ret < 0) {
              hal->radio->g_rds_grp_proc_ps = saved_val;
@@ -1347,6 +1348,7 @@ static int set_fm_ctrl(int cmd, int val)
 
     case HCI_FM_HELIUM_RDS_GRP_COUNTERS_EXT:
          ALOGD("%s: rds_grp counter read  value=%d ", LOG_TAG,val);
+         saved_val = hal->radio->g_rds_grp_proc_ps;
          ret = hci_fm_get_rds_grpcounters_ext_req(val);
          if (ret < 0) {
             hal->radio->g_rds_grp_proc_ps = saved_val;
@@ -1423,7 +1425,10 @@ static int set_fm_ctrl(int cmd, int val)
         hal->radio->recv_conf.band_low_limit = val;
         break;
     case HCI_FM_HELIUM_AUDIO_MODE:
-        hal->radio->stereo_mode.stereo_mode = ~val;
+        hal->radio->stereo_mode.stereo_mode = (char)val ? 0:1;
+        hal->radio->stereo_mode.sig_blend  = 1;
+        hal->radio->stereo_mode.intf_blend = 0;
+        hal->radio->stereo_mode.most_switch =0;
         hci_set_fm_stereo_mode_req(&hal->radio->stereo_mode);
         break;
     case HCI_FM_HELIUM_RIVA_ACCS_ADDR:
@@ -1600,6 +1605,10 @@ static int set_fm_ctrl(int cmd, int val)
          if (!(ret = hci_fm_enable_lpf(val))) {
              ALOGI("%s: command sent sucessfully", __func__, val);
          }
+         break;
+    case HCI_FM_HELIUM_AUDIO:
+         ALOGE("%s slimbus port", val ? "enable" : "disable");
+         ret = hci_fm_enable_slimbus(val);
          break;
     default:
         ALOGE("%s:%s: Not a valid FM CMD!!", LOG_TAG, __func__);
