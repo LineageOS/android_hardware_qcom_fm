@@ -229,7 +229,6 @@ static int read_fm_event(struct fm_hci_t *hci, struct fm_event_header_t *pbuf, i
                             pthread_cond_signal(&hci->cmd_credits_cond);
                         } else if (pbuf->evt_code == FM_HW_ERR_EVENT) {
                               ALOGI("%s: FM H/w Err Event Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
-                              lib_running =0;
                               hci->vendor->ssr_cleanup(0x22);
                               status  = power(hci, FM_RADIO_DISABLE);
                               if (status < 0) {
@@ -677,6 +676,12 @@ void fm_hci_close(void *arg) {
         return;
     }
     event_notification(hci, HC_EVENT_EXIT);
+    pthread_mutex_lock(&hci->event_lock);
+again:
+    pthread_cond_wait(&hci->event_cond, &hci->event_lock);
+    if (!(ready_events & HC_EVENT_EXIT_DONE))
+        goto again;
+    pthread_mutex_unlock(&hci->event_lock);
 }
 
 int fm_hci_init(fm_hci_hal_t *hci_hal)
@@ -785,6 +790,7 @@ static void fm_hci_exit(void *arg)
     vendor_close(hci);
     pthread_cond_broadcast(&hci->event_cond);
     pthread_cond_broadcast(&hci->cmd_credits_cond);
+    event_notification(hci, HC_EVENT_EXIT_DONE);
     stop_rx_thread(hci);
     stop_tx_thread(hci);
     ALOGD("Tx, Rx Threads join done");

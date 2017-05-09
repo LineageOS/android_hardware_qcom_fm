@@ -342,7 +342,8 @@ public class FmSharedPreferences
       }
    }
    public static void addTags(int index, String s) {
-     if ((index >= 0) && (index <FmSharedPreferences.MAX_NUM_TAG_TYPES)) {
+     if ((index >= 0) && (index <FmSharedPreferences.MAX_NUM_TAG_TYPES) &&
+             s != null && !s.isEmpty()) {
           if(tagList[index] == null) {
              tagList[index] = new TreeSet<String>();
           }

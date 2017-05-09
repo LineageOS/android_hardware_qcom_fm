@@ -786,4 +786,13 @@ class FmRxControls
          return true;
       }
    }
+   public boolean enableSlimbus(int fd, int enable) {
+       int ret;
+       Log.d(TAG, "enableSlimbus : enable = " + enable);
+       ret = FmReceiverJNI.enableSlimbus(fd, enable);
+       if (ret == 0)
+           return true;
+       else
+           return false;
+   }
 }
