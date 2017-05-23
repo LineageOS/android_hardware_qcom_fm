@@ -20,6 +20,7 @@ LOCAL_SRC_FILES := \
 
 LOCAL_SHARED_LIBRARIES := \
          libdl \
+         liblog \
          libcutils
 
 LOCAL_CFLAGS := -Wno-unused-parameter
