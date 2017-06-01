@@ -29,7 +29,7 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="app_name">FM-Radio</string>
+  <string name="app_name">FM-radio</string>
   <string name="tx_app_name">FM-sender</string>
   <string name="menu_scan_start">Søk</string>
   <string name="menu_scan_stop">Slutt å søke</string>
@@ -107,7 +107,6 @@
   <string name="regional_band_summary_belgium">Belgia (87.5 til 108.0 MHz i 100 kHz trinn)</string>
   <string name="regional_band_summary_brazil">Brasil (87.5 til 108.0 MHz i 200 kHz trinn)</string>
   <string name="regional_band_summary_china">Kina (87.0 til 108.0 MHz i 100 kHz trinn)</string>
-  <string name="regional_band_summary_czech_republic">Tsjekkia (87.5 til 108.0 MHz i 100 kHz trinn)</string>
   <string name="regional_band_summary_denmark">Danmark (87.5 til 108.0 MHz i 50 kHz trinn)</string>
   <string name="regional_band_summary_finland">Finland (87.5 til 108.0 MHz i 100 kHz trinn)</string>
   <string name="regional_band_summary_france">Frankrike (87.5 til 108.0 MHz i 100 kHz trinn)</string>

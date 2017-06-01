@@ -107,7 +107,6 @@
   <string name="regional_band_summary_belgium">Belgique (87,5 MHz à 108,0 MHz par pas de 100 kHz)</string>
   <string name="regional_band_summary_brazil">Brésil (87,5 MHz à 108,0 MHz par pas de 200 kHz)</string>
   <string name="regional_band_summary_china">Chine (87.0 MHz à 108,0 MHz par pas de 100 kHz)</string>
-  <string name="regional_band_summary_czech_republic">République Tchèque (87,5 MHz à 108,0 MHz par pas de 100 kHz)</string>
   <string name="regional_band_summary_denmark">Danemark (87,5 MHz à 108,0 MHz par pas de 50 kHz)</string>
   <string name="regional_band_summary_finland">Finlande (87,5 MHz à 108,0 MHz par pas de 100 kHz)</string>
   <string name="regional_band_summary_france">France (87,5 MHz à 108,0 MHz par pas de 100 kHz)</string>
@@ -188,6 +187,7 @@
   <string name="usr_def_band_max">Fréquence maximale (MHz)</string>
   <string name="chanl_spacing">Espacement entre les canaux</string>
   <string name="set">Définir</string>
+  <string name="user_defind_band_msg">Saisir une fréquence comprise entre 76,0 et 108,0 MHz avec un espacement canal minimum de 1 et 100 kHz d\'espace entre la fréquence minimale et maximale</string>
   <string name="save_record_file">Fichier d\'enregistrement FM enregistré dans \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
   <string name="fm_search_no_results">Aucune station compatible trouvée</string>
   <!-- program types -->

@@ -98,6 +98,8 @@
   <string name="regional_band_entry_united_kingdom">United Kingdom</string>
   <string name="regional_band_entry_united_states">USA</string>
   <string name="regional_band_entry_user_defined">Användardefinierat band</string>
+  <string name="regional_band_summary_japan">Japan (76.0 till 90.0 MHz i 100 kHz-steg)</string>
+  <string name="regional_band_summary_denmark">Danmark (87.5 till 108.0 MHz i 50 kHz-steg)</string>
   <string name="regional_band_summary_user_defined">Användardefinierat band</string>
   <string name="aud_output_mode">Ljudutgångsläge</string>
   <string name="audio_type_stereo">Stereo</string>
