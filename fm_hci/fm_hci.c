@@ -57,7 +57,6 @@ static int fm_hal_fd =0;
 #define WAIT_TIMEOUT 200000 /* 200*1000us */
 
 static void fm_hci_exit(void *arg);
-static int power(struct fm_hci_t *hci, fm_power_state_t state);
 
 static void event_notification(struct fm_hci_t *hci, uint16_t event)
 {
@@ -179,7 +178,7 @@ static int read_fm_event(struct fm_hci_t *hci, struct fm_event_header_t *pbuf, i
 {
     fd_set readFds;
     sigset_t sigmask, emptymask;
-    int n = 0, ret = -1, evt_len = -1,status=0;
+    int n = 0, ret = -1, evt_len = -1;
     volatile int fd = hci->fd;
     struct sigaction action;
 
@@ -230,11 +229,6 @@ static int read_fm_event(struct fm_hci_t *hci, struct fm_event_header_t *pbuf, i
                         } else if (pbuf->evt_code == FM_HW_ERR_EVENT) {
                               ALOGI("%s: FM H/w Err Event Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
                               lib_running =0;
-                              hci->vendor->ssr_cleanup(0x22);
-                              status  = power(hci, FM_RADIO_DISABLE);
-                              if (status < 0) {
-                                 ALOGE("power off fm radio failed during SSR ");
-                              }
                         } else {
                             ALOGE("%s: Not CS/CC Event: Recvd. Event Code: 0x%2x", __func__, pbuf->evt_code);
                         }
