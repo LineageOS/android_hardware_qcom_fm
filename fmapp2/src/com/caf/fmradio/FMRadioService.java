@@ -1691,6 +1691,8 @@ public class FMRadioService extends Service
 
    /* Show the FM Notification */
    public void startNotification() {
+      Log.d(LOGTAG,"startNotification");
+
       RemoteViews views = new RemoteViews(getPackageName(), R.layout.statusbar);
       views.setImageViewResource(R.id.icon, R.drawable.stat_notify_fm);
       if (isFmOn())

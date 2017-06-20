@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2015-2017 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -30,72 +30,41 @@
 #ifndef __FM_HCI__
 #define __FM_HCI__
 
-#include "bt_hci_bdroid.h"
-#include "bt_vendor_lib.h"
 #include "fm_hci_api.h"
-
-/* Host/Controller lib internal event ID */
-#define HC_EVENT_PRELOAD               0x0001
-#define HC_EVENT_POSTLOAD              0x0002
-#define HC_EVENT_RX                    0x0004
-#define HC_EVENT_TX                    0x0008
-#define HC_EVENT_LPM_ENABLE            0x0010
-#define HC_EVENT_LPM_DISABLE           0x0020
-#define HC_EVENT_LPM_WAKE_DEVICE       0x0040
-#define HC_EVENT_LPM_ALLOW_SLEEP       0x0080
-#define HC_EVENT_LPM_IDLE_TIMEOUT      0x0100
-#define HC_EVENT_EXIT                  0x0200
-#define HC_EVENT_EPILOG                0x0400
-#define HC_EVENT_EXIT_DONE             0x8000
-
-#define MAX_FM_CMD_CNT                 100
-#define FM_CMD                         0x11
-#define FM_EVT                         0x14
-#define MAX_FM_EVT_PARAMS              255
 
 #define FM_CMD_COMPLETE 0x0f
 #define FM_CMD_STATUS   0x10
 #define FM_HW_ERR_EVENT 0x1A
 
-/* TODO: move inside context */
-static volatile uint8_t lib_running = 0;
-static volatile uint16_t ready_events = 0;
-
-// The set of events one can send to the userial read thread.
-// Note that the values must be >= 0x8000000000000000 to guarantee delivery
-// of the message (see eventfd(2) for details on blocking behaviour).
-enum {
-    USERIAL_RX_EXIT     = 0x8000000000000000ULL
-};
-
-struct transmit_queue_t {
-    struct fm_command_header_t *hdr;
-    struct transmit_queue_t *next;
-};
-
 struct fm_hci_t {
-    int fd;
-    pthread_mutex_t credit_lock;
-    pthread_cond_t cmd_credits_cond;
+    public:
+        fm_power_state_t state;
+        std::condition_variable on_cond;
+        std::mutex on_mtx;
 
-    pthread_mutex_t event_lock;
-    pthread_cond_t event_cond;
+        bool is_tx_processing;
+        bool is_rx_processing;
 
-    pthread_t hal_thread;
-    pthread_t tx_thread;
-    pthread_t rx_thread;
-    pthread_t mon_thread;
+        std::condition_variable tx_cond;
+        std::mutex tx_cond_mtx;
 
-    pthread_mutex_t tx_q_lock;
-    struct transmit_queue_t *first;
-    struct transmit_queue_t *last;
+        std::condition_variable rx_cond;
+        std::mutex rx_cond_mtx;
 
-    void *dlhandle;
-    bt_vendor_interface_t *vendor;
+        std::mutex tx_queue_mtx;
+        std::mutex rx_queue_mtx;
 
-    struct fm_hci_callbacks_t *cb;
-    void *private_data;
-    volatile uint16_t command_credits;
+        std::mutex credit_mtx;
+        std::condition_variable cmd_credits_cond;
+
+        std::queue<struct fm_command_header_t *> tx_cmd_queue;
+        std::queue<struct fm_event_header_t *> rx_event_queue;
+
+        volatile uint16_t command_credits;
+        struct fm_hci_callbacks_t *cb;
+
+        std::thread tx_thread_;
+        std::thread rx_thread_;
 };
 
 #endif
