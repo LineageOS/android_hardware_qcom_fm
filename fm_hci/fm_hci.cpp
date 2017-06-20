@@ -43,6 +43,7 @@
 #include <thread>
 
 #include <utils/Log.h>
+#include <unistd.h>
 
 #include <vendor/qti/hardware/fm/1.0/IFmHci.h>
 #include <vendor/qti/hardware/fm/1.0/IFmHciCallbacks.h>
@@ -263,6 +264,7 @@ static void dequeue_fm_tx_cmd()
 static void  hci_tx_thread()
 {
     ALOGI("%s: ##### starting hci_tx_thread Worker thread!!! #####", __func__);
+    hci.is_tx_thread_running = true;
 
     while (hci.state != FM_RADIO_DISABLING && hci.state != FM_RADIO_DISABLED) {
         //wait  for tx cmd
@@ -272,6 +274,7 @@ static void  hci_tx_thread()
         dequeue_fm_tx_cmd();
     }
 
+    hci.is_tx_thread_running =false;
     ALOGI("%s: ##### Exiting hci_tx_thread Worker thread!!! #####", __func__);
 }
 
@@ -291,6 +294,7 @@ static void hci_rx_thread()
 {
 
     ALOGI("%s: ##### starting hci_rx_thread Worker thread!!! #####", __func__);
+    hci.is_rx_thread_running = true;
 
     while (hci.state != FM_RADIO_DISABLING && hci.state != FM_RADIO_DISABLED) {
         //wait for rx event
@@ -299,6 +303,7 @@ static void hci_rx_thread()
         dequeue_fm_rx_event();
     }
 
+    hci.is_rx_thread_running = false;
     ALOGI("%s: ##### Exiting hci_rx_thread Worker thread!!! #####", __func__);
 }
 
@@ -612,6 +617,8 @@ int fm_hci_init(fm_hci_hal_t *hci_hal)
     hci.command_credits = 1;
     hci.is_tx_processing = false;
     hci.is_rx_processing = false;
+    hci.is_tx_thread_running = false;
+    hci.is_rx_thread_running = false;
     hci.state = FM_RADIO_DISABLED;
     hci_hal->hci = &hci;
 
@@ -626,6 +633,13 @@ int fm_hci_init(fm_hci_hal_t *hci_hal)
     }
 
     if (hci.state == FM_RADIO_ENABLED) {
+        while (hci.is_tx_thread_running == false
+            || hci.is_rx_thread_running == false)
+        {
+            /* checking tx & rx thread running status after every
+               5ms before notifying on to upper layer */
+            usleep(5000);
+        }
         ALOGD("--%s success", __func__);
         ret = FM_HC_STATUS_SUCCESS;
     } else {
