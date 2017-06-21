@@ -1018,6 +1018,11 @@ public class FMTransmitterService extends Service
             e.printStackTrace();
          }
       }
+
+      public void FmRxEvEnableSlimbus(int status)
+      {
+         Log.d(LOGTAG, "FmRxEvEnableReceiver status = " + status);
+      }
    };
 
 

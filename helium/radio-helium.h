@@ -171,6 +171,7 @@ typedef void (*fm_def_data_wrt_cb) (int status);
 typedef void (*fm_set_blnd_cb) (int status);
 typedef void (*fm_get_stn_prm_cb) (int val, int status);
 typedef void (*fm_get_stn_dbg_prm_cb) (int val, int status);
+typedef void (*fm_enable_slimbus_cb) (int status);
 
 typedef struct {
     size_t  size;
@@ -206,6 +207,7 @@ typedef struct {
     fm_set_blnd_cb fm_set_blend_cb;
     fm_get_stn_prm_cb fm_get_station_param_cb;
     fm_get_stn_dbg_prm_cb fm_get_station_debug_param_cb;
+    fm_enable_slimbus_cb enable_slimbus_cb;
 } fm_hal_callbacks_t;
 
 /* Opcode OCF */

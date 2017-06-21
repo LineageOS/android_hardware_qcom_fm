@@ -61,4 +61,5 @@ public class FmRxEvCallbacksAdaptor implements FmRxEvCallbacks {
     public void FmRxEvSetBlend(int status) {};
     public void FmRxGetStationParam(int val, int status) {};
     public void FmRxGetStationDbgParam(int val, int status) {};
+    public void FmRxEvEnableSlimbus(int status) {};
 }

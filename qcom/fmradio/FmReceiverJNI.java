@@ -127,6 +127,13 @@ class FmReceiverJNI {
         FmReceiver.mCallback.FmRxGetStationDbgParam(val, status);
     }
 
+    public void enableSlimbusCallback(int status)
+    {
+        Log.d(TAG, "++enableSlimbusCallback" );
+        FmReceiver.mCallback.FmRxEvEnableSlimbus(status);
+        Log.d(TAG, "--enableSlimbusCallback" );
+    }
+
     public void RtPlusCallback(byte[] rtplus) {
         Log.d(TAG, "RtPlusCallback enter " );
         if (rtplus == null) {
