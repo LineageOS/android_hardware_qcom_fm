@@ -35,6 +35,7 @@ import java.lang.ref.WeakReference;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -111,6 +112,7 @@ public class FMRadioService extends Service
 
    private static final int FMRADIOSERVICE_STATUS = 101;
    private static final String FMRADIO_DEVICE_FD_STRING = "/dev/radio0";
+   private static final String FMRADIO_NOTIFICATION_CHANNEL = "fmradio_notification_channel";
    private static final String LOGTAG = "FMService";//FMRadio.LOGTAG;
 
    private FmReceiver mReceiver;
@@ -1703,18 +1705,39 @@ public class FMRadioService extends Service
          views.setTextViewText(R.id.frequency, "");
       }
 
-      Notification status = new Notification();
-      status.contentView = views;
-      status.flags |= Notification.FLAG_ONGOING_EVENT;
-      status.icon = R.drawable.stat_notify_fm;
-      status.contentIntent = PendingIntent.getActivity(this, 0,
-                                                       new Intent("com.caf.fmradio.FMRADIO_ACTIVITY"), 0);
-      startForeground(FMRADIOSERVICE_STATUS, status);
-      //NotificationManager nm = (NotificationManager)
-      //                         getSystemService(Context.NOTIFICATION_SERVICE);
-      //nm.notify(FMRADIOSERVICE_STATUS, status);
-      //setForeground(true);
+      Context context = getApplicationContext();
+      Notification notification;
+      NotificationManager notificationManager =
+              (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+      NotificationChannel notificationChannel =
+              new NotificationChannel(FMRADIO_NOTIFICATION_CHANNEL,
+              context.getString(R.string.app_name),
+              NotificationManager.IMPORTANCE_HIGH);
+
+      notificationManager.createNotificationChannel(notificationChannel);
+
+      notification = new Notification.Builder(context, FMRADIO_NOTIFICATION_CHANNEL)
+            .setCustomContentView(views)
+            .setSmallIcon(R.drawable.stat_notify_fm)
+            .setContentIntent(PendingIntent.getActivity(this,
+                0, new Intent("com.caf.fmradio.FMRADIO_ACTIVITY"), 0))
+            .setOngoing(true)
+            .build();
+
+      notificationManager.notify(FMRADIOSERVICE_STATUS, notification);
+
       mFMOn = true;
+   }
+
+      /* hide the FM Notification */
+   public void stopNotification() {
+      Log.d(LOGTAG,"stopNotification");
+
+      Context context = getApplicationContext();
+      NotificationManager notificationManager =
+            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+      notificationManager.deleteNotificationChannel(FMRADIO_NOTIFICATION_CHANNEL);
    }
 
    private void stop() {
@@ -2409,6 +2432,10 @@ public class FMRadioService extends Service
            Log.d(LOGTAG, "FM application close button pressed or antenna removed");
            mSession.setActive(false);
        }
+
+       //stop Notification
+       stopNotification();
+
        return fmOff();
    }
   /*
