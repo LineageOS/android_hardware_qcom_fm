@@ -36,7 +36,7 @@
   <string name="menu_record_start">Gravar</string>
   <string name="menu_record_stop">Parar gravação</string>
   <string name="menu_settings">Configurações</string>
-  <string name="menu_sleep">Sono</string>
+  <string name="menu_sleep">Suspender</string>
   <string name="menu_sleep_cancel">Cancelar Sono</string>
   <string name="menu_all_channels">Todos os canais</string>
   <string name="menu_display_tags">Mostrar tags</string>
