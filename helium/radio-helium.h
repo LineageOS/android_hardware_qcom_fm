@@ -32,6 +32,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdbool.h>
 
+#define HELIUM_CMD_TIME_OUT (5)
 #define MIN_TX_TONE_VAL  0x00
 #define MAX_TX_TONE_VAL  0x07
 #define MIN_HARD_MUTE_VAL  0x00
@@ -1248,6 +1249,9 @@ struct fm_hal_t {
     struct radio_helium_device *radio;
     fm_hal_callbacks_t *jni_cb;
     void *private_data;
+    pthread_mutex_t cmd_lock;
+    pthread_cond_t cmd_cond;
+    bool set_cmd_sent;
 };
 
 struct fm_interface_t {
