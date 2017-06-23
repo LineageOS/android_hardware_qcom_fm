@@ -107,6 +107,7 @@
   <string name="regional_band_summary_belgium">Belgien (87,5 til 108,0 MHz i 100 kHz-trin)</string>
   <string name="regional_band_summary_brazil">Brasilien (87,5 til 108,0 MHz i 200 kHz-trin)</string>
   <string name="regional_band_summary_china">Kina (87,0 til 108,0 MHz i 100 kHz-trin)</string>
+  <string name="regional_band_summary_czech_republic">Tjekkiet (87,5 til 108,0 MHz i 100 kHz-trin)</string>
   <string name="regional_band_summary_denmark">Danmark (87,5 til 108,0 MHz i 50 kHz-trin)</string>
   <string name="regional_band_summary_finland">Finland (87,5 til 108,0 MHz i 100 kHz-trin)</string>
   <string name="regional_band_summary_france">Frankrig (87,5 til 108,0 MHz i 100 kHz-trin)</string>

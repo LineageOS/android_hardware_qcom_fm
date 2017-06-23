@@ -107,6 +107,7 @@
   <string name="regional_band_summary_belgium">Бельгія (від 87.5 МГц до 108.0 МГц з кроком у 100 кГц)</string>
   <string name="regional_band_summary_brazil">Бразилія (від 87.5 МГц до 108.0 МГц з кроком у 200 кГц)</string>
   <string name="regional_band_summary_china">Китай (від 87.0 МГц до 108.0 МГц з кроком у 100 кГц)</string>
+  <string name="regional_band_summary_czech_republic">Чеська Республіка (від 87.5 МГц до 108.0 МГц з кроком 100 кГц)</string>
   <string name="regional_band_summary_denmark">Данія (від 87.5 МГц до 108.0 МГц з кроком у 50 кГц)</string>
   <string name="regional_band_summary_finland">Фінляндія (від 87.5 МГц до 108.0 МГц з кроком у 100 кГц)</string>
   <string name="regional_band_summary_france">Франція (від 87.5 МГц до 108.0 МГц з кроком у 100 кГц)</string>

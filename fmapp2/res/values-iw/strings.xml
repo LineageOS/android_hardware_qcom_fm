@@ -48,7 +48,7 @@
   <string name="msg_searching_title">בוחר אוטומטית תחנות קבועות מראש</string>
   <string name="msg_searching">מחפש תחנות בעלות קליטה טובה על מנת לבנות רשימת תחנות קבועות מראש\u2026</string>
   <string name="msg_noantenna">נא לחבר אוזניות כדי להשתמש ברדיו FM</string>
-  <string name="dialog_sleep_title">זמן שינה לפני כיבוי אוטומטי</string>
+  <string name="dialog_sleep_title">זמן שינה לכיבוי אוטומטי</string>
   <string name="presetlist_select_name">בחירת \"<xliff:g id="presetlist_name">%1$s</xliff:g>\"</string>
   <string name="presetlist_add_new">הוספת רשימה חדשה</string>
   <string name="dialog_presetlist_rename_title">הזנת שם</string>
@@ -57,7 +57,7 @@
   <string name="preset_tune">כיוון ידני</string>
   <string name="preset_rename">שינוי שם</string>
   <string name="preset_delete">מחיקה</string>
-  <string name="preset_search">חיפוש עבור \'<xliff:g id="preset_pi">%1$s</xliff:g>\'</string>
+  <string name="preset_search">חיפוש עבור \"<xliff:g id="preset_pi">%1$s</xliff:g>\"</string>
   <string name="stat_notif_frequency">\"<xliff:g id="frequency">%1$s</xliff:g>\" MHz</string>
   <string name="regional_band">טווח אזורי</string>
   <string name="regional_band_entry_north_america">צפון אמריקה</string>
@@ -107,12 +107,13 @@
   <string name="regional_band_summary_belgium">בלגיה (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
   <string name="regional_band_summary_brazil">ברזיל (87.5MHz עד 108.0MHz בקפיצות של 200kHz)</string>
   <string name="regional_band_summary_china">סין (87.0MHz עד 108.0MHz בקפיצות של 100kHz)</string>
+  <string name="regional_band_summary_czech_republic">צ\'כיה (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
   <string name="regional_band_summary_denmark">דנמרק (87.5MHz עד 108.0MHz בקפיצות של 50kHz)</string>
   <string name="regional_band_summary_finland">פינלנד (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
   <string name="regional_band_summary_france">צרפת (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
   <string name="regional_band_summary_germany">גרמניה (87.5MHz עד 108.0MHz בקפיצות של 50kHz)</string>
   <string name="regional_band_summary_greece">יוון (87.5MHz עד 108.0MHz בקפיצות של 50kHz)</string>
-  <string name="regional_band_summary_hong_kong">הונג-קונג (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
+  <string name="regional_band_summary_hong_kong">הונג קונג (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
   <string name="regional_band_summary_india">הודו (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
   <string name="regional_band_summary_indonesia">אינדונזיה (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
   <string name="regional_band_summary_ireland">אירלנד (87.5MHz עד 108.0MHz בקפיצות של 50kHz)</string>

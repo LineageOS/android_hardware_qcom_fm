@@ -51,7 +51,7 @@
   <string name="dialog_sleep_title">Tiempo de suspensión automática</string>
   <string name="presetlist_select_name">Seleccionar \'<xliff:g id="presetlist_name">%1$s</xliff:g>\'</string>
   <string name="presetlist_add_new">Añadir nueva lista</string>
-  <string name="dialog_presetlist_rename_title">Introducir nombre</string>
+  <string name="dialog_presetlist_rename_title">Ingresar nombre</string>
   <string name="presetlist_autoselect_title">Confirmar selección automática</string>
   <string name="preset_replace">Reemplazar</string>
   <string name="preset_tune">Sintonizar</string>
@@ -107,6 +107,7 @@
   <string name="regional_band_summary_belgium">Bélgica (87.5 MHz a 108.0 MHz en intervalos de 100 KHz)</string>
   <string name="regional_band_summary_brazil">Brasil (87.5 MHz a 108.0 MHz en intervalos de 200 KHz)</string>
   <string name="regional_band_summary_china">China (87.0 MHz a 108.0 MHz en intervalos de 100 KHz)</string>
+  <string name="regional_band_summary_czech_republic">República Checa (87.5 MHz a 108.0 MHz en intervalos de 100 KHz)</string>
   <string name="regional_band_summary_denmark">Dinamarca (87.5 MHz a 108.0 MHz en intervalos de 50 KHz)</string>
   <string name="regional_band_summary_finland">Finlandia (87.5 MHz a 108.0 MHz en intervalos de 100 KHz)</string>
   <string name="regional_band_summary_france">Francia (87.5 MHz a 108.0 MHz en intervalos de 100 KHz)</string>
@@ -159,7 +160,7 @@
   <string name="fm_off">La radio FM está apagada.</string>
   <string name="fm_call">La radio FM no se puede utilizar durante una llamada.</string>
   <!-- The messsage shown when long pressed on a station. -->
-  <string name="alert_dialog_hint">Introducir un nombre</string>
+  <string name="alert_dialog_hint">Ingresa un nombre</string>
   <string name="search_dialog_title">Explorar estaciones</string>
   <string name="fm_command_timeout_title">Tiempo de espera</string>
   <string name="fm_tune_timeout_msg">No se ha recibido respuesta de la emisora FM. Si el problema persiste, apaga la radio y vuelve a encenderla.</string>
@@ -181,7 +182,7 @@
   <string name="station_list_delete_station">Eliminar:<xliff:g id="name">%s</xliff:g></string>
   <string name="station_list_delete_station_prompt">¿Estás seguro de que quieres eliminar \'<xliff:g id="name">%s</xliff:g>\'?</string>
   <string name="station_name_empty">Nombre de estación vacío. Escribe uno de nuevo.</string>
-  <string name="station_name_exist">\'<xliff:g id="name">%s</xliff:g>\' ya está en uso. Escribe un nombre distinto.</string>
+  <string name="station_name_exist">\'<xliff:g id="name">%s</xliff:g>\' ya está en uso. Ingresa un nombre distinto.</string>
   <string name="rt_plus_tags">Etiquetas</string>
   <string name="usr_def_band_min">Frecuencia más baja (MHz)</string>
   <string name="usr_def_band_max">Frecuencia más alta (MHz)</string>

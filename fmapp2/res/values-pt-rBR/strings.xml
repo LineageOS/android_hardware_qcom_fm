@@ -36,7 +36,7 @@
   <string name="menu_record_start">Gravar</string>
   <string name="menu_record_stop">Parar gravação</string>
   <string name="menu_settings">Configurações</string>
-  <string name="menu_sleep">Sono</string>
+  <string name="menu_sleep">Suspender</string>
   <string name="menu_sleep_cancel">Cancelar Sono</string>
   <string name="menu_all_channels">Todos os canais</string>
   <string name="menu_display_tags">Mostrar tags</string>
@@ -107,6 +107,7 @@
   <string name="regional_band_summary_belgium">Bélgica (87,5 MHz a 108,0 MHz em intervalos de 100 kHz)</string>
   <string name="regional_band_summary_brazil">Brasil (87,5 MHz  a 108,0 MHz  em intervalos de 200 kHz)</string>
   <string name="regional_band_summary_china">China (87,0 MHz a 108,0 MHz em intervalos de 100 kHz)</string>
+  <string name="regional_band_summary_czech_republic">República Checa (87,5 MHz a 108,0 MHz em intervalos de 100 kHz)</string>
   <string name="regional_band_summary_denmark">Dinamarca (87,5 MHz a 108,0 MHz em intervalos de 50 kHz)</string>
   <string name="regional_band_summary_finland">Finlândia (87,5 MHz a 108,0 MHz em intervalos de 100 kHz)</string>
   <string name="regional_band_summary_france">França (87,5 MHz a 108,0 MHz em intervalos de 100 kHz)</string>

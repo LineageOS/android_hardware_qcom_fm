@@ -107,6 +107,7 @@
   <string name="regional_band_summary_belgium">比利时 (87.5 - 108.0 MHz ，步长 100 kHz)</string>
   <string name="regional_band_summary_brazil">巴西 (87.5 - 108.0 MHz ，步长 200 kHz)</string>
   <string name="regional_band_summary_china">中国 (87.0 - 108.0 MHz ，步长 100 kHz)</string>
+  <string name="regional_band_summary_czech_republic">捷克共和国 (87.5 - 108.0 MHz ，步长 100 kHz)</string>
   <string name="regional_band_summary_denmark">丹麦 (87.5 - 108.0 MHz ，步长 50 kHz)</string>
   <string name="regional_band_summary_finland">芬兰 (87.5 - 108.0 MHz ，步长 100 kHz)</string>
   <string name="regional_band_summary_france">法国 (87.5 - 108.0 MHz ，步长 100 kHz)</string>

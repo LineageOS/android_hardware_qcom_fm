@@ -107,6 +107,7 @@
   <string name="regional_band_summary_belgium">Belgicko (87,5 MHz až 108.0 MHz v 100 KHz krokoch)</string>
   <string name="regional_band_summary_brazil">Brazília (87,5 MHz až 108.0 MHz v 200 KHz krokoch)</string>
   <string name="regional_band_summary_china">Čína (87.0 MHz až 108.0 MHz v 100 KHz krokoch)</string>
+  <string name="regional_band_summary_czech_republic">Česká republika (87,5 MHz až 108.0 MHz v 100 KHz krokoch)</string>
   <string name="regional_band_summary_denmark">Dánsko (87,5 MHz až 108.0 MHz v 50 KHz krokoch)</string>
   <string name="regional_band_summary_finland">Fínsko (87,5 MHz až 108.0 MHz v 100 KHz krokoch)</string>
   <string name="regional_band_summary_france">Francúzsko (87,5 MHz až 108.0 MHz v 100 KHz krokoch)</string>
