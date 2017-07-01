@@ -180,7 +180,7 @@
   <string name="station_name">Emisora:</string>
   <string name="station_exists">¡Esta frecuencia ya existe!</string>
   <string name="station_list_delete_station">Eliminar:<xliff:g id="name">%s</xliff:g></string>
-  <string name="station_list_delete_station_prompt">¿Estás seguro de que quieres eliminar \'<xliff:g id="name">%s</xliff:g>\'?</string>
+  <string name="station_list_delete_station_prompt">¿Quieres borrar \'<xliff:g id="name">%s</xliff:g>\'?</string>
   <string name="station_name_empty">Nombre de estación vacío. Escribe uno de nuevo.</string>
   <string name="station_name_exist">\'<xliff:g id="name">%s</xliff:g>\' ya está en uso. Ingresa un nombre distinto.</string>
   <string name="rt_plus_tags">Etiquetas</string>
@@ -223,7 +223,7 @@
   <string name="typ_Sport">Deporte</string>
   <string name="typ_Travel">Viajes</string>
   <string name="typ_Varied">Variado</string>
-  <string name="typ_Weather">El tiempo</string>
+  <string name="typ_Weather">Clima</string>
   <!-- RBDS (North America) -->
   <string name="typ_Adult_hits">Éxitos de siempre</string>
   <string name="typ_Classical">Clásica</string>

@@ -31,7 +31,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="app_name">FM радио</string>
   <string name="tx_app_name">FM предајник</string>
-  <string name="menu_scan_start">Претражи</string>
+  <string name="menu_scan_start">Скенирај</string>
   <string name="menu_scan_stop">Заустави претрагу</string>
   <string name="menu_record_start">Сними</string>
   <string name="menu_record_stop">Заустави снимање</string>
@@ -45,7 +45,7 @@
   <string name="msg_scanning">Тражим све радио-станице\u2026</string>
   <string name="msg_scanning_pty">Тражим „<xliff:g id="pty_name">%1$s</xliff:g>“\u2026</string>
   <string name="msg_search_title"><xliff:g id="frequency_string">%1$s</xliff:g> MHz</string>
-  <string name="msg_searching_title">Аутоматско тражење станица</string>
+  <string name="msg_searching_title">Аутоматска претрага станица</string>
   <string name="msg_searching">Тражим станице са јаким сигналом ради израде списка станица\u2026</string>
   <string name="msg_noantenna">Прикључите слушалице да бисте користили FM радио.</string>
   <string name="dialog_sleep_title">Време аутоматског искључивања</string>
@@ -158,7 +158,7 @@
   <string name="menu_scan_for_preset">Претражи сачуване станице</string>
   <!-- Off messages -->
   <string name="fm_off">FM је искључен.</string>
-  <string name="fm_call">FM се не може користити за време позива.</string>
+  <string name="fm_call">FM се не може користити током позива.</string>
   <!-- The messsage shown when long pressed on a station. -->
   <string name="alert_dialog_hint">Унесите име</string>
   <string name="search_dialog_title">Претрага станица</string>
@@ -167,7 +167,7 @@
   <string name="fm_command_failed_title">Неуспешна операција</string>
   <string name="fm_cmd_failed_msg">Не могу да извршим операцију. Ако се проблем не реши, искључите FM радио па га поново укључите.</string>
   <string name="fm_cmd_failed_msg_hdmi">Истовремено коришћење FM радија и HDMI улаза није подржано.</string>
-  <string name="fm_cmd_failed_call_on">Коришћење FM радија за време телефонског позива није могуће.</string>
+  <string name="fm_cmd_failed_call_on">Коришћење FM радија током телефонског позива није могуће.</string>
   <!-- Do not translate. Duration format. -->
   <!-- the name under which recordings will be visible in the media database is formatted like this -->
   <string name="audio_db_title_format"><xliff:g id="format">dd-MM-yyyy HH:mm:ss</xliff:g></string>
