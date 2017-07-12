@@ -45,6 +45,9 @@ struct fm_hci_t {
         bool is_tx_processing;
         bool is_rx_processing;
 
+        bool is_tx_thread_running;
+        bool is_rx_thread_running;
+
         std::condition_variable tx_cond;
         std::mutex tx_cond_mtx;
 
