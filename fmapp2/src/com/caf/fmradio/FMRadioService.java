@@ -1712,7 +1712,7 @@ public class FMRadioService extends Service
       NotificationChannel notificationChannel =
               new NotificationChannel(FMRADIO_NOTIFICATION_CHANNEL,
               context.getString(R.string.app_name),
-              NotificationManager.IMPORTANCE_HIGH);
+              NotificationManager.IMPORTANCE_LOW);
 
       notificationManager.createNotificationChannel(notificationChannel);
 
@@ -1724,7 +1724,7 @@ public class FMRadioService extends Service
             .setOngoing(true)
             .build();
 
-      notificationManager.notify(FMRADIOSERVICE_STATUS, notification);
+      startForeground(FMRADIOSERVICE_STATUS, notification);
 
       mFMOn = true;
    }
