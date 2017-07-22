@@ -107,7 +107,7 @@
   <string name="regional_band_summary_belgium">בלגיה (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
   <string name="regional_band_summary_brazil">ברזיל (87.5MHz עד 108.0MHz בקפיצות של 200kHz)</string>
   <string name="regional_band_summary_china">סין (87.0MHz עד 108.0MHz בקפיצות של 100kHz)</string>
-  <string name="regional_band_summary_czech_republic">צ\'כיה (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
+  <string name="regional_band_summary_czech_republic">צ\'כיה (87.5 עד 108.0MHz בקפיצות של 100kHz)</string>
   <string name="regional_band_summary_denmark">דנמרק (87.5MHz עד 108.0MHz בקפיצות של 50kHz)</string>
   <string name="regional_band_summary_finland">פינלנד (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
   <string name="regional_band_summary_france">צרפת (87.5MHz עד 108.0MHz בקפיצות של 100kHz)</string>
