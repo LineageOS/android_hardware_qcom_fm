@@ -235,7 +235,7 @@ public class FMRadioService extends Service
    public void onCreate() {
       super.onCreate();
 
-      mFmA2dpDisabled = SystemProperties.getBoolean("fm.a2dp.conc.disabled",false);
+      mFmA2dpDisabled = SystemProperties.getBoolean("vendor.fm.a2dp.conc.disabled",false);
       mPrefs = new FmSharedPreferences(this);
       mCallbacks = null;
       TelephonyManager tmgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
