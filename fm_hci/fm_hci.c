@@ -704,11 +704,6 @@ int fm_hci_init(fm_hci_hal_t *hci_hal)
     }
     memset(hci, 0, sizeof(struct fm_hci_t));
 
-    lib_running = 1;
-    ready_events = 0;
-    hci->command_credits = 1;
-    hci->fd = -1;
-
     pthread_mutex_init(&hci->tx_q_lock, NULL);
     pthread_mutex_init(&hci->credit_lock, NULL);
     pthread_mutex_init(&hci->event_lock, NULL);
@@ -723,6 +718,11 @@ int fm_hci_init(fm_hci_hal_t *hci_hal)
         goto err_socket;
     }
     ALOGI("fm_hal_fd = %d", fm_hal_fd);
+
+    lib_running = 1;
+    ready_events = 0;
+    hci->command_credits = 1;
+    hci->fd = -1;
 
     ret = vendor_init(hci);
     if (ret)
