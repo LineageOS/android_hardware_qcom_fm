@@ -3070,7 +3070,7 @@ public class FMRadio extends Activity
    private ServiceConnection osc = new ServiceConnection() {
       public void onServiceConnected(ComponentName classname, IBinder obj) {
          mService = IFMRadioService.Stub.asInterface(obj);
-         Log.e(LOGTAG, "ServiceConnection: onServiceConnected: ");
+         Log.e(LOGTAG, "ServiceConnection: onServiceConnected");
          if (mService != null) {
             try {
                mService.registerCallbacks(mServiceCallbacks);

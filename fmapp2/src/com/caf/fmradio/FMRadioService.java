@@ -99,6 +99,7 @@ import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.os.IBinder.DeathRecipient;
 
 /**
  * Provides "background" FM Radio (that uses the hardware) capabilities,
@@ -150,6 +151,11 @@ public class FMRadioService extends Service
    private boolean misAnalogPathEnabled = false;
    private boolean mA2dpDisconnected = false;
    private boolean mA2dpConnected = false;
+
+   //Install the death receipient
+   private IBinder.DeathRecipient mDeathRecipient;
+   private FMDeathRecipient mFMdr;
+
    //PhoneStateListener instances corresponding to each
 
    private FmRxRdsData mFMRxRDSData=null;
@@ -873,7 +879,15 @@ public class FMRadioService extends Service
       mServiceInUse = true;
       /* Application/UI is attached, so get out of lower power mode */
       setLowPowerMode(false);
-      Log.d(LOGTAG, "onBind");
+      Log.d(LOGTAG, "onBind ");
+      //todo check for the mBinder validity
+      mFMdr = new FMDeathRecipient(this, mBinder);
+      try {
+              mBinder.linkToDeath(mFMdr, 0);
+              Log.d(LOGTAG, "onBind mBinder linked to death" + mBinder);
+          } catch (RemoteException e) {
+              Log.e(LOGTAG,"LinktoDeath Exception: "+e + "FM DR =" + mFMdr);
+          }
       return mBinder;
    }
 
@@ -905,14 +919,20 @@ public class FMRadioService extends Service
 
    @Override
    public boolean onUnbind(Intent intent) {
-      mServiceInUse = false;
-      Log.d(LOGTAG, "onUnbind");
-
-      /* Application/UI is not attached, so go into lower power mode */
-      unregisterCallbacks();
-      setLowPowerMode(true);
-      return true;
-   }
+       mServiceInUse = false;
+       Log.d(LOGTAG, "onUnbind");
+       /* Application/UI is not attached, so go into lower power mode */
+       unregisterCallbacks();
+       setLowPowerMode(true);
+       try{
+           Log.d(LOGTAG,"Unlinking FM Death receipient");
+           mBinder.unlinkToDeath(mFMdr,0);
+       }
+       catch(NoSuchElementException e){
+           Log.e(LOGTAG,"No death recipient registered"+e);
+       }
+       return true;
+  }
 
    private String getProcessName() {
       int id = Process.myPid();
@@ -1553,7 +1573,7 @@ public class FMRadioService extends Service
 
    private Runnable mSpeakerDisableTask = new Runnable() {
       public void run() {
-         Log.v(LOGTAG, "Disabling Speaker");
+         Log.v(LOGTAG, "*** Disabling Speaker");
          AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
       }
    };
@@ -1599,6 +1619,10 @@ public class FMRadioService extends Service
                           stopRecording();
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
+                      if (mSpeakerPhoneOn) {
+                          Log.v(LOGTAG, "Focus Loss/TLoss - Disabling speaker");
+                          AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
+                      }
                       if (mReceiver != null)
                           mReceiver.EnableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
                       if (true == mPlaybackInProgress) {
@@ -1608,11 +1632,12 @@ public class FMRadioService extends Service
                       mStoppedOnFocusLoss = true;
                       break;
                   case AudioManager.AUDIOFOCUS_LOSS:
-                      Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS");
-
+                      Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS mspeakerphone= " +
+                               mSpeakerPhoneOn);
+                      //intentional fall through.
                       if (mSpeakerPhoneOn) {
-                         mSpeakerDisableHandler.removeCallbacks(mSpeakerDisableTask);
-                         mSpeakerDisableHandler.postDelayed(mSpeakerDisableTask, 0);
+                          mSpeakerDisableHandler.removeCallbacks(mSpeakerDisableTask);
+                          mSpeakerDisableHandler.postDelayed(mSpeakerDisableTask, 0);
                       }
                       if (true == mPlaybackInProgress) {
                           stopFM();
@@ -1632,7 +1657,8 @@ public class FMRadioService extends Service
                       mSession.setActive(false);
                       break;
                   case AudioManager.AUDIOFOCUS_GAIN:
-                      Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN");
+                      Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN mPlaybackinprogress =" +
+                           mPlaybackInProgress);
                       mStoppedOnFocusLoss = false;
                       if (mResumeAfterCall) {
                           Log.v(LOGTAG, "resumeAfterCall");
@@ -1737,7 +1763,6 @@ public class FMRadioService extends Service
             .build();
 
       startForeground(FMRADIOSERVICE_STATUS, notification);
-
       mFMOn = true;
    }
 
@@ -4072,5 +4097,15 @@ public class FMRadioService extends Service
 
    private void restoreDefaults () {
         mStoppedOnFactoryReset = true;
+   }
+
+
+   class FMDeathRecipient implements IBinder.DeathRecipient {
+       public FMDeathRecipient(FMRadioService service, IBinder binder) {
+       }
+       public void binderDied() {
+           Log.d(LOGTAG, "** Binder is dead - cleanup audio now ** ");
+           //TODO unregister the fm service here.
+       }
    }
 }
