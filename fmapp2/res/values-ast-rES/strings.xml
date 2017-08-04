@@ -50,6 +50,7 @@
   <string name="preset_rename">Renomar</string>
   <string name="stat_notif_frequency">«<xliff:g id="frequency">%1$s</xliff:g>» MHz</string>
   <string name="regional_band">Banda rexonal</string>
+  <string name="regional_band_entry_north_america">Norteamérica</string>
   <string name="regional_band_entry_europe">Europa</string>
   <string name="regional_band_entry_japan">Xapón</string>
   <string name="regional_band_entry_australia">Australia</string>
@@ -70,6 +71,21 @@
   <string name="regional_band_entry_italy">Italia</string>
   <string name="regional_band_entry_korea">Corea</string>
   <string name="regional_band_entry_mexico">Méxicu</string>
+  <string name="regional_band_entry_netherlands">Países Baxos</string>
+  <string name="regional_band_entry_new_zealand">Nueva Zelanda</string>
+  <string name="regional_band_entry_norway">Noruega</string>
+  <string name="regional_band_entry_poland">Polonia</string>
+  <string name="regional_band_entry_portugal">Portugal</string>
+  <string name="regional_band_entry_russia">Rusia</string>
+  <string name="regional_band_entry_singapore">Singapur</string>
+  <string name="regional_band_entry_slovakia">Eslovaquia</string>
+  <string name="regional_band_entry_spain">España</string>
+  <string name="regional_band_entry_switzerland">Suiza</string>
+  <string name="regional_band_entry_sweden">Suecia</string>
+  <string name="regional_band_entry_taiwan">Taiwán</string>
+  <string name="regional_band_entry_turkey">Turquía</string>
+  <string name="regional_band_entry_united_kingdom">Reinu Xuníu</string>
+  <string name="regional_band_entry_united_states">Estaos Xuníos</string>
   <string name="regional_band_summary_north_america">Norteamérica (87,5MHz a 108,0MHz en pasos de 200KHz)</string>
   <string name="regional_band_summary_europe">Europa (87,5MHz a 108,0MHz en pasos de 100KHz)</string>
   <string name="regional_band_summary_japan">Xapón (76,0MHz a 90,0MHz en pasos de 100KHz)</string>
@@ -79,6 +95,7 @@
   <string name="regional_band_summary_belgium">Bélxica (87,5MHz a 108,0MHz en pasos de 100KHz)</string>
   <string name="regional_band_summary_brazil">Brasil (87,5MHz a 108,0MHz en pasos de 200KHz)</string>
   <string name="regional_band_summary_china">China (87,0MHz a 108,0MHz en pasos de 100KHz)</string>
+  <string name="regional_band_summary_czech_republic">Chequia (87,5MHz a 108,0MHz en pasos de 100KHz)</string>
   <string name="regional_band_summary_denmark">Dinamarca (87,5MHz a 108,0MHz en pasos de 50KHz)</string>
   <string name="regional_band_summary_finland">Finlandia (87,5MHz a 108,0MHz en pasos de 100KHz)</string>
   <string name="regional_band_summary_france">Francia (87,5MHz a 108,0MHz en pasos de 100KHz)</string>
@@ -109,8 +126,10 @@
   <string name="regional_band_summary_user_defined">Banda Definida pol usuariu</string>
   <string name="aud_output_mode">Mou de salida d\'audiu</string>
   <string name="audio_type_stereo">Estereu</string>
+  <string name="audio_type_mono">Monu</string>
   <string name="record_dur">Duración de grabación</string>
   <string name="auto_select_af">Frecuencia alternativa</string>
+  <string name="settings_revert_defaults_title">Afitar axustes de fábrica</string>
   <string name="settings_revert_defaults_summary">Reafitar tolos axustes</string>
   <string name="settings_revert_confirm_title">Confirmar reafitamientu</string>
   <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
@@ -123,15 +142,41 @@
   <string name="FMRecording_reach_size_limit">Algamóse la llende de tamañu.</string>
   <string name="menu_scan_for_preset">Escaniar preaxustes</string>
   <!-- Off messages -->
+  <string name="fm_off">La radio FM ta apagada.</string>
+  <string name="fm_call">Nun pue usase la radio FM nes llamaes.</string>
   <!-- The messsage shown when long pressed on a station. -->
+  <string name="alert_dialog_hint">Introduz un nome</string>
+  <string name="fm_command_timeout_title">Escosó\'l tiempu</string>
   <!-- Do not translate. Duration format. -->
   <!-- the name under which recordings will be visible in the media database is formatted like this -->
+  <string name="audio_db_title_format"><xliff:g id="format">dd-MM-yyyy HH:mm:ss</xliff:g></string>
   <!-- all recordings will show up in the media database with this 'artist' name -->
+  <string name="audio_db_artist_name">Les mios grabaciones FM</string>
   <!-- all recordings will show up in the media database with this 'album' name -->
   <string name="audio_db_album_name">Grabaciones FM</string>
   <!-- all recordings will show up in the media database in a playlist with this name -->
+  <string name="audio_db_playlist_name">Grabaciones FM</string>
+  <string name="station_name">Emisora:</string>
+  <string name="station_list_delete_station">Desaniciar:<xliff:g id="name">%s</xliff:g></string>
+  <string name="station_list_delete_station_prompt">¿De xuru que quies desaniciar «<xliff:g id="name">%s</xliff:g>»?</string>
+  <string name="rt_plus_tags">Etiquetes</string>
+  <string name="usr_def_band_min">Frecuencia más baxa (MHz)</string>
+  <string name="usr_def_band_max">Frecuencia más alta (MHz)</string>
+  <string name="chanl_spacing">Esparu de canales</string>
   <string name="user_defind_band_msg">Introduz una frecuencia d\'ente 76.0MHz y 108.0MHz con al menos 1 canal d\'espaciu y 100KHz ente la frecuencia mínima y máxima</string>
   <!-- program types -->
+  <string name="typ_All_stations">Toles emisores</string>
+  <string name="typ_Culture">Cultura</string>
+  <string name="typ_Children">Programes pa neños</string>
+  <string name="typ_Country">Música country</string>
+  <string name="typ_Documentary">Documental</string>
+  <string name="typ_Drama">Drama</string>
+  <string name="typ_Emergency">Emerxencia</string>
+  <string name="typ_Emergency_test">Prueba d\'emerxencia</string>
+  <string name="typ_Finance">Finances</string>
+  <string name="typ_Folk">Música folk</string>
+  <string name="typ_Information">Información</string>
+  <string name="typ_Jazz">Música Jazz</string>
   <string name="typ_News">Anuncies</string>
   <string name="typ_National">Música nacional</string>
   <string name="typ_Other">Otra música</string>
@@ -143,10 +188,13 @@
   <string name="typ_Travel">Viaxes</string>
   <!-- RBDS (North America) -->
   <string name="typ_Foreign_language">Llingua foriata</string>
+  <string name="typ_Hiphop">Hip Hop</string>
   <string name="typ_Nostalgia">Señardá</string>
   <string name="typ_Personality">Personalidaes</string>
   <string name="typ_Religious_music">Música relixosa</string>
   <string name="typ_Religious_talk">Charres relixoses</string>
   <string name="typ_Spanish_music">Música española</string>
+  <string name="typ_Spanish_talk">Conversación n\'español</string>
+  <string name="typ_Sports">Deportes</string>
   <string name="typ_Top_40">Top 40</string>
 </resources>

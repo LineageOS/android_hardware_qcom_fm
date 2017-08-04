@@ -43,13 +43,13 @@
   <string name="button_text_stop">Detener</string>
   <string name="msg_seeking">Buscando estación FM\u2026</string>
   <string name="msg_scanning">Explorando todas las estaciones FM\u2026</string>
-  <string name="msg_scanning_pty">Explorando \'<xliff:g id="pty_name">%1$s</xliff:g>\'\u2026</string>
+  <string name="msg_scanning_pty">Explorando «<xliff:g id="pty_name">%1$s</xliff:g>»\u2026</string>
   <string name="msg_search_title"><xliff:g id="frequency_string">%1$s</xliff:g> MHz</string>
   <string name="msg_searching_title">Selección automática de estaciones</string>
   <string name="msg_searching">Buscando las estaciones con mejor señal para crear una lista de predefinidas\u2026</string>
   <string name="msg_noantenna">Conectar auriculares para usar la radio FM</string>
   <string name="dialog_sleep_title">Tiempo de suspensión automática</string>
-  <string name="presetlist_select_name">Seleccionar \'<xliff:g id="presetlist_name">%1$s</xliff:g>\'</string>
+  <string name="presetlist_select_name">Seleccionar «<xliff:g id="presetlist_name">%1$s</xliff:g>»</string>
   <string name="presetlist_add_new">Añadir nueva lista</string>
   <string name="dialog_presetlist_rename_title">Ingresar nombre</string>
   <string name="presetlist_autoselect_title">Confirmar selección automática</string>
@@ -57,8 +57,8 @@
   <string name="preset_tune">Sintonizar</string>
   <string name="preset_rename">Renombrar</string>
   <string name="preset_delete">Borrar</string>
-  <string name="preset_search">Buscar \'<xliff:g id="preset_pi">%1$s</xliff:g>\'</string>
-  <string name="stat_notif_frequency">\'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
+  <string name="preset_search">Buscar «<xliff:g id="preset_pi">%1$s</xliff:g>»</string>
+  <string name="stat_notif_frequency">«<xliff:g id="frequency">%1$s</xliff:g>» MHz</string>
   <string name="regional_band">Banda regional</string>
   <string name="regional_band_entry_north_america">América del Norte</string>
   <string name="regional_band_entry_europe">Europa</string>
@@ -180,16 +180,16 @@
   <string name="station_name">Emisora:</string>
   <string name="station_exists">¡Esta frecuencia ya existe!</string>
   <string name="station_list_delete_station">Eliminar:<xliff:g id="name">%s</xliff:g></string>
-  <string name="station_list_delete_station_prompt">¿Quieres borrar \'<xliff:g id="name">%s</xliff:g>\'?</string>
+  <string name="station_list_delete_station_prompt">¿Quieres borrar «<xliff:g id="name">%s</xliff:g>»?</string>
   <string name="station_name_empty">Nombre de estación vacío. Escribe uno de nuevo.</string>
-  <string name="station_name_exist">\'<xliff:g id="name">%s</xliff:g>\' ya está en uso. Ingresa un nombre distinto.</string>
+  <string name="station_name_exist">«<xliff:g id="name">%s</xliff:g>» ya está en uso. Ingresa un nombre distinto.</string>
   <string name="rt_plus_tags">Etiquetas</string>
   <string name="usr_def_band_min">Frecuencia más baja (MHz)</string>
   <string name="usr_def_band_max">Frecuencia más alta (MHz)</string>
   <string name="chanl_spacing">Espaciado de canales</string>
   <string name="set">Establecer</string>
   <string name="user_defind_band_msg">Ingresa una frecuencia entre 76.0 MHz y 108.0 MHz con al menos 1 canal de espacio y 100KHz entre la frecuencia mínima y máxima</string>
-  <string name="save_record_file">Archivo de grabación de FM guardado en \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
+  <string name="save_record_file">Archivo de grabación de FM guardado en «<xliff:g id="record_file">%1$s</xliff:g>»</string>
   <string name="fm_search_no_results">No se encontraron emisoras compatibles</string>
   <!-- program types -->
   <string name="typ_All_stations">Todas las estaciones</string>
