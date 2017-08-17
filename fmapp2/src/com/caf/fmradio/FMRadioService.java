@@ -100,6 +100,7 @@ import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 
+
 /**
  * Provides "background" FM Radio (that uses the hardware) capabilities,
  * allowing the user to switch between activities without stopping playback.
@@ -127,6 +128,7 @@ public class FMRadioService extends Service
    private boolean mOverA2DP = false;
    private BroadcastReceiver mFmMediaButtonListener;
    private BroadcastReceiver mAirplaneModeChanged;
+   private BroadcastReceiver mRegisterUserSwitched;
    private IFMRadioServiceCallbacks mCallbacks;
    private static FmSharedPreferences mPrefs;
    private boolean mHeadsetPlugged = false;
@@ -254,6 +256,7 @@ public class FMRadioService extends Service
       registerDelayedServiceStop();
       registerExternalStorageListener();
       registerAirplaneModeStatusChanged();
+      registerUserSwitch();
 
       mSession = new MediaSession(getApplicationContext(), this.getClass().getName());
       mSession.setCallback(mSessionCallback);
@@ -339,6 +342,10 @@ public class FMRadioService extends Service
       if( mSdcardUnmountReceiver != null ) {
           unregisterReceiver(mSdcardUnmountReceiver);
           mSdcardUnmountReceiver = null;
+      }
+      if (mRegisterUserSwitched != null) {
+          unregisterReceiver(mRegisterUserSwitched);
+          mRegisterUserSwitched = null;
       }
       /* Since the service is closing, disable the receiver */
       if (isFmOn())
@@ -605,6 +612,41 @@ public class FMRadioService extends Service
            IntentFilter iFilter = new IntentFilter();
            iFilter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
            registerReceiver(mAirplaneModeChanged, iFilter);
+       }
+   }
+
+    public void registerUserSwitch(){
+        if (mRegisterUserSwitched == null) {
+            mRegisterUserSwitched = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    String action = intent.getAction();
+                    Log.d(LOGTAG, "on receive UserSwitched " + action);
+                    if (action.equals(Intent.ACTION_USER_SWITCHED)) {
+                        Log.d(LOGTAG, "ACTION_USER_SWITCHED Intent received");
+                        int userId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, 0);
+                        Log.d(LOGTAG, "ACTION_USER_SWITCHED, user ID:" + userId);
+                        if (userId == 0) {
+                            if (isFmOn()){
+                                fmOff();
+                                try {
+                                    if ((mServiceInUse) && (mCallbacks != null) ) {
+                                        mCallbacks.onDisabled();
+                                    }
+                                } catch (RemoteException e) {
+                                     e.printStackTrace();
+                                }
+                            }
+                            stop();
+                            android.os.Process.killProcess(android.os.Process.myPid());
+                            System.exit(0);
+                        }
+                    }
+                }
+            };
+            IntentFilter iFilter = new IntentFilter();
+            iFilter.addAction(Intent.ACTION_USER_SWITCHED);
+            registerReceiver(mRegisterUserSwitched, iFilter);
        }
    }
 
