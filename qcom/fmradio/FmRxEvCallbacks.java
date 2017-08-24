@@ -47,4 +47,5 @@ interface FmRxEvCallbacks {
     public void FmRxEvRTPlus();
     public void FmRxEvERTInfo();
     public void FmRxEvECCInfo();
+    public void FmRxEvEnableSlimbus(int status);
 }

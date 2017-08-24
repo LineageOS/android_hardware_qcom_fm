@@ -120,9 +120,11 @@ typedef void (*fm_def_data_wrt_cb) (int status);
 typedef void (*fm_set_blnd_cb) (int status);
 typedef void (*fm_get_stn_prm_cb) (int val, int status);
 typedef void (*fm_get_stn_dbg_prm_cb) (int val, int status);
+typedef void (*fm_enable_sb_cb) (int status);
 
 static JNIEnv *mCallbackEnv = NULL;
 static jobject mCallbacksObj = NULL;
+static bool mCallbacksObjCreated = false;
 static jfieldID sCallbacksField;
 
 jclass javaClassRef;
@@ -150,6 +152,7 @@ jmethodID method_defDataWrtCallback;
 jmethodID method_setBlendCallback;
 jmethodID method_getStnParamCallback;
 jmethodID method_getStnDbgParamCallback;
+jmethodID method_enableSlimbusCallback;
 
 static bool checkCallbackThread() {
    JNIEnv* env = AndroidRuntime::getJNIEnv();
@@ -163,12 +166,11 @@ static bool checkCallbackThread() {
 
 void fm_enabled_cb() {
     ALOGD("Entered %s", __func__);
-    if (mCallbackEnv != NULL) {
-        ALOGE("javaObjectRef creating");
-        jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_enableCallback);
-        mCallbacksObj = javaObjectRef;
-        ALOGE("javaObjectRef = %p mCallbackobject =%p \n",javaObjectRef,mCallbacksObj);
-    }
+
+    if (!checkCallbackThread())
+        return;
+
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_enableCallback);
     ALOGD("exit  %s", __func__);
 }
 
@@ -396,6 +398,7 @@ void fm_disabled_cb()
         return;
 
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_disableCallback);
+    mCallbacksObjCreated = false;
 }
 
 void fm_peek_rsp_cb(char *peek_rsp) {
@@ -523,6 +526,24 @@ static void fm_get_station_debug_param_cb(int val, int status)
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_getStnDbgParamCallback, val, status);
 }
 
+static void fm_enable_slimbus_cb(int status)
+{
+    ALOGD("++fm_enable_slimbus_cb mCallbacksObjCreated: %d", mCallbacksObjCreated);
+
+    if (mCallbacksObjCreated == false) {
+        jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_enableSlimbusCallback);
+        mCallbacksObj = javaObjectRef;
+        mCallbacksObjCreated = true;
+        return;
+    }
+
+    if (!checkCallbackThread())
+        return;
+
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_enableSlimbusCallback, status);
+    ALOGV("--fm_enable_slimbus_cb");
+}
+
 typedef struct {
    size_t  size;
 
@@ -557,6 +578,7 @@ typedef struct {
    fm_set_blnd_cb fm_set_blend_cb;
    fm_get_stn_prm_cb fm_get_station_param_cb;
    fm_get_stn_dbg_prm_cb fm_get_station_debug_param_cb;
+   fm_enable_sb_cb fm_enable_slimbus_cb;
 } fm_vendor_callbacks_t;
 
 typedef struct {
@@ -598,7 +620,8 @@ static   fm_vendor_callbacks_t fm_callbacks = {
     fm_def_data_write_cb,
     fm_set_blend_cb,
     fm_get_station_param_cb,
-    fm_get_station_debug_param_cb
+    fm_get_station_debug_param_cb,
+    fm_enable_slimbus_cb
 };
 #endif
 /* native interface */
@@ -1593,6 +1616,7 @@ static void classInitNative(JNIEnv* env, jclass clazz) {
     method_setBlendCallback = env->GetMethodID(javaClassRef, "setBlendCallback", "(I)V");
     method_getStnParamCallback = env->GetMethodID(javaClassRef, "getStnParamCallback", "(II)V");
     method_getStnDbgParamCallback = env->GetMethodID(javaClassRef, "getStnDbgParamCallback", "(II)V");
+    method_enableSlimbusCallback = env->GetMethodID(javaClassRef, "enableSlimbusCallback", "(I)V");
 
     return;
 error:
@@ -1621,6 +1645,7 @@ static void initNative(JNIEnv *env, jobject object) {
     mCallbacksObj = env->NewGlobalRef(object);
 #endif
 }
+
 static void cleanupNative(JNIEnv *env, jobject object) {
 
 #ifdef FM_SOC_TYPE_CHEROKEE

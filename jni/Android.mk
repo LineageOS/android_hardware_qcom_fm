@@ -27,5 +27,17 @@ LOCAL_MODULE := libqcomfm_jni
 LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := init.qti.fm.sh
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES := $(LOCAL_MODULE)
+LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR_EXECUTABLES)
+
+LOCAL_INIT_RC := init.qti.fm.rc
+
+include $(BUILD_PREBUILT)
+
 endif # is-vendor-board-platform
 endif # BOARD_HAVE_QCOM_FM

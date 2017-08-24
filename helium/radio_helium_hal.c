@@ -79,7 +79,6 @@ static void hci_cc_fm_enable_rsp(char *ev_rsp)
         return;
     }
     rsp = (struct hci_fm_conf_rsp *)ev_rsp;
-    hal->jni_cb->thread_evt_cb(0);
     radio_hci_req_complete(rsp->status);
     hal->jni_cb->enabled_cb();
     if (rsp->status == FM_HC_STATUS_SUCCESS)
@@ -394,6 +393,13 @@ static void hci_cc_dbg_param_rsp(char *ev_buff)
     clear_all_bit(station_dbg_param_mask_flag);
 }
 
+static void hci_cc_enable_slimbus_rsp(char *ev_buff)
+{
+    ALOGV("%s status %d", __func__, ev_buff[0]);
+    hal->jni_cb->thread_evt_cb(0);
+    hal->jni_cb->enable_slimbus_cb(ev_buff[0]);
+}
+
 static inline void hci_cmd_complete_event(char *buff)
 {
     uint16_t opcode;
@@ -489,6 +495,10 @@ static inline void hci_cmd_complete_event(char *buff)
 
     case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_STATION_DBG_PARAM):
             hci_cc_dbg_param_rsp(pbuf);
+            break;
+
+    case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_ENABLE_SLIMBUS):
+            hci_cc_enable_slimbus_rsp(pbuf);
             break;
 
 /*    case hci_common_cmd_op_pack(HCI_OCF_FM_GET_SPUR_TABLE):
