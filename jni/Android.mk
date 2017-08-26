@@ -16,7 +16,8 @@ LOCAL_LDLIBS += -ldl
 LOCAL_SHARED_LIBRARIES := \
         libandroid_runtime \
         libnativehelper \
-        libcutils
+        libcutils \
+        liblog
 
 LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
 LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
