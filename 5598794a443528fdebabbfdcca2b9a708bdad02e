@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7d1ff96_d3596b4d",
+        "filename": "jni/ConfFileParser.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2017-08-28T15:08:40Z",
+      "side": 1,
+      "message": "const char *equal_start; ?",
+      "range": {
+        "startLine": 792,
+        "startChar": 2,
+        "endLine": 792,
+        "endChar": 20
+      },
+      "revId": "5598794a443528fdebabbfdcca2b9a708bdad02e",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
