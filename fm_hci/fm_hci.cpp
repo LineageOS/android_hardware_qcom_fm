@@ -500,10 +500,14 @@ class FmHciCallbacks : public IFmHciCallbacks {
 
         Return<void> hciEventReceived(const hidl_vec<uint8_t>& event) {
             struct fm_event_header_t *temp = (struct fm_event_header_t *) malloc(event.size());
-            memcpy(temp, event.data(), event.size());
-            ALOGI("%s: evt_code:  0x%x", __func__, temp->evt_code);
-            enqueue_fm_rx_event(temp);
-
+            if(temp) {
+                memcpy(temp, event.data(), event.size());
+                ALOGI("%s: evt_code:  0x%x", __func__, temp->evt_code);
+                enqueue_fm_rx_event(temp);
+            }
+            else {
+                ALOGE("%s: Memory Allocation failed for event buffer ",__func__);
+            }
             return Void();
         }
 };
