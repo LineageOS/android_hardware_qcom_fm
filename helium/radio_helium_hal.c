@@ -57,6 +57,7 @@ static uint32_t blend_tbl_mask_flag;
 static uint32_t station_param_mask_flag;
 static uint32_t station_dbg_param_mask_flag;
 uint64_t flag;
+static int slimbus_flag = 0;
 struct fm_hal_t *hal = NULL;
 
 #define LOG_TAG "radio_helium"
@@ -79,6 +80,8 @@ static void hci_cc_fm_enable_rsp(char *ev_rsp)
         return;
     }
     rsp = (struct hci_fm_conf_rsp *)ev_rsp;
+    if (!slimbus_flag)
+        hal->jni_cb->thread_evt_cb(0);
     radio_hci_req_complete(rsp->status);
     hal->jni_cb->enabled_cb();
     if (rsp->status == FM_HC_STATUS_SUCCESS)
@@ -412,7 +415,8 @@ static void hci_cc_dbg_param_rsp(char *ev_buff)
 
 static void hci_cc_enable_slimbus_rsp(char *ev_buff)
 {
-    ALOGV("%s status %d", __func__, ev_buff[0]);
+    ALOGD("%s status %d", __func__, ev_buff[0]);
+    slimbus_flag = 1;
     hal->jni_cb->thread_evt_cb(0);
     hal->jni_cb->enable_slimbus_cb(ev_buff[0]);
 }
