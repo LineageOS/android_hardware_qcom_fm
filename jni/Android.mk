@@ -13,6 +13,10 @@ ifeq ($(BOARD_HAS_QCA_FM_SOC), "cherokee")
 LOCAL_CFLAGS += -DFM_SOC_TYPE_CHEROKEE
 endif
 LOCAL_LDLIBS += -ldl
+
+LOCAL_LDLIBS += -llog \
+                -landroid
+
 LOCAL_SHARED_LIBRARIES := \
         libandroid_runtime \
         libnativehelper \
