@@ -31,6 +31,7 @@ package com.caf.fmradio;
 import java.lang.ref.WeakReference;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -81,6 +82,8 @@ public class FMTransmitterService extends Service
    private static final int FM_TX_PS_REPEAT_COUNT = 1;
 
    private static final String FMRADIO_DEVICE_FD_STRING = "/dev/radio0";
+   private static final String FMTRANSMITTER_NOTIFICATION_CHANNEL =
+           "fmtransmitter_notification_channel";
    private static final String LOGTAG = "FMTxService";//FMRadio.LOGTAG;
    private static final String QFM_STRING ="QFMRADIO";
 
@@ -278,6 +281,8 @@ public class FMTransmitterService extends Service
 
    /* Show the FM Notification */
    public void startNotification() {
+      Log.d(LOGTAG,"startNotification");
+
       RemoteViews views = new RemoteViews(getPackageName(), R.layout.statusbar);
       views.setImageViewResource(R.id.icon, R.drawable.ic_status_fm_tx);
       if (isFmOn())
@@ -288,18 +293,38 @@ public class FMTransmitterService extends Service
          views.setTextViewText(R.id.frequency, "");
       }
 
-      Notification status = new Notification();
-      status.contentView = views;
-      status.flags |= Notification.FLAG_ONGOING_EVENT;
-      status.icon = R.drawable.ic_status_fm_tx;
-      status.contentIntent = PendingIntent.getActivity(this, 0,
-                                                       new Intent("com.caf.fmradio.FMTRANSMITTER_ACTIVITY"), 0);
-      startForeground(FMTRANSMITTERSERVICE_STATUS, status);
-      //NotificationManager nm = (NotificationManager)
-      //                         getSystemService(Context.NOTIFICATION_SERVICE);
-      //nm.notify(FMTRANSMITTERSERVICE_STATUS, status);
-      //setForeground(true);
+      Context context = getApplicationContext();
+      Notification notification;
+      NotificationManager notificationManager =
+              (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+      NotificationChannel notificationChannel =
+              new NotificationChannel(FMTRANSMITTER_NOTIFICATION_CHANNEL,
+              context.getString(R.string.app_name),
+              NotificationManager.IMPORTANCE_LOW);
+
+      notificationManager.createNotificationChannel(notificationChannel);
+
+      notification = new Notification.Builder(context, FMTRANSMITTER_NOTIFICATION_CHANNEL)
+            .setCustomContentView(views)
+            .setSmallIcon(R.drawable.stat_notify_fm)
+            .setContentIntent(PendingIntent.getActivity(this,
+                0, new Intent("com.caf.fmradio.FMTRANSMITTER_ACTIVITY"), 0))
+            .setOngoing(true)
+            .build();
+
+      startForeground(FMTRANSMITTERSERVICE_STATUS, notification);
       mFMOn = true;
+   }
+
+      /* hide the FM Notification */
+   public void stopNotification() {
+      Log.d(LOGTAG,"stopNotification");
+
+      Context context = getApplicationContext();
+      NotificationManager notificationManager =
+            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+      notificationManager.deleteNotificationChannel(FMTRANSMITTER_NOTIFICATION_CHANNEL);
    }
 
    private void stop() {
