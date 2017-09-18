@@ -43,13 +43,13 @@
   <string name="button_text_stop">Detener</string>
   <string name="msg_seeking">Buscando emisora de FM\u2026</string>
   <string name="msg_scanning">Buscando todas las emisoras FM\u2026</string>
-  <string name="msg_scanning_pty">Buscando a \'<xliff:g id="pty_name">%1$s</xliff:g>\'\u2026</string>
+  <string name="msg_scanning_pty">Buscando a «<xliff:g id="pty_name">%1$s</xliff:g>»\u2026</string>
   <string name="msg_search_title"><xliff:g id="frequency_string">%1$s</xliff:g> MHz</string>
   <string name="msg_searching_title">Selección automática de emisoras</string>
   <string name="msg_searching">Buscando las emisoras con mejor señal para crear una lista\u2026</string>
   <string name="msg_noantenna">Por favor conecta unos auriculares para usar la radio FM</string>
   <string name="dialog_sleep_title">Tiempo de apagado automático</string>
-  <string name="presetlist_select_name">Seleccionar \'<xliff:g id="presetlist_name">%1$s</xliff:g>\'</string>
+  <string name="presetlist_select_name">Seleccionar «<xliff:g id="presetlist_name">%1$s</xliff:g>»</string>
   <string name="presetlist_add_new">Añadir nueva lista</string>
   <string name="dialog_presetlist_rename_title">Introducir nombre</string>
   <string name="presetlist_autoselect_title">Confirmar selección automática</string>
@@ -57,8 +57,8 @@
   <string name="preset_tune">Sintonizar</string>
   <string name="preset_rename">Cambiar el nombre</string>
   <string name="preset_delete">Eliminar</string>
-  <string name="preset_search">Buscar a \'<xliff:g id="preset_pi">%1$s</xliff:g>\'</string>
-  <string name="stat_notif_frequency">\'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
+  <string name="preset_search">Buscar a «<xliff:g id="preset_pi">%1$s</xliff:g>»</string>
+  <string name="stat_notif_frequency">«<xliff:g id="frequency">%1$s</xliff:g>» MHz</string>
   <string name="regional_band">Banda regional</string>
   <string name="regional_band_entry_north_america">Norteamérica</string>
   <string name="regional_band_entry_europe">Europa</string>
@@ -107,7 +107,6 @@
   <string name="regional_band_summary_belgium">Bélgica (87,5 a 108,0 MHz en pasos de 100 kHz)</string>
   <string name="regional_band_summary_brazil">Brasil (87,5 a 108,0 MHz en pasos de 200 kHz)</string>
   <string name="regional_band_summary_china">China (87,0 a 108,0 MHz en pasos de 100 kHz)</string>
-  <string name="regional_band_summary_czech_republic">República Checa (87.5 MHz a 108.0 MHz en intervalos de 100 KHz)</string>
   <string name="regional_band_summary_denmark">Dinamarca (87,5 a 108,0 MHz en pasos de 50 kHz)</string>
   <string name="regional_band_summary_finland">Finlandia (87,5 a 108,0 MHz en pasos de 100 kHz)</string>
   <string name="regional_band_summary_france">Francia (87,5 a 108,0 MHz en pasos de 100 kHz)</string>
@@ -166,7 +165,7 @@
   <string name="fm_tune_timeout_msg">No se ha recibido respuesta de la emisora FM. Si el problema persiste, apaga la radio y vuelve a encenderla.</string>
   <string name="fm_command_failed_title">Error en la operación FM</string>
   <string name="fm_cmd_failed_msg">Eror para operar la radio FM. Si el problema persiste, apaga la radio y vuelve a encenderla.</string>
-  <string name="fm_cmd_failed_msg_hdmi">Falló la operación FM. No es posible utilizar la radio y el HDMI simultáneamente.</string>
+  <string name="fm_cmd_failed_msg_hdmi">Falló la operación FM. Es imposible utilizar la radio y el HDMI simultáneamente.</string>
   <string name="fm_cmd_failed_call_on">Falló la operación FM. El audio FM no está permitido durante una llamada.</string>
   <!-- Do not translate. Duration format. -->
   <!-- the name under which recordings will be visible in the media database is formatted like this -->
@@ -180,16 +179,16 @@
   <string name="station_name">Emisora:</string>
   <string name="station_exists">¡Esta frecuencia ya existe!</string>
   <string name="station_list_delete_station">Eliminar:<xliff:g id="name">%s</xliff:g></string>
-  <string name="station_list_delete_station_prompt">¿Estás seguro de que quieres eliminar a \'<xliff:g id="name">%s</xliff:g>\'?</string>
+  <string name="station_list_delete_station_prompt">¿Estás seguro de que quieres eliminar a «<xliff:g id="name">%s</xliff:g>»?</string>
   <string name="station_name_empty">Nombre de emisora vacío. Por favor, escribe uno.</string>
-  <string name="station_name_exist">\'<xliff:g id="name">%s</xliff:g>\' ya está en uso. Por favor, escribe un nuevo nombre.</string>
+  <string name="station_name_exist">«<xliff:g id="name">%s</xliff:g>» ya está en uso. Por favor, escribe un nuevo nombre.</string>
   <string name="rt_plus_tags">Etiquetas</string>
   <string name="usr_def_band_min">Frecuencia más baja (MHz)</string>
   <string name="usr_def_band_max">Frecuencia más alta (MHz)</string>
   <string name="chanl_spacing">Espaciado de canales</string>
   <string name="set">Establecer</string>
   <string name="user_defind_band_msg">Introduce una frecuencia entre 76,0 y 108,0 MHz con al menos 1 canal de espacio y 100KHz entre la frecuencia mínima y máxima</string>
-  <string name="save_record_file">Archivo de grabación de FM guardado en \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
+  <string name="save_record_file">Archivo de grabación de FM guardado en «<xliff:g id="record_file">%1$s</xliff:g>»</string>
   <string name="fm_search_no_results">No se han encontrado emisoras compatibles</string>
   <!-- program types -->
   <string name="typ_All_stations">Todas las emisoras</string>
