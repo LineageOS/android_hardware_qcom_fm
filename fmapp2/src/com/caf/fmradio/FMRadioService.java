@@ -1670,7 +1670,8 @@ public class FMRadioService extends Service
                       if (true == mPlaybackInProgress) {
                           stopFM();
                       }
-                      mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
+                      if (mReceiver != null)
+                          mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
                       mStoppedOnFocusLoss = true;
                       break;
                   case AudioManager.AUDIOFOCUS_LOSS:
