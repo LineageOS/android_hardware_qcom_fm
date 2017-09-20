@@ -142,8 +142,8 @@
   <string name="record_dur">Duração da gravação</string>
   <string name="auto_select_af">Frequência alternativa</string>
   <string name="settings_revert_defaults_title">Reverter para as predefinições de fábrica</string>
-  <string name="settings_revert_defaults_summary">Restaurar todas as definições</string>
-  <string name="settings_revert_confirm_title">Confirme o restauro</string>
+  <string name="settings_revert_defaults_summary">Repor todas as definições</string>
+  <string name="settings_revert_confirm_title">Confirme a reposição</string>
   <string name="settings_revert_confirm_msg">Isto vai eliminar todas as definições, incluido as estações pré configuradas. Continuar?</string>
   <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
   <string name="no_storage">Montar o cartão SD antes de iniciar a gravação.</string>
