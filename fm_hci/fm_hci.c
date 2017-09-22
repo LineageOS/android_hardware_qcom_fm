@@ -391,6 +391,7 @@ void start_fmhal_service() {
            return;
        }
   //     property_set("wc_transport.fm_service_status", "0");
+       usleep(100 * 1000);	// 100 msecs
        property_set(FM_VND_SERVICE_START, "true");
        ALOGI("%s: %s set to true ", __func__, FM_VND_SERVICE_START );
        for(i=0; i<45; i++) {
