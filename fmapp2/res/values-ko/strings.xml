@@ -107,6 +107,7 @@
   <string name="regional_band_summary_belgium">벨기에 (87.5 MHz ~ 108.0 MHz, 100 kHz 단위)</string>
   <string name="regional_band_summary_brazil">브라질 (87.5 MHz ~ 108.0 MHz, 200 kHz 단위)</string>
   <string name="regional_band_summary_china">중국 (87.0 MHz ~ 108.0 MHz, 100 kHz 단위)</string>
+  <string name="regional_band_summary_czech_republic">체코 (87.5 MHz ~ 108.0 MHz, 100 kHz 단위)</string>
   <string name="regional_band_summary_denmark">덴마크 (87.5 MHz ~ 108.0 MHz, 50 kHz 단위)</string>
   <string name="regional_band_summary_finland">핀란드 (87.5 MHz ~ 108.0 MHz, 100 kHz 단위)</string>
   <string name="regional_band_summary_france">프랑스 (87.5 MHz ~ 108.0 MHz, 100 kHz 단위)</string>

@@ -107,6 +107,7 @@
   <string name="regional_band_summary_belgium">Belgien (87,5 bis 108,0 MHz, Schrittweite 100 kHz)</string>
   <string name="regional_band_summary_brazil">Brasilien (87,5 bis 108,0 MHz, Schrittweite 200 kHz)</string>
   <string name="regional_band_summary_china">China (87,0 bis 108,0 MHz, Schrittweite 100 kHz)</string>
+  <string name="regional_band_summary_czech_republic">Tschechien (87,5 bis 108,0 MHz, Schrittweite 100 kHz)</string>
   <string name="regional_band_summary_denmark">Dänemark (87,5 bis 108,0 MHz, Schrittweite 50 kHz)</string>
   <string name="regional_band_summary_finland">Finnland (87,5 bis 108,0 MHz, Schrittweite 100 kHz)</string>
   <string name="regional_band_summary_france">Frankreich (87,5 bis 108,0 MHz, Schrittweite 100 kHz)</string>

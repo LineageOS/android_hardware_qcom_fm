@@ -107,6 +107,7 @@
   <string name="regional_band_summary_belgium">Белгия (87.5 до 108.0 MHz в стъпки от 100 kHz)</string>
   <string name="regional_band_summary_brazil">Бразилия (87.5 до 108.0 MHz в 200 kHz стъпки)</string>
   <string name="regional_band_summary_china">Китай (87.0 до 108.0 MHz в стъпки от 100 kHz)</string>
+  <string name="regional_band_summary_czech_republic">Чешка Република (87.5 MHz до 108.0 MHz в 100 KHz стъпки)</string>
   <string name="regional_band_summary_denmark">Дания (87.5 до 108.0 MHz в 50 kHz стъпки)</string>
   <string name="regional_band_summary_finland">Финландия (87.5 до 108.0 MHz в стъпки от 100 kHz)</string>
   <string name="regional_band_summary_france">Франция (87.5 до 108.0 MHz в стъпки от 100 kHz)</string>
