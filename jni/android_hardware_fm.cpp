@@ -128,7 +128,7 @@ static jobject mCallbacksObj = NULL;
 static bool mCallbacksObjCreated = false;
 static jfieldID sCallbacksField;
 
-jclass javaClassRef;
+static jclass javaClassRef;
 static jmethodID method_psInfoCallback;
 static jmethodID method_rtCallback;
 static jmethodID method_ertCallback;
