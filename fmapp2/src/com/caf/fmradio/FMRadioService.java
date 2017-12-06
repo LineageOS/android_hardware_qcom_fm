@@ -2358,6 +2358,8 @@ public class FMRadioService extends Service
                               // failure of enable can be because handle
                               // already open which gets effected if
                               // we disable
+            AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            audioManager.abandonAudioFocus(mAudioFocusListener);
             stop();
          }
 
@@ -2447,6 +2449,7 @@ public class FMRadioService extends Service
                               // failure of enable can be because handle
                               // already open which gets effected if
                               // we disable
+            audioManager.abandonAudioFocus(mAudioFocusListener);
             stop();
        }
 
