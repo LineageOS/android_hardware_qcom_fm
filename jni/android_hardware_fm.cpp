@@ -87,6 +87,7 @@ namespace android {
 char *FM_LIBRARY_NAME = "fm_helium.so";
 char *FM_LIBRARY_SYMBOL_NAME = "FM_HELIUM_LIB_INTERFACE";
 void *lib_handle;
+static int slimbus_flag = 0;
 
 typedef void (*enb_result_cb)();
 typedef void (*tune_rsp_cb)(int Freq);
@@ -167,10 +168,19 @@ static bool checkCallbackThread() {
 void fm_enabled_cb() {
     ALOGD("Entered %s", __func__);
 
-    if (!checkCallbackThread())
-        return;
+    if (slimbus_flag) {
+        if (!checkCallbackThread())
+            return;
 
-    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_enableCallback);
+        mCallbackEnv->CallVoidMethod(mCallbacksObj, method_enableCallback);
+    } else {
+        if (mCallbackEnv != NULL) {
+            ALOGE("javaObjectRef creating");
+            jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_enableCallback);
+            mCallbacksObj = javaObjectRef;
+            ALOGE("javaObjectRef = %p mCallbackobject =%p \n",javaObjectRef,mCallbacksObj);
+        }
+    }
     ALOGD("exit  %s", __func__);
 }
 
@@ -541,6 +551,7 @@ static void fm_enable_slimbus_cb(int status)
         return;
 
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_enableSlimbusCallback, status);
+    slimbus_flag = 1;
     ALOGV("--fm_enable_slimbus_cb");
 }
 

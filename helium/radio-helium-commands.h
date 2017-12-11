@@ -115,6 +115,9 @@ enum helium_cmd_t {
     HCI_FM_HELIUM_AUDIO_MODE,
     HCI_FM_HELIUM_RMSSI,
     HCI_FM_HELIUM_AUDIO_MUTE,
+    HCI_FM_HELIUM_AF_ALGO,
+    HCI_FM_HELIUM_AF_SINR_GD_CH_TH,
+    HCI_FM_HELIUM_AF_SINR_TH,
 
     /*FM VSC command to enable/disable slimbus data port*/
     HCI_FM_HELIUM_AUDIO = 0x00980940,
