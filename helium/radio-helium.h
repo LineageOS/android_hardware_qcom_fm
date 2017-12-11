@@ -98,8 +98,13 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**RDS CONFIG MODE**/
 #define FM_RDS_CNFG_MODE    0x0f
 #define FM_RDS_CNFG_LEN     0x10
+
+/**AF JUMP CONFIG MODE**/
+#define AF_ALGO_OFFSET      0
 #define AF_RMSSI_TH_OFFSET  1
 #define AF_RMSSI_SAMPLES_OFFSET 2
+#define AF_SINR_GD_CH_TH_OFFSET 4
+#define AF_SINR_TH_OFFSET   5
 /**RX CONFIG MODE**/
 #define FM_RX_CONFG_MODE    0x15
 #define FM_RX_CNFG_LEN      0x15
@@ -1186,6 +1191,9 @@ struct radio_helium_device {
 #define CMD_DEFRD_CF0TH12           (7)
 #define CMD_DEFRD_TUNE_POWER        (8)
 #define CMD_DEFRD_REPEATCOUNT       (9)
+#define CMD_DEFRD_AF_ALGO           (10)
+#define CMD_DEFRD_AF_SINR_GD_CH_TH  (11)
+#define CMD_DEFRD_AF_SINR_TH        (12)
 
 #define CMD_STNPARAM_RSSI           (1)
 #define CMD_STNPARAM_SINR           (2)
