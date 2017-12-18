@@ -539,7 +539,7 @@ static void fm_get_station_debug_param_cb(int val, int status)
 static void fm_enable_slimbus_cb(int status)
 {
     ALOGD("++fm_enable_slimbus_cb mCallbacksObjCreated: %d", mCallbacksObjCreated);
-
+    slimbus_flag = 1;
     if (mCallbacksObjCreated == false) {
         jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_enableSlimbusCallback);
         mCallbacksObj = javaObjectRef;
@@ -551,8 +551,7 @@ static void fm_enable_slimbus_cb(int status)
         return;
 
     mCallbackEnv->CallVoidMethod(mCallbacksObj, method_enableSlimbusCallback, status);
-    slimbus_flag = 1;
-    ALOGV("--fm_enable_slimbus_cb");
+    ALOGD("--fm_enable_slimbus_cb");
 }
 
 typedef struct {
