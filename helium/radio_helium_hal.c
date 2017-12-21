@@ -61,6 +61,8 @@ static int slimbus_flag = 0;
 struct fm_hal_t *hal = NULL;
 
 #define LOG_TAG "radio_helium"
+#define WAIT_TIMEOUT 20000 /* 20*1000us */
+
 static void radio_hci_req_complete(char result)
 {
   ALOGD("%s:enetred %s", LOG_TAG, __func__);
@@ -1261,12 +1263,29 @@ static struct fm_hci_callbacks_t hal_cb = {
 
 int hal_init(fm_hal_callbacks_t *cb)
 {
-    int ret = -FM_HC_STATUS_FAIL;
+    int ret = -FM_HC_STATUS_FAIL, i;
     fm_hci_hal_t hci_hal;
 
     ALOGD("++%s", __func__);
 
     memset(&hci_hal, 0, sizeof(fm_hci_hal_t));
+
+    if (hal) {
+        ALOGE("%s:HAL is still available from the last session, please wait for sometime", __func__);
+        for(i=0; i<10; i++) {
+            if (!hal) {
+                break;
+            } else {
+                usleep(WAIT_TIMEOUT);
+            }
+        }
+    }
+
+    if (hal) {
+        ALOGE("%s:Last FM session didnot end properly, please launch again", __func__);
+        hal = NULL;
+        return ret;
+    }
 
     hal = malloc(sizeof(struct fm_hal_t));
     if (!hal) {
