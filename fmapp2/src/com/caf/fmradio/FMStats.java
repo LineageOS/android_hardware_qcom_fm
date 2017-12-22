@@ -748,7 +748,7 @@ public class FMStats extends Activity  {
                      return;
                  if(mService != null) {
                     try {
-                        mService.getRxRepeatCount();
+                        mService.setRxRepeatCount(textBoxVal);
                         setCmdSent = true;
                         lastCmdSent = CMD_DEFRD_REPEATCOUNT;
                     } catch (RemoteException e) {
@@ -773,7 +773,7 @@ public class FMStats extends Activity  {
                      (textBoxVal > MAX_BLEND_SINRHI))
                      return;
                  if(mReceiver != null) {
-                     mReceiver.getBlendSinr();
+                     mReceiver.setBlendSinr(textBoxVal);
                      setCmdSent = true;
                      lastCmdSent = CMD_BLENDTBL_SINR_HI;
                  }
@@ -795,7 +795,7 @@ public class FMStats extends Activity  {
                      (textBoxVal > MAX_BLEND_RMSSIHI))
                      return;
                  if(mReceiver != null) {
-                     mReceiver.getBlendRmssi();
+                     mReceiver.setBlendRmssi(textBoxVal);
                      setCmdSent = true;
                      lastCmdSent = CMD_BLENDTBL_RMSSI_HI;
                  }
@@ -834,7 +834,7 @@ public class FMStats extends Activity  {
               Log.d(LOGTAG, "Value of Sinr Samples count is : " + textBoxVal);
               if(mService != null) {
                  try {
-                     mService.getSinrSamplesCnt();
+                     mService.setSinrSamplesCnt(textBoxVal);
                      setCmdSent = true;
                      lastCmdSent = CMD_CHDET_SINR_SAMPLE;
                  }catch (RemoteException e) {
@@ -857,7 +857,7 @@ public class FMStats extends Activity  {
               Log.d(LOGTAG, "Value of Sinr Th is : " + textBoxVal);
               if(mService != null) {
                  try {
-                     mService.getSinrTh();
+                     mService.setSinrTh(textBoxVal);
                      setCmdSent = true;
                      lastCmdSent = CMD_CHDET_SINR_TH;
                  }catch (RemoteException e) {
@@ -881,7 +881,7 @@ public class FMStats extends Activity  {
               Log.d(LOGTAG, "Value of Intf Det Low Th is : " + textBoxVal);
               if(mService != null) {
                  try {
-                     mService.getIntfDetLowTh();
+                     mService.setIntfDetLowTh(textBoxVal);
                      setCmdSent =  true;
                      lastCmdSent = CMD_CHDET_INTF_TH_LOW;
                  }catch (RemoteException e) {
@@ -904,7 +904,7 @@ public class FMStats extends Activity  {
               Log.d(LOGTAG, "Value of Intf Det Low Th is : " + textBoxVal);
               if(mService != null) {
                  try {
-                     mService.getIntfDetHighTh();
+                     mService.setIntfDetHighTh(textBoxVal);
                      setCmdSent = true;
                      lastCmdSent = CMD_CHDET_INTF_TH_HIGH;
                  }catch (RemoteException e) {
@@ -931,7 +931,7 @@ public class FMStats extends Activity  {
                   return;
               if(mService != null) {
                  try {
-                     mService.getSinrFirstStage();
+                     mService.setSinrFirstStage(textBoxVal);
                      setCmdSent = true;
                      lastCmdSent = CMD_DEFRD_SINR_FIRST_STAGE;
                  }catch (RemoteException e) {
@@ -958,7 +958,7 @@ public class FMStats extends Activity  {
                   return;
               if(mService != null) {
                  try {
-                     mService.getRmssiFirstStage();
+                     mService.setRmssiFirstStage(textBoxVal);
                      setCmdSent = true;
                      lastCmdSent = CMD_DEFRD_RMSSI_FIRST_STAGE;
                  }catch (RemoteException e) {
@@ -985,7 +985,7 @@ public class FMStats extends Activity  {
                   return;
               if(mService != null) {
                  try {
-                     mService.getCFOMeanTh();
+                     mService.setCFOMeanTh(textBoxVal);
                      setCmdSent = true;
                      lastCmdSent = CMD_DEFRD_CF0TH12;
                  }catch (RemoteException e) {
@@ -1005,7 +1005,7 @@ public class FMStats extends Activity  {
           Log.d(LOGTAG, "Value entered for search is: MPX DCC");
           if(mService != null) {
              try {
-                 mService.getSearchAlgoType();
+                 mService.setSearchAlgoType(MPX_DCC);
                  setCmdSent = true;
                  algo_type = MPX_DCC;
                  lastCmdSent = CMD_DEFRD_SEARCH_ALGO;
@@ -1022,7 +1022,7 @@ public class FMStats extends Activity  {
           Log.d(LOGTAG, "Value entered for search is: SINR INTF");
           if(mService != null) {
              try {
-                 mService.getSearchAlgoType();
+                 mService.setSearchAlgoType(SINR_INTF);
                  setCmdSent = true;
                  algo_type = SINR_INTF;
                  lastCmdSent = CMD_DEFRD_SEARCH_ALGO;
@@ -1046,7 +1046,7 @@ public class FMStats extends Activity  {
                   return;
               if(mService != null) {
                  try {
-                     mService.getAfJmpRmssiTh();
+                     mService.setAfJmpRmssiTh(textBoxVal);
                      setCmdSent = true;
                      lastCmdSent = CMD_DEFRD_AF_RMSSI_TH;
                  }catch (RemoteException e) {
@@ -1073,7 +1073,7 @@ public class FMStats extends Activity  {
                   return;
               if(mService != null) {
                  try {
-                     mService.getGoodChRmssiTh();
+                     mService.setGoodChRmssiTh(textBoxVal);
                      setCmdSent = true;
                      lastCmdSent = CMD_DEFRD_GD_CH_RMSSI_TH;
                  }catch (RemoteException e) {
@@ -1100,7 +1100,7 @@ public class FMStats extends Activity  {
                   return;
               if(mService != null) {
                  try {
-                     mService.getAfJmpRmssiSamplesCnt();
+                     mService.setAfJmpRmssiSamplesCnt(textBoxVal);
                      setCmdSent = true;
                      lastCmdSent = CMD_DEFRD_AF_RMSSI_SAMPLE;
                  }catch (RemoteException e) {
@@ -3652,49 +3652,12 @@ public class FMStats extends Activity  {
           }
           public void getSigThCb(int val, int status) {
               Log.d(LOGTAG, "getSigThCb ");
-
-              if (setCmdSent) {
-                  setCmdSent = false;
-                  if (mService != null) {
-                      try {
-                          mService.setSinrSamplesCnt(textBoxVal);
-                      } catch (RemoteException e) {
-                          e.printStackTrace();
-                      }
-                  } else {
-                      Log.e(LOGTAG, "getSigTh: Service is null");
-                  }
-              } else {
-                  Log.e(LOGTAG, "Send message: SIGNAL_THRESHOLD");
-                  mCallbackHandler.obtainMessage(SIGNAL_THRESHOLD, val, status).sendToTarget();
-              }
+              mCallbackHandler.obtainMessage(SIGNAL_THRESHOLD, val, status).sendToTarget();
           }
 
           public void getChDetThCb(int val, int status) {
               Log.d(LOGTAG, "getChDetThCb");
-
-              if (setCmdSent) {
-                  setCmdSent = false;
-                  if (mService != null) {
-                      try {
-                          if (lastCmdSent == CMD_CHDET_SINR_TH)
-                              mService.setSinrTh(textBoxVal);
-                          else if (lastCmdSent == CMD_CHDET_SINR_SAMPLE)
-                              mService.setSinrSamplesCnt(textBoxVal);
-                          else if (lastCmdSent == CMD_CHDET_INTF_TH_LOW)
-                              mService.setIntfDetLowTh(textBoxVal);
-                          else if (lastCmdSent == CMD_CHDET_INTF_TH_HIGH)
-                              mService.setIntfDetHighTh(textBoxVal);
-                      } catch (RemoteException e) {
-                          Log.e(LOGTAG, "getChDetTh: exception");
-                          e.printStackTrace();
-                      }
-                  }
-                  lastCmdSent = 0;
-              } else {
-                  Log.e(LOGTAG, "Send message: GET_CHANNEL_DET_THRESHOLD");
-                  mCallbackHandler.obtainMessage(GET_CHANNEL_DET_THRESHOLD, val, status).sendToTarget();
-              }
+              mCallbackHandler.obtainMessage(GET_CHANNEL_DET_THRESHOLD, val, status).sendToTarget();
           }
 
           public void setChDetThCb(int status)
@@ -3705,40 +3668,7 @@ public class FMStats extends Activity  {
 
           public void DefDataRdCb(int val, int status) {
               Log.d(LOGTAG, "DefDataRdCb");
-
-              if (setCmdSent) {
-                  setCmdSent = false;
-                  if (mService != null) {
-                      try {
-                          if (lastCmdSent == CMD_DEFRD_AF_RMSSI_TH)
-                               mService.setAfJmpRmssiTh(textBoxVal);
-                          else if (lastCmdSent == CMD_DEFRD_AF_RMSSI_SAMPLE)
-                              mService.setAfJmpRmssiSamplesCnt(textBoxVal);
-                          else if (lastCmdSent == CMD_DEFRD_GD_CH_RMSSI_TH)
-                              mService.setGoodChRmssiTh(textBoxVal);
-                          else if (lastCmdSent == CMD_DEFRD_SEARCH_ALGO)
-                              mService.setSearchAlgoType(algo_type);
-                          else if (lastCmdSent == CMD_DEFRD_SINR_FIRST_STAGE)
-                              mService.setSinrFirstStage(textBoxVal);
-                          else if (lastCmdSent == CMD_DEFRD_RMSSI_FIRST_STAGE)
-                              mService.setRmssiFirstStage(textBoxVal);
-                          else if (lastCmdSent == CMD_DEFRD_CF0TH12)
-                              mService.setCFOMeanTh(textBoxVal);
-                          else if (lastCmdSent == CMD_DEFRD_REPEATCOUNT)
-                              mService.setRxRepeatCount(textBoxVal);
-                      } catch (RemoteException e) {
-                          Log.e(LOGTAG,"DefDataRd: exception");
-                          lastCmdSent = 0;
-                          e.printStackTrace();
-                      }
-                  } else {
-                      Log.e(LOGTAG, "DefDataRd:Service is null");
-                  }
-                  lastCmdSent = 0;
-              } else {
-                  Log.e(LOGTAG, "Send message: DEFAULT_DATA_READ");
-                  mCallbackHandler.obtainMessage(DEFAULT_DATA_READ, val, status).sendToTarget();
-              }
+              mCallbackHandler.obtainMessage(DEFAULT_DATA_READ, val, status).sendToTarget();
           }
 
           public void DefDataWrtCb(int status)
@@ -3749,22 +3679,7 @@ public class FMStats extends Activity  {
 
           public void getBlendCb(int val, int status) {
               Log.d(LOGTAG, "getBlend");
-
-              if (setCmdSent) {
-                  setCmdSent = false;
-                  if (mReceiver != null) {
-                      if (lastCmdSent == CMD_BLENDTBL_SINR_HI)
-                          mReceiver.setBlendSinr(textBoxVal);
-                      else if (lastCmdSent == CMD_BLENDTBL_RMSSI_HI)
-                          mReceiver.setBlendRmssi(textBoxVal);
-                  } else {
-                      Log.e(LOGTAG, "getBlend: Service is null");
-                  }
-                  lastCmdSent = 0;
-              } else {
-                  Log.e(LOGTAG, "Send message: GET_BLEND_TBL");
-                  mCallbackHandler.obtainMessage(GET_BLEND_TBL, val, status).sendToTarget();
-              }
+              mCallbackHandler.obtainMessage(GET_BLEND_TBL, val, status).sendToTarget();
           }
 
           public void setBlendCb(int status)
