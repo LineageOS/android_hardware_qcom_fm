@@ -51,7 +51,9 @@ LOCAL_PATH := $(LOCAL_DIR_PATH)
 #endif # is-vendor-board-platform
 #endif # Not (TARGET_USES_AOSP)
 
+endif # BOARD_HAVE_QCOM_FM
+
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 LOCAL_PATH := $(LOCAL_DIR_PATH)
 include $(LOCAL_PATH)/libfm_jni/Android.mk
-
-endif # BOARD_HAVE_QCOM_FM
+endif # BOARD_USES_QCOM_HARDWARE
