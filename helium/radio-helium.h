@@ -32,6 +32,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdbool.h>
 
+#define HELIUM_CMD_TIME_OUT (5)
 #define MIN_TX_TONE_VAL  0x00
 #define MAX_TX_TONE_VAL  0x07
 #define MIN_HARD_MUTE_VAL  0x00
@@ -110,11 +111,11 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define FM_RX_CNFG_LEN      0x15
 #define GD_CH_RMSSI_TH_OFFSET   0x03
 #define MAX_GD_CH_RMSSI_TH  0x7F
-#define SRCH_ALGO_TYPE_OFFSET  0x00
-#define SINRFIRSTSTAGE_OFFSET  0x01
-#define RMSSIFIRSTSTAGE_OFFSET 0x02
-#define CF0TH12_BYTE1_OFFSET   0x03
-#define CF0TH12_BYTE2_OFFSET   0x04
+#define SRCH_ALGO_TYPE_OFFSET  0x02
+#define SINRFIRSTSTAGE_OFFSET  0x03
+#define RMSSIFIRSTSTAGE_OFFSET 0x04
+#define CF0TH12_BYTE1_OFFSET   0x00
+#define CF0TH12_BYTE2_OFFSET   0x01
 #define MAX_SINR_FIRSTSTAGE 0x7F
 #define MAX_RMSSI_FIRSTSTAGE    0x7F
 #define RDS_PS0_XFR_MODE 0x01
@@ -1248,6 +1249,9 @@ struct fm_hal_t {
     struct radio_helium_device *radio;
     fm_hal_callbacks_t *jni_cb;
     void *private_data;
+    pthread_mutex_t cmd_lock;
+    pthread_cond_t cmd_cond;
+    bool set_cmd_sent;
 };
 
 struct fm_interface_t {

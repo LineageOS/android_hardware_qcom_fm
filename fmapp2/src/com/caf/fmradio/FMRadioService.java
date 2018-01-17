@@ -2357,11 +2357,14 @@ public class FMRadioService extends Service
          }
          else
          {
-            mReceiver = null; // as enable failed no need to disable
+            if ((mReceiver.getFMState() != mReceiver.subPwrLevel_FMRx_Starting) &&
+                            (mReceiver.getFMState() != mReceiver.FMState_Rx_Turned_On)) {
+                mReceiver = null; // as enable failed no need to disable
                               // failure of enable can be because handle
                               // already open which gets effected if
                               // we disable
-            stop();
+                stop();
+            }
          }
 
          return bStatus;
@@ -2450,6 +2453,7 @@ public class FMRadioService extends Service
                               // failure of enable can be because handle
                               // already open which gets effected if
                               // we disable
+            audioManager.abandonAudioFocus(mAudioFocusListener);
             stop();
        }
 
@@ -3396,11 +3400,13 @@ public class FMRadioService extends Service
       public void FmRxEvEnableReceiver()
       {
          Log.d(LOGTAG, "FmRxEvEnableReceiver");
-         mReceiver.setRawRdsGrpMask();
-         if (mReceiver != null && mReceiver.isCherokeeChip()) {
-             synchronized(mEventWaitLock) {
-                 mEventReceived = true;
-                 mEventWaitLock.notify();
+         if (mReceiver != null) {
+             mReceiver.setRawRdsGrpMask();
+             if (mReceiver.isCherokeeChip()) {
+                 synchronized(mEventWaitLock) {
+                     mEventReceived = true;
+                     mEventWaitLock.notify();
+                 }
              }
          }
       }

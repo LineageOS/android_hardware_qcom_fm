@@ -793,8 +793,8 @@ static char line_is_key_value_pair
 )
 {
   const char *equal_start;
-  char *key;
-  char *val;
+  char *key = NULL;
+  char *val = NULL;
   unsigned key_len;
   unsigned val_len;
 
@@ -822,6 +822,10 @@ static char line_is_key_value_pair
       val = (char *)malloc(sizeof(char) * (val_len + 1));
       if(val == NULL) {
          ALOGE("could not alloc memory for value\n");
+         if(key){
+             free(key);
+             key = NULL;
+         }
          return FALSE;
       }
       memcpy(key, (str - key_len), key_len);
@@ -869,20 +873,20 @@ static char add_key_value_pair
                  list = grp->list[key_index];
               }else {
                  ALOGE("group list is null\n");
-                 return FALSE;
+                 goto err;
               }
               while((list != NULL) && strcmp(key, list->key)) {
                     list = list->next;
               }
               if(list != NULL) {
                   ALOGE("group already contains the key\n");
-                  return FALSE;
+                  goto err;
               }else{
                   list = alloc_key_value_pair();
                   if(list == NULL) {
                      ALOGE("add key value failed as could not alloc memory for key\
                             val pair\n");
-                     return FALSE;
+                     goto err;
                   }
                   key_len = strlen(key);
                   list->key = (char *)malloc(sizeof(char) *
@@ -890,7 +894,7 @@ static char add_key_value_pair
                   if(list->key == NULL) {
                      ALOGE("could not alloc memory for key\n");
                      free(list);
-                     return FALSE;
+                     goto err;
                   }
                   val_len = strlen(val);
                   list->value = (char *)malloc(sizeof(char) *
@@ -898,10 +902,12 @@ static char add_key_value_pair
                   if(!list->value) {
                       free(list->key);
                       free(list);
-                      return FALSE;
+                      goto err;
                   }
                   memcpy(list->key, key, key_len);
                   memcpy(list->value, val, val_len);
+                  if (key) free((char*)key);
+                  if (val) free((char*)val);
                   list->key[key_len] = '\0';
                   list->value[val_len] = '\0';
                   list->next = grp->list[key_index];
@@ -913,8 +919,10 @@ static char add_key_value_pair
            grp = grp->grp_next;
      }
      ALOGE("group does not exist\n");
-     return FALSE;
-  }else {
-     return FALSE;
+     goto err;
   }
+err:
+     if (key) free((char*)key);
+     if (val) free((char*)val);
+     return FALSE;
 }
