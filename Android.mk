@@ -39,11 +39,12 @@ include $(LOCAL_PATH)/fmapp2/Android.mk
 #LOCAL_PATH := $(LOCAL_DIR_PATH)
 #include $(LOCAL_PATH)/FMRecord/Android.mk
 
+ifeq ($(BOARD_HAS_QCA_FM_SOC), "cherokee")
 LOCAL_PATH := $(LOCAL_DIR_PATH)
 include $(LOCAL_PATH)/fm_hci/Android.mk
-
 LOCAL_PATH := $(LOCAL_DIR_PATH)
 include $(LOCAL_PATH)/helium/Android.mk
+endif
 
 LOCAL_PATH := $(LOCAL_DIR_PATH)
 #include $(LOCAL_PATH)/fmhalService/Android.mk
