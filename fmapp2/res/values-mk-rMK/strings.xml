@@ -29,6 +29,43 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="regional_band_summary_north_america">Северна Америка (87,5 до 108,0 MHz во 200 kHz во чекори)</string>
+  <string name="regional_band_summary_europe">Европа (87.5 до 108.0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_japan">Јапонија (76.0 до 90.0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_japan_wide">Јапонија (широко) (90,0 до 108,0 MHz во 50 kHz во чекори)</string>
+  <string name="regional_band_summary_australia">Австралија (87,7 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_austria">Австрија (87,5 до 108,0 MHz во 50 kHz во чекори)</string>
+  <string name="regional_band_summary_belgium">Белгија (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_brazil">Бразил (87.5 до 108.0 MHz во 200 kHz во чекори)</string>
+  <string name="regional_band_summary_china">Кина (87.0 до 108.0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_czech_republic">Чешка (87,5 до 108,0 MHz во 100 kHz чекори)</string>
+  <string name="regional_band_summary_denmark">Данска (87,5 до 108,0 MHz во 50 kHz чекори)</string>
+  <string name="regional_band_summary_finland">Финска (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_france">Франција (87.5 до 108.0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_germany">Германија (87,5 до 108,0 MHz во чекори 50 kHz во чекори)</string>
+  <string name="regional_band_summary_greece">Грција (87,5 до 108,0 MHz во 50 kHz во чекори)</string>
+  <string name="regional_band_summary_hong_kong">Хонг Конг (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_india">Индија (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_indonesia">Индонезија (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_ireland">Ирска (87,5 до 108,0 MHz во 50 kHz во чекори)</string>
+  <string name="regional_band_summary_italy">Италија (87,5 до 108,0 MHz во 50 kHz во чекори)</string>
+  <string name="regional_band_summary_korea">Кореја (87,5 до 108,0 MHz во 200 kHz во чекори)</string>
+  <string name="regional_band_summary_mexico">Мексико (88,1 до 107,9 MHz во 200 kHz во чекори)</string>
+  <string name="regional_band_summary_netherlands">Холандија (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_new_zealand">Нов Зеланд (88,0 до 107,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_norway">Норвешка (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_poland">Полска (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_portugal">Португалија (87,5 до 108,0 MHz во 50 kHz во чекори)</string>
+  <string name="regional_band_summary_russia">Русија (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_singapore">Сингапур (88,0 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_slovakia">Словачка (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_spain">Шпанија (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_switzerland">Швајцарија (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_sweden">Шведска (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_taiwan">Тајван (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_turkey">Турција (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_united_kingdom">Обединето Кралство (87,5 до 108,0 MHz во 100 kHz во чекори)</string>
+  <string name="regional_band_summary_united_states">САД (88.1 до 107.9 MHz во 200 kHz во чекори)</string>
   <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
   <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
   <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
@@ -41,6 +78,7 @@
   <!-- all recordings will show up in the media database with this 'artist' name -->
   <!-- all recordings will show up in the media database with this 'album' name -->
   <!-- all recordings will show up in the media database in a playlist with this name -->
+  <string name="user_defind_band_msg">Внесете фреквенција од 76,0 до 108,0 MHz со минимум 1 канал простор и 100 kHz простор помеѓу мин и максимална фреквенција</string>
   <!-- program types -->
   <!-- RBDS (North America) -->
 </resources>

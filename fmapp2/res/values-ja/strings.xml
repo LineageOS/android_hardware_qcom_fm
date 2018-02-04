@@ -107,6 +107,7 @@
   <string name="regional_band_summary_belgium">ベルギー（87.5MHz～108.0MHz 100kHzステップ）</string>
   <string name="regional_band_summary_brazil">ブラジル（87.5MHz～108.0MHz 200kHzステップ）</string>
   <string name="regional_band_summary_china">中国（87.0MHz～108.0MHz 100kHzステップ）</string>
+  <string name="regional_band_summary_czech_republic">チェコ共和国（87.5MHz～108.0MHz 100kHzステップ）</string>
   <string name="regional_band_summary_denmark">デンマーク（87.5MHz～108.0MHz 50kHzステップ）</string>
   <string name="regional_band_summary_finland">フィンランド（87.5MHz～108.0MHz 100kHzステップ）</string>
   <string name="regional_band_summary_france">フランス（87.5MHz～108.0MHz 100kHzステップ）</string>
