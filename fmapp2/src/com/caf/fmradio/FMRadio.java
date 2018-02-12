@@ -1274,7 +1274,7 @@ public class FMRadio extends Activity
           if (mProgressDialog != null) {
               mProgressDialog.setTitle(titleStr);
               mProgressDialog.setMessage(msgStr);
-              mProgressDialog.setIcon(R.drawable.ic_launcher_fmradio);
+              mProgressDialog.setIcon(R.mipmap.ic_launcher);
               mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
               mProgressDialog.setCanceledOnTouchOutside(false);
               mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE,
