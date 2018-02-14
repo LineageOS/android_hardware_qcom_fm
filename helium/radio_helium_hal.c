@@ -120,13 +120,6 @@ static void hci_cc_fm_disable_rsp(char *ev_buff)
     if (hal->radio->mode == FM_TURNING_OFF) {
         ALOGD("%s:calling fm close\n", LOG_TAG );
         fm_hci_close(hal->private_data);
-        free(hal->radio);
-        hal->radio = NULL;
-        hal->jni_cb = NULL;
-        pthread_cond_destroy(&hal->cmd_cond);
-        pthread_mutex_destroy(&hal->cmd_lock);
-        free(hal);
-        hal = NULL;
     }
 }
 
@@ -1097,11 +1090,22 @@ int process_event(void *hal, unsigned char *evt_buf)
 int fm_hci_close_done()
 {
     ALOGI("fm_hci_close_done");
+    fm_hal_callbacks_t *ptr = NULL;
+
     if(hal != NULL){
+        ptr = hal->jni_cb;
+        ALOGI("clearing hal ");
+        free(hal->radio);
+        hal->radio = NULL;
+        hal->jni_cb = NULL;
+        pthread_cond_destroy(&hal->cmd_cond);
+        pthread_mutex_destroy(&hal->cmd_lock);
+        free(hal);
+        hal = NULL;
+
         ALOGI("Notifying FM OFF to JNI");
-        hal->radio->mode = FM_OFF;
-        hal->jni_cb->disabled_cb();
-        hal->jni_cb->thread_evt_cb(1);
+        ptr->disabled_cb();
+        ptr->thread_evt_cb(1);
     }
     return 0;
 }
