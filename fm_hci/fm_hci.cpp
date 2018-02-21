@@ -101,10 +101,12 @@ static int enqueue_fm_rx_event(struct fm_event_header_t *hdr)
     hci.rx_event_queue.push(hdr);
     hci.rx_queue_mtx.unlock();
 
-    if (hci.is_rx_processing == false) {
-        hci.rx_cond.notify_all();
-    }
-
+    ALOGI("%s: putting lock before notify", __func__);
+    hci.rx_cond_mtx.lock();
+    ALOGI("%s:before notify to waiting thred", __func__);
+    hci.rx_cond.notify_all();
+    ALOGI("%s:after notify to waiting thred", __func__);
+    hci.rx_cond_mtx.unlock();
     ALOGI("%s: FM-Event ENQUEUED SUCCESSFULLY", __func__);
 
     return FM_HC_STATUS_SUCCESS;
@@ -132,11 +134,9 @@ static void dequeue_fm_rx_event()
         hci.rx_queue_mtx.lock();
         if (hci.rx_event_queue.empty()) {
             ALOGI("No more FM Events are available in the RX Queue");
-            hci.is_rx_processing = false;
             hci.rx_queue_mtx.unlock();
             return;
         } else {
-            hci.is_rx_processing = true;
         }
 
         evt_buf = hci.rx_event_queue.front();
@@ -296,10 +296,13 @@ static void hci_rx_thread()
     ALOGI("%s: ##### starting hci_rx_thread Worker thread!!! #####", __func__);
     hci.is_rx_thread_running = true;
 
+    ALOGI("%s: constr unique_lock ", __func__);
+    Lock lk(hci.rx_cond_mtx);
     while (hci.state != FM_RADIO_DISABLING && hci.state != FM_RADIO_DISABLED) {
         //wait for rx event
-        Lock lk(hci.rx_cond_mtx);
+        ALOGI("%s:before wait", __func__);
         hci.rx_cond.wait(lk);
+        ALOGI("%s:after wait ", __func__);
         dequeue_fm_rx_event();
     }
 
@@ -398,9 +401,7 @@ static int start_rx_thread()
 static void stop_rx_thread()
 {
     ALOGI("%s:stop_rx_thread ++", __func__);
-    if (hci.is_rx_processing == false) {
-        hci.rx_cond.notify_all();
-    }
+    hci.rx_cond.notify_all();
 
     hci.rx_thread_.join();
     ALOGI("%s:stop_rx_thread --", __func__);
@@ -619,7 +620,6 @@ int fm_hci_init(fm_hci_hal_t *hci_hal)
     hci.cb = hci_hal->cb;
     hci.command_credits = 1;
     hci.is_tx_processing = false;
-    hci.is_rx_processing = false;
     hci.is_tx_thread_running = false;
     hci.is_rx_thread_running = false;
     hci.state = FM_RADIO_DISABLED;
