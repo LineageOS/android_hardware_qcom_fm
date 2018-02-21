@@ -25,7 +25,11 @@ LOCAL_SRC_FILES +=  $(call all-java-files-under, src/com/caf/hc_utils)
 else
 LOCAL_SRC_FILES +=  $(call all-java-files-under, src/com/caf/utils)
 endif
+
 LOCAL_PACKAGE_NAME := FM2
+
+LOCAL_PRIVATE_PLATFORM_APIS := true
+
 LOCAL_CERTIFICATE := platform
 LOCAL_JNI_SHARED_LIBRARIES := libqcomfm_jni
 LOCAL_JAVA_LIBRARIES := qcom.fmradio
