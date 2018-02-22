@@ -37,15 +37,15 @@
     <item>스테레오</item>
   </string-array>
   <string-array name="record_durations_entries">
-    <item>5분</item>
-    <item>15분</item>
-    <item>30분</item>
+    <item>5 분</item>
+    <item>15 분</item>
+    <item>30 분</item>
     <item>멈출 때까지</item>
   </string-array>
   <string-array name="sleep_duration_values">
-    <item>15 minutes</item>
-    <item>30분</item>
-    <item>45분</item>
+    <item>15 분</item>
+    <item>30 분</item>
+    <item>45 분</item>
     <item>1시간</item>
   </string-array>
   <string-array name="channel_spacing_entries">
