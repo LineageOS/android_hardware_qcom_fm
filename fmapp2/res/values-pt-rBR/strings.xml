@@ -180,9 +180,9 @@
   <string name="station_name">Estação:</string>
   <string name="station_exists">Essa frequência já existe!</string>
   <string name="station_list_delete_station">Apagar: <xliff:g id="name">%s</xliff:g></string>
-  <string name="station_list_delete_station_prompt">Tem certeza que quer apagar \'<xliff:g id="name">%s</xliff:g>\'?</string>
-  <string name="station_name_empty">Nome de estação vazio, digite novamente.</string>
-  <string name="station_name_exist">\'<xliff:g id="name">%s</xliff:g>\' já está em uso, digite um nome diferente.</string>
+  <string name="station_list_delete_station_prompt">Tem certeza de que deseja apagar \'<xliff:g id="name">%s</xliff:g>\'?</string>
+  <string name="station_name_empty">O nome da estação está vazio. Por favor, digite novamente.</string>
+  <string name="station_name_exist">\'<xliff:g id="name">%s</xliff:g>\' já está em uso. Por favor, digite um nome diferente.</string>
   <string name="rt_plus_tags">Tags</string>
   <string name="usr_def_band_min">Menor frequência (MHz)</string>
   <string name="usr_def_band_max">Maior frequência (MHz)</string>
