@@ -15,7 +15,7 @@ LOCAL_JNI_SHARED_LIBRARIES := libqcomfm_jni
 LOCAL_SHARED_LIBRARIES := liblog
 LOCAL_MODULE:= qcom.fmradio
 
-LOCAL_ADDITIONAL_DEPENDENCIES := qcom.fmradio.xml
+LOCAL_ADDITIONAL_DEPENDENCIES := qcom/fmradio/qcom.fmradio.xml
 
 include $(BUILD_JAVA_LIBRARY)
 
