@@ -486,7 +486,7 @@ static char parse_load_frm_fhandler
                 }
                 line = (char *)new_line;
             }
-            if((buf[i] == '\n')) {
+            if(buf[i] == '\n') {
                 has_carriage_rtn = false;
                 line[line_len] = '\0';
                 ret = parse_line(key_file, line, &cur_grp);
@@ -758,7 +758,7 @@ static char line_is_key_value_pair
   }
   while((str != equal_start) && isalnum(*str))
         str++;
-  if((str == equal_start)) {
+  if(str == equal_start) {
       key = (char *)malloc(sizeof(char) * (key_len + 1));
       if(key == NULL) {
          ALOGE("could not alloc memory for new key\n");
