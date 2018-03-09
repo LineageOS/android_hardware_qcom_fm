@@ -306,6 +306,7 @@ signed char FmPerformanceParams :: GetSinrFirstStage
    UINT fd, signed char &th
 )
 {
+   long int sinr_first_stage;
    signed char ret = FM_FAILURE;
 
    ret = FmIoctlsInterface::get_control(fd,
