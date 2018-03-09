@@ -93,7 +93,7 @@ int FmRadioController ::open_dev()
 {
     int ret = FM_SUCCESS;
 
-    fd_driver = open(FM_DEVICE_PATH, O_RDONLY, O_NONBLOCK);
+    fd_driver = open(FM_DEVICE_PATH, O_RDONLY);
 
     if (fd_driver < 0) {
         ALOGE("%s failed, [fd=%d] %s\n", __func__, fd_driver, FM_DEVICE_PATH);
