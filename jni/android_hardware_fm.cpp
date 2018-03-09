@@ -664,7 +664,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
     if(radio_path == NULL){
         return FM_JNI_FAILURE;
     }
-    fd = open(radio_path, O_RDONLY, O_NONBLOCK);
+    fd = open(radio_path, O_RDONLY, 0);
     if(isCopy == JNI_TRUE){
         env->ReleaseStringUTFChars(path, radio_path);
     }
