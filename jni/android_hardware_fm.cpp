@@ -78,7 +78,6 @@ enum search_dir_t {
     SCAN_DN
 };
 
-static JNIEnv *g_jEnv = NULL;
 static JavaVM *g_jVM = NULL;
 
 namespace android {
@@ -655,7 +654,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
         (JNIEnv* env, jobject thiz, jstring path)
 {
     int fd;
-    int i, retval=0, err;
+    int i, err;
     char value[PROPERTY_VALUE_MAX] = {'\0'};
     char versionStr[40] = {'\0'};
     int init_success = 0;
@@ -729,9 +728,6 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
 static jint android_hardware_fmradio_FmReceiverJNI_closeFdNative
     (JNIEnv * env, jobject thiz, jint fd)
 {
-    int i = 0;
-    int cleanup_success = 0;
-    char retval =0;
     char value[PROPERTY_VALUE_MAX] = {'\0'};
 
     property_get("qcom.bluetooth.soc", value, NULL);
@@ -1229,7 +1225,6 @@ static jint android_hardware_fmradio_FmReceiverJNI_setAnalogModeNative(JNIEnv * 
 {
     int i=0;
     char value[PROPERTY_VALUE_MAX] = {'\0'};
-    char firmwareVersion[80];
 
     property_get("qcom.bluetooth.soc", value, NULL);
 
