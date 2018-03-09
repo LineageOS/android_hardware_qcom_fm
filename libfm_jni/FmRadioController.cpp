@@ -648,7 +648,6 @@ int FmRadioController :: GetStationList
     int ret;
     ULINT lowBand, highBand;
     int station_num = 0;
-    int stationList[FM_RX_SRCHLIST_MAX_STATIONS];
     int tmpFreqByte1=0;
     int tmpFreqByte2=0;
     int freq = 0;
