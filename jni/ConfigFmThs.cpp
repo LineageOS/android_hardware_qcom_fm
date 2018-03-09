@@ -344,7 +344,6 @@ void ConfigFmThs :: set_hybrd_list
     UINT fd
 )
 {
-    signed char ret = FM_SUCCESS;
     char **keys = NULL;
     char **keys_cpy = NULL;
     char *key_value = NULL;
@@ -352,7 +351,6 @@ void ConfigFmThs :: set_hybrd_list
     unsigned int *freqs_array = NULL;
     signed char *sinrs_array = NULL;
     char *sinrs = NULL;
-    int value;
     unsigned int freq_cnt = 0;
     unsigned int sinr_cnt = 0;
     FmPerformanceParams perf_params;
@@ -485,7 +483,6 @@ void  ConfigFmThs :: SetRxSearchAfThs
     const char *file, UINT fd
 )
 {
-    int index;
     struct NAME_MAP *found;
     char **grps = NULL;
     char **grps_cpy = NULL;

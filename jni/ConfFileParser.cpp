@@ -322,7 +322,6 @@ char **get_keys
 {
   unsigned int grp_hash_code;
   unsigned int grp_index;
-  unsigned int num_of_keys;
   unsigned int i;
   unsigned int j = 0;
   unsigned int key_len;
@@ -530,8 +529,6 @@ static char parse_line
 )
 {
   const char *line_begin;
-  char *grp_name;
-  unsigned int len;
 
   if((line == NULL) || (key_file == NULL)) {
       ALOGE("key file or line is null\n");
@@ -726,53 +723,6 @@ static char line_is_grp
       }
   }else {
       return FALSE;
-  }
-}
-
-static char key_exist
-(
-  const group_table *key_file,
-  const char *cur_grp,
-  const char *key
-)
-{
-  unsigned int grp_hash_code;
-  unsigned int key_hash_code;
-  unsigned int grp_index;
-  unsigned int key_index;
-  group *grp = NULL;
-  key_value_pair_list *list = NULL;
-
-  if((key_file != NULL) && (cur_grp != NULL)
-      && (key != NULL) && ((key_file->grps_hash != NULL))
-      && (strcmp(key, ""))) {
-     grp_hash_code = get_hash_code(cur_grp);
-     grp_index = (grp_hash_code % key_file->grps_hash_size);
-     grp = key_file->grps_hash[grp_index];
-     key_hash_code = get_hash_code(key);
-     while((grp != NULL)) {
-           if(!strcmp(cur_grp, grp->grp_name)) {
-              key_index = (key_hash_code % grp->keys_hash_size);
-              if(grp->list)
-                 list = grp->list[key_index];
-              while((list != NULL) && strcmp(key, list->key)) {
-                    list = list->next;
-              }
-              if(list != NULL){
-                  return TRUE;
-              }else{
-                  return FALSE;
-              }
-           }
-           grp = grp->grp_next;
-     }
-     if(!grp) {
-        return TRUE;
-     }else {
-        return FALSE;
-     }
-  }else {
-     return FALSE;
   }
 }
 
