@@ -38,9 +38,10 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 static FmRadioController * pFMRadio;
 
-jboolean OpenFd(JNIEnv *env, jobject thiz)
+jboolean OpenFd(JNIEnv *env __unused, jobject thiz __unused)
 {
     int ret = 0;
+
     pFMRadio = new FmRadioController();
     if (pFMRadio)
         ret = pFMRadio->open_dev();
@@ -50,7 +51,7 @@ jboolean OpenFd(JNIEnv *env, jobject thiz)
     return ret? JNI_FALSE: JNI_TRUE;
 }
 
-jboolean CloseFd(JNIEnv *env, jobject thiz)
+jboolean CloseFd(JNIEnv *env __unused, jobject thiz __unused)
 {
     int ret = 0;
 
@@ -63,7 +64,7 @@ jboolean CloseFd(JNIEnv *env, jobject thiz)
     return ret? JNI_FALSE: JNI_TRUE;
 }
 
-jboolean TurnOn(JNIEnv *env, jobject thiz, jfloat freq)
+jboolean TurnOn(JNIEnv *env __unused, jobject thiz __unused, jfloat freq)
 {
     int ret = 0;
     int tmp_freq;
@@ -82,7 +83,8 @@ jboolean TurnOn(JNIEnv *env, jobject thiz, jfloat freq)
     return ret?JNI_FALSE:JNI_TRUE;
 }
 
-jboolean TurnOff(JNIEnv *env, jobject thiz, jint type)
+jboolean TurnOff(JNIEnv *env __unused, jobject thiz __unused,
+        jint type __unused)
 {
     int ret = 0;
 
@@ -99,7 +101,7 @@ jboolean TurnOff(JNIEnv *env, jobject thiz, jint type)
     return ret?JNI_FALSE:JNI_TRUE;
 }
 
-jboolean SetFreq(JNIEnv *env, jobject thiz, jfloat freq)
+jboolean SetFreq(JNIEnv *env __unused, jobject thiz __unused, jfloat freq)
 {
     int ret = 0;
     int tmp_freq;
@@ -114,7 +116,7 @@ jboolean SetFreq(JNIEnv *env, jobject thiz, jfloat freq)
     return ret?JNI_FALSE:JNI_TRUE;
 }
 
-jfloat Seek(JNIEnv *env, jobject thiz, jfloat freq, jboolean isUp)
+jfloat Seek(JNIEnv *env __unused, jobject thiz __unused, jfloat freq, jboolean isUp)
 {
     int ret = JNI_FALSE;
     float val = freq;
@@ -131,7 +133,7 @@ jfloat Seek(JNIEnv *env, jobject thiz, jfloat freq, jboolean isUp)
     return val;
 }
 
-jshortArray ScanList(JNIEnv *env, jobject thiz)
+jshortArray ScanList(JNIEnv *env, jobject thiz __unused)
 {
     int ret = 0;
     jshortArray scanList;
@@ -160,7 +162,7 @@ out:
     return scanList;
 }
 
-jshort GetRdsEvent(JNIEnv *env, jobject thiz)
+jshort GetRdsEvent(JNIEnv *env __unused, jobject thiz __unused)
 {
     int ret = JNI_FALSE;
 
@@ -170,7 +172,7 @@ jshort GetRdsEvent(JNIEnv *env, jobject thiz)
     return ret;
 }
 
-jbyteArray GetPsText(JNIEnv *env, jobject thiz)
+jbyteArray GetPsText(JNIEnv *env, jobject thiz __unused)
 {
     int ret = 0;
     jbyteArray PS;
@@ -191,7 +193,7 @@ jbyteArray GetPsText(JNIEnv *env, jobject thiz)
     return PS;
 }
 
-jbyteArray GetRtText(JNIEnv *env, jobject thiz)
+jbyteArray GetRtText(JNIEnv *env, jobject thiz __unused)
 {
     int ret = 0;
     jbyteArray RadioText;
@@ -212,7 +214,7 @@ jbyteArray GetRtText(JNIEnv *env, jobject thiz)
     return RadioText;
 }
 
-jshort GetAfFreq(JNIEnv *env, jobject thiz)
+jshort GetAfFreq(JNIEnv *env __unused, jobject thiz __unused)
 {
     int ret = 0;
     jshort ret_freq = 0;
@@ -229,7 +231,7 @@ jshort GetAfFreq(JNIEnv *env, jobject thiz)
     return ret_freq;
 }
 
-jint SetRds(JNIEnv *env, jobject thiz, jboolean rdson)
+jint SetRds(JNIEnv *env __unused, jobject thiz __unused, jboolean rdson)
 {
     int ret = 0;
 
@@ -244,7 +246,7 @@ jint SetRds(JNIEnv *env, jobject thiz, jboolean rdson)
     return ret?JNI_FALSE:JNI_TRUE;
 }
 
-jboolean StopSrch(JNIEnv *env, jobject thiz)
+jboolean StopSrch(JNIEnv *env __unused, jobject thiz __unused)
 {
     int ret = 0;
 
@@ -259,7 +261,7 @@ jboolean StopSrch(JNIEnv *env, jobject thiz)
     return ret?JNI_FALSE:JNI_TRUE;
 }
 
-jint SetMute(JNIEnv *env, jobject thiz, jboolean mute)
+jint SetMute(JNIEnv *env __unused, jobject thiz __unused, jboolean mute)
 {
     int ret = 0;
 
@@ -283,7 +285,7 @@ jint SetMute(JNIEnv *env, jobject thiz, jboolean mute)
  *      0: NOT support
  *      -1: error
  ******************************************/
-jint IsRdsSupport(JNIEnv *env, jobject thiz)
+jint IsRdsSupport(JNIEnv *env __unused, jobject thiz __unused)
 {
     int ret = 0;
 
@@ -310,7 +312,7 @@ jint IsRdsSupport(JNIEnv *env, jobject thiz)
  *          1: Failed
  *          2: Not support
  ******************************************/
-jint SetAntenna(JNIEnv *env, jobject thiz, jint antenna)
+jint SetAntenna(JNIEnv *env __unused, jobject thiz __unused, jint antenna)
 {
     int ret = 0;
     jint jret = 0;
@@ -361,15 +363,16 @@ static JNINativeMethod gMethods[] = {
     {"switchAntenna", "(I)I",  (void*)SetAntenna},
 };
 
-int register_android_hardware_fm(JNIEnv* env)
+int register_android_hardware_fm(JNIEnv* env __unused)
 {
         return jniRegisterNativeMethods(env, classPathNameFM, gMethods, NELEM(gMethods));
 }
 
-jint JNI_OnLoad(JavaVM *jvm, void *reserved)
+jint JNI_OnLoad(JavaVM *jvm, void *reserved __unused)
 {
    JNIEnv *e;
    int status;
+
    ALOGI("FM: loading FM-JNI\n");
 
    if (jvm->GetEnv((void **)&e, JNI_VERSION_1_6)) {
