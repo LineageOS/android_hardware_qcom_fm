@@ -477,7 +477,7 @@ static char parse_load_frm_fhandler
   unsigned int i;
   bool has_carriage_rtn = false;
 
-  while (bytes_read = fread(buf, 1, MAX_LINE_LEN, fp)) {
+  while ((bytes_read = fread(buf, 1, MAX_LINE_LEN, fp))) {
         for (i = 0; i < bytes_read; i++) {
             if (line_len == line_allocated) {
                 line_allocated += 25;
