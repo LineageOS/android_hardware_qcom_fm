@@ -41,6 +41,10 @@ static FmRadioController * pFMRadio;
 jboolean OpenFd(JNIEnv *env, jobject thiz)
 {
     int ret = 0;
+
+    (void)env;
+    (void)thiz;
+
     pFMRadio = new FmRadioController();
     if (pFMRadio)
         ret = pFMRadio->open_dev();
@@ -53,6 +57,9 @@ jboolean OpenFd(JNIEnv *env, jobject thiz)
 jboolean CloseFd(JNIEnv *env, jobject thiz)
 {
     int ret = 0;
+
+    (void)env;
+    (void)thiz;
 
     if (pFMRadio)
         ret = pFMRadio->close_dev();
@@ -67,6 +74,9 @@ jboolean TurnOn(JNIEnv *env, jobject thiz, jfloat freq)
 {
     int ret = 0;
     int tmp_freq;
+
+    (void)env;
+    (void)thiz;
 
     ALOGI("%s, [freq=%d]\n", __func__, (int)freq);
     tmp_freq = (int)(freq * FREQ_MULT);   //Eg, 87.5 * 1000 --> 87500
@@ -86,6 +96,10 @@ jboolean TurnOff(JNIEnv *env, jobject thiz, jint type)
 {
     int ret = 0;
 
+    (void)env;
+    (void)thiz;
+    (void)type;
+
     if (pFMRadio)
         ret = pFMRadio->Pwr_Down();
     else
@@ -104,6 +118,9 @@ jboolean SetFreq(JNIEnv *env, jobject thiz, jfloat freq)
     int ret = 0;
     int tmp_freq;
 
+    (void)env;
+    (void)thiz;
+
     tmp_freq = (int)(freq * FREQ_MULT);        //Eg, 87.5 * 10 --> 875
     if (pFMRadio)
         ret = pFMRadio->TuneChannel(tmp_freq);
@@ -118,6 +135,9 @@ jfloat Seek(JNIEnv *env, jobject thiz, jfloat freq, jboolean isUp)
 {
     int ret = JNI_FALSE;
     float val = freq;
+
+    (void)env;
+    (void)thiz;
 
     if (pFMRadio) {
         ret = pFMRadio->Set_mute(true);
@@ -137,6 +157,8 @@ jshortArray ScanList(JNIEnv *env, jobject thiz)
     jshortArray scanList;
     int chl_cnt = FM_SCAN_CH_SIZE_MAX;
     uint16_t ScanTBL[FM_SCAN_CH_SIZE_MAX];
+
+    (void)thiz;
 
     if (pFMRadio)
         ret = pFMRadio->ScanList(ScanTBL, &chl_cnt);
@@ -164,6 +186,9 @@ jshort GetRdsEvent(JNIEnv *env, jobject thiz)
 {
     int ret = JNI_FALSE;
 
+    (void)env;
+    (void)thiz;
+
     if (pFMRadio)
         ret = pFMRadio->ReadRDS();
 
@@ -176,6 +201,8 @@ jbyteArray GetPsText(JNIEnv *env, jobject thiz)
     jbyteArray PS;
     char ps[MAX_PS_LEN];
     int ps_len = 0;
+
+    (void)thiz;
 
     if (pFMRadio)
         ret = pFMRadio->Get_ps(ps, &ps_len);
@@ -198,6 +225,8 @@ jbyteArray GetRtText(JNIEnv *env, jobject thiz)
     char rt[MAX_RT_LEN];
     int rt_len = 0;
 
+    (void)thiz;
+
     if (pFMRadio)
         ret = pFMRadio->Get_rt(rt, &rt_len);
     else
@@ -217,6 +246,9 @@ jshort GetAfFreq(JNIEnv *env, jobject thiz)
     int ret = 0;
     jshort ret_freq = 0;
 
+    (void)env;
+    (void)thiz;
+
     if (pFMRadio)
         ret = pFMRadio->Get_AF_freq((uint16_t*)&ret_freq);
     else
@@ -233,6 +265,9 @@ jint SetRds(JNIEnv *env, jobject thiz, jboolean rdson)
 {
     int ret = 0;
 
+    (void)env;
+    (void)thiz;
+
     if (pFMRadio)
         ret = pFMRadio->Turn_On_Off_Rds(rdson);
     else
@@ -248,6 +283,9 @@ jboolean StopSrch(JNIEnv *env, jobject thiz)
 {
     int ret = 0;
 
+    (void)env;
+    (void)thiz;
+
     if (pFMRadio)
         ret = pFMRadio->Stop_Scan_Seek();
     else
@@ -262,6 +300,9 @@ jboolean StopSrch(JNIEnv *env, jobject thiz)
 jint SetMute(JNIEnv *env, jobject thiz, jboolean mute)
 {
     int ret = 0;
+
+    (void)env;
+    (void)thiz;
 
     if (pFMRadio)
         ret = pFMRadio->Set_mute(mute);
@@ -286,6 +327,9 @@ jint SetMute(JNIEnv *env, jobject thiz, jboolean mute)
 jint IsRdsSupport(JNIEnv *env, jobject thiz)
 {
     int ret = 0;
+
+    (void)env;
+    (void)thiz;
 
     if (pFMRadio)
         ret = pFMRadio->IsRds_support();
@@ -315,6 +359,9 @@ jint SetAntenna(JNIEnv *env, jobject thiz, jint antenna)
     int ret = 0;
     jint jret = 0;
     int ana = -1;
+
+    (void)env;
+    (void)thiz;
 
     if (0 == antenna) {
         ana = FM_LONG_ANA;
@@ -363,24 +410,29 @@ static JNINativeMethod gMethods[] = {
 
 int register_android_hardware_fm(JNIEnv* env)
 {
-        return jniRegisterNativeMethods(env, classPathNameFM, gMethods, NELEM(gMethods));
+    (void)env;
+
+    return jniRegisterNativeMethods(env, classPathNameFM, gMethods, NELEM(gMethods));
 }
 
 jint JNI_OnLoad(JavaVM *jvm, void *reserved)
 {
-   JNIEnv *e;
-   int status;
-   ALOGI("FM: loading FM-JNI\n");
+    JNIEnv *e;
+    int status;
 
-   if (jvm->GetEnv((void **)&e, JNI_VERSION_1_6)) {
-       ALOGE("JNI version mismatch error");
-       return JNI_ERR;
-   }
+    (void)reserved;
 
-   if ((status = register_android_hardware_fm(e)) < 0) {
-       ALOGE("jni adapter service registration failure, status: %d", status);
-       return JNI_ERR;
-   }
-   return JNI_VERSION_1_6;
+    ALOGI("FM: loading FM-JNI\n");
+
+    if (jvm->GetEnv((void **)&e, JNI_VERSION_1_6)) {
+        ALOGE("JNI version mismatch error");
+        return JNI_ERR;
+    }
+
+    if ((status = register_android_hardware_fm(e)) < 0) {
+        ALOGE("jni adapter service registration failure, status: %d", status);
+        return JNI_ERR;
+    }
+    return JNI_VERSION_1_6;
 }
 
