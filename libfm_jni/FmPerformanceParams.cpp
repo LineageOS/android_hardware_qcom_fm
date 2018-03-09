@@ -306,7 +306,6 @@ signed char FmPerformanceParams :: GetSinrFirstStage
    UINT fd, signed char &th
 )
 {
-   long int sinr_first_stage;
    signed char ret = FM_FAILURE;
 
    ret = FmIoctlsInterface::get_control(fd,
@@ -440,7 +439,6 @@ signed char FmPerformanceParams :: SetHybridSrchList
    struct v4l2_ext_control ext_ctl;
    struct v4l2_ext_controls v4l2_ctls;
    unsigned int freq;
-   signed char sinr;
    unsigned int size = 0;
    char *data = NULL;
    signed char ret = FM_FAILURE;
