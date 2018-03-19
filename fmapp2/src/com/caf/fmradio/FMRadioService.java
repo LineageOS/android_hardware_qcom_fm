@@ -236,6 +236,8 @@ public class FMRadioService extends Service
    private static final int FW_TIMEOUT = 200;
    private static final int DISABLE_SLIMBUS_DATA_PORT = 0;
    private static final int ENABLE_SLIMBUS_DATA_PORT = 1;
+   private static final int DISABLE_SOFT_MUTE = 0;
+   private static final int ENABLE_SOFT_MUTE = 1;
 
    private static Object mNotchFilterLock = new Object();
 
@@ -3843,6 +3845,16 @@ public class FMRadioService extends Service
       public void FmRxEvEnableSlimbus(int status)
       {
          Log.e(LOGTAG, "FmRxEvEnableSlimbus status = " + status);
+         if (mReceiver != null && mReceiver.isCherokeeChip()) {
+             synchronized(mEventWaitLock) {
+                 mEventReceived = true;
+                 mEventWaitLock.notify();
+             }
+         }
+      }
+	  public void FmRxEvEnableSoftMute(int status)
+      {
+         Log.e(LOGTAG, "FmRxEvEnableSoftMute status = " + status);
          if (mReceiver != null && mReceiver.isCherokeeChip()) {
              synchronized(mEventWaitLock) {
                  mEventReceived = true;

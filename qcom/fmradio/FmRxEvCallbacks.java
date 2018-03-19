@@ -48,4 +48,5 @@ interface FmRxEvCallbacks {
     public void FmRxEvERTInfo();
     public void FmRxEvECCInfo();
     public void FmRxEvEnableSlimbus(int status);
+	public void FmRxEvEnableSoftMute(int status);
 }

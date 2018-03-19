@@ -795,4 +795,13 @@ class FmRxControls
        else
            return false;
    }
+   public boolean enableSoftMute(int fd, int enable) {
+       int ret;
+       Log.d(TAG, "enableSoftMute : enable = " + enable);
+       ret = FmReceiverJNI.enableSoftMute(fd, enable);
+       if (ret == 0)
+           return true;
+       else
+           return false;
+   }
 }
