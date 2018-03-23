@@ -624,6 +624,12 @@ int fm_hci_init(fm_hci_hal_t *hci_hal)
 
     ALOGD("++%s", __func__);
 
+    if(hci.is_rx_thread_running)
+    {
+        ALOGI("%s:previous rx thread running wait until rx thread stops", __func__);
+        hci.rx_thread_.join();
+        ALOGI("%s:stop_rx_thread completed, proceed iniialization", __func__);
+    }
     if (!hci_hal || !hci_hal->hal) {
         ALOGE("NULL input argument");
         return FM_HC_STATUS_NULL_POINTER;
