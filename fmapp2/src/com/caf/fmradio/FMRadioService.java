@@ -1673,15 +1673,17 @@ public class FMRadioService extends Service
                           Log.v(LOGTAG, "Focus Loss/TLoss - Disabling speaker");
                           AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
                       }
-                      if (mReceiver != null && (mReceiver.isCherokeeChip()))
-                          mReceiver.EnableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
+                      if ((mReceiver != null) && mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
+                          mEventReceived = false;
+                          mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
+                          waitForFWEvent();
+                      }
+                      mStoppedOnFocusLoss = true;
+
                       if (true == mPlaybackInProgress) {
                           stopFM();
                       }
 
-                      if ((mReceiver != null) && mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true)))
-                          mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
-                      mStoppedOnFocusLoss = true;
                       break;
                   case AudioManager.AUDIOFOCUS_LOSS:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS mspeakerphone= " +
@@ -1691,13 +1693,16 @@ public class FMRadioService extends Service
                           mSpeakerDisableHandler.removeCallbacks(mSpeakerDisableTask);
                           mSpeakerDisableHandler.postDelayed(mSpeakerDisableTask, 0);
                       }
+
+                      //intentional fall through.
+                      if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
+                          mEventReceived = false;
+                          mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
+                          waitForFWEvent();
+                      }
                       if (true == mPlaybackInProgress) {
                           stopFM();
                       }
-
-                      //intentional fall through.
-                      if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true)))
-                          mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
 
                       if (true == isFmRecordingOn())
                           stopRecording();
