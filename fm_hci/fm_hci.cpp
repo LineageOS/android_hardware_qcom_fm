@@ -101,10 +101,12 @@ static int enqueue_fm_rx_event(struct fm_event_header_t *hdr)
     hci.rx_event_queue.push(hdr);
     hci.rx_queue_mtx.unlock();
 
-    if (hci.is_rx_processing == false) {
-        hci.rx_cond.notify_all();
-    }
-
+    ALOGI("%s: putting lock before notify", __func__);
+    hci.rx_cond_mtx.lock();
+    ALOGI("%s:before notify to waiting thred", __func__);
+    hci.rx_cond.notify_all();
+    ALOGI("%s:after notify to waiting thred", __func__);
+    hci.rx_cond_mtx.unlock();
     ALOGI("%s: FM-Event ENQUEUED SUCCESSFULLY", __func__);
 
     return FM_HC_STATUS_SUCCESS;
@@ -132,11 +134,9 @@ static void dequeue_fm_rx_event()
         hci.rx_queue_mtx.lock();
         if (hci.rx_event_queue.empty()) {
             ALOGI("No more FM Events are available in the RX Queue");
-            hci.is_rx_processing = false;
             hci.rx_queue_mtx.unlock();
             return;
         } else {
-            hci.is_rx_processing = true;
         }
 
         evt_buf = hci.rx_event_queue.front();
@@ -185,13 +185,14 @@ static void dequeue_fm_rx_event()
 *******************************************************************************/
 static int enqueue_fm_tx_cmd(struct fm_command_header_t *hdr)
 {
-    ALOGI("%s:  opcode 0x%x len:%d", __func__,  hdr->opcode, hdr->len);
+    ALOGI("%s:  opcode 0x%x len:%d tx_processing %d", __func__,  hdr->opcode, hdr->len, hci.is_tx_processing);
 
     hci.tx_queue_mtx.lock();
     hci.tx_cmd_queue.push(hdr);
     hci.tx_queue_mtx.unlock();
 
     if (hci.is_tx_processing == false) {
+        ALOGI("%s:  notifying tx_processing %d", __func__,hci.is_tx_processing);
         hci.tx_cond.notify_all();
     }
 
@@ -221,18 +222,21 @@ static void dequeue_fm_tx_cmd()
 
     while (1) {
         hci.tx_queue_mtx.lock();
+        ALOGI("%s inside while(1) %d", __func__,hci.tx_cmd_queue.empty());
         if(hci.tx_cmd_queue.empty()){
-            ALOGI("No more FM CMDs are available in the Queue");
+            ALOGI(" %s No more FM CMDs are available in the Queue",__func__);
             hci.is_tx_processing = false;
             hci.tx_queue_mtx.unlock();
             return;
         } else {
+            ALOGI("%s tx_processing", __func__);
             hci.is_tx_processing = true;
         }
 
         hdr = hci.tx_cmd_queue.front();
         hci.tx_cmd_queue.pop();
         hci.tx_queue_mtx.unlock();
+        ALOGI("%s: packet popped %d credits", __func__,hci.command_credits);
 
         Lock lk(hci.credit_mtx);
         while (hci.command_credits == 0) {
@@ -245,6 +249,7 @@ static void dequeue_fm_tx_cmd()
         }
         hci.command_credits--;
         hci_transmit(hdr);
+        ALOGI("%s: packet transmitted %d credits", __func__,hci.command_credits);
     }
 }
 
@@ -268,9 +273,18 @@ static void  hci_tx_thread()
 
     while (hci.state != FM_RADIO_DISABLING && hci.state != FM_RADIO_DISABLED) {
         //wait  for tx cmd
+        ALOGV("%s: acquiring lock %d credits!!!" , __func__,hci.command_credits);
         Lock lk(hci.tx_cond_mtx);
-        hci.tx_cond.wait(lk);
-        ALOGV("%s: dequeueing the tx cmd!!!" , __func__);
+        if(hci.tx_cmd_queue.empty())
+        {
+          ALOGI("%s: before wait %d credits!!!" , __func__,hci.command_credits);
+          hci.tx_cond.wait(lk);
+        }
+        else
+        {
+          ALOGI("%s:queue is not empty dont wait" , __func__);
+        }
+        ALOGV("%s: after wait dequeueing the tx cmd!!!" , __func__);
         dequeue_fm_tx_cmd();
     }
 
@@ -296,10 +310,13 @@ static void hci_rx_thread()
     ALOGI("%s: ##### starting hci_rx_thread Worker thread!!! #####", __func__);
     hci.is_rx_thread_running = true;
 
+    ALOGI("%s: constr unique_lock ", __func__);
+    Lock lk(hci.rx_cond_mtx);
     while (hci.state != FM_RADIO_DISABLING && hci.state != FM_RADIO_DISABLED) {
         //wait for rx event
-        Lock lk(hci.rx_cond_mtx);
+        ALOGI("%s:before wait", __func__);
         hci.rx_cond.wait(lk);
+        ALOGI("%s:after wait ", __func__);
         dequeue_fm_rx_event();
     }
 
@@ -398,9 +415,7 @@ static int start_rx_thread()
 static void stop_rx_thread()
 {
     ALOGI("%s:stop_rx_thread ++", __func__);
-    if (hci.is_rx_processing == false) {
-        hci.rx_cond.notify_all();
-    }
+    hci.rx_cond.notify_all();
 
     hci.rx_thread_.join();
     ALOGI("%s:stop_rx_thread --", __func__);
@@ -619,7 +634,6 @@ int fm_hci_init(fm_hci_hal_t *hci_hal)
     hci.cb = hci_hal->cb;
     hci.command_credits = 1;
     hci.is_tx_processing = false;
-    hci.is_rx_processing = false;
     hci.is_tx_thread_running = false;
     hci.is_rx_thread_running = false;
     hci.state = FM_RADIO_DISABLED;
