@@ -97,12 +97,10 @@ static void hci_close();
 static int enqueue_fm_rx_event(struct fm_event_header_t *hdr)
 {
 
-    hci.rx_queue_mtx.lock();
-    hci.rx_event_queue.push(hdr);
-    hci.rx_queue_mtx.unlock();
-
-    ALOGI("%s: putting lock before notify", __func__);
+    ALOGI("%s: putting lock before enqueue ", __func__);
     hci.rx_cond_mtx.lock();
+    ALOGI("%s: pushing event to que before notify", __func__);
+    hci.rx_event_queue.push(hdr);
     ALOGI("%s:before notify to waiting thred", __func__);
     hci.rx_cond.notify_all();
     ALOGI("%s:after notify to waiting thred", __func__);
@@ -131,17 +129,14 @@ static void dequeue_fm_rx_event()
 
     ALOGI("%s", __func__);
     while (1) {
-        hci.rx_queue_mtx.lock();
         if (hci.rx_event_queue.empty()) {
             ALOGI("No more FM Events are available in the RX Queue");
-            hci.rx_queue_mtx.unlock();
             return;
         } else {
         }
 
         evt_buf = hci.rx_event_queue.front();
         hci.rx_event_queue.pop();
-        hci.rx_queue_mtx.unlock();
 
         hci.credit_mtx.lock();
         if (evt_buf->evt_code == FM_CMD_COMPLETE) {
