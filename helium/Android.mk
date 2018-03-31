@@ -1,3 +1,4 @@
+ifneq ($(QCPATH),)
 #ifeq ($(BOARD_HAVE_QCOM_FM),true)
 #ifneq (,$(filter $(QCOM_BOARD_PLATFORMS),$(TARGET_BOARD_PLATFORM)))
 
@@ -26,5 +27,6 @@ include $(BUILD_SHARED_LIBRARY)
 
 #endif # is-vendor-board-platform
 #endif # BOARD_HAVE_QCOM_FM
+endif
 
 
