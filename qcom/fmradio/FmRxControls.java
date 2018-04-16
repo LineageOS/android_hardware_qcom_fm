@@ -248,7 +248,7 @@ class FmRxControls
     */
    public int setRssiThreshold(int fd, int sBuff)
    {
-      int re = FmReceiverJNI.setControlNative(fd, V4L2_CID_PRIVATE_RSSI_TH, sBuff);
+      int re = FmReceiverJNI.setControlNative(fd, V4L2_CID_PRIVATE_TAVARUA_SIGNAL_TH, sBuff);
       if ( re < 0)
          Log.e(TAG, "Failed to set RSSI threshold data");
       return re;
