@@ -29,7 +29,7 @@
 #define LOG_TAG "android_hardware_fm"
 
 #include "jni.h"
-#include "JNIHelp.h"
+#include <nativehelper/JNIHelp.h>
 #include <utils/Log.h>
 #include "utils/misc.h"
 #include "FmIoctlsInterface.h"
