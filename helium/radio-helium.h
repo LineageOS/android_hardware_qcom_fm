@@ -178,6 +178,7 @@ typedef void (*fm_set_blnd_cb) (int status);
 typedef void (*fm_get_stn_prm_cb) (int val, int status);
 typedef void (*fm_get_stn_dbg_prm_cb) (int val, int status);
 typedef void (*fm_enable_slimbus_cb) (int status);
+typedef void (*fm_enable_softmute_cb) (int status);
 
 typedef struct {
     size_t  size;
@@ -214,6 +215,7 @@ typedef struct {
     fm_get_stn_prm_cb fm_get_station_param_cb;
     fm_get_stn_dbg_prm_cb fm_get_station_debug_param_cb;
     fm_enable_slimbus_cb enable_slimbus_cb;
+    fm_enable_softmute_cb enable_softmute_cb;
 } fm_hal_callbacks_t;
 
 /* Opcode OCF */
@@ -1244,6 +1246,7 @@ int hci_fm_default_data_write_req(struct hci_fm_def_data_wr_req * data_wrt);
 int hci_fm_get_station_dbg_param_req();
 int hci_fm_get_station_cmd_param_req();
 int hci_fm_enable_slimbus(uint8_t enable);
+int hci_fm_enable_softmute(uint8_t enable);
 
 struct fm_hal_t {
     struct radio_helium_device *radio;

@@ -236,6 +236,8 @@ public class FMRadioService extends Service
    private static final int FW_TIMEOUT = 200;
    private static final int DISABLE_SLIMBUS_DATA_PORT = 0;
    private static final int ENABLE_SLIMBUS_DATA_PORT = 1;
+   private static final int DISABLE_SOFT_MUTE = 0;
+   private static final int ENABLE_SOFT_MUTE = 1;
 
    private static Object mNotchFilterLock = new Object();
 
@@ -1671,15 +1673,17 @@ public class FMRadioService extends Service
                           Log.v(LOGTAG, "Focus Loss/TLoss - Disabling speaker");
                           AudioSystem.setForceUse(AudioSystem.FOR_MEDIA, AudioSystem.FORCE_NONE);
                       }
-                      if (mReceiver != null && (mReceiver.isCherokeeChip()))
-                          mReceiver.EnableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
+                      if ((mReceiver != null) && mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
+                          mEventReceived = false;
+                          mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
+                          waitForFWEvent();
+                      }
+                      mStoppedOnFocusLoss = true;
+
                       if (true == mPlaybackInProgress) {
                           stopFM();
                       }
 
-                      if ((mReceiver != null) && mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true)))
-                          mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
-                      mStoppedOnFocusLoss = true;
                       break;
                   case AudioManager.AUDIOFOCUS_LOSS:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS mspeakerphone= " +
@@ -1689,13 +1693,16 @@ public class FMRadioService extends Service
                           mSpeakerDisableHandler.removeCallbacks(mSpeakerDisableTask);
                           mSpeakerDisableHandler.postDelayed(mSpeakerDisableTask, 0);
                       }
+
+                      //intentional fall through.
+                      if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
+                          mEventReceived = false;
+                          mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
+                          waitForFWEvent();
+                      }
                       if (true == mPlaybackInProgress) {
                           stopFM();
                       }
-
-                      //intentional fall through.
-                      if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true)))
-                          mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
 
                       if (true == isFmRecordingOn())
                           stopRecording();
@@ -3843,6 +3850,16 @@ public class FMRadioService extends Service
       public void FmRxEvEnableSlimbus(int status)
       {
          Log.e(LOGTAG, "FmRxEvEnableSlimbus status = " + status);
+         if (mReceiver != null && mReceiver.isCherokeeChip()) {
+             synchronized(mEventWaitLock) {
+                 mEventReceived = true;
+                 mEventWaitLock.notify();
+             }
+         }
+      }
+	  public void FmRxEvEnableSoftMute(int status)
+      {
+         Log.e(LOGTAG, "FmRxEvEnableSoftMute status = " + status);
          if (mReceiver != null && mReceiver.isCherokeeChip()) {
              synchronized(mEventWaitLock) {
                  mEventReceived = true;

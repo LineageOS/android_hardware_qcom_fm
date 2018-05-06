@@ -448,6 +448,12 @@ static void hci_cc_enable_slimbus_rsp(char *ev_buff)
     hal->jni_cb->enable_slimbus_cb(ev_buff[0]);
 }
 
+static void hci_cc_enable_softmute_rsp(char *ev_buff)
+{
+    ALOGD("%s status %d", __func__, ev_buff[0]);
+    hal->jni_cb->enable_softmute_cb(ev_buff[0]);
+}
+
 static inline void hci_cmd_complete_event(char *buff)
 {
     uint16_t opcode;
@@ -476,6 +482,8 @@ static inline void hci_cmd_complete_event(char *buff)
 
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_RECV_CONF_REQ):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_MUTE_MODE_REQ):
+            hci_cc_enable_softmute_rsp(pbuf);
+            break; 
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_STEREO_MODE_REQ):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_ANTENNA):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_SIGNAL_THRESHOLD):
