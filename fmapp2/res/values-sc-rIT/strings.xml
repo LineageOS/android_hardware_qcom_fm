@@ -29,6 +29,61 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="menu_settings">Cunfiguratziones</string>
+  <string name="preset_delete">Iscantzella</string>
+  <string name="regional_band_entry_india">Ìndia</string>
+  <string name="regional_band_entry_indonesia">Indonèsia</string>
+  <string name="regional_band_entry_ireland">Irlanda</string>
+  <string name="regional_band_entry_italy">Itàlia</string>
+  <string name="regional_band_entry_korea">Corea</string>
+  <string name="regional_band_entry_mexico">Mèssicu</string>
+  <string name="regional_band_entry_norway">Norvègia</string>
+  <string name="regional_band_entry_poland">Polònia</string>
+  <string name="regional_band_entry_russia">Rùssia</string>
+  <string name="regional_band_entry_slovakia">Islovàchia</string>
+  <string name="regional_band_entry_spain">Ispàgna</string>
+  <string name="regional_band_entry_switzerland">Isvìtzera</string>
+  <string name="regional_band_entry_sweden">Isvètzia</string>
+  <string name="regional_band_entry_turkey">Turchia</string>
+  <string name="regional_band_entry_united_kingdom">Regnu Unidu</string>
+  <string name="regional_band_entry_united_states">Istados Unidos</string>
+  <string name="regional_band_summary_north_america">Amèrica de su Nord (dae 87.5 a 108.0 MHz in intervallos de 200 kHz)</string>
+  <string name="regional_band_summary_europe">Europa (dae 87.5 a 108.0 MHz in intervallos de 100 kHz)</string>
+  <string name="regional_band_summary_japan">Giapone (dae 76.0 a 90.0 MHz in intervallos de 100 kHz)</string>
+  <string name="regional_band_summary_japan_wide">Giapone (intreu) (dae 90.0 a 108.0 MHz in intervallos de 50 kHz)</string>
+  <string name="regional_band_summary_australia">Austràlia (dae 87.7 a 108.0 MHz in intervallos de 100 kHz)</string>
+  <string name="regional_band_summary_austria">Àustria (dae 87.5 a 108.0 MHz in intervallos de 50 kHz)</string>
+  <string name="regional_band_summary_belgium">Bèlgiu (dae 87.5 a 108.0 MHz in intervallos de 100 kHz)</string>
+  <string name="regional_band_summary_brazil">Brasile (dae 87.5 a 108.0 MHz in intervallos de 200 kHz)</string>
+  <string name="regional_band_summary_china">Tzina (dae 87.0 a 108.0 MHz in intervallos de 100 kHz)</string>
+  <string name="regional_band_summary_czech_republic">Repùblica Tzeca (dae 87.5 a 108.0 MHz in intervallos de 100 kHz)</string>
+  <string name="regional_band_summary_denmark">Danimarca (dae 87.5MHz a 108.0MHz in intervallos de 50KHz)</string>
+  <string name="regional_band_summary_finland">Finlàndia (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_france">Frantza (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_germany">Germània (dae 87.5MHz a 108.0MHz in intervallos de 50KHz)</string>
+  <string name="regional_band_summary_greece">Grètzia (dae 87.5 a 108.0 MHz in intervallos de 50 kHz)</string>
+  <string name="regional_band_summary_hong_kong">Hong Kong (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_india">Ìndia (dae 87,5MHz a 108,0MHz in intervallos de 100 KHz)</string>
+  <string name="regional_band_summary_indonesia">Indonèsia (dae 87,5MHz a 108,0MHz in intervallos de 100 KHz)</string>
+  <string name="regional_band_summary_ireland">Irlanda (dae 87.5MHz a 108.0MHz in intervallos de 50KHz)</string>
+  <string name="regional_band_summary_italy">Itàlia (dae 87.5MHz a 108.0MHz in intervallos de 50KHz)</string>
+  <string name="regional_band_summary_korea">Corea (dae 87.5MHz a 108.0MHz in intervallos de 200KHz)</string>
+  <string name="regional_band_summary_mexico">Mèssicu (dae 88.1MHz a 107.9MHz in intervallos de 200KHz)</string>
+  <string name="regional_band_summary_netherlands">Olanda (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_new_zealand">Noa Zelanda (dae 88.0 a 107.0 MHz in intervallos de 100 kHz)</string>
+  <string name="regional_band_summary_norway">Norvègia (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_poland">Polònia (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_portugal">Portogallu (dae 87.5MHz a 108.0MHz in intervallos de 50KHz)</string>
+  <string name="regional_band_summary_russia">Rùssia (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_singapore">Singapore (dae 88.0MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_slovakia">Islovàchia (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_spain">Ispagna (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_switzerland">Isvìtzera (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_sweden">Isvètzia (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_taiwan">Taiwan (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_turkey">Turchia (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_united_kingdom">Regnu Unidu (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
+  <string name="regional_band_summary_united_states">Istados Unidos (dae 88.1MHz a 107.9MHz in intervallos de 200KHz)</string>
   <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
   <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
   <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
@@ -41,6 +96,13 @@
   <!-- all recordings will show up in the media database with this 'artist' name -->
   <!-- all recordings will show up in the media database with this 'album' name -->
   <!-- all recordings will show up in the media database in a playlist with this name -->
+  <string name="set">Cunfigura</string>
+  <string name="user_defind_band_msg">Inserta una frecuèntzia intre 76.0 e 108.0 MHz cun a su mancu unu canale e cun 100 kHz de ispàtziu intre sa frecuèntzia mìnima e cussa màssima</string>
   <!-- program types -->
+  <string name="typ_Culture">Cultura</string>
+  <string name="typ_Education">Iscola e formatzione</string>
+  <string name="typ_Emergency">Emergèntzia</string>
+  <string name="typ_Sport">Isport</string>
   <!-- RBDS (North America) -->
+  <string name="typ_College">College</string>
 </resources>
