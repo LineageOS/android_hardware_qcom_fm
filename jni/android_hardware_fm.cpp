@@ -155,6 +155,7 @@ jmethodID method_getStnParamCallback;
 jmethodID method_getStnDbgParamCallback;
 jmethodID method_enableSlimbusCallback;
 jmethodID method_enableSoftMuteCallback;
+jmethodID method_FmReceiverJNICtor;
 
 static bool checkCallbackThread() {
    JNIEnv* env = AndroidRuntime::getJNIEnv();
@@ -177,9 +178,10 @@ void fm_enabled_cb() {
     } else {
         if (mCallbackEnv != NULL) {
             ALOGE("javaObjectRef creating");
-            jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_enableCallback);
+            jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_FmReceiverJNICtor);
             mCallbacksObj = javaObjectRef;
             ALOGE("javaObjectRef = %p mCallbackobject =%p \n",javaObjectRef,mCallbacksObj);
+            mCallbackEnv->CallVoidMethod(mCallbacksObj, method_enableCallback);
         }
     }
     ALOGD("exit  %s", __func__);
@@ -539,12 +541,13 @@ static void fm_get_station_debug_param_cb(int val, int status)
 
 static void fm_enable_slimbus_cb(int status)
 {
-    ALOGD("++fm_enable_slimbus_cb mCallbacksObjCreated: %d", mCallbacksObjCreated);
+    ALOGD("++fm_enable_slimbus_cb mCallbacksObjCreatedtor: %d", mCallbacksObjCreated);
     slimbus_flag = 1;
     if (mCallbacksObjCreated == false) {
-        jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_enableSlimbusCallback);
+        jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_FmReceiverJNICtor);
         mCallbacksObj = javaObjectRef;
         mCallbacksObjCreated = true;
+        mCallbackEnv->CallVoidMethod(mCallbacksObj, method_enableSlimbusCallback, status);
         return;
     }
 
@@ -1692,6 +1695,7 @@ static void classInitNative(JNIEnv* env, jclass clazz) {
     method_getStnDbgParamCallback = env->GetMethodID(javaClassRef, "getStnDbgParamCallback", "(II)V");
     method_enableSlimbusCallback = env->GetMethodID(javaClassRef, "enableSlimbusCallback", "(I)V");
     method_enableSoftMuteCallback = env->GetMethodID(javaClassRef, "enableSoftMuteCallback", "(I)V");
+    method_FmReceiverJNICtor = env->GetMethodID(javaClassRef,"<init>","()V");
 
     return;
 error:
