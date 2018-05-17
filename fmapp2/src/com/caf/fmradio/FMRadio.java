@@ -2428,6 +2428,10 @@ public class FMRadio extends Activity
                                             FMRadioService.STOP_SERVICE);
                  }
               }
+              if (mSleepUpdateHandlerThread.getState() == Thread.State.TERMINATED) {
+                  mSleepUpdateHandlerThread = new Thread(null, doSleepProcessing,
+                                                    "SleepUpdateThread");
+              }
               mSleepUpdateHandlerThread.start();
           }catch(Exception e) {
               e.printStackTrace();
