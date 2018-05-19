@@ -29,7 +29,7 @@
 #define LOG_TAG "android_hardware_fm"
 
 #include "jni.h"
-#include "JNIHelp.h"
+#include <nativehelper/JNIHelp.h>
 #include <utils/Log.h>
 #include "utils/misc.h"
 #include "FmIoctlsInterface.h"
@@ -122,13 +122,14 @@ typedef void (*fm_set_blnd_cb) (int status);
 typedef void (*fm_get_stn_prm_cb) (int val, int status);
 typedef void (*fm_get_stn_dbg_prm_cb) (int val, int status);
 typedef void (*fm_enable_sb_cb) (int status);
+typedef void (*fm_enable_sm_cb) (int status);
 
 static JNIEnv *mCallbackEnv = NULL;
 static jobject mCallbacksObj = NULL;
 static bool mCallbacksObjCreated = false;
 static jfieldID sCallbacksField;
 
-jclass javaClassRef;
+static jclass javaClassRef;
 static jmethodID method_psInfoCallback;
 static jmethodID method_rtCallback;
 static jmethodID method_ertCallback;
@@ -154,6 +155,7 @@ jmethodID method_setBlendCallback;
 jmethodID method_getStnParamCallback;
 jmethodID method_getStnDbgParamCallback;
 jmethodID method_enableSlimbusCallback;
+jmethodID method_enableSoftMuteCallback;
 
 static bool checkCallbackThread() {
    JNIEnv* env = AndroidRuntime::getJNIEnv();
@@ -554,6 +556,18 @@ static void fm_enable_slimbus_cb(int status)
     ALOGD("--fm_enable_slimbus_cb");
 }
 
+static void fm_enable_softmute_cb(int status)
+{
+    ALOGD("++fm_enable_softmute_cb");
+
+    if (!checkCallbackThread())
+        return;
+
+    mCallbackEnv->CallVoidMethod(mCallbacksObj, method_enableSoftMuteCallback, status);
+    ALOGD("--fm_enable_softmute_cb");
+}
+
+
 typedef struct {
    size_t  size;
 
@@ -589,6 +603,7 @@ typedef struct {
    fm_get_stn_prm_cb fm_get_station_param_cb;
    fm_get_stn_dbg_prm_cb fm_get_station_debug_param_cb;
    fm_enable_sb_cb fm_enable_slimbus_cb;
+   fm_enable_sm_cb fm_enable_softmute_cb;
 } fm_vendor_callbacks_t;
 
 typedef struct {
@@ -631,7 +646,8 @@ static   fm_vendor_callbacks_t fm_callbacks = {
     fm_set_blend_cb,
     fm_get_station_param_cb,
     fm_get_station_debug_param_cb,
-    fm_enable_slimbus_cb
+    fm_enable_slimbus_cb,
+    fm_enable_softmute_cb
 };
 #endif
 /* native interface */
@@ -1593,6 +1609,17 @@ static jint android_hardware_fmradio_FmReceiverJNI_enableSlimbusNative
     return err;
 }
 
+static jint android_hardware_fmradio_FmReceiverJNI_enableSoftMuteNative
+ (JNIEnv * env, jobject thiz, jint fd, jint val)
+{
+    ALOGD("%s: val = %d\n", __func__, val);
+    int err = JNI_ERR;
+#ifdef FM_SOC_TYPE_CHEROKEE
+    err = vendor_interface->set_fm_ctrl(V4L2_CID_PRV_SOFT_MUTE, val);
+#endif
+    return err;
+}
+
 static void classInitNative(JNIEnv* env, jclass clazz) {
 
     ALOGI("ClassInit native called \n");
@@ -1637,6 +1664,7 @@ static void classInitNative(JNIEnv* env, jclass clazz) {
     method_getStnParamCallback = env->GetMethodID(javaClassRef, "getStnParamCallback", "(II)V");
     method_getStnDbgParamCallback = env->GetMethodID(javaClassRef, "getStnDbgParamCallback", "(II)V");
     method_enableSlimbusCallback = env->GetMethodID(javaClassRef, "enableSlimbusCallback", "(I)V");
+    method_enableSoftMuteCallback = env->GetMethodID(javaClassRef, "enableSoftMuteCallback", "(I)V");
 
     return;
 error:
@@ -1743,6 +1771,8 @@ static JNINativeMethod gMethods[] = {
              (void*)android_hardware_fmradio_FmReceiverJNI_configurePerformanceParams},
         { "enableSlimbus", "(II)I",
              (void*)android_hardware_fmradio_FmReceiverJNI_enableSlimbusNative},
+        { "enableSoftMute", "(II)I",
+             (void*)android_hardware_fmradio_FmReceiverJNI_enableSoftMuteNative},
 };
 
 int register_android_hardware_fm_fmradio(JNIEnv* env)

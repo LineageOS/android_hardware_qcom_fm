@@ -1039,6 +1039,10 @@ public class FMTransmitterService extends Service
       {
          Log.d(LOGTAG, "FmRxEvEnableReceiver status = " + status);
       }
+	  public void FmRxEvEnableSoftMute(int status)
+      {
+         Log.d(LOGTAG, "FmRxEvEnableReceiver status = " + status);
+      }
    };
 
 

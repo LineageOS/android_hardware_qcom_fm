@@ -134,6 +134,13 @@ class FmReceiverJNI {
         Log.d(TAG, "--enableSlimbusCallback" );
     }
 
+	public void enableSoftMuteCallback(int status)
+    {
+        Log.d(TAG, "++enableSoftMuteCallback" );
+        FmReceiver.mCallback.FmRxEvEnableSoftMute(status);
+        Log.d(TAG, "--enableSoftMuteCallback" );
+    }
+
     public void RtPlusCallback(byte[] rtplus) {
         Log.d(TAG, "RtPlusCallback enter " );
         if (rtplus == null) {
@@ -555,4 +562,5 @@ class FmReceiverJNI {
     static native int setSpurDataNative(int fd, short  buff[], int len);
     static native void configurePerformanceParams(int fd);
     static native int enableSlimbus(int fd, int val);
+    static native int enableSoftMute(int fd, int val);
 }
