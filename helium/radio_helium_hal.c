@@ -120,13 +120,6 @@ static void hci_cc_fm_disable_rsp(char *ev_buff)
     if (hal->radio->mode == FM_TURNING_OFF) {
         ALOGD("%s:calling fm close\n", LOG_TAG );
         fm_hci_close(hal->private_data);
-        free(hal->radio);
-        hal->radio = NULL;
-        hal->jni_cb = NULL;
-        pthread_cond_destroy(&hal->cmd_cond);
-        pthread_mutex_destroy(&hal->cmd_lock);
-        free(hal);
-        hal = NULL;
     }
 }
 
@@ -455,6 +448,12 @@ static void hci_cc_enable_slimbus_rsp(char *ev_buff)
     hal->jni_cb->enable_slimbus_cb(ev_buff[0]);
 }
 
+static void hci_cc_enable_softmute_rsp(char *ev_buff)
+{
+    ALOGD("%s status %d", __func__, ev_buff[0]);
+    hal->jni_cb->enable_softmute_cb(ev_buff[0]);
+}
+
 static inline void hci_cmd_complete_event(char *buff)
 {
     uint16_t opcode;
@@ -483,6 +482,8 @@ static inline void hci_cmd_complete_event(char *buff)
 
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_RECV_CONF_REQ):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_MUTE_MODE_REQ):
+            hci_cc_enable_softmute_rsp(pbuf);
+            break; 
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_STEREO_MODE_REQ):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_ANTENNA):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_SIGNAL_THRESHOLD):
@@ -1097,11 +1098,22 @@ int process_event(void *hal, unsigned char *evt_buf)
 int fm_hci_close_done()
 {
     ALOGI("fm_hci_close_done");
+    fm_hal_callbacks_t *ptr = NULL;
+
     if(hal != NULL){
+        ptr = hal->jni_cb;
+        ALOGI("clearing hal ");
+        free(hal->radio);
+        hal->radio = NULL;
+        hal->jni_cb = NULL;
+        pthread_cond_destroy(&hal->cmd_cond);
+        pthread_mutex_destroy(&hal->cmd_lock);
+        free(hal);
+        hal = NULL;
+
         ALOGI("Notifying FM OFF to JNI");
-        hal->radio->mode = FM_OFF;
-        hal->jni_cb->disabled_cb();
-        hal->jni_cb->thread_evt_cb(1);
+        ptr->disabled_cb();
+        ptr->thread_evt_cb(1);
     }
     return 0;
 }

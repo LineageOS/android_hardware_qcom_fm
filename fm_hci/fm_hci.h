@@ -42,9 +42,6 @@ struct fm_hci_t {
         std::condition_variable on_cond;
         std::mutex on_mtx;
 
-        bool is_tx_processing;
-        bool is_rx_processing;
-
         bool is_tx_thread_running;
         bool is_rx_thread_running;
 
@@ -55,9 +52,7 @@ struct fm_hci_t {
         std::mutex rx_cond_mtx;
 
         std::mutex tx_queue_mtx;
-        std::mutex rx_queue_mtx;
 
-        std::mutex credit_mtx;
         std::condition_variable cmd_credits_cond;
 
         std::queue<struct fm_command_header_t *> tx_cmd_queue;

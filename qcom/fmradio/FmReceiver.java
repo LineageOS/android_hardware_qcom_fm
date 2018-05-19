@@ -3089,4 +3089,8 @@ public class FmReceiver extends FmTransceiver
        Log.d(TAG, "EnableSlimbus :enable =" + enable);
        mControl.enableSlimbus(sFd, enable);
    }
+   public void EnableSoftMute(int enable) {
+       Log.d(TAG, "enableSoftMute :enable =" + enable);
+       mControl.enableSoftMute(sFd, enable);
+   }
 }

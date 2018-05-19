@@ -850,7 +850,8 @@ static char add_key_value_pair
   unsigned int key_hash_code;
   unsigned int grp_index;
   unsigned int key_index;
-  unsigned key_len, val_len;
+  unsigned key_len = 0;
+  unsigned val_len = 0;
   group *grp = NULL;
   key_value_pair_list *list = NULL;
 
@@ -885,7 +886,9 @@ static char add_key_value_pair
                             val pair\n");
                      goto err;
                   }
-                  key_len = strlen(key);
+                  if(key) {
+                      key_len = strlen(key);
+                  }
                   list->key = (char *)malloc(sizeof(char) *
                                               (key_len + 1));
                   if(list->key == NULL) {
@@ -893,7 +896,9 @@ static char add_key_value_pair
                      free(list);
                      goto err;
                   }
-                  val_len = strlen(val);
+                  if(val) {
+                      val_len = strlen(val);
+                  }
                   list->value = (char *)malloc(sizeof(char) *
                                                 (val_len + 1));
                   if(!list->value) {

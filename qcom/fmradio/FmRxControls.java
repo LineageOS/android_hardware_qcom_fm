@@ -248,7 +248,7 @@ class FmRxControls
     */
    public int setRssiThreshold(int fd, int sBuff)
    {
-      int re = FmReceiverJNI.setControlNative(fd, V4L2_CID_PRIVATE_RSSI_TH, sBuff);
+      int re = FmReceiverJNI.setControlNative(fd, V4L2_CID_PRIVATE_TAVARUA_SIGNAL_TH, sBuff);
       if ( re < 0)
          Log.e(TAG, "Failed to set RSSI threshold data");
       return re;
@@ -790,6 +790,15 @@ class FmRxControls
        int ret;
        Log.d(TAG, "enableSlimbus : enable = " + enable);
        ret = FmReceiverJNI.enableSlimbus(fd, enable);
+       if (ret == 0)
+           return true;
+       else
+           return false;
+   }
+   public boolean enableSoftMute(int fd, int enable) {
+       int ret;
+       Log.d(TAG, "enableSoftMute : enable = " + enable);
+       ret = FmReceiverJNI.enableSoftMute(fd, enable);
        if (ret == 0)
            return true;
        else
