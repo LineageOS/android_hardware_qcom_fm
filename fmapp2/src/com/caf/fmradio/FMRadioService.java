@@ -241,6 +241,7 @@ public class FMRadioService extends Service
    private static final int ENABLE_SOFT_MUTE = 1;
 
    private static Object mNotchFilterLock = new Object();
+   private static Object mNotificationLock = new Object();
 
    private boolean mFmA2dpDisabled;
    private boolean mEventReceived = false;
@@ -1801,28 +1802,28 @@ public class FMRadioService extends Service
    public void startNotification() {
       Log.d(LOGTAG,"startNotification");
 
-      RemoteViews views = new RemoteViews(getPackageName(), R.layout.statusbar);
-      views.setImageViewResource(R.id.icon, R.drawable.stat_notify_fm);
-      if (isFmOn())
-      {
-         views.setTextViewText(R.id.frequency, getTunedFrequencyString());
-      } else
-      {
-         views.setTextViewText(R.id.frequency, "");
-      }
+      synchronized (mNotificationLock) {
+          RemoteViews views = new RemoteViews(getPackageName(), R.layout.statusbar);
+          views.setImageViewResource(R.id.icon, R.drawable.stat_notify_fm);
+          if (isFmOn())
+          {
+              views.setTextViewText(R.id.frequency, getTunedFrequencyString());
+          } else {
+             views.setTextViewText(R.id.frequency, "");
+          }
 
-      Context context = getApplicationContext();
-      Notification notification;
-      NotificationManager notificationManager =
+          Context context = getApplicationContext();
+          Notification notification;
+          NotificationManager notificationManager =
               (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-      NotificationChannel notificationChannel =
+          NotificationChannel notificationChannel =
               new NotificationChannel(FMRADIO_NOTIFICATION_CHANNEL,
               context.getString(R.string.app_name),
               NotificationManager.IMPORTANCE_LOW);
 
-      notificationManager.createNotificationChannel(notificationChannel);
+          notificationManager.createNotificationChannel(notificationChannel);
 
-      notification = new Notification.Builder(context, FMRADIO_NOTIFICATION_CHANNEL)
+          notification = new Notification.Builder(context, FMRADIO_NOTIFICATION_CHANNEL)
             .setCustomContentView(views)
             .setSmallIcon(R.drawable.stat_notify_fm)
             .setContentIntent(PendingIntent.getActivity(this,
@@ -1830,19 +1831,22 @@ public class FMRadioService extends Service
             .setOngoing(true)
             .build();
 
-      startForeground(FMRADIOSERVICE_STATUS, notification);
-      mFMOn = true;
+          startForeground(FMRADIOSERVICE_STATUS, notification);
+          mFMOn = true;
+      }
    }
 
       /* hide the FM Notification */
    public void stopNotification() {
       Log.d(LOGTAG,"stopNotification");
 
-      Context context = getApplicationContext();
-      NotificationManager notificationManager =
-            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+      synchronized (mNotificationLock) {
+          Context context = getApplicationContext();
+          NotificationManager notificationManager =
+              (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-      notificationManager.deleteNotificationChannel(FMRADIO_NOTIFICATION_CHANNEL);
+          notificationManager.deleteNotificationChannel(FMRADIO_NOTIFICATION_CHANNEL);
+      }
    }
 
    private void stop() {
