@@ -389,10 +389,16 @@ public class FMRadioService extends Service
         mAudioRecord = new AudioRecord(MediaRecorder.AudioSource.RADIO_TUNER,
                                        AUDIO_SAMPLE_RATE, AUDIO_CHANNEL_CONFIG,
                                        AUDIO_ENCODING_FORMAT, FM_RECORD_BUF_SIZE);
-        mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-                                     AUDIO_SAMPLE_RATE, AUDIO_CHANNEL_CONFIG,
-                                     AUDIO_ENCODING_FORMAT, FM_RECORD_BUF_SIZE,
-                                     AudioTrack.MODE_STREAM);
+
+        mAudioTrack = new AudioTrack.Builder()
+                .setAudioFormat(new AudioFormat.Builder()
+                          .setEncoding(AUDIO_ENCODING_FORMAT)
+                          .setSampleRate(AUDIO_SAMPLE_RATE)
+                          .setChannelIndexMask(AUDIO_CHANNEL_CONFIG)
+                          .build())
+                .setBufferSizeInBytes(FM_RECORD_BUF_SIZE)
+                .build();
+
         if (mMuted)
             mAudioTrack.setVolume(0.0f);
    }
