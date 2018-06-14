@@ -227,7 +227,6 @@ public class FMRadioService extends Service
    private AudioTrack mAudioTrack = null;
    private boolean mIsRecordSink = false;
    private static final int AUDIO_FRAMES_COUNT_TO_IGNORE = 3;
-   private Object mRecordSinkLock = new Object();
    private Object mEventWaitLock = new Object();
    private boolean mIsFMDeviceLoopbackActive = false;
    private File mStoragePath = null;
@@ -411,32 +410,34 @@ public class FMRadioService extends Service
        createRecordSinkThread();
 
         mIsRecordSink = true;
-        synchronized (mRecordSinkLock) {
-            mRecordSinkLock.notify();
-        }
    }
-
-   private synchronized void stopRecordSink() {
-        Log.d(LOGTAG, "stopRecordSink");
-        mIsRecordSink = false;
-        synchronized (mRecordSinkLock) {
-            mRecordSinkLock.notify();
-        }
-    }
 
     private synchronized void createRecordSinkThread() {
         if (mRecordSinkThread == null) {
             mRecordSinkThread = new RecordSinkThread();
             mRecordSinkThread.start();
+            Log.d(LOGTAG, "mRecordSinkThread started");
         }
     }
 
     private synchronized void exitRecordSinkThread() {
-        stopRecordSink();
-        if (mRecordSinkThread != null) {
-            mRecordSinkThread.interrupt();
+        if(isRecordSinking()) {
+            Log.d(LOGTAG, "stopRecordSink");
+            mIsRecordSink = false;
+        } else {
+            Log.d(LOGTAG, "exitRecordSinkThread called mRecordSinkThread not running");
+            return;
+        }
+        try {
+            Log.d(LOGTAG, "stopRecordSink waiting to join mRecordSinkThread");
+            mRecordSinkThread.join();
+        } catch (InterruptedException e) {
+            Log.d(LOGTAG, "Exceprion while mRecordSinkThread join");
         }
         mRecordSinkThread = null;
+        mAudioTrack = null;
+        mAudioRecord = null;
+        Log.d(LOGTAG, "exitRecordSinkThread completed");
     }
 
     private boolean isRecordSinking() {
@@ -452,21 +453,21 @@ public class FMRadioService extends Service
         @Override
         public void run() {
             try {
+                Log.d(LOGTAG, "RecordSinkThread: run started ");
                 byte[] buffer = new byte[FM_RECORD_BUF_SIZE];
-                while (!Thread.interrupted()) {
-                    if (isRecordSinking()) {
+                while (isRecordSinking()) {
                         // Speaker mode or BT a2dp mode will come here and keep reading and writing.
                         // If we want FM sound output from speaker or BT a2dp, we must record data
                         // to AudioRecrd and write data to AudioTrack.
                         if (mAudioRecord.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED) {
                             mAudioRecord.startRecording();
-                            Log.d(LOGTAG, "mAudioRecord.startRecording started");
+                            Log.d(LOGTAG, "RecordSinkThread: mAudioRecord.startRecording started");
                         }
 
                         if (mAudioTrack.getPlayState() == AudioTrack.PLAYSTATE_STOPPED) {
-                            Log.d(LOGTAG, "mAudioTrack.play executed");
+                            Log.d(LOGTAG, "RecordSinkThread: mAudioTrack.play executed");
                             mAudioTrack.play();
-                            Log.d(LOGTAG, "mAudioTrack.play completed");
+                            Log.d(LOGTAG, "RecordSinkThread: mAudioTrack.play completed");
                         }
                         int size = mAudioRecord.read(buffer, 0, FM_RECORD_BUF_SIZE);
                         // check whether need to ignore first 3 frames audio data from AudioRecord
@@ -486,32 +487,25 @@ public class FMRadioService extends Service
                         // while AudioRecord is reading.
                         if (isRecordSinking()) {
                             mAudioTrack.write(tmpBuf, 0, tmpBuf.length);
+                        } else {
+                            mCurrentFrame = 0;
+                            Log.d(LOGTAG, "RecordSinkThread: stopRecordSink called stopping mAudioTrack and mAudioRecord ");
+                            break;
                         }
-                    } else {
-                        // Earphone mode will come here and wait.
-                        mCurrentFrame = 0;
-
-                        if (mAudioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
-                            mAudioTrack.stop();
-                        }
-
-                        if (mAudioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
-                            mAudioRecord.stop();
-                        }
-
-                        synchronized (mRecordSinkLock) {
-                            mRecordSinkLock.wait();
-                        }
-                    }
                 }
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 Log.d(LOGTAG, "RecordSinkThread.run, thread is interrupted, need exit thread");
             } finally {
+                Log.d(LOGTAG, "RecordSinkThread: stopRecordSink called stopping mAudioTrack and mAudioRecord ");
                 if (mAudioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
+                    Log.d(LOGTAG, "RecordSinkThread: mAudioRecord.stop()");
                     mAudioRecord.stop();
+                    Log.d(LOGTAG, "RecordSinkThread: mAudioRecord.stop() completed");
                 }
                 if (mAudioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
+                    Log.d(LOGTAG, "RecordSinkThread: mAudioTrack.stop();");
                     mAudioTrack.stop();
+                    Log.d(LOGTAG, "RecordSinkThread:mAudioTrack.stop() completed");
                 }
             }
         }
@@ -725,15 +719,15 @@ public class FMRadioService extends Service
                         if (!bA2dpConnected) {
                             Log.d(LOGTAG, "A2DP device is dis-connected!");
                             //stop record session of audio and switch to default audio output device
-                           // getOutputDeviceAndSwitchAudio(AudioDeviceInfo.TYPE_WIRED_HEADSET);
+                           // startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
                         } else {
                               Log.d(LOGTAG, "A2DP device is connected!");
                               if (mSpeakerPhoneOn) {
                                   Log.d(LOGTAG, "route audio to speaker");
-                                  getOutputDeviceAndSwitchAudio(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
+                                  startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
                               } else {
                                   Log.d(LOGTAG, "route audio to wiredHeadset");
-                                  getOutputDeviceAndSwitchAudio(AudioDeviceInfo.TYPE_WIRED_HEADSET);
+                                  startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
                               }
                        }
                     } else if (action.equals("HDMI_CONNECTED")) {
@@ -1178,9 +1172,9 @@ public class FMRadioService extends Service
                String temp = mSpeakerPhoneOn ? "Speaker" : "WiredHeadset";
                Log.d(LOGTAG, "Route audio to " + temp);
                if(!mSpeakerPhoneOn) {
-                   getOutputDeviceAndSwitchAudio(AudioDeviceInfo.TYPE_WIRED_HEADSET);
+                   startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
                } else {
-                   getOutputDeviceAndSwitchAudio(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
+                   startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
                }
        }
        mPlaybackInProgress = true;
@@ -2548,7 +2542,7 @@ public class FMRadioService extends Service
        if (isSpeakerEnabled() == true) {
            if (mA2dpConnected == true) {
                Log.d(LOGTAG, "A2DP connected, resetAudioRoute to wiredHeadset");
-               getOutputDeviceAndSwitchAudio(AudioDeviceInfo.TYPE_WIRED_HEADSET);
+               startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
            }
        }
    }
@@ -2761,10 +2755,10 @@ public class FMRadioService extends Service
 
        if (speakerOn == false) {
             Log.d(LOGTAG, "route audio to wired headset");
-           getOutputDeviceAndSwitchAudio(AudioDeviceInfo.TYPE_WIRED_HEADSET);
+           startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
        } else if (speakerOn == true) {
            Log.d(LOGTAG, "enabling speaker");
-               getOutputDeviceAndSwitchAudio(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
+               startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
        }
 
        Log.d(LOGTAG, "speakerOn completed:" + speakerOn);
@@ -4232,10 +4226,10 @@ public class FMRadioService extends Service
            //TODO unregister the fm service here.
        }
    }
-   private boolean getOutputDeviceAndSwitchAudio(int deviceType) {
+   private boolean startApplicationLoopBack(int deviceType) {
 
    // stop existing playback path before starting new one
-        Log.d(LOGTAG,"getOutputDeviceAndSwitchAudio for device "+deviceType);
+        Log.d(LOGTAG,"startApplicationLoopBack for device "+deviceType);
 
         AudioDeviceInfo outputDevice = null;
         AudioDeviceInfo[] deviceList = mAudioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
