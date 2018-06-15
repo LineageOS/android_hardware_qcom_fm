@@ -524,6 +524,15 @@ public class FMRadioService extends Service
         Log.d(LOGTAG, "configureFMDeviceLoopback enable:" + enable +
               " DeviceLoopbackActive:" + mIsFMDeviceLoopbackActive);
         if (enable && mIsFMDeviceLoopbackActive == false) {
+            status = AudioSystem.getDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,"");
+            Log.d(LOGTAG," FM hardwareLoopback Status = " + status);
+            if( status == AudioSystem.DEVICE_STATE_AVAILABLE) {
+                // This case usually happens, when FM is force killed through settings app
+                // and we don't get chance to disable Hardware LoopBack.
+                Log.d(LOGTAG," FM HardwareLoopBack Active, disable it first");
+                status =  AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,
+                              AudioSystem.DEVICE_STATE_UNAVAILABLE, "", "");
+            }
             status = AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,
                                           AudioSystem.DEVICE_STATE_AVAILABLE, "", "");
             if (status != AudioSystem.SUCCESS) {
