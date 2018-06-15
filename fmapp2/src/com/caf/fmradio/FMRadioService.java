@@ -407,9 +407,9 @@ public class FMRadioService extends Service
         Log.d(LOGTAG, "startRecordSink "
                         + AudioSystem.getForceUse(AudioSystem.FOR_MEDIA));
 
+       mIsRecordSink = true;
        createRecordSinkThread();
 
-        mIsRecordSink = true;
    }
 
     private synchronized void createRecordSinkThread() {
