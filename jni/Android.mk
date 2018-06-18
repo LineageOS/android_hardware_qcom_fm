@@ -3,10 +3,6 @@ ifneq (,$(filter $(QCOM_BOARD_PLATFORMS),$(TARGET_BOARD_PLATFORM)))
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
-ifeq ($(BOARD_HAS_QCA_FM_SOC), "cherokee")
-LOCAL_CFLAGS += -DFM_SOC_TYPE_CHEROKEE
-endif
-
 LOCAL_SRC_FILES:= \
 android_hardware_fm.cpp \
 ConfFileParser.cpp \

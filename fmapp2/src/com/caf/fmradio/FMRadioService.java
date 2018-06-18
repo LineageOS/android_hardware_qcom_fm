@@ -2252,9 +2252,6 @@ public class FMRadioService extends Service
                 Log.d(LOGTAG,"Analog Path is not supported ");
                 return false;
         }
-        if (SystemProperties.getBoolean("hw.fm.digitalpath",false)) {
-                return false;
-        }
 
         boolean state = mReceiver.setAnalogMode(analogMode);
         if (false == state) {
@@ -2585,7 +2582,6 @@ public class FMRadioService extends Service
           unMute();
 
       if (isAnalogModeEnabled()) {
-              SystemProperties.set("hw.fm.isAnalog","false");
               misAnalogPathEnabled = false;
       }
    }
@@ -2610,7 +2606,6 @@ public class FMRadioService extends Service
       }
 
       if (isAnalogModeEnabled()) {
-              SystemProperties.set("hw.fm.isAnalog","false");
               misAnalogPathEnabled = false;
       }
 
