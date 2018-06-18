@@ -574,7 +574,7 @@ public class FmTransceiver
    {
        return ((FmReceiverJNI.getControlNative(sFd,
                        V4L2_CID_PRIVATE_TAVARUA_ANTENNA) == 1) ||
-               SystemProperties.getBoolean("hw.fm.internal_antenna", false));
+               SystemProperties.getBoolean("vendor.hw.fm.internal_antenna", false));
    }
 
    /*==============================================================
