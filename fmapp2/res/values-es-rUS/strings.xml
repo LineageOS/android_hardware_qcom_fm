@@ -166,7 +166,7 @@
   <string name="fm_tune_timeout_msg">No se ha recibido respuesta de la emisora FM. Si el problema persiste, apaga la radio y vuelve a encenderla.</string>
   <string name="fm_command_failed_title">Error en la operación FM</string>
   <string name="fm_cmd_failed_msg">Error en la operación FM. Si el problema persiste, apaga la radio y vuelve a encenderla.</string>
-  <string name="fm_cmd_failed_msg_hdmi">Error en la operación FM. No es compatible utilizar la radio y el HDMI simultáneamente.</string>
+  <string name="fm_cmd_failed_msg_hdmi">Error en la operación FM. No se soporta el uso de la radio y el HDMI simultáneamente.</string>
   <string name="fm_cmd_failed_call_on">Error en la operación FM. El audio FM no está permitido durante una llamada.</string>
   <!-- Do not translate. Duration format. -->
   <!-- the name under which recordings will be visible in the media database is formatted like this -->
