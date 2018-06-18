@@ -4229,11 +4229,22 @@ public class FMRadioService extends Service
         AudioDeviceInfo outputDevice = null;
         AudioDeviceInfo[] deviceList = mAudioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
         for (int index = 0; index < deviceList.length; index++) {
-            if (deviceList[index].getType() == deviceType) {
+            Log.d(LOGTAG,"startApplicationLoopBack dev_type " + deviceList[index].getType());
+            if(AudioDeviceInfo.TYPE_WIRED_HEADSET == deviceType) {
+                if ((deviceList[index].getType() == AudioDeviceInfo.TYPE_WIRED_HEADSET ) ||
+                    (deviceList[index].getType() == AudioDeviceInfo.TYPE_WIRED_HEADPHONES )){
+                     outputDevice = deviceList[index];
+                     Log.d(LOGTAG,"startApplicationLoopBack found_dev "
+                          + deviceList[index].getType());
+                     break;
+                }
+            }
+            else if (deviceList[index].getType() == deviceType) {
                 outputDevice = deviceList[index];
+                Log.d(LOGTAG,"startApplicationLoopBack found_dev "+ deviceList[index].getType());
+                break;
             }
         }
-
         if (outputDevice == null) {
             Log.d(LOGTAG,"no output device" + deviceType + " found");
             return false;
