@@ -501,11 +501,15 @@ public class FMRadioService extends Service
                     Log.d(LOGTAG, "RecordSinkThread: mAudioRecord.stop()");
                     mAudioRecord.stop();
                     Log.d(LOGTAG, "RecordSinkThread: mAudioRecord.stop() completed");
+                    mAudioRecord.release();
+                    Log.d(LOGTAG, "RecordSinkThread: mAudioRecord.release() completed");
                 }
                 if (mAudioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
                     Log.d(LOGTAG, "RecordSinkThread: mAudioTrack.stop();");
                     mAudioTrack.stop();
                     Log.d(LOGTAG, "RecordSinkThread:mAudioTrack.stop() completed");
+                    mAudioTrack.release();
+                    Log.d(LOGTAG, "RecordSinkThread: mAudioTrack.release() completed");
                 }
             }
         }
