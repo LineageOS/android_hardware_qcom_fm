@@ -407,9 +407,9 @@ public class FMRadioService extends Service
         Log.d(LOGTAG, "startRecordSink "
                         + AudioSystem.getForceUse(AudioSystem.FOR_MEDIA));
 
+       mIsRecordSink = true;
        createRecordSinkThread();
 
-        mIsRecordSink = true;
    }
 
     private synchronized void createRecordSinkThread() {
@@ -2252,9 +2252,6 @@ public class FMRadioService extends Service
                 Log.d(LOGTAG,"Analog Path is not supported ");
                 return false;
         }
-        if (SystemProperties.getBoolean("hw.fm.digitalpath",false)) {
-                return false;
-        }
 
         boolean state = mReceiver.setAnalogMode(analogMode);
         if (false == state) {
@@ -2585,7 +2582,6 @@ public class FMRadioService extends Service
           unMute();
 
       if (isAnalogModeEnabled()) {
-              SystemProperties.set("hw.fm.isAnalog","false");
               misAnalogPathEnabled = false;
       }
    }
@@ -2610,7 +2606,6 @@ public class FMRadioService extends Service
       }
 
       if (isAnalogModeEnabled()) {
-              SystemProperties.set("hw.fm.isAnalog","false");
               misAnalogPathEnabled = false;
       }
 
@@ -4234,11 +4229,22 @@ public class FMRadioService extends Service
         AudioDeviceInfo outputDevice = null;
         AudioDeviceInfo[] deviceList = mAudioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
         for (int index = 0; index < deviceList.length; index++) {
-            if (deviceList[index].getType() == deviceType) {
+            Log.d(LOGTAG,"startApplicationLoopBack dev_type " + deviceList[index].getType());
+            if(AudioDeviceInfo.TYPE_WIRED_HEADSET == deviceType) {
+                if ((deviceList[index].getType() == AudioDeviceInfo.TYPE_WIRED_HEADSET ) ||
+                    (deviceList[index].getType() == AudioDeviceInfo.TYPE_WIRED_HEADPHONES )){
+                     outputDevice = deviceList[index];
+                     Log.d(LOGTAG,"startApplicationLoopBack found_dev "
+                          + deviceList[index].getType());
+                     break;
+                }
+            }
+            else if (deviceList[index].getType() == deviceType) {
                 outputDevice = deviceList[index];
+                Log.d(LOGTAG,"startApplicationLoopBack found_dev "+ deviceList[index].getType());
+                break;
             }
         }
-
         if (outputDevice == null) {
             Log.d(LOGTAG,"no output device" + deviceType + " found");
             return false;

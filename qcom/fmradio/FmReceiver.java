@@ -352,7 +352,7 @@ public class FmReceiver extends FmTransceiver
    }
 
    public static boolean isRomeChip() {
-       String chip = SystemProperties.get("qcom.bluetooth.soc");
+       String chip = SystemProperties.get("vendor.bluetooth.soc");
        if (chip.equals("rome"))
            return true;
        else
@@ -360,7 +360,7 @@ public class FmReceiver extends FmTransceiver
    }
 
    public static boolean isCherokeeChip() {
-       String chip = SystemProperties.get("qcom.bluetooth.soc");
+       String chip = SystemProperties.get("vendor.bluetooth.soc");
        if (chip.equals("cherokee"))
            return true;
        else
