@@ -367,7 +367,10 @@ static void stop_tx_thread()
     int ret;
 
     ALOGI("%s:stop_tx_thread ++", __func__);
+    hci.tx_cond_mtx.lock();
     hci.tx_cond.notify_all();
+    ALOGI("%s:notify to tx thread", __func__);
+    hci.tx_cond_mtx.unlock();
 
     hci.tx_thread_.join();
     ALOGI("%s:stop_tx_thread --", __func__);
