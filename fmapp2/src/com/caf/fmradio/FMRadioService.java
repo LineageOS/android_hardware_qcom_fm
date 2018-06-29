@@ -423,6 +423,7 @@ public class FMRadioService extends Service
     private synchronized void exitRecordSinkThread() {
         if(isRecordSinking()) {
             Log.d(LOGTAG, "stopRecordSink");
+            mAudioTrack.setPreferredDevice(null);
             mIsRecordSink = false;
         } else {
             Log.d(LOGTAG, "exitRecordSinkThread called mRecordSinkThread not running");
@@ -719,13 +720,19 @@ public class FMRadioService extends Service
                         //mSpeakerPhoneOn = bA2dpConnected;
                         mA2dpConnected = bA2dpConnected;
                         mA2dpDisconnected = !bA2dpConnected;
-                        Log.d(LOGTAG, "A2DP, mSpeakerPhoneOn: " + mSpeakerPhoneOn);
                         if (!bA2dpConnected) {
                             Log.d(LOGTAG, "A2DP device is dis-connected!");
-                            //stop record session of audio and switch to default audio output device
-                           // startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
                         } else {
-                              Log.d(LOGTAG, "A2DP device is connected!");
+                            if(mReceiver == null) {
+                                Log.d(LOGTAG," mReciver is NULL, bail out ");
+                                return;
+                            }
+                              int currFMState = mReceiver.getFMState();
+                              Log.d(LOGTAG, "A2DP device connected! FM_State = "+ currFMState);
+                              if ((currFMState == mReceiver.FMState_Turned_Off)||
+                                  (currFMState == mReceiver.subPwrLevel_FMTurning_Off)){
+                                  return;
+                              }
                               if (mSpeakerPhoneOn) {
                                   Log.d(LOGTAG, "route audio to speaker");
                                   startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
@@ -2539,15 +2546,6 @@ public class FMRadioService extends Service
       return(bStatus);
    }
 
-   private void resetAudioRoute() {
-       if (isSpeakerEnabled() == true) {
-           if (mA2dpConnected == true) {
-               Log.d(LOGTAG, "A2DP connected, resetAudioRoute to wiredHeadset");
-               startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
-           }
-       }
-   }
-
   /*
    * Turn OFF FM Operations: This disables all the current FM operations             .
    */
@@ -2579,8 +2577,6 @@ public class FMRadioService extends Service
                return;
           }
       }
-      // reset FM audio settings
-      resetAudioRoute();
 
       if (isMuted() == true)
           unMute();
@@ -4261,7 +4257,7 @@ public class FMRadioService extends Service
             Log.d(LOGTAG,"creating AudioTrack session");
         }
         mAudioTrack.setPreferredDevice(outputDevice);
-        Log.d(LOGTAG,"PreferredDevice is set to "+ deviceType);
+        Log.d(LOGTAG,"PreferredDevice is set to "+ outputDevice.getType());
         if(!isRecordSinking()) {
             startRecordSink();
         }
