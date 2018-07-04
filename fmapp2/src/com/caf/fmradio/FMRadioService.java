@@ -974,7 +974,7 @@ public class FMRadioService extends Service
           setLowPowerMode(false);
           startFM();
           if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true)))
-              mReceiver.EnableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
+              enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
       }
    }
 
@@ -1699,9 +1699,7 @@ public class FMRadioService extends Service
                           exitRecordSinkThread();
                       }
                       if ((mReceiver != null) && mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
-                          mEventReceived = false;
-                          mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
-                          waitForFWEvent();
+                          enableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
                       }
                       mStoppedOnFocusLoss = true;
 
@@ -1721,9 +1719,7 @@ public class FMRadioService extends Service
 
                       //intentional fall through.
                       if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
-                          mEventReceived = false;
-                          mReceiver.EnableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
-                          waitForFWEvent();
+                          enableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
                       }
                       if (true == mPlaybackInProgress) {
                           stopFM();
@@ -1752,7 +1748,7 @@ public class FMRadioService extends Service
                       if(false == mPlaybackInProgress)
                           startFM();
                       if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true)))
-                          mReceiver.EnableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
+                          enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
                       mSession.setActive(true);
                       break;
                   default:
@@ -2399,12 +2395,12 @@ public class FMRadioService extends Service
          return bStatus;
    }
 
-   private boolean checkForFwResponse(){
-       Log.d(LOGTAG, "checkForFwResponse");
+   private boolean enableSlimbus(int flag) {
+       Log.d(LOGTAG, "enableSlimbus");
        boolean bStatus = false;
        // Send command to enable FM core
        mEventReceived = false;
-       mReceiver.EnableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
+       mReceiver.EnableSlimbus(flag);
        bStatus = waitForFWEvent();
        return bStatus;
    }
@@ -2525,10 +2521,11 @@ public class FMRadioService extends Service
          {
            if (mReceiver.isCherokeeChip()) {
                if ((mPref.getBoolean("SLIMBUS_SEQ", true)) ) {
-                   bStatus = checkForFwResponse();
+                       bStatus = enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
                    if (bStatus) {
                        bStatus = fmTurnOnSequenceCherokee();
                    } else {
+                       Log.d(LOGTAG, "set SLIMBUS_SEQ flag to false");
                        mEditor.putBoolean("SLIMBUS_SEQ", false);
                        mEditor.commit();
                        bStatus = fmTurnOnSequence();
@@ -2555,6 +2552,10 @@ public class FMRadioService extends Service
       if(audioManager != null)
       {
          Log.d(LOGTAG, "audioManager.setFmRadioOn = false \n" );
+         if ((mReceiver != null) && mReceiver.isCherokeeChip() &&
+                            (mPref.getBoolean("SLIMBUS_SEQ", true))) {
+             enableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
+         }
          stopFM();
          unMute();
          // If call is active, we will use audio focus to resume fm after call ends.
@@ -2755,7 +2756,7 @@ public class FMRadioService extends Service
            Log.d(LOGTAG, "enabling speaker");
                startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
        }
-
+       enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
        Log.d(LOGTAG, "speakerOn completed:" + speakerOn);
    }
   /*
@@ -4155,7 +4156,7 @@ public class FMRadioService extends Service
            audioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
                   AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
            startFM();
-           mReceiver.EnableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
+           enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
            mStoppedOnFocusLoss = false;
        }
    }
@@ -4250,6 +4251,10 @@ public class FMRadioService extends Service
             return false;
         }
         if(mIsFMDeviceLoopbackActive) {
+            if ((mReceiver != null) && mReceiver.isCherokeeChip() &&
+                            (mPref.getBoolean("SLIMBUS_SEQ", true))) {
+                enableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
+            }
             configureFMDeviceLoopback(false);
         }
         if(!isRecordSinking()) {
