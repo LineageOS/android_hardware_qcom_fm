@@ -145,7 +145,7 @@
   <string name="settings_revert_defaults_title">Вернуться к заводским настройкам</string>
   <string name="settings_revert_defaults_summary">Сбросить все настройки</string>
   <string name="settings_revert_confirm_title">Подтвердите сброс</string>
-  <string name="settings_revert_confirm_msg">Будут удалены все настройки приложения, включая список сохранённых станций. Продолжить?</string>
+  <string name="settings_revert_confirm_msg">Будут удалены все настройки приложения, включая список сохраненных станций. Продолжить?</string>
   <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
   <string name="no_storage">Для начала записи подключите SD-карту.</string>
   <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
@@ -190,7 +190,7 @@
   <string name="chanl_spacing">Шаг каналов</string>
   <string name="set">Установить</string>
   <string name="user_defind_band_msg">Введите частоту в пределах 76,0–108,0 МГц с минимальным интервалом в 1 канал и отступом в 100 кГц от минимальной и максимальной частоты</string>
-  <string name="save_record_file">Файл радиозаписи сохранён в «<xliff:g id="record_file">%1$s</xliff:g>»</string>
+  <string name="save_record_file">Файл радиозаписи сохранен в «<xliff:g id="record_file">%1$s</xliff:g>»</string>
   <string name="fm_search_no_results">Совместимых станций не найдено</string>
   <!-- program types -->
   <string name="typ_All_stations">Все станции</string>
@@ -200,7 +200,7 @@
   <string name="typ_Country">Кантри</string>
   <string name="typ_Documentary">Документальные передачи</string>
   <string name="typ_Drama">Драма</string>
-  <string name="typ_Easy_listening">Лёгкая музыка</string>
+  <string name="typ_Easy_listening">Легкая музыка</string>
   <string name="typ_Education">Образование</string>
   <string name="typ_Emergency">Экстренные сообщ.</string>
   <string name="typ_Emergency_test">Тест экстренных сообщ.</string>
@@ -208,7 +208,7 @@
   <string name="typ_Folk">Фолк</string>
   <string name="typ_Information">Информация</string>
   <string name="typ_Jazz">Джаз</string>
-  <string name="typ_Light_classical">Лёгкая классика</string>
+  <string name="typ_Light_classical">Легкая классика</string>
   <string name="typ_Leisure">Досуг</string>
   <string name="typ_News">Новости</string>
   <string name="typ_National">Национальная музыка</string>
@@ -242,7 +242,7 @@
   <string name="typ_Spanish_talk">Испанские передачи</string>
   <string name="typ_Soft">Спокойная музыка</string>
   <string name="typ_Soft_Rock">Софт-рок</string>
-  <string name="typ_Soft_Rhythm_and_Blues">Лёгкий ритм-н-блюз</string>
+  <string name="typ_Soft_Rhythm_and_Blues">Легкий ритм-н-блюз</string>
   <string name="typ_Sports">Спорт</string>
   <string name="typ_Talk">Ток-шоу</string>
   <string name="typ_Top_40">Топ-40</string>
