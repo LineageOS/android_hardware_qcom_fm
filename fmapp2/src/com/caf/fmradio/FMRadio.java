@@ -392,7 +392,7 @@ public class FMRadio extends Activity
       if ((mERadioTextScroller == null) && (mERadioTextTV != null)) {
           mERadioTextScroller = new ScrollerText(mERadioTextTV);
       }
-      mBTsoc = SystemProperties.get("qcom.bluetooth.soc");
+      mBTsoc = SystemProperties.get("vendor.bluetooth.soc");
    }
 
    protected void setDisplayvalue(){

@@ -679,26 +679,26 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
        ALOGD("Driver Version(Same as ChipId): %x \n",  cap.version );
        /*Conver the integer to string */
        snprintf(versionStr, sizeof(versionStr), "%d", cap.version);
-       property_set("hw.fm.version", versionStr);
+       property_set("vendor.hw.fm.version", versionStr);
     } else {
        close(fd);
        return FM_JNI_FAILURE;
     }
 
-    property_get("qcom.bluetooth.soc", value, NULL);
+    property_get("vendor.bluetooth.soc", value, NULL);
 
     ALOGD("BT soc is %s\n", value);
 
     if (strcmp(value, "rome") != 0)
     {
        /*Set the mode for soc downloader*/
-       property_set("hw.fm.mode", "normal");
+       property_set("vendor.hw.fm.mode", "normal");
        /* Need to clear the hw.fm.init firstly */
-       property_set("hw.fm.init", "0");
+       property_set("vendor.hw.fm.init", "0");
        property_set("ctl.start", "fm_dl");
        sched_yield();
        for(i=0; i<45; i++) {
-         property_get("hw.fm.init", value, NULL);
+         property_get("vendor.hw.fm.init", value, NULL);
          if (strcmp(value, "1") == 0) {
             init_success = 1;
             break;
@@ -726,7 +726,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_closeFdNative
     char retval =0;
     char value[PROPERTY_VALUE_MAX] = {'\0'};
 
-    property_get("qcom.bluetooth.soc", value, NULL);
+    property_get("vendor.bluetooth.soc", value, NULL);
 
     ALOGD("BT soc is %s\n", value);
 
@@ -739,21 +739,15 @@ static jint android_hardware_fmradio_FmReceiverJNI_closeFdNative
 }
 
 static bool is_soc_cherokee() {
+
     char value[PROPERTY_VALUE_MAX] = {'\0'};
     property_get("vendor.bluetooth.soc", value, NULL);
     ALOGD("BT soc is %s\n", value);
 
-    // Need to rework on property
-    /*if(strcmp(value, "cherokee") == 0)
+    if(strcmp(value, "cherokee") == 0)
         return true;
     else
-        return false;*/
-#ifdef FM_SOC_TYPE_CHEROKEE
-    ALOGD("BT soc is CHEROKEE");
-    return true;
-#else
-    return false;
-#endif
+        return false;
 }
 /********************************************************************
  * Current JNI
@@ -1210,23 +1204,23 @@ static jint android_hardware_fmradio_FmReceiverJNI_setNotchFilterNative(JNIEnv *
     int band;
     int err = 0;
 
-    property_get("qcom.bluetooth.soc", value, NULL);
+    property_get("vendor.bluetooth.soc", value, NULL);
 
     ALOGD("BT soc is %s\n", value);
 
     if (strcmp(value, "rome") != 0)
     {
        /*Enable/Disable the WAN avoidance*/
-       property_set("hw.fm.init", "0");
+       property_set("vendor.hw.fm.init", "0");
        if (aValue)
-          property_set("hw.fm.mode", "wa_enable");
+          property_set("vendor.hw.fm.mode", "wa_enable");
        else
-          property_set("hw.fm.mode", "wa_disable");
+          property_set("vendor.hw.fm.mode", "wa_disable");
 
        property_set("ctl.start", "fm_dl");
        sched_yield();
        for(i=0; i<10; i++) {
-          property_get("hw.fm.init", value, NULL);
+          property_get("vendor.hw.fm.init", value, NULL);
           if (strcmp(value, "1") == 0) {
              init_success = 1;
              break;
@@ -1236,7 +1230,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setNotchFilterNative(JNIEnv *
        }
        ALOGE("init_success:%d after %f seconds \n", init_success, 0.2*i);
 
-       property_get("notch.value", notch, NULL);
+       property_get("vendor.notch.value", notch, NULL);
        ALOGE("Notch = %s",notch);
        if (!strncmp("HIGH",notch,strlen("HIGH")))
            band = HIGH_BAND;
@@ -1270,24 +1264,19 @@ static jint android_hardware_fmradio_FmReceiverJNI_setAnalogModeNative(JNIEnv * 
     char value[PROPERTY_VALUE_MAX] = {'\0'};
     char firmwareVersion[80];
 
-    property_get("qcom.bluetooth.soc", value, NULL);
+    property_get("vendor.bluetooth.soc", value, NULL);
 
     ALOGD("BT soc is %s\n", value);
 
     if (strcmp(value, "rome") != 0)
     {
        /*Enable/Disable Analog Mode FM*/
-       property_set("hw.fm.init", "0");
-       if (aValue) {
-           property_set("hw.fm.isAnalog", "true");
-       } else {
-           property_set("hw.fm.isAnalog", "false");
-       }
-       property_set("hw.fm.mode","config_dac");
+       property_set("vendor.hw.fm.init", "0");
+       property_set("vendor.hw.fm.mode","config_dac");
        property_set("ctl.start", "fm_dl");
        sched_yield();
        for(i=0; i<10; i++) {
-          property_get("hw.fm.init", value, NULL);
+          property_get("vendor.hw.fm.init", value, NULL);
           if (strcmp(value, "1") == 0) {
              return 1;
           } else {
