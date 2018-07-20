@@ -1425,11 +1425,13 @@ public class FMRadioService extends Service
            return;
        try {
              mRecorder.stop();
+       } catch(Exception e) {
+             e.printStackTrace();
+       } finally {
+             Log.d(LOGTAG, "reset and release of mRecorder");
              mRecorder.reset();
              mRecorder.release();
              mRecorder = null;
-       } catch(Exception e) {
-             e.printStackTrace();
        }
        mSampleLength = (int)(SystemClock.elapsedRealtime() - mSampleStart);
        Log.d(LOGTAG, "Sample length is " + mSampleLength);
