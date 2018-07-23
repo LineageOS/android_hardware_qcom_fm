@@ -96,6 +96,7 @@ import android.os.Process;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.media.session.MediaSession;
+import android.media.AudioRouting;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothAdapter;
@@ -246,6 +247,8 @@ public class FMRadioService extends Service
    private boolean mEventReceived = false;
    private boolean isfmOffFromApplication = false;
 
+   private AudioRoutingListener mRoutingListener =  null;
+   private int mCurrentDevice = AudioDeviceInfo.TYPE_UNKNOWN; // current output device
    public FMRadioService() {
    }
 
@@ -297,6 +300,8 @@ public class FMRadioService extends Service
       Log.d(LOGTAG, " is A2DP device Supported In HAL"+mA2dpDeviceSupportInHal);
 
       getA2dpStatusAtStart();
+
+      mRoutingListener = new AudioRoutingListener();
    }
 
    @Override
@@ -397,6 +402,8 @@ public class FMRadioService extends Service
                           .build())
                 .setBufferSizeInBytes(FM_RECORD_BUF_SIZE)
                 .build();
+        Log.d(LOGTAG," adding RoutingChangedListener() ");
+        mAudioTrack.addOnRoutingChangedListener(mRoutingListener, null);
 
         if (mMuted)
             mAudioTrack.setVolume(0.0f);
@@ -547,11 +554,13 @@ public class FMRadioService extends Service
             }
             status = AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,
                                           AudioSystem.DEVICE_STATE_AVAILABLE, "", "");
+            mCurrentDevice = AudioDeviceInfo.TYPE_WIRED_HEADSET;
             if (status != AudioSystem.SUCCESS) {
                 success = false;
                 Log.e(LOGTAG, "configureFMDeviceLoopback failed! status:" + status);
                 AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,
                                      AudioSystem.DEVICE_STATE_UNAVAILABLE, "", "");
+                mCurrentDevice = AudioDeviceInfo.TYPE_UNKNOWN;
             } else {
                 mIsFMDeviceLoopbackActive = true;
             }
@@ -559,6 +568,7 @@ public class FMRadioService extends Service
             AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,
                                  AudioSystem.DEVICE_STATE_UNAVAILABLE, "", "");
             mIsFMDeviceLoopbackActive = false;
+            mCurrentDevice = AudioDeviceInfo.TYPE_UNKNOWN;
         }
 
         return success;
@@ -1673,6 +1683,20 @@ public class FMRadioService extends Service
          exitRecordSinkThread();
       }
    };
+
+    private class AudioRoutingListener implements AudioRouting.OnRoutingChangedListener {
+        public void onRoutingChanged(AudioRouting audioRouting) {
+            Log.d(LOGTAG," onRoutingChanged  + currdevice " + mCurrentDevice);
+            AudioDeviceInfo routedDevice = audioRouting.getRoutedDevice();
+            // if routing is nowhere, we get routedDevice as null
+            if(routedDevice != null) {
+                Log.d(LOGTAG," Audio Routed to device id " + routedDevice.getType());
+                if(routedDevice.getType() != mCurrentDevice) {
+                    startApplicationLoopBack(mCurrentDevice);
+                }
+            }
+        }
+    }
 
    private Handler mDelayedStopHandler = new Handler() {
       @Override
@@ -4275,6 +4299,7 @@ public class FMRadioService extends Service
             CreateRecordSessions();
             Log.d(LOGTAG,"creating AudioTrack session");
         }
+        mCurrentDevice = outputDevice.getType();
         mAudioTrack.setPreferredDevice(outputDevice);
         Log.d(LOGTAG,"PreferredDevice is set to "+ outputDevice.getType());
         if(!isRecordSinking()) {

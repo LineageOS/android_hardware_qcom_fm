@@ -60,7 +60,8 @@ public class A2dpDeviceStatus {
         boolean isConnected = false;
         int state = intent.getIntExtra(BluetoothA2dp.EXTRA_STATE,
                                 BluetoothA2dp.STATE_DISCONNECTED);
-        if((state == BluetoothA2dp.STATE_CONNECTED) || (state == BluetoothProfile.STATE_CONNECTED)) {
+        if((state == BluetoothA2dp.STATE_CONNECTED) || (state == BluetoothProfile.STATE_CONNECTED)
+           || (state ==  BluetoothA2dp.STATE_CONNECTING)) {
             isConnected = true;
         }
         return isConnected;
