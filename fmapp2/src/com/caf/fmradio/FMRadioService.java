@@ -575,6 +575,7 @@ public class FMRadioService extends Service
                       " mIsFMDeviceLoopbackActive:" + mIsFMDeviceLoopbackActive);
 
         if (enable) {
+            Log.d(LOGTAG,"Start Hardware loop back for audio");
             if (mStoppedOnFocusLoss == true) {
                 Log.d(LOGTAG, "FM does not have audio focus, not enabling " +
                       "audio path");
@@ -1200,6 +1201,7 @@ public class FMRadioService extends Service
        if (mStoppedOnFactoryReset) {
            mStoppedOnFactoryReset = false;
            mSpeakerPhoneOn = false;
+           configureAudioDataPath(true);
        // In FM stop, the audio route is set to default audio device
        } else if (mA2dpConnected || mSpeakerPhoneOn) {
                String temp = mSpeakerPhoneOn ? "Speaker" : "WiredHeadset";
@@ -1210,7 +1212,6 @@ public class FMRadioService extends Service
                    startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
                }
        } else {
-               Log.d(LOGTAG,"Start Hardware loop back for audio");
                configureAudioDataPath(true);
        }
        try {
