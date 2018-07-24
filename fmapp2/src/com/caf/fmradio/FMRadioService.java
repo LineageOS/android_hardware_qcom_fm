@@ -244,6 +244,7 @@ public class FMRadioService extends Service
 
    private boolean mFmA2dpDisabled;
    private boolean mEventReceived = false;
+   private boolean isfmOffFromApplication = false;
 
    public FMRadioService() {
    }
@@ -702,6 +703,10 @@ public class FMRadioService extends Service
                        // if headset is plugged out it is required to disable
                        // in minimal duration to avoid race conditions with
                        // audio policy manager switch audio to speaker.
+                       if (isfmOffFromApplication) {
+                           Log.d(LOGTAG, "fm is off from Application, bail out");
+                           return;
+                       }
                        mHandler.removeCallbacks(mHeadsetPluginHandler);
                        mHandler.post(mHeadsetPluginHandler);
                     } else if(mA2dpDeviceState.isA2dpStateChange(action) &&
@@ -2502,6 +2507,7 @@ public class FMRadioService extends Service
       {
          try {
             mReceiver = new FmReceiver(FMRADIO_DEVICE_FD_STRING, fmCallbacks);
+            isfmOffFromApplication = false;
          }
          catch (InstantiationException e)
          {
@@ -2675,6 +2681,10 @@ public class FMRadioService extends Service
        if (off_from == FM_OFF_FROM_APPLICATION || off_from == FM_OFF_FROM_ANTENNA) {
            Log.d(LOGTAG, "FM application close button pressed or antenna removed");
            mSession.setActive(false);
+       }
+       if(off_from == FM_OFF_FROM_APPLICATION) {
+           Log.d(LOGTAG, "FM off from Application");
+           isfmOffFromApplication = true;
        }
 
        //stop Notification
