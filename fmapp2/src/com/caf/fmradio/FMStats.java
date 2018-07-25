@@ -2883,11 +2883,11 @@ public class FMStats extends Activity  {
         }
     }
     private void checkTransportLayer() {
-        String transportLayer = "";
-
-        transportLayer = SystemProperties.get("ro.qualcomm.bt.hci_transport");
-        if(transportLayer.equals("smd"))
+       String chip = SystemProperties.get("vendor.bluetooth.soc","default");
+       if (chip.equals("default"))
            mIsTransportSMD = true;
+       else
+           mIsTransportSMD = false;
     }
     private boolean isTransportLayerSMD() {
         return mIsTransportSMD;
