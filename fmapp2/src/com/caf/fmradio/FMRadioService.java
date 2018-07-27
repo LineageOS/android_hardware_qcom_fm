@@ -282,7 +282,6 @@ public class FMRadioService extends Service
       mSession.setCallback(mSessionCallback);
       mSession.setFlags(MediaSession.FLAG_EXCLUSIVE_GLOBAL_PRIORITY |
                              MediaSession.FLAG_HANDLES_MEDIA_BUTTONS);
-      mSession.setActive(true);
       if ( false == SystemProperties.getBoolean("ro.fm.mulinst.recording.support",true)) {
            mSingleRecordingInstanceSupported = true;
       }
