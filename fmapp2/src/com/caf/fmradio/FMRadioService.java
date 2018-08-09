@@ -1193,16 +1193,16 @@ public class FMRadioService extends Service
        if (mStoppedOnFactoryReset) {
            mStoppedOnFactoryReset = false;
            mSpeakerPhoneOn = false;
-           configureAudioDataPath(true);
        // In FM stop, the audio route is set to default audio device
-       } else if (mA2dpConnected || mSpeakerPhoneOn) {
-               String temp = mSpeakerPhoneOn ? "Speaker" : "WiredHeadset";
-               Log.d(LOGTAG, "Route audio to " + temp);
-               if(!mSpeakerPhoneOn) {
-                   startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
-               } else {
-                   startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
-               }
+       }
+       if (mA2dpConnected || mSpeakerPhoneOn) {
+           String temp = mSpeakerPhoneOn ? "Speaker" : "WiredHeadset";
+           Log.d(LOGTAG, "Route audio to " + temp);
+           if(!mSpeakerPhoneOn) {
+               startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
+           } else {
+               startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
+           }
        } else {
                configureAudioDataPath(true);
        }
