@@ -32,8 +32,6 @@
 #include <nativehelper/JNIHelp.h>
 #include <utils/Log.h>
 #include "utils/misc.h"
-#include "FmIoctlsInterface.h"
-#include "ConfigFmThs.h"
 #include <cutils/properties.h>
 #include <fcntl.h>
 #include <math.h>
@@ -43,6 +41,8 @@
 #include <dlfcn.h>
 #include "android_runtime/Log.h"
 #include "android_runtime/AndroidRuntime.h"
+#include "FmIoctlsInterface.h"
+#include "ConfigFmThs.h"
 
 #define RADIO "/dev/radio0"
 #define FM_JNI_SUCCESS 0L
