@@ -82,8 +82,8 @@ static JavaVM *g_jVM = NULL;
 
 namespace android {
 
-char *FM_LIBRARY_NAME = "fm_helium.so";
-char *FM_LIBRARY_SYMBOL_NAME = "FM_HELIUM_LIB_INTERFACE";
+const char *FM_LIBRARY_NAME = "fm_helium.so";
+const char *FM_LIBRARY_SYMBOL_NAME = "FM_HELIUM_LIB_INTERFACE";
 void *lib_handle;
 static int slimbus_flag = 0;
 
