@@ -26,12 +26,12 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "FmPerformanceParams.h"
-#include "FmIoctlsInterface.h"
-
 #include <cstdio>
 #include <linux/videodev2.h>
 #include <utils/Log.h>
+
+#include "FmPerformanceParams.h"
+#include "FmIoctlsInterface.h"
 
 signed char FmPerformanceParams :: SetAfRmssiTh
 (
