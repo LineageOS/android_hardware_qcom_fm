@@ -52,7 +52,9 @@ const char *const CALIB_DATA_NAME = "/data/misc/fm/Riva_fm_cal";
 
 #define V4L2_CTRL_CLASS_USER  0x00980000
 #define V4L2_CID_BASE  (V4L2_CTRL_CLASS_USER | 0x900)
+#ifndef V4L2_CID_AUDIO_MUTE
 #define V4L2_CID_AUDIO_MUTE   (V4L2_CID_BASE + 9)
+#endif
 const UINT SEARCH_DWELL_TIME = 2;
 const UINT SEEK_DWELL_TIME = 0;
 

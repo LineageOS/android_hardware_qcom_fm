@@ -26,7 +26,6 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "FmIoctlsInterface.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -36,6 +35,7 @@
 #include <sys/ioctl.h>
 #include <linux/videodev2.h>
 #include <math.h>
+#include "FmIoctlsInterface.h"
 
 char const * const FmIoctlsInterface::LOGTAG = "FmIoctlsInterface";
 
