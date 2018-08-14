@@ -651,7 +651,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
         (JNIEnv* env, jobject thiz __unused, jstring path)
 {
     int fd;
-    int i, err;
+    int i = 0, err;
     char value[PROPERTY_VALUE_MAX] = {'\0'};
     char versionStr[40] = {'\0'};
     int init_success = 0;
@@ -1161,7 +1161,9 @@ static jint android_hardware_fmradio_FmReceiverJNI_setNotchFilterNative
     jboolean aValue)
 {
     char value[PROPERTY_VALUE_MAX] = {'\0'};
+#ifndef QCOM_NO_FM_FIRMWARE
     int init_success = 0,i;
+#endif
     char notch[PROPERTY_VALUE_MAX] = {0x00};
     int band;
     int err = 0;
