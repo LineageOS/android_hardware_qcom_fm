@@ -44,6 +44,7 @@ class FmRxControls
    static final int SCAN_BACKWARD = 3;
    static final int FM_DIGITAL_PATH = 0;
    static final int FM_ANALOG_PATH  = 1;
+   static final int ENABLE_SOFT_MUTE = 1;
    private int mSrchMode;
    private int mScanTime;
    private int mSrchDir;
@@ -121,6 +122,12 @@ class FmRxControls
       if (re < 0) {
          Log.d(TAG,"setControlNative faile" + V4L2_CID_PRIVATE_TAVARUA_STATE);
          return re;
+      }
+      if (FmReceiver.isCherokeeChip()) {
+          boolean ret = enableSoftMute(fd,ENABLE_SOFT_MUTE);
+          if(false == ret) {
+              Log.d(TAG,"enableSoftMute failed");
+          }
       }
       setAudioPath(fd, false);
       re = FmReceiverJNI.SetCalibrationNative(fd);

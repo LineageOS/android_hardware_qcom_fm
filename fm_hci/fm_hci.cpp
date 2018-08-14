@@ -550,7 +550,10 @@ static bool hci_initialize()
     if (fmHci != nullptr) {
         hci.state = FM_RADIO_ENABLING;
         android::sp<IFmHciCallbacks> callbacks = new FmHciCallbacks();
-        fmHci->initialize(callbacks);
+        auto hidl_daemon_status = fmHci->initialize(callbacks);
+        if(!hidl_daemon_status.isOk()) {
+            ALOGE("%s: HIDL daemon is dead", __func__);
+        }
         return true;
     } else {
         return false;
@@ -577,7 +580,10 @@ static void hci_transmit(struct fm_command_header_t *hdr) {
 
     if (fmHci != nullptr) {
         data.setToExternal((uint8_t *)hdr, 3 + hdr->len);
-        fmHci->sendHciCommand(data);
+        auto hidl_daemon_status = fmHci->sendHciCommand(data);
+        if(!hidl_daemon_status.isOk()) {
+            ALOGE("%s: send Command failed, HIDL daemon is dead", __func__);
+        }
     } else {
         ALOGI("%s: fmHci is NULL", __func__);
     }
@@ -603,7 +609,10 @@ static void hci_close()
     ALOGI("%s", __func__);
 
     if (fmHci != nullptr) {
-        fmHci->close();
+        auto hidl_daemon_status = fmHci->close();
+        if(!hidl_daemon_status.isOk()) {
+            ALOGE("%s: HIDL daemon is dead", __func__);
+        }
         fmHci = nullptr;
     }
 }

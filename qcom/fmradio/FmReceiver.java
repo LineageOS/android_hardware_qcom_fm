@@ -344,8 +344,8 @@ public class FmReceiver extends FmTransceiver
    private static final int SEARCH_SINR_INT = 1;
 
    public boolean isSmdTransportLayer() {
-       String transportLayer = SystemProperties.get("ro.qualcomm.bt.hci_transport");
-       if (transportLayer.equals("smd"))
+       String chip = SystemProperties.get("vendor.bluetooth.soc","default");
+       if (chip.equals("default"))
            return true;
        else
            return false;
