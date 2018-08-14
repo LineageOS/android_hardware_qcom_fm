@@ -2676,14 +2676,16 @@ public class FMRadioService extends Service
    * @return true if fm Disable api was invoked successfully, false if the api failed.
    */
    private boolean fmOff() {
+       boolean ret = false;
        if (mReceiver != null) {
            if (mReceiver.isCherokeeChip()) {
-               return fmOffImplCherokee();
+               ret = fmOffImplCherokee();
            } else {
-              return fmOffImpl();
+              ret = fmOffImpl();
            }
        }
-       return false;
+       mWakeLock.release();
+       return ret;
    }
 
    private boolean fmOff(int off_from) {
