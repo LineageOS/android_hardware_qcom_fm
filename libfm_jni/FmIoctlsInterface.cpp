@@ -48,7 +48,9 @@ int FmIoctlsInterface :: start_fm_patch_dl
     int ret;
     int init_success = 0;
     char versionStr[MAX_VER_STR_LEN] = {'\0'};
+#ifndef QCOM_NO_FM_FIRMWARE
     char prop_value[PROPERTY_VALUE_MAX] = {'\0'};
+#endif
     struct v4l2_capability cap;
 
     ALOGI("%s: start_fm_patch_dl = %d\n", __func__, fd);
@@ -108,9 +110,9 @@ int  FmIoctlsInterface :: close_fm_patch_dl
     void
 )
 {
+#ifndef QCOM_NO_FM_FIRMWARE
     int ret;
 
-#ifndef QCOM_NO_FM_FIRMWARE
     ret = property_set(SCRIPT_STOP_PROP, SOC_PATCH_DL_SCRPT);
     if(ret != PROP_SET_SUCC) {
         return FM_FAILURE;
@@ -184,13 +186,14 @@ int  FmIoctlsInterface :: set_calibration
     UINT fd
 )
 {
+
+#ifndef QCOM_NO_FM_FIRMWARE
     int ret;
     FILE *cal_fp;
     struct v4l2_ext_control ext_ctl;
     struct v4l2_ext_controls v4l2_ctls;
     char cal_data[CAL_DATA_SIZE] = {0};
 
-#ifndef QCOM_NO_FM_FIRMWARE
     cal_fp = fopen(CALIB_DATA_NAME, "r");
     if(cal_fp != NULL) {
        if(fread(&cal_data[0], 1, CAL_DATA_SIZE, cal_fp)
