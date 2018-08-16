@@ -739,12 +739,6 @@ public class FMRadioService extends Service
                         boolean  bA2dpConnected =
                         mA2dpDeviceState.isConnected(intent);
                         Log.d(LOGTAG, "bA2dpConnected: " + bA2dpConnected);
-                        try {
-                             if ((mServiceInUse) && (mCallbacks != null))
-                                 mCallbacks.onA2DPConnectionstateChanged(bA2dpConnected);
-                        } catch (RemoteException e) {
-                             e.printStackTrace();
-                        }
 
                         //mSpeakerPhoneOn = bA2dpConnected;
                         mA2dpConnected = bA2dpConnected;
