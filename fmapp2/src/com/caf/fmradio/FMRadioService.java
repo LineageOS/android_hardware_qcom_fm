@@ -277,6 +277,7 @@ public class FMRadioService extends Service
       registerExternalStorageListener();
       registerAirplaneModeStatusChanged();
       registerUserSwitch();
+      registerAudioBecomeNoisy();
 
       mSession = new MediaSession(getApplicationContext(), this.getClass().getName());
       mSession.setCallback(mSessionCallback);
@@ -812,32 +813,19 @@ public class FMRadioService extends Service
             mAudioBecomeNoisyListener = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    Log.d(LOGTAG, "FMMediaButtonIntentReceiver.AUDIO_BECOMING_NOISY");
                     String intentAction = intent.getAction();
-                    if (FMMediaButtonIntentReceiver.AUDIO_BECOMING_NOISY.equals(intentAction)) {
-                        mHeadsetPlugged = false;
-                       if (isFmOn())
-                       {
-                           /* Disable FM and let the UI know */
-                           fmOff(FM_OFF_FROM_ANTENNA);
-                           try
-                           {
-                              /* Notify the UI/Activity, only if the service is "bound"
-                              by an activity and if Callbacks are registered
-                              */
-                              if((mServiceInUse) && (mCallbacks != null) )
-                              {
-                                  mCallbacks.onDisabled();
-                              }
-                           } catch (RemoteException e)
-                           {
-                               e.printStackTrace();
-                           }
-                       }
+                    Log.d(LOGTAG, "intent received " + intentAction);
+                    if ((intentAction != null) &&
+                          intentAction.equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
+                        if (isFmOn())
+                        {
+                            Log.d(LOGTAG, "AUDIO_BECOMING_NOISY INTENT: mute FM Audio");
+                            mute();
+                        }
                     }
                 }
             };
-            IntentFilter intentFilter = new IntentFilter(FMMediaButtonIntentReceiver.AUDIO_BECOMING_NOISY);
+            IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
             registerReceiver(mAudioBecomeNoisyListener, intentFilter);
         }
     }
