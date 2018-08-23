@@ -682,21 +682,19 @@ public class FMRadioService extends Service
                         Log.d(LOGTAG, "ACTION_USER_SWITCHED Intent received");
                         int userId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, 0);
                         Log.d(LOGTAG, "ACTION_USER_SWITCHED, user ID:" + userId);
-                        if (userId == 0) {
-                            if (isFmOn()){
-                                fmOff();
-                                try {
-                                    if ((mServiceInUse) && (mCallbacks != null) ) {
-                                        mCallbacks.onDisabled();
-                                    }
-                                } catch (RemoteException e) {
-                                     e.printStackTrace();
+                        if (isFmOn()){
+                            fmOff();
+                            try {
+                                if ((mServiceInUse) && (mCallbacks != null) ) {
+                                    mCallbacks.onDisabled();
                                 }
+                            } catch (RemoteException e) {
+                                 e.printStackTrace();
                             }
+                        }
                             stop();
                             android.os.Process.killProcess(android.os.Process.myPid());
                             System.exit(0);
-                        }
                     }
                 }
             };
@@ -1193,16 +1191,16 @@ public class FMRadioService extends Service
        if (mStoppedOnFactoryReset) {
            mStoppedOnFactoryReset = false;
            mSpeakerPhoneOn = false;
-           configureAudioDataPath(true);
        // In FM stop, the audio route is set to default audio device
-       } else if (mA2dpConnected || mSpeakerPhoneOn) {
-               String temp = mSpeakerPhoneOn ? "Speaker" : "WiredHeadset";
-               Log.d(LOGTAG, "Route audio to " + temp);
-               if(!mSpeakerPhoneOn) {
-                   startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
-               } else {
-                   startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
-               }
+       }
+       if (mA2dpConnected || mSpeakerPhoneOn) {
+           String temp = mSpeakerPhoneOn ? "Speaker" : "WiredHeadset";
+           Log.d(LOGTAG, "Route audio to " + temp);
+           if(!mSpeakerPhoneOn) {
+               startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
+           } else {
+               startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
+           }
        } else {
                configureAudioDataPath(true);
        }
