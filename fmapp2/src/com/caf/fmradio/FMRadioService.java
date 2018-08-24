@@ -277,6 +277,7 @@ public class FMRadioService extends Service
       registerExternalStorageListener();
       registerAirplaneModeStatusChanged();
       registerUserSwitch();
+      registerAudioBecomeNoisy();
 
       mSession = new MediaSession(getApplicationContext(), this.getClass().getName());
       mSession.setCallback(mSessionCallback);
@@ -681,21 +682,19 @@ public class FMRadioService extends Service
                         Log.d(LOGTAG, "ACTION_USER_SWITCHED Intent received");
                         int userId = intent.getIntExtra(Intent.EXTRA_USER_HANDLE, 0);
                         Log.d(LOGTAG, "ACTION_USER_SWITCHED, user ID:" + userId);
-                        if (userId == 0) {
-                            if (isFmOn()){
-                                fmOff();
-                                try {
-                                    if ((mServiceInUse) && (mCallbacks != null) ) {
-                                        mCallbacks.onDisabled();
-                                    }
-                                } catch (RemoteException e) {
-                                     e.printStackTrace();
+                        if (isFmOn()){
+                            fmOff();
+                            try {
+                                if ((mServiceInUse) && (mCallbacks != null) ) {
+                                    mCallbacks.onDisabled();
                                 }
+                            } catch (RemoteException e) {
+                                 e.printStackTrace();
                             }
+                        }
                             stop();
                             android.os.Process.killProcess(android.os.Process.myPid());
                             System.exit(0);
-                        }
                     }
                 }
             };
@@ -812,32 +811,19 @@ public class FMRadioService extends Service
             mAudioBecomeNoisyListener = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    Log.d(LOGTAG, "FMMediaButtonIntentReceiver.AUDIO_BECOMING_NOISY");
                     String intentAction = intent.getAction();
-                    if (FMMediaButtonIntentReceiver.AUDIO_BECOMING_NOISY.equals(intentAction)) {
-                        mHeadsetPlugged = false;
-                       if (isFmOn())
-                       {
-                           /* Disable FM and let the UI know */
-                           fmOff(FM_OFF_FROM_ANTENNA);
-                           try
-                           {
-                              /* Notify the UI/Activity, only if the service is "bound"
-                              by an activity and if Callbacks are registered
-                              */
-                              if((mServiceInUse) && (mCallbacks != null) )
-                              {
-                                  mCallbacks.onDisabled();
-                              }
-                           } catch (RemoteException e)
-                           {
-                               e.printStackTrace();
-                           }
-                       }
+                    Log.d(LOGTAG, "intent received " + intentAction);
+                    if ((intentAction != null) &&
+                          intentAction.equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
+                        if (isFmOn())
+                        {
+                            Log.d(LOGTAG, "AUDIO_BECOMING_NOISY INTENT: mute FM Audio");
+                            mute();
+                        }
                     }
                 }
             };
-            IntentFilter intentFilter = new IntentFilter(FMMediaButtonIntentReceiver.AUDIO_BECOMING_NOISY);
+            IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
             registerReceiver(mAudioBecomeNoisyListener, intentFilter);
         }
     }
@@ -1205,16 +1191,16 @@ public class FMRadioService extends Service
        if (mStoppedOnFactoryReset) {
            mStoppedOnFactoryReset = false;
            mSpeakerPhoneOn = false;
-           configureAudioDataPath(true);
        // In FM stop, the audio route is set to default audio device
-       } else if (mA2dpConnected || mSpeakerPhoneOn) {
-               String temp = mSpeakerPhoneOn ? "Speaker" : "WiredHeadset";
-               Log.d(LOGTAG, "Route audio to " + temp);
-               if(!mSpeakerPhoneOn) {
-                   startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
-               } else {
-                   startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
-               }
+       }
+       if (mA2dpConnected || mSpeakerPhoneOn) {
+           String temp = mSpeakerPhoneOn ? "Speaker" : "WiredHeadset";
+           Log.d(LOGTAG, "Route audio to " + temp);
+           if(!mSpeakerPhoneOn) {
+               startApplicationLoopBack(AudioDeviceInfo.TYPE_WIRED_HEADSET);
+           } else {
+               startApplicationLoopBack(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER);
+           }
        } else {
                configureAudioDataPath(true);
        }
