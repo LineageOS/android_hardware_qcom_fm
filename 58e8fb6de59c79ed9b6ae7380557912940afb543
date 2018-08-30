@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccef27dd_a2ef0b42",
+        "filename": "libfm_jni/Android.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2018-08-30T21:12:45Z",
+      "side": 1,
+      "message": "Ifdef them instead?",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 37
+      },
+      "revId": "58e8fb6de59c79ed9b6ae7380557912940afb543",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
