@@ -4253,7 +4253,11 @@ public class FMRadioService extends Service
    }
    private boolean startApplicationLoopBack(int deviceType) {
 
-   // stop existing playback path before starting new one
+        if (mStoppedOnFocusLoss == true) {
+            Log.d(LOGTAG, "FM does not have audio focus, not enabling " +
+                  "audio path");
+            return false;
+        }
         Log.d(LOGTAG,"startApplicationLoopBack for device "+deviceType);
 
         AudioDeviceInfo outputDevice = null;
@@ -4279,6 +4283,7 @@ public class FMRadioService extends Service
             Log.d(LOGTAG,"no output device" + deviceType + " found");
             return false;
         }
+        // stop existing playback path before starting new one
         if(mIsFMDeviceLoopbackActive) {
             if ((mReceiver != null) && mReceiver.isCherokeeChip() &&
                             (mPref.getBoolean("SLIMBUS_SEQ", true))) {
