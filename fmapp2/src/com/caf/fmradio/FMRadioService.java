@@ -739,12 +739,6 @@ public class FMRadioService extends Service
                         boolean  bA2dpConnected =
                         mA2dpDeviceState.isConnected(intent);
                         Log.d(LOGTAG, "bA2dpConnected: " + bA2dpConnected);
-                        try {
-                             if ((mServiceInUse) && (mCallbacks != null))
-                                 mCallbacks.onA2DPConnectionstateChanged(bA2dpConnected);
-                        } catch (RemoteException e) {
-                             e.printStackTrace();
-                        }
 
                         //mSpeakerPhoneOn = bA2dpConnected;
                         mA2dpConnected = bA2dpConnected;
@@ -2682,14 +2676,16 @@ public class FMRadioService extends Service
    * @return true if fm Disable api was invoked successfully, false if the api failed.
    */
    private boolean fmOff() {
+       boolean ret = false;
        if (mReceiver != null) {
            if (mReceiver.isCherokeeChip()) {
-               return fmOffImplCherokee();
+               ret = fmOffImplCherokee();
            } else {
-              return fmOffImpl();
+              ret = fmOffImpl();
            }
        }
-       return false;
+       mWakeLock.release();
+       return ret;
    }
 
    private boolean fmOff(int off_from) {
@@ -3676,6 +3672,12 @@ public class FMRadioService extends Service
           if (mCallbacks != null) {
               try {
                   mCallbacks.getStationParamCb(val, status);
+                  if (mReceiver != null && mReceiver.isCherokeeChip()) {
+                      synchronized(mEventWaitLock) {
+                          mEventReceived = true;
+                          mEventWaitLock.notify();
+                      }
+                  }
               } catch (RemoteException e) {
                   e.printStackTrace();
               }
@@ -3909,9 +3911,12 @@ public class FMRadioService extends Service
       return frequencyString;
    }
    public int getRssi() {
-      if (mReceiver != null)
-          return mReceiver.getRssi();
-      else
+      if (mReceiver != null) {
+          mEventReceived = false;
+          int rssi = mReceiver.getRssi();
+          waitForFWEvent();
+          return rssi;
+      } else
           return Integer.MAX_VALUE;
    }
    public int getIoC() {
@@ -3937,9 +3942,12 @@ public class FMRadioService extends Service
           mReceiver.setHiLoInj(inj);
    }
    public int getSINR() {
-      if (mReceiver != null)
-          return mReceiver.getSINR();
-      else
+      if (mReceiver != null) {
+          mEventReceived = false;
+          int sinr = mReceiver.getSINR();;
+          waitForFWEvent();
+          return sinr;
+      } else
           return Integer.MAX_VALUE;
    }
    public boolean setSinrSamplesCnt(int samplesCnt) {
@@ -4247,7 +4255,11 @@ public class FMRadioService extends Service
    }
    private boolean startApplicationLoopBack(int deviceType) {
 
-   // stop existing playback path before starting new one
+        if (mStoppedOnFocusLoss == true) {
+            Log.d(LOGTAG, "FM does not have audio focus, not enabling " +
+                  "audio path");
+            return false;
+        }
         Log.d(LOGTAG,"startApplicationLoopBack for device "+deviceType);
 
         AudioDeviceInfo outputDevice = null;
@@ -4273,6 +4285,7 @@ public class FMRadioService extends Service
             Log.d(LOGTAG,"no output device" + deviceType + " found");
             return false;
         }
+        // stop existing playback path before starting new one
         if(mIsFMDeviceLoopbackActive) {
             if ((mReceiver != null) && mReceiver.isCherokeeChip() &&
                             (mPref.getBoolean("SLIMBUS_SEQ", true))) {

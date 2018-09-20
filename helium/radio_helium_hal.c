@@ -418,8 +418,8 @@ static void hci_cc_station_rsp(char *ev_buff)
     }
     ALOGE("hci_cc_station_rsp: val =%x, status = %x", val, status);
 
-    hal->jni_cb->fm_get_station_param_cb(val, status);
     clear_all_bit(station_param_mask_flag);
+    hal->jni_cb->fm_get_station_param_cb(val, status);
 }
 
 static void hci_cc_dbg_param_rsp(char *ev_buff)
