@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74e5dd4b_6d2cf8c7",
+        "filename": "fmapp2/src/com/caf/fmradio/FMTransmitterService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2018-10-03T22:31:08Z",
+      "side": 1,
+      "message": "Remove for proper indent",
+      "range": {
+        "startLine": 319,
+        "startChar": 3,
+        "endLine": 319,
+        "endChar": 6
+      },
+      "revId": "569c5f79494a254e95edd4ca47993c25454063fa",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
