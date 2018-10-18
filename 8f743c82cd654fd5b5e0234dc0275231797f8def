@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c59d1ac_774ba4f4",
+        "filename": "jni/android_hardware_fm.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-10-18T13:50:41Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 662,
+        "startChar": 34,
+        "endLine": 662,
+        "endChar": 37
+      },
+      "revId": "8f743c82cd654fd5b5e0234dc0275231797f8def",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "682e856f_d7dd56dc",
+        "filename": "libfm_jni/FmRadioController.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-10-18T13:50:41Z",
+      "side": 1,
+      "message": "remove",
+      "range": {
+        "startLine": 96,
+        "startChar": 45,
+        "endLine": 96,
+        "endChar": 48
+      },
+      "revId": "8f743c82cd654fd5b5e0234dc0275231797f8def",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    }
+  ]
+}
