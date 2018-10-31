@@ -344,7 +344,7 @@ public class FmReceiver extends FmTransceiver
    private static final int SEARCH_SINR_INT = 1;
 
    public boolean isSmdTransportLayer() {
-       String chip = SystemProperties.get("vendor.bluetooth.soc","default");
+       String chip = SystemProperties.get("vendor.qcom.bluetooth.soc","default");
        if (chip.equals("default"))
            return true;
        else
@@ -352,7 +352,7 @@ public class FmReceiver extends FmTransceiver
    }
 
    public static boolean isRomeChip() {
-       String chip = SystemProperties.get("vendor.bluetooth.soc");
+       String chip = SystemProperties.get("vendor.qcom.bluetooth.soc");
        if (chip.equals("rome"))
            return true;
        else
@@ -360,7 +360,7 @@ public class FmReceiver extends FmTransceiver
    }
 
    public static boolean isCherokeeChip() {
-       String chip = SystemProperties.get("vendor.bluetooth.soc");
+       String chip = SystemProperties.get("vendor.qcom.bluetooth.soc");
        if (chip.equals("cherokee"))
            return true;
        else
