@@ -2883,7 +2883,7 @@ public class FMStats extends Activity  {
         }
     }
     private void checkTransportLayer() {
-       String chip = SystemProperties.get("vendor.bluetooth.soc","default");
+       String chip = SystemProperties.get("vendor.qcom.bluetooth.soc","default");
        if (chip.equals("default"))
            mIsTransportSMD = true;
        else
@@ -2896,7 +2896,7 @@ public class FMStats extends Activity  {
     private boolean isCherokeeChip() {
         Log.d(LOGTAG, "isCherokeeChip");
 
-        String chip = SystemProperties.get("vendor.bluetooth.soc");
+        String chip = SystemProperties.get("vendor.qcom.bluetooth.soc");
         if (chip.equals("cherokee"))
             return true;
         else
@@ -2906,7 +2906,7 @@ public class FMStats extends Activity  {
     private boolean isRomeChip() {
         String chip = "";
 
-        chip = SystemProperties.get("vendor.bluetooth.soc");
+        chip = SystemProperties.get("vendor.qcom.bluetooth.soc");
         if(chip.equals("rome"))
            return true;
         return false;
