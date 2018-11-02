@@ -17,9 +17,9 @@ LOCAL_SHARED_LIBRARIES := \
         liblog \
         libcutils
 
-LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include \
-                   $(TOP)/libnativehelper/include/nativehelper
-LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
+LOCAL_C_INCLUDES := $(TOP)/libnativehelper/include/nativehelper
+
+LOCAL_HEADER_LIBRARIES := generated_kernel_headers
 
 LOCAL_MODULE := libqcomfm_jni
 LOCAL_MODULE_TAGS := optional
