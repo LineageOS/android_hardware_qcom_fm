@@ -29,58 +29,58 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="stat_notif_frequency">\'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
-  <string name="regional_band_summary_north_america">Gogledd America (87.5 i 108.0 MHz mewn camau 200 kHz)</string>
-  <string name="regional_band_summary_europe">Ewrop (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_japan">Japan (76.0 i 90.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_japan_wide">Japan (llydan) (90.0 i 108.0 MHz mewn camau 50 kHz)</string>
-  <string name="regional_band_summary_australia">Awstralia (87.7 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_austria">Awstria (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
-  <string name="regional_band_summary_belgium">Gwlad Belg (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_brazil">Brasil (87.5 i 108.0 MHz mewn camau 200 kHz)</string>
-  <string name="regional_band_summary_china">Tsieina (87.0 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_czech_republic">Y Gweriniaeth Tsiec (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_denmark">Denmarc (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
-  <string name="regional_band_summary_finland">Y Ffindir (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_france">Ffrainc (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_germany">Yr Almaen (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
-  <string name="regional_band_summary_greece">Groeg (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
-  <string name="regional_band_summary_hong_kong">Hong Cong (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_india">India (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_indonesia">Indonesia (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_ireland">Iwerddon (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
-  <string name="regional_band_summary_italy">Yr Eidal (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
-  <string name="regional_band_summary_korea">Corea (87.5 i 108.0 MHz mewn camau 200 kHz)</string>
-  <string name="regional_band_summary_mexico">Mecsico (88.1 i 107.9 MHz mewn camau 200 kHz)</string>
-  <string name="regional_band_summary_netherlands">Yr Iseldiroedd (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_new_zealand">Seland Newydd (88.0 i 107.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_norway">Norwy (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_poland">Gwlad Pwyl (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_portugal">Portiwgal (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
-  <string name="regional_band_summary_russia">Rwsia (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_singapore">Singapôr (88.0 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_slovakia">Slofacia (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_spain">Sbaen (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_switzerland">Y Swisdir (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_sweden">Sweden (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_taiwan">Taiwan (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_turkey">Twrci (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_united_kingdom">Y Deyrnas Gyfunol (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-  <string name="regional_band_summary_united_states">Unol Daleithiau (88.1 i 107.9 MHz mewn camau 200 kHz)</string>
-  <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
-  <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
-  <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
-  <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
-  <!-- The messsage shown when FM record reaches size limit. -->
-  <!-- Off messages -->
-  <!-- The messsage shown when long pressed on a station. -->
-  <!-- Do not translate. Duration format. -->
-  <!-- the name under which recordings will be visible in the media database is formatted like this -->
-  <!-- all recordings will show up in the media database with this 'artist' name -->
-  <!-- all recordings will show up in the media database with this 'album' name -->
-  <!-- all recordings will show up in the media database in a playlist with this name -->
-  <string name="user_defind_band_msg">Rho amledd o 76.0 i 108.0 MHz gyda bylchu o leiaf 1 sianel a bwlch 100 kHz rhwng yr amledd isaf ac uchaf.</string>
-  <!-- program types -->
-  <!-- RBDS (North America) -->
-  <string name="typ_Foreign_language">Iaith dramor</string>
+    <string name="stat_notif_frequency">\'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
+    <string name="regional_band_summary_north_america">Gogledd America (87.5 i 108.0 MHz mewn camau 200 kHz)</string>
+    <string name="regional_band_summary_europe">Ewrop (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_japan">Japan (76.0 i 90.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_japan_wide">Japan (llydan) (90.0 i 108.0 MHz mewn camau 50 kHz)</string>
+    <string name="regional_band_summary_australia">Awstralia (87.7 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_austria">Awstria (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
+    <string name="regional_band_summary_belgium">Gwlad Belg (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_brazil">Brasil (87.5 i 108.0 MHz mewn camau 200 kHz)</string>
+    <string name="regional_band_summary_china">Tsieina (87.0 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_czech_republic">Y Gweriniaeth Tsiec (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_denmark">Denmarc (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
+    <string name="regional_band_summary_finland">Y Ffindir (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_france">Ffrainc (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_germany">Yr Almaen (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
+    <string name="regional_band_summary_greece">Groeg (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
+    <string name="regional_band_summary_hong_kong">Hong Cong (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_india">India (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_indonesia">Indonesia (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_ireland">Iwerddon (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
+    <string name="regional_band_summary_italy">Yr Eidal (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
+    <string name="regional_band_summary_korea">Corea (87.5 i 108.0 MHz mewn camau 200 kHz)</string>
+    <string name="regional_band_summary_mexico">Mecsico (88.1 i 107.9 MHz mewn camau 200 kHz)</string>
+    <string name="regional_band_summary_netherlands">Yr Iseldiroedd (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_new_zealand">Seland Newydd (88.0 i 107.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_norway">Norwy (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_poland">Gwlad Pwyl (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_portugal">Portiwgal (87.5 i 108.0 MHz mewn camau 50 kHz)</string>
+    <string name="regional_band_summary_russia">Rwsia (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_singapore">Singapôr (88.0 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_slovakia">Slofacia (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_spain">Sbaen (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_switzerland">Y Swisdir (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_sweden">Sweden (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_taiwan">Taiwan (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_turkey">Twrci (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_united_kingdom">Y Deyrnas Gyfunol (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_united_states">Unol Daleithiau (88.1 i 107.9 MHz mewn camau 200 kHz)</string>
+    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
+    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
+    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
+    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
+    <!-- The messsage shown when FM record reaches size limit. -->
+    <!-- Off messages -->
+    <!-- The messsage shown when long pressed on a station. -->
+    <!-- Do not translate. Duration format. -->
+    <!-- the name under which recordings will be visible in the media database is formatted like this -->
+    <!-- all recordings will show up in the media database with this 'artist' name -->
+    <!-- all recordings will show up in the media database with this 'album' name -->
+    <!-- all recordings will show up in the media database in a playlist with this name -->
+    <string name="user_defind_band_msg">Rho amledd o 76.0 i 108.0 MHz gyda bylchu o leiaf 1 sianel a bwlch 100 kHz rhwng yr amledd isaf ac uchaf.</string>
+    <!-- program types -->
+    <!-- RBDS (North America) -->
+    <string name="typ_Foreign_language">Iaith dramor</string>
 </resources>
