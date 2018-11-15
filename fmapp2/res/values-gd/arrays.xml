@@ -28,4 +28,24 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
-<resources></resources>
+<resources>
+  <string-array name="ster_mon_entries">
+    <item>Stereo</item>
+    <item>Mono</item>
+  </string-array>
+  <string-array name="ster_entries">
+    <item>Stereo</item>
+  </string-array>
+  <string-array name="record_durations_entries">
+    <item>5 mionaidean</item>
+    <item>Cairteal na h-uarach</item>
+    <item>Leth-uair a thìde</item>
+    <item>Gus an stadar e</item>
+  </string-array>
+  <string-array name="sleep_duration_values">
+    <item>Cairteal na h-uarach</item>
+    <item>Leth-uair a thìde</item>
+    <item>Trì cairteal na h-uarach</item>
+    <item>1 uair a thìde</item>
+  </string-array>
+</resources>

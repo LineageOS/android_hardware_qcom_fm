@@ -29,6 +29,74 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Rèidio FM</string>
+    <string name="tx_app_name">Craoladair FM</string>
+    <string name="menu_scan_start">Sganaich</string>
+    <string name="menu_scan_stop">Sguir dhen lorg</string>
+    <string name="menu_record_start">Clàraich</string>
+    <string name="menu_record_stop">Sguir dhen chlàradh</string>
+    <string name="menu_settings">Roghainnean</string>
+    <string name="menu_sleep">Cadal</string>
+    <string name="menu_sleep_cancel">Sguir dhen chadal</string>
+    <string name="menu_all_channels">A h-uile seanail</string>
+    <string name="menu_display_tags">Seall na tagaichean</string>
+    <string name="button_text_stop">Stad</string>
+    <string name="msg_seeking">A’ lorg an stèisein FM\u2026</string>
+    <string name="msg_scanning">A’ lorg gach stèisean FM\u2026</string>
+    <string name="msg_scanning_pty">A’ sganadh airson “<xliff:g id="pty_name">%1$s</xliff:g>”\u2026</string>
+    <string name="msg_search_title"><xliff:g id="frequency_string">%1$s</xliff:g> MHz</string>
+    <string name="msg_searching_title">A’ fèin-taghadh nan ro-sheata</string>
+    <string name="msg_searching">A’ lorg stèiseanan le siognail làidir airson liosta ro-sheataichean a chruthachadh\u2026</string>
+    <string name="msg_noantenna">Cuir a-steach headset airson èisteachd ri rèidio FM</string>
+    <string name="presetlist_select_name">Tagh “<xliff:g id="presetlist_name">%1$s</xliff:g>”</string>
+    <string name="presetlist_add_new">Cuir liosta ùr ris</string>
+    <string name="dialog_presetlist_rename_title">Cuir a-steach ainm</string>
+    <string name="presetlist_autoselect_title">Dearbh am fèin-taghadh</string>
+    <string name="preset_replace">Cuir ’na àite</string>
+    <string name="preset_tune">Lorg stèiseanan</string>
+    <string name="preset_rename">Thoir ainm ùr air</string>
+    <string name="preset_delete">Sguab às</string>
+    <string name="preset_search">Lorg “<xliff:g id="preset_pi">%1$s</xliff:g>”</string>
+    <string name="stat_notif_frequency">“<xliff:g id="frequency">%1$s</xliff:g>” MHz</string>
+    <string name="regional_band">Bann ionadail</string>
+    <string name="regional_band_entry_north_america">Aimeireaga a Tuath</string>
+    <string name="regional_band_entry_europe">An Roinn-Eòrpa</string>
+    <string name="regional_band_entry_japan">An t-Seapan</string>
+    <string name="regional_band_entry_japan_wide">An t-Seapan (leathann)</string>
+    <string name="regional_band_entry_australia">Astràilia</string>
+    <string name="regional_band_entry_austria">An Ostair</string>
+    <string name="regional_band_entry_belgium">A’ Bheilg</string>
+    <string name="regional_band_entry_brazil">A’ Bhraisil</string>
+    <string name="regional_band_entry_china">An t-Sìn</string>
+    <string name="regional_band_entry_czech_republic">Poblachd na Seice</string>
+    <string name="regional_band_entry_denmark">An Danmhairg</string>
+    <string name="regional_band_entry_finland">An Fhionnlann</string>
+    <string name="regional_band_entry_france">An Fhraing</string>
+    <string name="regional_band_entry_germany">A’ Ghearmailt</string>
+    <string name="regional_band_entry_greece">A’ Ghreug</string>
+    <string name="regional_band_entry_hong_kong">Hong Kong</string>
+    <string name="regional_band_entry_india">Na h-Innseachan</string>
+    <string name="regional_band_entry_indonesia">An Innd-Innse</string>
+    <string name="regional_band_entry_ireland">Èirinn</string>
+    <string name="regional_band_entry_italy">An Eadailt</string>
+    <string name="regional_band_entry_korea">Coirèa</string>
+    <string name="regional_band_entry_mexico">Meagsago</string>
+    <string name="regional_band_entry_netherlands">Na Tìrean Ìsle</string>
+    <string name="regional_band_entry_new_zealand">Sealainn Nuadh</string>
+    <string name="regional_band_entry_norway">Nirribhidh</string>
+    <string name="regional_band_entry_poland">A’ Phòlainn</string>
+    <string name="regional_band_entry_portugal">A’ Phortagail</string>
+    <string name="regional_band_entry_russia">An Ruis</string>
+    <string name="regional_band_entry_singapore">Singeapòr</string>
+    <string name="regional_band_entry_slovakia">An t-Slòbhac</string>
+    <string name="regional_band_entry_spain">An Spàinnt</string>
+    <string name="regional_band_entry_switzerland">An Eilbheis</string>
+    <string name="regional_band_entry_sweden">An t-Suain</string>
+    <string name="regional_band_entry_taiwan">Taidh-Bhàn</string>
+    <string name="regional_band_entry_turkey">An Tuirc</string>
+    <string name="regional_band_entry_united_kingdom">An Rìoghachd Aonaichte</string>
+    <string name="regional_band_entry_united_states">Na Stàitean Aonaichte</string>
+    <string name="regional_band_entry_user_defined">Bann air a shònrachadh leis a’ chleachdaiche</string>
     <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
@@ -43,4 +111,5 @@
     <!-- all recordings will show up in the media database in a playlist with this name -->
     <!-- program types -->
     <!-- RBDS (North America) -->
+    <string name="typ_Classical">Clasaigeach</string>
 </resources>
