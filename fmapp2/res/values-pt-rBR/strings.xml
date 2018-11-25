@@ -167,7 +167,7 @@
     <string name="fm_command_failed_title">Falha na operação FM</string>
     <string name="fm_cmd_failed_msg">Falha na operação FM. Se o problema continuar, desligue e ligue o FM.</string>
     <string name="fm_cmd_failed_msg_hdmi">A operação FM falhou. FM e HDMI não podem ser usados simultaneamente.</string>
-    <string name="fm_cmd_failed_call_on">A operação FM falhou. O áudio FM não é permitido durante uma chamada.</string>
+    <string name="fm_cmd_failed_call_on">A operação FM falhou. O áudio FM não é permitido durante uma chamada. </string>
     <!-- Do not translate. Duration format. -->
     <!-- the name under which recordings will be visible in the media database is formatted like this -->
     <string name="audio_db_title_format"><xliff:g id="format">dd-MM-yyyy HH:mm:ss</xliff:g></string>

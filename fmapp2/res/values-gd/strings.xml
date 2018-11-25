@@ -97,6 +97,8 @@
     <string name="regional_band_entry_united_kingdom">An Rìoghachd Aonaichte</string>
     <string name="regional_band_entry_united_states">Na Stàitean Aonaichte</string>
     <string name="regional_band_entry_user_defined">Bann air a shònrachadh leis a’ chleachdaiche</string>
+    <string name="audio_type_stereo">Stereo</string>
+    <string name="audio_type_mono">Mono</string>
     <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->

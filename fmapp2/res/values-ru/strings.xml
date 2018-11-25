@@ -57,7 +57,8 @@
     <string name="preset_tune">Настроить</string>
     <string name="preset_rename">Переименовать</string>
     <string name="preset_delete">Удалить</string>
-    <string name="preset_search">Поиск «<xliff:g id="preset_pi">%1$s</xliff:g>»</string>
+    <string name="preset_search">Поиск «<xliff:g id="preset_pi">%1$s</xliff:g>»
+        </string>
     <string name="stat_notif_frequency"><xliff:g id="frequency">%1$s</xliff:g> МГц</string>
     <string name="regional_band">Региональный диапазон</string>
     <string name="regional_band_entry_north_america">Северная Америка</string>

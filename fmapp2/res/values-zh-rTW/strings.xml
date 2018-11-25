@@ -160,13 +160,13 @@
     <string name="fm_off">FM 已關閉。</string>
     <string name="fm_call">FM 不能在通話時使用</string>
     <!-- The messsage shown when long pressed on a station. -->
-    <string name="alert_dialog_hint">輸入名稱</string>
+    <string name="alert_dialog_hint">輸入名稱 </string>
     <string name="search_dialog_title">掃描電台</string>
     <string name="fm_command_timeout_title">逾時</string>
     <string name="fm_tune_timeout_msg">未收到回應來調整 FM 電台。如果問題仍然持續，請關閉 FM，並將其重新開啟。</string>
     <string name="fm_command_failed_title">FM 操作失敗</string>
     <string name="fm_cmd_failed_msg">FM 操作失敗。如果問題仍然持續，請關閉 FM，並將其重新開啟。</string>
-    <string name="fm_cmd_failed_msg_hdmi">FM 操作失敗。不支援 FM和 HDMI 併頻 。</string>
+    <string name="fm_cmd_failed_msg_hdmi">FM 操作失敗。不支援 FM和 HDMI 併頻 。 </string>
     <string name="fm_cmd_failed_call_on">FM 操作失敗。通話期間禁止 FM 音訊。</string>
     <!-- Do not translate. Duration format. -->
     <!-- the name under which recordings will be visible in the media database is formatted like this -->

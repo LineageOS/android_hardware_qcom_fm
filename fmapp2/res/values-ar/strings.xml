@@ -107,7 +107,7 @@
     <string name="settings_revert_defaults_title">العودة إلى إعدادات المصنع الافتراضية</string>
     <string name="settings_revert_defaults_summary">إعادة تعيين كل الإعدادات</string>
     <string name="settings_revert_confirm_title">تأكيد إعادة التعيين</string>
-    <string name="settings_revert_confirm_msg">سيترتب على ذلك مسح كل إعدادات التطبيق، بما في ذلك الإعدادات المسبقة المحفوظة. هل تريد الاستمرار؟</string>
+    <string name="settings_revert_confirm_msg">سيترتب على ذلك مسح كل إعدادات التطبيق، بما في ذلك الإعدادات المسبقة المحفوظة. هل تريد الاستمرار؟ </string>
     <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">تحميل بطاقة SD قبل بدء التسجيل.</string>
     <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->

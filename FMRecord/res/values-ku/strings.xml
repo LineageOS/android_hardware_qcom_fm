@@ -34,7 +34,7 @@
     <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">ئامادەکاری بیرگەی دەرەکی</string>
     <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
-    <string name="access_sd_fail">نەتوانرا پەیوەندی نێوان ئامێر و بیرگەی دەرەکی دروست بکرێت</string>
+    <string name="access_sd_fail">نەتوانرا پەیوەندی نێوان ئامێر و بیرگەی دەرەکی دروست بکرێت </string>
     <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">بیرگەیەکەت پڕ بوە تکایە لەپێشدا کەمێك زانیاری بسڕەوە و پاشان هەوڵ بدەرەوە</string>
     <!-- The messsage shown when FM record reaches size limit. -->
