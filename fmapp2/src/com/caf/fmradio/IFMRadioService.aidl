@@ -15,7 +15,6 @@ interface IFMRadioService
     void registerCallbacks(IFMRadioServiceCallbacks cb);
     void unregisterCallbacks();
     boolean mute();
-    boolean routeAudio(int device);
     boolean unMute();
     boolean isMuted();
     boolean startRecording();

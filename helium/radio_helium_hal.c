@@ -479,11 +479,10 @@ static inline void hci_cmd_complete_event(char *buff)
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_DISABLE_RECV_REQ):
             hci_cc_fm_disable_rsp(pbuf);
             break;
-
-    case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_RECV_CONF_REQ):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_MUTE_MODE_REQ):
             hci_cc_enable_softmute_rsp(pbuf);
             break; 
+    case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_RECV_CONF_REQ):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_STEREO_MODE_REQ):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_ANTENNA):
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_SET_SIGNAL_THRESHOLD):
