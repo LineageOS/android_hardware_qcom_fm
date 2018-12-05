@@ -1647,8 +1647,10 @@ public class FMRadioService extends Service
           Context context = getApplicationContext();
           NotificationManager notificationManager =
               (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-          notificationManager.deleteNotificationChannel(FMRADIO_NOTIFICATION_CHANNEL);
+          if((notificationManager != null)
+            && (notificationManager.getNotificationChannel(FMRADIO_NOTIFICATION_CHANNEL) != null)) {
+             notificationManager.deleteNotificationChannel(FMRADIO_NOTIFICATION_CHANNEL);
+          }
       }
    }
 
