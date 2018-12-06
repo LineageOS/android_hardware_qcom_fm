@@ -1661,10 +1661,10 @@ public class FMRadioService extends Service
           ComponentName fmRadio = new ComponentName(this.getPackageName(),
                                   FMMediaButtonIntentReceiver.class.getName());
           mAudioManager.unregisterMediaButtonEventReceiver(fmRadio);
-          if (mSession.isActive()) {
-              Log.d(LOGTAG,"mSession is not active");
-              mSession.setActive(false);
-          }
+      }
+      if (mSession.isActive()) {
+          mSession.setActive(false);
+          Log.d(LOGTAG,"mSession is not active");
       }
       gotoIdleState();
       mFMOn = false;
