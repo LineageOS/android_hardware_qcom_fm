@@ -34,9 +34,11 @@
     <string name="preparing_sd">Yn paratoi cerdyn SD</string>
     <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
+    <string name="spaceIsLow_content">Mae dy storfa cerdyn SD yn rhedeg yn brin o le. Newidia\'r gosodiad ansawdd neu ddileu rhai lluniau neu ffeiliau eraill.</string>
     <!-- The messsage shown when FM record reaches size limit. -->
     <!-- the name under which recordings will be visible in the media database is formatted like this -->
     <!-- all recordings will show up in the media database with this 'artist' name -->
     <!-- all recordings will show up in the media database with this 'album' name -->
     <!-- all recordings will show up in the media database in a playlist with this name -->
+    <string name="unable_to_store">Methu â chadw sain y recordiad</string>
 </resources>

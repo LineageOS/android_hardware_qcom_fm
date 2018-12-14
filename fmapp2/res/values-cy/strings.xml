@@ -29,7 +29,15 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="menu_scan_stop">Stopio chwilio</string>
+    <string name="menu_record_stop">Stopio recordio</string>
+    <string name="button_text_stop">Stopio</string>
     <string name="stat_notif_frequency">\'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
+    <string name="regional_band_entry_switzerland">Y Swistir</string>
+    <string name="regional_band_entry_sweden">Sweden</string>
+    <string name="regional_band_entry_taiwan">Taiwan</string>
+    <string name="regional_band_entry_united_kingdom">Y Deyrnas Gyfunol</string>
+    <string name="regional_band_entry_united_states">Unol Daleithiau</string>
     <string name="regional_band_summary_north_america">Gogledd America (87.5 i 108.0 MHz mewn camau 200 kHz)</string>
     <string name="regional_band_summary_europe">Ewrop (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
     <string name="regional_band_summary_japan">Japan (76.0 i 90.0 MHz mewn camau 100 kHz)</string>
@@ -61,16 +69,18 @@
     <string name="regional_band_summary_singapore">Singapôr (88.0 i 108.0 MHz mewn camau 100 kHz)</string>
     <string name="regional_band_summary_slovakia">Slofacia (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
     <string name="regional_band_summary_spain">Sbaen (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
-    <string name="regional_band_summary_switzerland">Y Swisdir (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
+    <string name="regional_band_summary_switzerland">Y Swistir (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
     <string name="regional_band_summary_sweden">Sweden (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
     <string name="regional_band_summary_taiwan">Taiwan (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
     <string name="regional_band_summary_turkey">Twrci (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
     <string name="regional_band_summary_united_kingdom">Y Deyrnas Gyfunol (87.5 i 108.0 MHz mewn camau 100 kHz)</string>
     <string name="regional_band_summary_united_states">Unol Daleithiau (88.1 i 107.9 MHz mewn camau 200 kHz)</string>
+    <string name="audio_type_stereo">Stereo</string>
     <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
+    <string name="spaceIsLow_content">Mae dy storfa cerdyn SD yn rhedeg yn brin o le. Newidia\'r gosodiad ansawdd neu ddileu rhai lluniau neu ffeiliau eraill i ryddhau lle.</string>
     <!-- The messsage shown when FM record reaches size limit. -->
     <!-- Off messages -->
     <!-- The messsage shown when long pressed on a station. -->
@@ -79,8 +89,17 @@
     <!-- all recordings will show up in the media database with this 'artist' name -->
     <!-- all recordings will show up in the media database with this 'album' name -->
     <!-- all recordings will show up in the media database in a playlist with this name -->
+    <string name="station_name">Gorsaf:</string>
+    <string name="station_name_empty">Mae enw\'r orsaf yn wag. Rho fo eto, plîs.</string>
+    <string name="rt_plus_tags">Tagiau</string>
     <string name="user_defind_band_msg">Rho amledd o 76.0 i 108.0 MHz gyda bylchu o leiaf 1 sianel a bwlch 100 kHz rhwng yr amledd isaf ac uchaf.</string>
     <!-- program types -->
+    <string name="typ_Sport">Chwaraeon</string>
+    <string name="typ_Travel">Teithio</string>
+    <string name="typ_Varied">Amrywiol</string>
+    <string name="typ_Weather">Tywydd</string>
     <!-- RBDS (North America) -->
     <string name="typ_Foreign_language">Iaith dramor</string>
+    <string name="typ_Sports">Chwaraeon</string>
+    <string name="typ_Talk">Siarad</string>
 </resources>
