@@ -1,4 +1,3 @@
-ifeq ($(BOARD_HAVE_QCOM_FM),true)
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -28,5 +27,3 @@ ifeq ($(TARGET_QCOM_NO_FM_FIRMWARE),true)
 endif
 
 include $(BUILD_SHARED_LIBRARY)
-
-endif # BOARD_HAVE_QCOM_FM

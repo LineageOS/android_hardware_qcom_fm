@@ -1,5 +1,3 @@
-ifeq ($(BOARD_HAVE_QCOM_FM),true)
-
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -33,5 +31,3 @@ LOCAL_JNI_SHARED_LIBRARIES := libqcomfm_jni
 LOCAL_JAVA_LIBRARIES := qcom.fmradio
 LOCAL_PRIVATE_PLATFORM_APIS := true
 include $(BUILD_PACKAGE)
-
-endif
