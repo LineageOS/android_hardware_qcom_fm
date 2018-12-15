@@ -13,7 +13,7 @@ LOCAL_SHARED_LIBRARIES := \
          libnativehelper \
          libcutils
 
-FM_HCI_DIR:= vendor/qcom/opensource/commonsys/fm
+FM_HCI_DIR:= hardware/qcom/fm
 
 LOCAL_C_INCLUDES += $(FM_HCI_DIR)/fm_hci
 
