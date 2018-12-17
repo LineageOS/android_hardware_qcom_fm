@@ -229,8 +229,6 @@ public class FMRadio extends Activity
    private int mPresetPageNumber = 0;
    private int mStereo = -1;
 
-   // default audio device - speaker
-   private static int mAudioRoute = FMRadioService.RADIO_AUDIO_DEVICE_WIRED_HEADSET;
    private static boolean mFMStats = false;
 
 
@@ -871,17 +869,6 @@ public class FMRadio extends Activity
       /* If the thread state is "new" then the thread has not yet started */
       if (mRecordUpdateHandlerThread.getState() == Thread.State.NEW) {
           mRecordUpdateHandlerThread.start();
-      }
-   }
-
-   private void audioRoute (int audioDevice) {
-      boolean bStatus;
-      if (mService != null) {
-         try {
-             bStatus = mService.routeAudio(audioDevice);
-         }catch (RemoteException e) {
-             e.printStackTrace();
-         }
       }
    }
 
