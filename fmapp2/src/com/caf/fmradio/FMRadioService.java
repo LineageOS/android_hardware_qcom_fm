@@ -970,12 +970,26 @@ public class FMRadioService extends Service
        }
 
        if (mStoppedOnFocusLoss) {
-           AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-           int granted = audioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
-                   AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-           if (granted != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-               Log.d(LOGTAG, "audio focuss couldnot be granted");
-               return;
+           for(int i = 0; i < 4; i++)
+           {
+              AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+              int granted =
+                   audioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
+                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+              if (granted == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                  Log.d(LOGTAG, "audio focuss granted");
+                  break;
+              } else {
+                  Log.d(LOGTAG, "audio focuss couldnot granted retry after some time");
+                  /*in case of call and fm concurency case focus is abandon
+                  ** after on call state callback, need to retry to get focus*/
+                  try {
+                      Thread.sleep(200);
+                  } catch (Exception ex) {
+                      Log.d( LOGTAG, "RunningThread InterruptedException");
+                      return;
+                  }
+              }
            }
        }
        mSession.setActive(true);
