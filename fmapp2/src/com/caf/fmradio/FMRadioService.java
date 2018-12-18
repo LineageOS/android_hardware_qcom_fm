@@ -402,6 +402,20 @@ public class FMRadioService extends Service
             if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
                 enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
             }
+            String status = audioManager.getParameters("fm_status");
+            Log.d(LOGTAG," FM hardwareLoopback Status = " + status);
+            if (status.contains("1")) {
+               /* This case usually happens, when FM is force killed through settings app
+                * and we don't get chance to disable Hardware LoopBack.
+                * Hardware LoopBack will be running,disable it first and enable again
+                * using routing set param to audio */
+               Log.d(LOGTAG," FM HardwareLoopBack Active, disable it first and enable again");
+               mAudioDeviceType =
+                  AudioDeviceInfo.TYPE_WIRED_HEADPHONES | AudioSystem.DEVICE_OUT_FM;
+               String keyValPairs = new String("fm_routing="+mAudioDeviceType);
+               Log.d(LOGTAG, "keyValPairs = "+keyValPairs);
+               audioManager.setParameters(keyValPairs);
+            }
             mIsFMDeviceLoopbackActive = true;
             /*or with DEVICE_OUT_FM to support backward compatiblity*/
             mAudioDeviceType = mAudioDevice | AudioSystem.DEVICE_OUT_FM;
