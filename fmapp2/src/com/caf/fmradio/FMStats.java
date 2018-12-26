@@ -466,10 +466,7 @@ public class FMStats extends Activity  {
                         if (lastCmdSent == CMD_STNPARAM_SINR)
                             nSINR = msg.arg1;
                     }
-					synchronized (obj) {
-						obj.notify();
-					}
-					lastCmdSent = 0;
+                    lastCmdSent = 0;
                     break;
                 case GET_STATION_DBG_PARAM:
                     status = msg.arg2;
@@ -3269,22 +3266,13 @@ public class FMStats extends Activity  {
         if((null != mService)) {
             try {
                 if (isCherokeeChip) {
+                    lastCmdSent = CMD_STNPARAM_RSSI;
                     ret = mService.getRssi();
                      if (ret != 0) {
                          Log.e(LOGTAG, "getrssi cmd failed: ret = " + ret);
+                         lastCmdSent = 0;
                          return null;
                      }
-                    lastCmdSent = CMD_STNPARAM_RSSI;
-                    Log.e(LOGTAG, "wait for response of mService.getRssi");
-                    synchronized (obj) {
-                        try {
-                            obj.wait();
-                        } catch (InterruptedException e) {
-                            Log.e(LOGTAG, "getRSSI:THREAD interrupted");
-                            e.printStackTrace();
-                            return null;
-                        }
-                    }
                 } else {
                     nRssi = mService.getRssi();
                 }
@@ -3333,18 +3321,8 @@ public class FMStats extends Activity  {
             if(isTransportLayerSMD() || isRomeChip() || isCherokeeChip) {
                 try {
                     if (isCherokeeChip) {
-                        mService.getSINR();
                         lastCmdSent = CMD_STNPARAM_SINR;
-                        Log.e(LOGTAG, "wait for response of mService.getSINR");
-                        synchronized (obj) {
-                            try {
-                                obj.wait();
-                            } catch (InterruptedException e) {
-                                Log.e(LOGTAG, "getSINR:THREAD interrupted");
-                                e.printStackTrace();
-                                return null;
-                            }
-                        }
+                        mService.getSINR();
                     } else {
                         nSINR = mService.getSINR();
                     }
