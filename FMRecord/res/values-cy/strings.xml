@@ -37,8 +37,11 @@
     <string name="spaceIsLow_content">Mae dy storfa cerdyn SD yn rhedeg yn brin o le. Newidia\'r gosodiad ansawdd neu ddileu rhai lluniau neu ffeiliau eraill.</string>
     <!-- The messsage shown when FM record reaches size limit. -->
     <!-- the name under which recordings will be visible in the media database is formatted like this -->
+    <string name="audio_db_title_format"><xliff:g id="format">bbbb-MM-dd AA:mm:ee</xliff:g></string>
     <!-- all recordings will show up in the media database with this 'artist' name -->
     <!-- all recordings will show up in the media database with this 'album' name -->
+    <string name="audio_db_album_name">Recordiadau FM</string>
     <!-- all recordings will show up in the media database in a playlist with this name -->
+    <string name="audio_db_playlist_name">Recordiadau FM</string>
     <string name="unable_to_store">Methu â chadw sain y recordiad</string>
 </resources>
