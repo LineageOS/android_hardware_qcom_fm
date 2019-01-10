@@ -119,6 +119,7 @@ public class FMRadioService extends Service
    private static final String LOGTAG = "FMService";//FMRadio.LOGTAG;
 
    private FmReceiver mReceiver;
+   private final Object mReceiverLock = new Object();
    private BroadcastReceiver mHeadsetReceiver = null;
    private BroadcastReceiver mSdcardUnmountReceiver = null;
    private BroadcastReceiver mMusicCommandListener = null;
@@ -969,12 +970,26 @@ public class FMRadioService extends Service
        }
 
        if (mStoppedOnFocusLoss) {
-           AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-           int granted = audioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
-                   AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-           if (granted != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-               Log.d(LOGTAG, "audio focuss couldnot be granted");
-               return;
+           for(int i = 0; i < 4; i++)
+           {
+              AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+              int granted =
+                   audioManager.requestAudioFocus(mAudioFocusListener, AudioManager.STREAM_MUSIC,
+                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+              if (granted == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                  Log.d(LOGTAG, "audio focuss granted");
+                  break;
+              } else {
+                  Log.d(LOGTAG, "audio focuss couldnot granted retry after some time");
+                  /*in case of call and fm concurency case focus is abandon
+                  ** after on call state callback, need to retry to get focus*/
+                  try {
+                      Thread.sleep(200);
+                  } catch (Exception ex) {
+                      Log.d( LOGTAG, "RunningThread InterruptedException");
+                      return;
+                  }
+              }
            }
        }
        mSession.setActive(true);
@@ -1647,8 +1662,10 @@ public class FMRadioService extends Service
           Context context = getApplicationContext();
           NotificationManager notificationManager =
               (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-          notificationManager.deleteNotificationChannel(FMRADIO_NOTIFICATION_CHANNEL);
+          if((notificationManager != null)
+            && (notificationManager.getNotificationChannel(FMRADIO_NOTIFICATION_CHANNEL) != null)) {
+             notificationManager.deleteNotificationChannel(FMRADIO_NOTIFICATION_CHANNEL);
+          }
       }
    }
 
@@ -1661,10 +1678,10 @@ public class FMRadioService extends Service
           ComponentName fmRadio = new ComponentName(this.getPackageName(),
                                   FMMediaButtonIntentReceiver.class.getName());
           mAudioManager.unregisterMediaButtonEventReceiver(fmRadio);
-          if (mSession.isActive()) {
-              Log.d(LOGTAG,"mSession is not active");
-              mSession.setActive(false);
-          }
+      }
+      if (mSession.isActive()) {
+          mSession.setActive(false);
+          Log.d(LOGTAG,"mSession is not active");
       }
       gotoIdleState();
       mFMOn = false;
@@ -2396,10 +2413,12 @@ public class FMRadioService extends Service
       boolean bStatus=false;
 
       // This will disable the FM radio device
-      if (mReceiver != null)
-      {
-         bStatus = mReceiver.disable(this);
-         mReceiver = null;
+      synchronized(mReceiverLock) {
+         if (mReceiver != null)
+         {
+            bStatus = mReceiver.disable(this);
+            mReceiver = null;
+         }
       }
       fmOperationsOff();
       stop();
@@ -3037,10 +3056,12 @@ public class FMRadioService extends Service
    public boolean enableStereo(boolean bEnable)
    {
       boolean bCommandSent=false;
-      if (mReceiver != null)
-      {
-         Log.d(LOGTAG, "enableStereo: " + bEnable);
-         bCommandSent = mReceiver.setStereoMode(bEnable);
+      synchronized(mReceiverLock) {
+          if (mReceiver != null)
+          {
+             Log.d(LOGTAG, "enableStereo: " + bEnable);
+             bCommandSent = mReceiver.setStereoMode(bEnable);
+          }
       }
       return bCommandSent;
    }
