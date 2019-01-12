@@ -143,7 +143,7 @@ public class FMRadioService extends Service
    private boolean mServiceInUse = false;
    private static boolean mMuted = false;
    private static boolean mResumeAfterCall = false;
-   private static int mAudioDevice = 0;
+   private static int mAudioDevice = AudioDeviceInfo.TYPE_WIRED_HEADPHONES;
    MediaRecorder mRecorder = null;
    MediaRecorder mA2dp = null;
    private boolean mFMOn = false;
@@ -598,6 +598,10 @@ public class FMRadioService extends Service
                             stopRecording();
                         }
                     } else if( action.equals(AudioManager.VOLUME_CHANGED_ACTION)) {
+                        if(!isFmOn()) {
+                            Log.d(LOGTAG, "FM is Turned off ,not applying the changed volume");
+                            return;
+                        }
                         int streamType =
                               intent.getIntExtra(AudioManager.EXTRA_VOLUME_STREAM_TYPE, -1);
                         if (streamType == AudioManager.STREAM_MUSIC) {
