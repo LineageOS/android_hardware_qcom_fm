@@ -121,7 +121,7 @@ const char *const FM_INIT_PROP = "vendor.hw.fm.init";
 const char *const FM_INTERNAL_ANTENNA_PROP = "vendor.hw.fm.internal_antenna";
 const char *const SCRIPT_START_PROP = "ctl.start";
 const char *const FM_SOC_DL_SCRIPT = "fm_dl";
-const char *const SCRIPT_STOP_PROP = "ctl.stOP";
+const char *const SCRIPT_STOP_PROP = "ctl.stop";
 #ifdef FM_LEGACY_PATCHLOADER
 const char *const CALIB_DATA_NAME = "/data/app/Riva_fm_cal";
 #else
