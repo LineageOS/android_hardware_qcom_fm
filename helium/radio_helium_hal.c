@@ -1977,23 +1977,31 @@ static int get_fm_ctrl(int cmd, int *val)
     ALOGE("%s: cmd = 0x%x", __func__, cmd);
     switch(cmd) {
     case HCI_FM_HELIUM_FREQ:
-        if (!val)
+        if (!val) {
             ret = -FM_HC_STATUS_NULL_POINTER;
+            goto end;
+        }
         *val = hal->radio->fm_st_rsp.station_rsp.station_freq;
         break;
     case HCI_FM_HELIUM_UPPER_BAND:
-        if (!val)
+        if (!val) {
             ret = -FM_HC_STATUS_NULL_POINTER;
+            goto end;
+        }
         *val = hal->radio->recv_conf.band_high_limit;
         break;
     case HCI_FM_HELIUM_LOWER_BAND:
-        if (!val)
+        if (!val) {
             ret = -FM_HC_STATUS_NULL_POINTER;
+            goto end;
+        }
         *val = hal->radio->recv_conf.band_low_limit;
         break;
     case HCI_FM_HELIUM_AUDIO_MUTE:
-        if (!val)
+        if (!val) {
             ret = -FM_HC_STATUS_NULL_POINTER;
+            goto end;
+        }
         *val = hal->radio->mute_mode.hard_mute;
         break;
     case HCI_FM_HELIUM_SINR_SAMPLES:
