@@ -35,7 +35,7 @@
 #define FM_CMD_COMPLETE 0x0f
 #define FM_CMD_STATUS   0x10
 #define FM_HW_ERR_EVENT 0x1A
-
+#define HCI_TIMEOUT 3
 struct fm_hci_t {
     public:
         fm_power_state_t state;
