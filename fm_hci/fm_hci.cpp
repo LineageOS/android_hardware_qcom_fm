@@ -661,7 +661,14 @@ int fm_hci_init(fm_hci_hal_t *hci_hal)
                 __func__, hci.state);
         if(hci.state == FM_RADIO_ENABLING){
             Lock lk(hci.on_mtx);
-            hci.on_cond.wait(lk);
+            std::cv_status status = std::cv_status::no_timeout;
+            auto now = std::chrono::system_clock::now();
+            status =
+               hci.on_cond.wait_until(lk, now + std::chrono::seconds(HCI_TIMEOUT));
+             if (status == std::cv_status::timeout) {
+                 ALOGE("hci_initialize failed, kill the fm process");
+                 kill(getpid(), SIGKILL);
+             }
         }
     }
 
