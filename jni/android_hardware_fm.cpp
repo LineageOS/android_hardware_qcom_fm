@@ -685,7 +685,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
 
     ALOGD("BT soc is %s\n", value);
 
-    if (strcmp(value, "rome") != 0)
+    if ((strcmp(value, "rome") != 0) && (strcmp(value, "hastings") != 0))
     {
        /*Set the mode for soc downloader*/
        property_set("vendor.hw.fm.mode", "normal");
@@ -729,7 +729,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_closeFdNative
 
     ALOGD("BT soc is %s\n", value);
 
-    if (strcmp(value, "rome") != 0)
+    if ((strcmp(value, "rome") != 0) && (strcmp(value, "hastings") != 0))
     {
        property_set("ctl.stop", "fm_dl");
     }
@@ -1215,7 +1215,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setNotchFilterNative
 
     ALOGD("BT soc is %s\n", value);
 
-    if (strcmp(value, "rome") != 0)
+    if ((strcmp(value, "rome") != 0) && (strcmp(value, "hastings") != 0))
     {
        /*Enable/Disable the WAN avoidance*/
        property_set("vendor.hw.fm.init", "0");
@@ -1279,7 +1279,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setAnalogModeNative
 
     ALOGD("BT soc is %s\n", value);
 
-    if (strcmp(value, "rome") != 0)
+    if ((strcmp(value, "rome") != 0) && (strcmp(value, "hastings") != 0))
     {
        /*Enable/Disable Analog Mode FM*/
        property_set("vendor.hw.fm.init", "0");
