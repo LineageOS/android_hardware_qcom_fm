@@ -29,19 +29,16 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
+    <string name="no_storage">Mowntio cerdyn SD cyn dechrau recordio.</string>
     <string name="preparing_sd">Yn paratoi cerdyn SD</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
+    <string name="access_sd_fail">Methwyd â chael at y cerdyn SD.</string>
     <string name="spaceIsLow_content">Mae dy storfa cerdyn SD yn rhedeg yn brin o le. Newidia\'r gosodiad ansawdd neu ddileu rhai lluniau neu ffeiliau eraill.</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
+    <string name="FMRecording_reach_size_limit">Wedi cyrraedd y terfyn maint.</string>
     <string name="audio_db_title_format"><xliff:g id="format">bbbb-MM-dd AA:mm:ee</xliff:g></string>
-    <!-- all recordings will show up in the media database with this 'artist' name -->
-    <!-- all recordings will show up in the media database with this 'album' name -->
+    <string name="audio_db_artist_name">Fy recordiadau FM</string>
     <string name="audio_db_album_name">Recordiadau FM</string>
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="audio_db_playlist_name">Recordiadau FM</string>
+    <string name="save_record_file">Cadwyd y recordiad FM i \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
+    <string name="fm_record_progress">Recordio FM ar y gweill</string>
     <string name="unable_to_store">Methu â chadw sain y recordiad</string>
 </resources>

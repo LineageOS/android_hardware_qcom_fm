@@ -108,20 +108,13 @@
     <string name="settings_revert_defaults_summary">అన్ని సెట్టింగులను తిరిగి సెట్ చేయుము</string>
     <string name="settings_revert_confirm_title">తిరిగి సెట్ చేయడాన్ని నిర్ధారించుము</string>
     <string name="settings_revert_confirm_msg">ఇది సేవ్ చేయబడిన పూర్వ అమరికలతో సహా అన్ని అప్లికేషన్ల సెట్టింగులను తొలిగిస్తుంది. కొనసాగించాలా?</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">రికార్డింగును ప్రారంభించే ముందు SD కార్డును మౌంట్ చేయుము.</string>
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">SD సిద్ధం చేయబడుతుంది\u2026</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">SD కార్డుకు ప్రాప్యత సాధ్యపడలేదు.</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">మీ యొక్క SD కార్డ్ నిల్వలో ఖాళీ అయిపోతోంది. నాణ్యతా సెట్టింగును మార్చండి లేదా ఖాళీను సృష్టించేందుకు కొన్ని ఇతర ఫైళ్ళను తొలిగించండి.</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="menu_scan_for_preset">పూర్వ అమరికల కొరకు స్కాన్ చేయుము</string>
-    <!-- Off messages -->
     <string name="fm_off">FM ఆపివేయబడింది.</string>
     <string name="fm_call">కాల్ చేసే సమయంలో FMను ఉపయోగించడం కుదరదు.</string>
-    <!-- The messsage shown when long pressed on a station. -->
     <string name="alert_dialog_hint">పేరును ఎంటర్ చేయుము</string>
     <string name="search_dialog_title">స్టేషనులను స్కాన్ చేయుము</string>
     <string name="fm_command_timeout_title">సమయం ముగిసింది</string>
@@ -130,11 +123,6 @@
     <string name="fm_cmd_failed_msg">FM ఆపరేషన్ విఫలమయింది. సమస్య కొనసాగితే, దయచేసి  FMను ఆపివేసి మరలా దానిని ఆన్ చేయండి.</string>
     <string name="fm_cmd_failed_msg_hdmi">FM ఆపరేషన్ విఫలమయింది. FM మరియు HDMI అనుకూలతకు మద్దతు లేదు.</string>
     <string name="fm_cmd_failed_call_on">FM ఆపరేషన్ విఫలమయింది. కాల్ చేసే సమయంలో FM ఆడియో అనుమతించబడదు.</string>
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
-    <!-- all recordings will show up in the media database with this 'artist' name -->
-    <!-- all recordings will show up in the media database with this 'album' name -->
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="station_name">స్టేషన్:</string>
     <string name="station_exists">ఈ ఫ్రీక్వెన్సీ ఇప్పటికే ఉంది!</string>
     <string name="station_list_delete_station">తొలిగించుము: <xliff:g id="name">%s</xliff:g></string>
@@ -147,7 +135,6 @@
     <string name="chanl_spacing">ఛానల్ అంతరం</string>
     <string name="set">సెట్ చేయి</string>
     <string name="fm_search_no_results">అనుకూలమైన స్టేషన్లు దొరకలేదు</string>
-    <!-- program types -->
     <string name="typ_All_stations">అన్ని స్టేషన్లు</string>
     <string name="typ_Culture">సంస్కృతి</string>
     <string name="typ_Current_affairs">సమకాలిన అంశాలు</string>
@@ -180,7 +167,6 @@
     <string name="typ_Travel">ప్రయాణం.</string>
     <string name="typ_Varied">వైవిధ్యభరిత</string>
     <string name="typ_Weather">వాతావరణం</string>
-    <!-- RBDS (North America) -->
     <string name="typ_Adult_hits">అడల్ట్ హిట్స్</string>
     <string name="typ_Classical">క్లాసికల్</string>
     <string name="typ_Classic_Rock">క్లాసిక్ రాక్</string>

@@ -40,7 +40,7 @@
     <item>5 munud</item>
     <item>15 munud</item>
     <item>30 munud</item>
-    <item>Until stopped</item>
+    <item>Nes wedi\'i stopio</item>
   </string-array>
   <string-array name="sleep_duration_values">
     <item>15 munud</item>

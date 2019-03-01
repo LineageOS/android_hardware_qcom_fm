@@ -146,21 +146,14 @@
     <string name="settings_revert_defaults_summary">Сбросить все настройки</string>
     <string name="settings_revert_confirm_title">Подтвердите сброс</string>
     <string name="settings_revert_confirm_msg">Будут удалены все настройки приложения, включая список сохраненных станций. Продолжить?</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">Для начала записи подключите SD-карту.</string>
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">Подготовка SD-карты…</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">Нет доступа к SD-карте</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">На SD-карте недостаточно места. Измените настройки качества или удалите несколько файлов, чтобы освободить место.</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="FMRecording_reach_size_limit">Достигнут максимальный размер файла.</string>
     <string name="menu_scan_for_preset">Искать сохраненные станции</string>
-    <!-- Off messages -->
     <string name="fm_off">FM отключено.</string>
     <string name="fm_call">FM не может использоваться во время вызова.</string>
-    <!-- The messsage shown when long pressed on a station. -->
     <string name="alert_dialog_hint">Введите название</string>
     <string name="search_dialog_title">Искать станции</string>
     <string name="fm_command_timeout_title">Время ожидания истекло</string>
@@ -169,14 +162,9 @@
     <string name="fm_cmd_failed_msg">Операция невозможна. Если проблема не исчезнет, выключите FM-радио и включите его снова.</string>
     <string name="fm_cmd_failed_msg_hdmi">Одновременное использование FM-радио и HDMI невозможно.</string>
     <string name="fm_cmd_failed_call_on">Использование FM-радио во время телефонного звонка невозможно.</string>
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
     <string name="audio_db_title_format"><xliff:g id="format">dd-MM-yyyy HH:mm:ss</xliff:g></string>
-    <!-- all recordings will show up in the media database with this 'artist' name -->
     <string name="audio_db_artist_name">Мои радиозаписи</string>
-    <!-- all recordings will show up in the media database with this 'album' name -->
     <string name="audio_db_album_name">Радиозаписи</string>
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="audio_db_playlist_name">Радиозаписи</string>
     <string name="station_name">Станция:</string>
     <string name="station_exists">Эта частота уже существует!</string>
@@ -192,7 +180,6 @@
     <string name="user_defind_band_msg">Введите частоту в пределах 76,0–108,0 МГц с минимальным интервалом в 1 канал и отступом в 100 кГц от минимальной и максимальной частоты</string>
     <string name="save_record_file">Файл радиозаписи сохранен в «<xliff:g id="record_file">%1$s</xliff:g>»</string>
     <string name="fm_search_no_results">Совместимых станций не найдено</string>
-    <!-- program types -->
     <string name="typ_All_stations">Все станции</string>
     <string name="typ_Culture">Культура</string>
     <string name="typ_Current_affairs">Текущие события</string>
@@ -225,7 +212,6 @@
     <string name="typ_Travel">Путешествия</string>
     <string name="typ_Varied">Разное</string>
     <string name="typ_Weather">Погода</string>
-    <!-- RBDS (North America) -->
     <string name="typ_Adult_hits">Хиты для взрослых</string>
     <string name="typ_Classical">Классика</string>
     <string name="typ_Classic_Rock">Классический рок</string>

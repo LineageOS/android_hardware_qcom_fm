@@ -29,23 +29,14 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">રેકૉર્ડિંગ શરૂ કરતા પહેલાં SD કાર્ડ માઉન્ટ કરો.</string>
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">SD કાર્ડ તૈયાર કરવું</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">SD કાર્ડનો વપરાશ કરી શકાયો નથી.</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">તમારા SD કાર્ડ સંગ્રહમાં જગ્યા સમાપ્ત થવાના આરે છે. ક્વોલિટી સેટિંગને બદલો અથવા અમુક ઈમેજીસ અથવા અન્ય ફાઈલોને ડીલીટ કરો.</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="FMRecording_reach_size_limit">કદ મર્યાદા પહોંચી ગયા.</string>
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
     <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
-    <!-- all recordings will show up in the media database with this 'artist' name -->
     <string name="audio_db_artist_name">મારા FM રેકોર્ડિંગ્સ</string>
-    <!-- all recordings will show up in the media database with this 'album' name -->
     <string name="audio_db_album_name">FM રેકોર્ડિંગ્સ</string>
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="audio_db_playlist_name">FM રેકોર્ડિંગ્સ</string>
     <string name="save_record_file">FM દ્વારા રેકૉર્ડ કરેલ ફાઇલ \'<xliff:g id="record_file">%1$s</xliff:g>\' પર સેવ થઈ</string>
     <string name="fm_record_progress">FM રેકૉર્ડિંગ ચાલુ છે</string>

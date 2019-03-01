@@ -84,25 +84,11 @@
     <string name="regional_band_summary_turkey">Turchia (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
     <string name="regional_band_summary_united_kingdom">Regnu Unidu (dae 87.5MHz a 108.0MHz in intervallos de 100KHz)</string>
     <string name="regional_band_summary_united_states">Istados Unidos (dae 88.1MHz a 107.9MHz in intervallos de 200KHz)</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
-    <!-- The messsage shown when FM record reaches size limit. -->
-    <!-- Off messages -->
-    <!-- The messsage shown when long pressed on a station. -->
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
-    <!-- all recordings will show up in the media database with this 'artist' name -->
-    <!-- all recordings will show up in the media database with this 'album' name -->
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="set">Cunfigura</string>
     <string name="user_defind_band_msg">Inserta una frecuèntzia intre 76.0 e 108.0 MHz cun a su mancu unu canale e cun 100 kHz de ispàtziu intre sa frecuèntzia mìnima e cussa màssima</string>
-    <!-- program types -->
     <string name="typ_Culture">Cultura</string>
     <string name="typ_Education">Iscola e formatzione</string>
     <string name="typ_Emergency">Emergèntzia</string>
     <string name="typ_Sport">Isport</string>
-    <!-- RBDS (North America) -->
     <string name="typ_College">College</string>
 </resources>

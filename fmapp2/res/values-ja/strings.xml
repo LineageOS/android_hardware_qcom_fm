@@ -145,21 +145,14 @@
     <string name="settings_revert_defaults_summary">すべての設定をリセットする</string>
     <string name="settings_revert_confirm_title">リセットを確認</string>
     <string name="settings_revert_confirm_msg">保存したプリセットを含むすべてのアプリケーションの設定を消去します。続けますか？</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">録音を開始する前にSDカードをマウントしてください。</string>
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">SDカードを準備中...</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">SDカードにアクセスできませんでした。</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">SDカードのストレージの容量が少なくなっています。音質の設定を変更するか、容量を空けるために他のファイルを一部削除してください。</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="FMRecording_reach_size_limit">サイズの上限に達しました。</string>
     <string name="menu_scan_for_preset">プリセットをスキャン</string>
-    <!-- Off messages -->
     <string name="fm_off">FMはOFFになっています。</string>
     <string name="fm_call">通話中にFMは使用できません。</string>
-    <!-- The messsage shown when long pressed on a station. -->
     <string name="alert_dialog_hint">名前を入力</string>
     <string name="search_dialog_title">局をスキャン</string>
     <string name="fm_command_timeout_title">タイムアウト</string>
@@ -168,14 +161,9 @@
     <string name="fm_cmd_failed_msg">FMを操作できませんでした。問題が解決しなければFMをOFFにして、ONに戻してみてください。</string>
     <string name="fm_cmd_failed_msg_hdmi">FMを操作できませんでした。FMとHDMIの同時実行はサポートされていません。</string>
     <string name="fm_cmd_failed_call_on">FMを操作できませんでした。通話中のFMオーディオは許可されていません。</string>
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
     <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
-    <!-- all recordings will show up in the media database with this 'artist' name -->
     <string name="audio_db_artist_name">FM録音</string>
-    <!-- all recordings will show up in the media database with this 'album' name -->
     <string name="audio_db_album_name">FM録音</string>
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="audio_db_playlist_name">FM録音</string>
     <string name="station_name">局:</string>
     <string name="station_exists">この周波数は既に存在しています。</string>
@@ -191,7 +179,6 @@
     <string name="user_defind_band_msg">76.0MHzから108.0MHzまでの間で最低周波数と最高周波数の間が100kHzになるように最小1チャネル間隔で周波数を入力してください。</string>
     <string name="save_record_file">FM録音は[<xliff:g id="record_file">%1$s</xliff:g>]に保存されました。</string>
     <string name="fm_search_no_results">互換性のある局が見つかりませんでした</string>
-    <!-- program types -->
     <string name="typ_All_stations">すべての局</string>
     <string name="typ_Culture">文化</string>
     <string name="typ_Current_affairs">時事問題</string>
@@ -224,7 +211,6 @@
     <string name="typ_Travel">旅行</string>
     <string name="typ_Varied">さまざまなカテゴリ</string>
     <string name="typ_Weather">天気</string>
-    <!-- RBDS (North America) -->
     <string name="typ_Adult_hits">アダルトヒット</string>
     <string name="typ_Classical">クラシック</string>
     <string name="typ_Classic_Rock">クラシックロック</string>
