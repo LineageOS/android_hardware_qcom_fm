@@ -905,7 +905,8 @@ public class FMRadio extends Activity
              if (data != null) {
                 String action = data.getAction();
                 if (action != null) {
-                  if (action.equals(Settings.RESTORE_FACTORY_DEFAULT_ACTION)) {
+                  if ((action.equals(Settings.RESTORE_FACTORY_DEFAULT_ACTION))
+                                               && (true == isFmOn())) {
                       disableRadio();
                       RestoreDefaults();
                       FmSharedPreferences.setTunedFrequency(FmSharedPreferences.DEFAULT_NO_FREQUENCY);
