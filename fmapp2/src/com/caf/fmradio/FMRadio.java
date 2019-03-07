@@ -31,7 +31,6 @@ package com.caf.fmradio;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothDevice;
 import android.content.ComponentName;
@@ -98,6 +97,7 @@ import com.caf.fmradio.HorizontalNumberPicker.Scale;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Point;
 
 public class FMRadio extends Activity
 {
@@ -121,8 +121,6 @@ public class FMRadio extends Activity
    /* Dialog Identifiers */
    private static final int DIALOG_SEARCH = 1;
    private static final int DIALOG_SLEEP = 2;
-   private static final int DIALOG_SELECT_PRESET_LIST = 3;
-   private static final int DIALOG_PRESETS_LIST = 4;
    private static final int DIALOG_PRESET_LIST_RENAME = 5;
    private static final int DIALOG_PRESET_LIST_DELETE = 6;
    private static final int DIALOG_PRESET_LIST_AUTO_SET = 7;
@@ -132,7 +130,6 @@ public class FMRadio extends Activity
    private static final int DIALOG_PRESET_RENAME = 11;
    private static final int DIALOG_CMD_TIMEOUT = 12;
    private static final int DIALOG_CMD_FAILED = 13;
-   private static final int DIALOG_CMD_FAILED_HDMI_ON = 14;
    private static final int DIALOG_CMD_FAILED_CALL_ON = 15;
    private static final int DIALOG_TAGS = 16;
 
@@ -250,7 +247,15 @@ public class FMRadio extends Activity
    /* Radio Vars */
    private Handler mHandler = new Handler();
    /* Search Progress Dialog */
-   private ProgressDialog mProgressDialog = null;
+   private AlertDialog mProgressDialog = null;
+   private Dialog mDlgResetOptions;
+   private Dialog mDlgSearch;
+   private Dialog mDlgSleep;
+   private Dialog mDlgPresetRename;
+   private Dialog mDlgCmdTout;
+   private Dialog mDlgCmdFailed;
+   private Dialog mDlgCmdFailedCallOn;
+   private Dialog mDlgPickFrequency;
 
    /* Asynchronous command active */
    private static int mCommandActive = 0;
@@ -283,14 +288,15 @@ public class FMRadio extends Activity
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setVolumeControlStream(AudioManager.STREAM_MUSIC);
+      Log.d(LOGTAG, "onCreate");
       mPrefs = new FmSharedPreferences(this);
       mCommandActive = CMD_NONE;
       mCommandFailed = CMD_NONE;
 
-      Log.d(LOGTAG, "onCreate - Height : "+ getWindowManager().getDefaultDisplay().getHeight()
-            + " - Width  : "+ getWindowManager().getDefaultDisplay().getWidth());
-
-      mDisplayWidth = getWindowManager().getDefaultDisplay().getWidth();
+      Point p = new Point();
+      getWindowManager().getDefaultDisplay().getSize(p);
+      mDisplayWidth = p.x;
+      Log.d(LOGTAG, " Height : " + p.y + " - mDisplayWidth  : " + mDisplayWidth);
       DisplayMetrics outMetrics = new DisplayMetrics();
       getWindowManager().getDefaultDisplay().getMetrics(outMetrics );
 
@@ -593,13 +599,11 @@ public class FMRadio extends Activity
       Log.d(LOGTAG, "FMRadio: onDestroy");
       mHandler.removeCallbacksAndMessages(null);
       cleanupTimeoutHandler();
-      if(mProgressDialog != null) {
-         mProgressDialog.dismiss();
-      }
+      closeDialog(DIALOG_PROGRESS_PROGRESS);
       if(mSearchProgressHandler != null) {
          mSearchProgressHandler.removeCallbacksAndMessages(null);
       }
-      removeDialog(DIALOG_PRESET_OPTIONS);
+      closeDialog(DIALOG_PRESET_OPTIONS);
       unRegisterReceiver(mFmSettingReceiver);
       if (mService != null) {
           try {
@@ -624,6 +628,7 @@ public class FMRadio extends Activity
       boolean mSpeakerPhoneOn = isSpeakerEnabled();
       boolean sleepActive = isSleepTimerActive();
       boolean searchActive = isScanActive() || isSeekActive();
+      Log.d(LOGTAG, "onCreateOptionsmenu");
 
       item = menu.add(0, MENU_SCAN_START, 0, R.string.menu_scan_start).
                             setIcon(R.drawable.ic_btn_search);
@@ -677,6 +682,7 @@ public class FMRadio extends Activity
    @Override
    public boolean onPrepareOptionsMenu(Menu menu) {
       super.onPrepareOptionsMenu(menu);
+      Log.d(LOGTAG, "onPrepare optionsmenu");
       MenuItem item;
       boolean radioOn = isFmOn();
       boolean recording = isRecording();
@@ -722,6 +728,7 @@ public class FMRadio extends Activity
 
    @Override
    public boolean onOptionsItemSelected(MenuItem item) {
+       Log.d(LOGTAG, "onOptionSelected");
       switch (item.getItemId()) {
       case MENU_SETTINGS:
          Intent launchPreferencesIntent = new Intent().setClass(this,
@@ -753,10 +760,10 @@ public class FMRadio extends Activity
           }
 
          if (mBTsoc.equals("rome")) {
-               clearStationList();
-               initiateSearch(0); // 0 - All stations
-           } else {
-               showDialog(DIALOG_SEARCH);
+             clearStationList();
+             initiateSearch(0); // 0 - All stations
+         } else {
+             displayDialog(DIALOG_SEARCH);
          }
 
          return true;
@@ -770,7 +777,7 @@ public class FMRadio extends Activity
          stopRecording();
          return true;
       case MENU_SLEEP:
-         showDialog(DIALOG_SLEEP);
+          displayDialog(DIALOG_SLEEP);
          return true;
       case MENU_SLEEP_CANCEL:
          DebugToasts("Sleep Cancelled", Toast.LENGTH_SHORT);
@@ -889,101 +896,6 @@ public class FMRadio extends Activity
    }
 
    @Override
-   protected Dialog onCreateDialog(int id) {
-      AlertDialog.Builder dlgBuilder = new AlertDialog.Builder(this);
-      dlgBuilder.setOnKeyListener(new OnKeyListener() {
-         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-             Log.d(LOGTAG, "OnKeyListener event received"+keyCode);
-             switch (keyCode) {
-                 case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                 case 126: //KeyEvent.KEYCODE_MEDIA_PLAY:
-                 case 127: //KeyEvent.KEYCODE_MEDIA_PAUSE:
-                 case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
-                 case KeyEvent.KEYCODE_MEDIA_NEXT:
-                 case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
-                 case KeyEvent.KEYCODE_MEDIA_REWIND:
-                 case KeyEvent.KEYCODE_MEDIA_STOP:
-                     return true;
-             }
-             return false;
-         }
-      });
-      switch (id) {
-      case DIALOG_SEARCH: {
-            return createSearchDlg(id, dlgBuilder);
-         }
-      case DIALOG_SLEEP: {
-            return createSleepDlg(id, dlgBuilder);
-         }
-      case DIALOG_PROGRESS_PROGRESS: {
-         return createProgressDialog(id);
-        }
-      case DIALOG_PRESET_OPTIONS: {
-         return createPresetOptionsDlg(id, dlgBuilder);
-       }
-      case DIALOG_PRESET_RENAME: {
-         return createPresetRenameDlg(id, dlgBuilder);
-       }
-      case DIALOG_CMD_TIMEOUT:{
-         return createCmdTimeoutDlg(id, dlgBuilder);
-      }
-      case DIALOG_CMD_FAILED:{
-         return createCmdFailedDlg(id, dlgBuilder);
-      }
-      case DIALOG_CMD_FAILED_HDMI_ON:{
-         return createCmdFailedDlgHdmiOn(id);
-      }
-      case DIALOG_CMD_FAILED_CALL_ON:{
-          return createCmdFailedDlgCallOn(id);
-      }
-      case DIALOG_PICK_FREQUENCY: {
-            FmConfig fmConfig = FmSharedPreferences.getFMConfiguration();
-            return new FrequencyPickerDialog(this, fmConfig, mTunedStation.getFrequency(), mFrequencyChangeListener);
-      }
-      default:
-          break;
-      }
-      return null;
-   }
-
-   @Override
-   protected void onPrepareDialog(int id, Dialog dialog) {
-      super.onPrepareDialog(id, dialog);
-      int curListIndex = FmSharedPreferences.getCurrentListIndex();
-      PresetList curList = FmSharedPreferences.getStationList(curListIndex);
-      switch (id) {
-      case DIALOG_PRESET_RENAME: {
-            EditText et = (EditText) dialog.findViewById(R.id.list_edit);
-            if ((et != null) && (mPresetButtonStation != null)) {
-                et.setText(mPresetButtonStation.getName());
-            }
-            break;
-         }
-      case DIALOG_PRESET_OPTIONS: {
-            AlertDialog alertDlg = ((AlertDialog) dialog);
-            if ((alertDlg != null) && (mPresetButtonStation != null)) {
-                alertDlg.setTitle(mPresetButtonStation.getName());
-            }
-            break;
-         }
-      case DIALOG_PICK_FREQUENCY:
-         {
-            if (dialog != null && mTunedStation != null)
-            {
-               FmConfig fmConfig = FmSharedPreferences.getFMConfiguration();
-              ((FrequencyPickerDialog) dialog).updateSteps(fmConfig.getChSpacing());
-              ((FrequencyPickerDialog) dialog).updateMinFreq(fmConfig.getLowerLimit());
-              ((FrequencyPickerDialog) dialog).updateMaxFreq(fmConfig.getUpperLimit());
-              ((FrequencyPickerDialog) dialog).UpdateFrequency(mTunedStation.getFrequency());
-            }
-            break;
-         }
-      default:
-            break;
-      }
-   }
-
-   @Override
    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
       super.onActivityResult(requestCode, resultCode, data);
       Log.d(LOGTAG, "onActivityResult : requestCode -> " + requestCode);
@@ -1090,7 +1002,7 @@ public class FMRadio extends Activity
                     initiateSearch(pty);
                  }
              }
-             removeDialog(DIALOG_SEARCH);
+             closeDialog(DIALOG_SEARCH);
           }
       });
       return dlgBuilder.create();
@@ -1118,7 +1030,7 @@ public class FMRadio extends Activity
          dlgBuilder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             public void onCancel(DialogInterface dialog) {
                mPresetButtonStation = null;
-               removeDialog(DIALOG_PRESET_OPTIONS);
+               closeDialog(DIALOG_PRESET_OPTIONS);
             }
          });
          String[] items = new String [arrayList.size ()];
@@ -1147,7 +1059,7 @@ public class FMRadio extends Activity
                       }
                    case PRESETS_OPTIONS_RENAME: {
                          // Rename
-                         showDialog(DIALOG_PRESET_RENAME);
+                         displayDialog(DIALOG_PRESET_RENAME);
                          break;
                       }
                    case PRESETS_OPTIONS_DELETE: {
@@ -1180,7 +1092,7 @@ public class FMRadio extends Activity
                       }
                    }//switch item
                 }//if(mPresetButtonStation != null)
-                removeDialog (DIALOG_PRESET_OPTIONS);
+                closeDialog(DIALOG_PRESET_OPTIONS);
              }//onClick
          });
          return dlgBuilder.create();
@@ -1200,13 +1112,13 @@ public class FMRadio extends Activity
                  long seconds = (long) (900 * (item + 1));
                  initiateSleepTimer(seconds);
               }
-              removeDialog (DIALOG_SLEEP);
+              closeDialog(DIALOG_SLEEP);
           }
       });
       return dlgBuilder.create();
    }
 
-   private Dialog createProgressDialog(int id) {
+   private AlertDialog createProgressDialog() {
       String msgStr = "";
       String titleStr = "";
       String []items;
@@ -1240,13 +1152,16 @@ public class FMRadio extends Activity
          titleStr = getString(R.string.msg_searching_title);
          bSearchActive = true;
       }
+      Log.v(LOGTAG," bSearchActive :"+bSearchActive);
       if (bSearchActive) {
-          mProgressDialog = new ProgressDialog(FMRadio.this);
-          if (mProgressDialog != null) {
-              mProgressDialog.setTitle(titleStr);
-              mProgressDialog.setMessage(msgStr);
-              mProgressDialog.setIcon(R.drawable.ic_launcher_fmradio);
-              mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+          AlertDialog.Builder builder = new AlertDialog.Builder(this);
+          builder.setTitle(titleStr);
+          builder.setIcon(R.drawable.ic_launcher_fmradio);
+          View view = getLayoutInflater().inflate(R.layout.layout_dialog_progress,null);
+          builder.setView(view);
+          TextView tvMessage = (TextView)view.findViewById(R.id.id_tv_message);
+          tvMessage.setText(msgStr);
+          mProgressDialog = builder.create();
               mProgressDialog.setCanceledOnTouchOutside(false);
               mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE,
                                    getText(R.string.button_text_stop),
@@ -1277,7 +1192,6 @@ public class FMRadio extends Activity
                     return false;
                 }
             });
-          }
           Message msg = new Message();
           msg.what = TIMEOUT_PROGRESS_DLG;
           mSearchProgressHandler.sendMessageDelayed(msg, SHOWBUSY_TIMEOUT);
@@ -1344,13 +1258,13 @@ public class FMRadio extends Activity
                                          mPresetButtonStation=null;
                                          setupPresetLayout();
                                          mPrefs.Save();
-                                         removeDialog(DIALOG_PRESET_RENAME);
+                                         closeDialog(DIALOG_PRESET_RENAME);
                                       }
                                    });
       dlgBuilder.setNegativeButton(R.string.alert_dialog_cancel,
                                    new DialogInterface.OnClickListener() {
                                       public void onClick(DialogInterface dialog, int whichButton) {
-                                         removeDialog(DIALOG_PRESET_RENAME);
+                                         closeDialog(DIALOG_PRESET_RENAME);
                                       }
                                    });
       return(dlgBuilder.create());
@@ -1366,7 +1280,7 @@ public class FMRadio extends Activity
                                          public void onClick(DialogInterface dialog,
                                                              int whichButton) {
                                             cleanupTimeoutHandler();
-                                            removeDialog(DIALOG_CMD_TIMEOUT);
+                                            closeDialog(DIALOG_CMD_TIMEOUT);
                                          }
                                       });
          return(dlgBuilder.create());
@@ -1384,25 +1298,7 @@ public class FMRadio extends Activity
                                    new DialogInterface.OnClickListener() {
                                       public void onClick(DialogInterface dialog,
                                                           int whichButton) {
-                                         removeDialog(DIALOG_CMD_TIMEOUT);
-                                         mCommandFailed = CMD_NONE;
-                                      }
-                                   });
-
-      return(dlgBuilder.create());
-   }
-
-   private Dialog createCmdFailedDlgHdmiOn(int id) {
-      AlertDialog.Builder dlgBuilder = new AlertDialog.Builder(this);
-      dlgBuilder.setIcon(R.drawable.alert_dialog_icon)
-                .setTitle(R.string.fm_command_failed_title);
-      dlgBuilder.setMessage(R.string.fm_cmd_failed_msg_hdmi);
-
-      dlgBuilder.setPositiveButton(R.string.alert_dialog_ok,
-                                   new DialogInterface.OnClickListener() {
-                                      public void onClick(DialogInterface dialog,
-                                                          int whichButton) {
-                                         removeDialog(DIALOG_CMD_TIMEOUT);
+                                          closeDialog(DIALOG_CMD_FAILED);
                                          mCommandFailed = CMD_NONE;
                                       }
                                    });
@@ -1420,7 +1316,7 @@ public class FMRadio extends Activity
                                     new DialogInterface.OnClickListener() {
                                        public void onClick(DialogInterface dialog,
                                                            int whichButton) {
-                                          removeDialog(DIALOG_CMD_TIMEOUT);
+                                           closeDialog(DIALOG_CMD_FAILED_CALL_ON);
                                           mCommandFailed = CMD_NONE;
                                           finish();
                                        }
@@ -1441,7 +1337,10 @@ public class FMRadio extends Activity
    private View.OnLongClickListener mFrequencyViewClickListener =
       new View.OnLongClickListener() {
         public boolean onLongClick(View v) {
-          showDialog(DIALOG_PICK_FREQUENCY);
+          FmConfig fmConfig = FmSharedPreferences.getFMConfiguration();
+          mDlgPickFrequency = new FrequencyPickerDialog(FMRadio.this, fmConfig,
+                        mTunedStation.getFrequency(), mFrequencyChangeListener);
+          mDlgPickFrequency.show();
           return true;
         }
    };
@@ -1480,20 +1379,6 @@ public class FMRadio extends Activity
         }
    };
 
-   private View.OnClickListener mPresetListClickListener =
-      new View.OnClickListener() {
-        public void onClick(View v) {
-          showDialog(DIALOG_SELECT_PRESET_LIST);
-        }
-   };
-   private View.OnLongClickListener mPresetListButtonOnLongClickListener =
-      new View.OnLongClickListener() {
-        public boolean onLongClick(View view) {
-          showDialog(DIALOG_PRESETS_LIST);
-          return true;
-        }
-   };
-
    private View.OnClickListener mPresetsPageClickListener =
       new View.OnClickListener() {
         public void onClick(View v) {
@@ -1521,7 +1406,9 @@ public class FMRadio extends Activity
            PresetStation station = (PresetStation)view.getTag();
            mPresetButtonStation = station;
            if (station != null) {
-               showDialog(DIALOG_PRESET_OPTIONS);
+               Log.v(LOGTAG," onLongClick DIALOG_PRESET_OPTIONS :");
+               closeDialog(DIALOG_PRESET_OPTIONS);
+               displayDialog(DIALOG_PRESET_OPTIONS);
            }else {
                addToPresets();
                view.startAnimation(mAnimation);
@@ -1576,9 +1463,9 @@ public class FMRadio extends Activity
                }else {
                    mCommandFailed = CMD_MUTE;
                    if(isCallActive()) {
-                      showDialog(DIALOG_CMD_FAILED_CALL_ON);
+                       displayDialog(DIALOG_CMD_FAILED_CALL_ON);
                    }else {
-                      showDialog(DIALOG_CMD_FAILED);
+                       displayDialog(DIALOG_CMD_FAILED);
                    }
                }
               }catch (RemoteException e) {
@@ -1692,9 +1579,10 @@ public class FMRadio extends Activity
                    mCommandFailed = CMD_FMON;
                    if(isCallActive()) {
                       enableRadioOnOffUI();
-                      showDialog(DIALOG_CMD_FAILED_CALL_ON);
+                      mDlgCmdFailedCallOn = createCmdFailedDlgCallOn(DIALOG_CMD_FAILED_CALL_ON);
+                      mDlgCmdFailedCallOn.show();
                    }else {
-                      showDialog(DIALOG_CMD_FAILED);
+                      displayDialog(DIALOG_CMD_FAILED);
                    }
                 }
             }else {
@@ -2106,7 +1994,7 @@ public class FMRadio extends Activity
       if (searchActive) {
          synchronized (this) {
             if(mProgressDialog == null) {
-               showDialog(DIALOG_PROGRESS_PROGRESS);
+                displayDialog(DIALOG_PROGRESS_PROGRESS);
             }else {
                Message msg = new Message();
                msg.what = UPDATE_PROGRESS_DLG;
@@ -2241,7 +2129,7 @@ public class FMRadio extends Activity
                if (mIsSeeking == false) {
                   mCommandFailed = CMD_SEEK;
                   Log.e(LOGTAG, "mService.seek failed");
-                  showDialog(DIALOG_CMD_FAILED);
+                  displayDialog(DIALOG_CMD_FAILED);
                }
             }
          }catch (RemoteException e) {
@@ -2260,7 +2148,7 @@ public class FMRadio extends Activity
                if (mIsSeeking == false) {
                   mCommandFailed = CMD_SEEK;
                   Log.e(LOGTAG, "mService.seek failed");
-                  showDialog(DIALOG_CMD_FAILED);
+                  displayDialog(DIALOG_CMD_FAILED);
                }
             }
          }catch (RemoteException e) {
@@ -2290,7 +2178,7 @@ public class FMRadio extends Activity
                if (mIsScaning == false) {
                   mCommandFailed = CMD_SCAN;
                   Log.e(LOGTAG, "mService.scan failed");
-                  showDialog(DIALOG_CMD_FAILED);
+                  displayDialog(DIALOG_CMD_FAILED);
                }else {
                   mScanPty = pty;
                }
@@ -2312,7 +2200,7 @@ public class FMRadio extends Activity
                if (mIsSeeking == false) {
                   mCommandFailed = CMD_SEEKPI;
                   Log.e(LOGTAG, "mService.seekPI failed");
-                  showDialog(DIALOG_CMD_FAILED);
+                  displayDialog(DIALOG_CMD_FAILED);
                }
             }
          }catch (RemoteException e) {
@@ -2360,7 +2248,7 @@ public class FMRadio extends Activity
                if (mIsSearching == false) {
                   mCommandFailed = CMD_SEARCHLIST;
                   Log.e(LOGTAG, "mService.searchStrongStationList failed");
-                  showDialog(DIALOG_CMD_FAILED);
+                  displayDialog(DIALOG_CMD_FAILED);
                }
             }catch (RemoteException e) {
                e.printStackTrace();
@@ -2386,7 +2274,7 @@ public class FMRadio extends Activity
               mSearchProgressHandler.removeMessages(END_PROGRESS_DLG);
               mSearchProgressHandler.removeMessages(UPDATE_PROGRESS_DLG);
               mSearchProgressHandler.removeMessages(TIMEOUT_PROGRESS_DLG);
-              removeDialog(DIALOG_PROGRESS_PROGRESS);
+              closeDialog(DIALOG_PROGRESS_PROGRESS);
               mProgressDialog = null;
            }else if (msg.what == TIMEOUT_PROGRESS_DLG) {
               cancelSearch();
@@ -2607,7 +2495,7 @@ public class FMRadio extends Activity
                if (isFmOn()) {
                   mCommandFailed = CMD_TUNE;
                   Log.e(LOGTAG, "mService.tune failed");
-                  showDialog(DIALOG_CMD_FAILED);
+                  displayDialog(DIALOG_CMD_FAILED);
                }
              }
              mTunedStation.setName("");
@@ -2647,7 +2535,7 @@ public class FMRadio extends Activity
                if (mCommandActive > 0) {
                   Log.d(LOGTAG, "mCommandTimeoutHandler: Cmd failed: " + mCommandActive);
                   mCommandTimeoutHandler.removeMessages(MSG_CMD_TIMEOUT);
-                  showDialog(DIALOG_CMD_TIMEOUT);
+                  displayDialog(DIALOG_CMD_TIMEOUT);
                   return;
                }
                break;
@@ -3315,6 +3203,119 @@ public class FMRadio extends Activity
         if(myReceiver != null) {
            unregisterReceiver(myReceiver);
            myReceiver = null;
+        }
+    }
+
+    private void displayDialog(int id) {
+        Log.d(LOGTAG, " disaplyDialog " + id);
+        AlertDialog.Builder dlgBuilder = null;
+        if (id != DIALOG_PROGRESS_PROGRESS) {
+            dlgBuilder = new AlertDialog.Builder(this);
+            dlgBuilder.setOnKeyListener(new OnKeyListener() {
+                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                    Log.d(LOGTAG, "OnKeyListener event received" + keyCode);
+                    switch (keyCode) {
+                    case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                    case 126: // KeyEvent.KEYCODE_MEDIA_PLAY:
+                    case 127: // KeyEvent.KEYCODE_MEDIA_PAUSE:
+                    case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+                    case KeyEvent.KEYCODE_MEDIA_NEXT:
+                    case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                    case KeyEvent.KEYCODE_MEDIA_REWIND:
+                    case KeyEvent.KEYCODE_MEDIA_STOP:
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+        switch (id) {
+        case DIALOG_PROGRESS_PROGRESS:
+            mProgressDialog = createProgressDialog();
+            mProgressDialog.show();
+            break;
+        case DIALOG_PRESET_OPTIONS:
+            mDlgResetOptions = createPresetOptionsDlg(DIALOG_PRESET_OPTIONS, dlgBuilder);
+            mDlgResetOptions.show();
+            break;
+        case DIALOG_SEARCH:
+            mDlgSearch = createSearchDlg(DIALOG_SEARCH, dlgBuilder);
+            mDlgSearch.show();
+            break;
+        case DIALOG_SLEEP:
+            mDlgSleep = createSleepDlg(DIALOG_SLEEP, dlgBuilder);
+            mDlgSleep.show();
+            break;
+        case DIALOG_PRESET_RENAME:
+            mDlgPresetRename = createPresetRenameDlg(DIALOG_PRESET_RENAME, dlgBuilder);
+            mDlgPresetRename.show();
+            break;
+        case DIALOG_CMD_TIMEOUT:
+            mDlgCmdTout = createCmdTimeoutDlg(DIALOG_CMD_TIMEOUT, dlgBuilder);
+            mDlgCmdTout.show();
+            break;
+        case DIALOG_CMD_FAILED:
+            mDlgCmdFailed = createCmdFailedDlg(DIALOG_CMD_FAILED, dlgBuilder);
+            mDlgCmdFailed.show();
+            break;
+        case DIALOG_CMD_FAILED_CALL_ON:
+            mDlgCmdFailedCallOn = createCmdFailedDlgCallOn(DIALOG_CMD_FAILED_CALL_ON);
+            mDlgCmdFailedCallOn.show();
+            break;
+        }
+    }
+
+    private void closeDialog(int id) {
+        Log.d(LOGTAG, " closeDialog " + id);
+        switch (id) {
+        case DIALOG_PROGRESS_PROGRESS:
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                mProgressDialog.dismiss();
+            }
+            break;
+        case DIALOG_PRESET_OPTIONS:
+            if (mDlgResetOptions != null && mDlgResetOptions.isShowing()) {
+                mDlgResetOptions.dismiss();
+            }
+            break;
+        case DIALOG_SEARCH:
+            if (mDlgSearch != null && mDlgSearch.isShowing()) {
+                mDlgSearch.dismiss();
+            }
+            mDlgSearch = null;
+            break;
+        case DIALOG_SLEEP:
+            if (mDlgSleep != null && mDlgSleep.isShowing()) {
+                mDlgSleep.dismiss();
+            }
+            mDlgSleep = null;
+        case DIALOG_PRESET_RENAME:
+            if (mDlgPresetRename != null && mDlgPresetRename.isShowing()) {
+                mDlgPresetRename.dismiss();
+            }
+            mDlgPresetRename = null;
+            break;
+        case DIALOG_CMD_TIMEOUT:
+            if (mDlgCmdTout != null && mDlgCmdTout.isShowing()) {
+                mDlgCmdTout.dismiss();
+            }
+            mDlgCmdTout = null;
+            break;
+        case DIALOG_CMD_FAILED:
+            if (mDlgCmdFailed != null && mDlgCmdFailed.isShowing()) {
+                mDlgCmdFailed.dismiss();
+            }
+            mDlgCmdFailed = null;
+            break;
+        case DIALOG_CMD_FAILED_CALL_ON:
+            if (mDlgCmdFailedCallOn != null && mDlgCmdFailedCallOn.isShowing()) {
+                mDlgCmdFailedCallOn.dismiss();
+            }
+            mDlgCmdFailedCallOn = null;
+            break;
+
+        default:
+            break;
         }
     }
 }
