@@ -108,21 +108,14 @@
     <string name="settings_revert_defaults_summary">તમામ સેટિંગ્સ રિસેટ કરો</string>
     <string name="settings_revert_confirm_title">રિસેટની પુષ્ટિ કરો</string>
     <string name="settings_revert_confirm_msg">આનાથી સેવ કરેલ પ્રિસેટ્સ સહિત તમામ ઍપ્લિકેશન સેટિંગ્સ સાફ થશે. ચાલુ રહેવા માંગો છો?</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">રેકૉર્ડિંગ શરૂ કરતા પહેલાં SD કાર્ડ માઉન્ટ કરો.</string>
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">SD કાર્ડ તૈયાર કરવું\u2026</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">SD કાર્ડનો વપરાશ કરી શકાયો નથી.</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">તમારા SD કાર્ડ સંગ્રહમાં જગ્યા સમાપ્ત થવાના આરે છે. જગ્યા છૂટી કરવા ગુણવત્તા સેટિંગ પરિવર્તન કરો અથવા અમુક અન્ય ફાઇલ રદ કરો.</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="FMRecording_reach_size_limit">કદ મર્યાદા પહોંચી ગયા.</string>
     <string name="menu_scan_for_preset">પ્રિસેટ માટે સ્કૅન કરો</string>
-    <!-- Off messages -->
     <string name="fm_off">FM બંધ કરાયું છે.</string>
     <string name="fm_call">કૉલિંગ કરતી વખતે FMનો ઉપયોગ થઈ શકે નહીં.</string>
-    <!-- The messsage shown when long pressed on a station. -->
     <string name="alert_dialog_hint">નામ દાખલ કરો</string>
     <string name="search_dialog_title">સ્ટેશનો સ્કૅન કરો</string>
     <string name="fm_command_timeout_title">સમય સમાપ્ત</string>
@@ -131,14 +124,9 @@
     <string name="fm_cmd_failed_msg">FM ઑપરેશન નિષ્ફળ. જો સમસ્યા ચાલુ રહે તો કૃપા કરી FM બંધ કરી ફરી ચાલુ કરો.</string>
     <string name="fm_cmd_failed_msg_hdmi">FM ઑપરેશન નિષ્ફળ. FM અને HDMI સમરૂપતાને સમર્થન નથી.</string>
     <string name="fm_cmd_failed_call_on">FM ઑપરેશન નિષ્ફળ. કૉલ દરમિયાન FM ઑડિયોની છૂટ નથી.</string>
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
     <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
-    <!-- all recordings will show up in the media database with this 'artist' name -->
     <string name="audio_db_artist_name">મારા FM રેકોર્ડિંગ્સ</string>
-    <!-- all recordings will show up in the media database with this 'album' name -->
     <string name="audio_db_album_name">FM રેકોર્ડિંગ્સ</string>
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="audio_db_playlist_name">FM રેકોર્ડિંગ્સ</string>
     <string name="station_name">સ્ટેશન:</string>
     <string name="station_exists">આ ફ્રીકવન્સિ અગાઉથી હાજર છે!</string>
@@ -153,7 +141,6 @@
     <string name="set">સેટ કરો</string>
     <string name="save_record_file">FM દ્વારા રેકૉર્ડ કરેલ ફાઇલ \'<xliff:g id="record_file">%1$s</xliff:g>\' પર સેવ થઈ</string>
     <string name="fm_search_no_results">કોઇ સુસંગત સ્ટેશનો મળ્યાં નહીં</string>
-    <!-- program types -->
     <string name="typ_All_stations">તમામ સ્ટેશનો</string>
     <string name="typ_Culture">સંસ્કારિતામાં એકરૂપ કરીને</string>
     <string name="typ_Current_affairs">આજની ખબરો</string>
@@ -186,7 +173,6 @@
     <string name="typ_Travel">મુસાફરી</string>
     <string name="typ_Varied">વિવિધ</string>
     <string name="typ_Weather">હવામાન</string>
-    <!-- RBDS (North America) -->
     <string name="typ_Adult_hits">એડલ્ટ હિટ્સ</string>
     <string name="typ_Classical">શાસ્ત્રીય</string>
     <string name="typ_Classic_Rock">ક્લાસિક રૉક</string>

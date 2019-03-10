@@ -145,21 +145,14 @@
     <string name="settings_revert_defaults_summary">Reinițializați toate setările</string>
     <string name="settings_revert_confirm_title">Confirmați reinițializarea</string>
     <string name="settings_revert_confirm_msg">Aceasta va șterge toate setările aplicației, inclusiv presetările salvate. Continuați?</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">Montați cardul SD înainte de a începe înregistrarea.</string>
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">Se pregătește cardul SD\u2026</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">Nu s-a putut accesa cardul SD.</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">Cardul dvs SD rămâne fără spațiu liber. Schimbați setarea de calitate sau ștergeți câteva dintre fișierele vechi pentru a elibera spațiul.</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="FMRecording_reach_size_limit">Dimensiune limită atinsă.</string>
     <string name="menu_scan_for_preset">Scanare pentru presetări</string>
-    <!-- Off messages -->
     <string name="fm_off">FM este oprit.</string>
     <string name="fm_call">FM nu poate fi utilizat în același timp cu un apel.</string>
-    <!-- The messsage shown when long pressed on a station. -->
     <string name="alert_dialog_hint">Introduceți un nume</string>
     <string name="search_dialog_title">Scanare stații</string>
     <string name="fm_command_timeout_title">Timeout</string>
@@ -168,14 +161,9 @@
     <string name="fm_cmd_failed_msg">Operația FM a eșuat. Dacă problema persistă, vă rugăm să opriți și să reporniți FM-ul.</string>
     <string name="fm_cmd_failed_msg_hdmi">Operația FM a eșuat. Concurența dintre FM și HDMI nu este acceptată.</string>
     <string name="fm_cmd_failed_call_on">Operația FM a eșuat. În timpul unui apel, audio al FM nu este permis.</string>
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
     <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
-    <!-- all recordings will show up in the media database with this 'artist' name -->
     <string name="audio_db_artist_name">Înregistrările mele FM</string>
-    <!-- all recordings will show up in the media database with this 'album' name -->
     <string name="audio_db_album_name">Înregistrări FM</string>
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="audio_db_playlist_name">Înregistrări FM</string>
     <string name="station_name">Stația:</string>
     <string name="station_exists">Această frecvență există deja!</string>
@@ -191,7 +179,6 @@
     <string name="user_defind_band_msg">Introduceți o frecvență de la 76.0 la 108.0 MHz cu spațiu de un canal minimum și 100 kHz spațiu între frecvențele min și max</string>
     <string name="save_record_file">Fișierul cu înregistrarea FM s-a salvat la \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
     <string name="fm_search_no_results">Nu s-au găsit posturi compatibile</string>
-    <!-- program types -->
     <string name="typ_All_stations">Toate stațiile</string>
     <string name="typ_Culture">Cultură</string>
     <string name="typ_Current_affairs">Actualități</string>
@@ -224,7 +211,6 @@
     <string name="typ_Travel">Călătorie</string>
     <string name="typ_Varied">Variate</string>
     <string name="typ_Weather">Vremea</string>
-    <!-- RBDS (North America) -->
     <string name="typ_Adult_hits">Hituri Adult</string>
     <string name="typ_Classical">Clasică</string>
     <string name="typ_Classic_Rock">Rock clasic</string>

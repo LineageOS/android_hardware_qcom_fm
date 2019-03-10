@@ -108,20 +108,13 @@
     <string name="settings_revert_defaults_summary">എല്ലാ ക്രമീകരണങ്ങളും പുനസജ്ജമാക്കുക</string>
     <string name="settings_revert_confirm_title">പുനഃസജ്ജമാക്കൽ സ്ഥിരീകരിക്കുക</string>
     <string name="settings_revert_confirm_msg">സേവ് ചെയ്ത പ്രീസെറ്റുകൾ ഉൾപ്പെടെയുള്ള എല്ലാ ആപ്ലിക്കേഷൻ ക്രമീകരണങ്ങളും മായ്ക്കുന്നതാണ്. തുടരണോ?</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">റെക്കോർഡിംഗ് ആരംഭിക്കുന്നതിന് മുമ്പ് SD കാർഡ് മൌണ്ട് ചെയ്യുക.</string>
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">SD കാർഡ് തയ്യാറാക്കുന്നു.......</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">SD കാർഡ് ആക്സസ് ചെയ്യാന്‍ കഴിഞ്ഞില്ല.</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">നിങ്ങളുടെ SD കാർഡ് സംഭരണത്തില്‍ സ്ഥലം കുറവാണ്. ഗുണമേന്മ ക്രമീകരണം മാറ്റുക അല്ലെങ്കിൽ സ്ഥലം ലഭ്യമാക്കുന്നതിന് മറ്റുചില ഫയലുകൾ ഇല്ലാതാക്കുക.</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="menu_scan_for_preset">പ്രീസെറ്റുകൾക്കായി സ്കാൻ ചെയ്യുക</string>
-    <!-- Off messages -->
     <string name="fm_off">FM ഓഫ് ചെയ്തു.</string>
     <string name="fm_call">കോള്‍ ചെയ്യുന്ന സമയത്ത് FM ഉപയോഗിക്കാന്‍ കഴിയില്ല.</string>
-    <!-- The messsage shown when long pressed on a station. -->
     <string name="alert_dialog_hint">ഒരു പേര് രേഖപ്പെടുത്തുക</string>
     <string name="search_dialog_title">സ്റ്റേഷനുകൾ സ്കാൻ ചെയ്യുക</string>
     <string name="fm_command_timeout_title">കാലഹരണപ്പെട്ടു</string>
@@ -130,11 +123,6 @@
     <string name="fm_cmd_failed_msg">FM പ്രവർത്തനം പരാജയപ്പെട്ടു. പ്രശ്നം നിലനിൽക്കുകയാണെങ്കിൽ, FM ഓഫ് ചെയ്തശേഷം അത് തിരികെ ഓൺ ചെയ്യുക.</string>
     <string name="fm_cmd_failed_msg_hdmi">FM പ്രവർത്തനം പരാജയപ്പെട്ടു. FM, HDMI യുടെ ഒരുമിച്ചുള്ള പ്രവര്‍ത്തനം പിന്തുണയ്ക്കുന്നില്ല.</string>
     <string name="fm_cmd_failed_call_on">FM പ്രവർത്തനം പരാജയപ്പെട്ടു. കോൾ ചെയ്യുമ്പോള്‍ FM ഓഡിയോ അനുവദനീയമല്ല.</string>
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
-    <!-- all recordings will show up in the media database with this 'artist' name -->
-    <!-- all recordings will show up in the media database with this 'album' name -->
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="station_name">സ്റ്റേഷൻ:</string>
     <string name="station_exists">ഈ ആവൃത്തി ഇതിനകം നിലവിലുണ്ട്!</string>
     <string name="station_list_delete_station">ഇല്ലാതാക്കുക: <xliff:g id="name">%s</xliff:g></string>
@@ -147,7 +135,6 @@
     <string name="chanl_spacing">ചാനൽ സ്പെയ്സിംഗ്</string>
     <string name="set">സജ്ജമാക്കുക</string>
     <string name="fm_search_no_results">അനുയോജ്യമായ സ്റ്റേഷനുകൾ കണ്ടെത്തിയില്ല</string>
-    <!-- program types -->
     <string name="typ_All_stations">എല്ലാ സ്റ്റേഷനുകളും</string>
     <string name="typ_Culture">കള്‍ച്ചര്‍</string>
     <string name="typ_Current_affairs">ആനുകാലികം</string>
@@ -180,7 +167,6 @@
     <string name="typ_Travel">യാത്ര</string>
     <string name="typ_Varied">വ്യത്യസ്‌തമായ</string>
     <string name="typ_Weather">കാലാവസ്ഥ</string>
-    <!-- RBDS (North America) -->
     <string name="typ_Adult_hits">മുതിര്‍ന്നവര്‍ക്കുള്ള ഹിറ്റുകൾ</string>
     <string name="typ_Classical">ക്ലാസിക്കൽ</string>
     <string name="typ_Classic_Rock">ക്ലാസിക് റോക്ക്</string>

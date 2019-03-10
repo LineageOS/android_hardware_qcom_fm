@@ -145,21 +145,14 @@
     <string name="settings_revert_defaults_summary">Ресетуј сва подешавања</string>
     <string name="settings_revert_confirm_title">Потврди ресет</string>
     <string name="settings_revert_confirm_msg">Биће уклоњена сва подешавања апликација, укључујући списак сачуваних станица. Наставити?</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">Убаците SD картицу пре почетка снимања.</string>
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">Припремам SD картицу\u2026</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">Нема приступа SD картици.</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">На SD картици понестаје простора. Промените подешавања квалитета или избришите неке датотеке да бисте ослободили простор.</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="FMRecording_reach_size_limit">Достинута је максимална величина датотеке.</string>
     <string name="menu_scan_for_preset">Претражи сачуване станице</string>
-    <!-- Off messages -->
     <string name="fm_off">FM је искључен.</string>
     <string name="fm_call">FM се не може користити током позива.</string>
-    <!-- The messsage shown when long pressed on a station. -->
     <string name="alert_dialog_hint">Унесите име</string>
     <string name="search_dialog_title">Претрага станица</string>
     <string name="fm_command_timeout_title">Време је истекло</string>
@@ -168,14 +161,9 @@
     <string name="fm_cmd_failed_msg">FM операција неуспешна. Ако се проблем настави, молимо искључите FM и укључите га поново.</string>
     <string name="fm_cmd_failed_msg_hdmi">Истовремено коришћење FM радија и HDMI улаза није подржано.</string>
     <string name="fm_cmd_failed_call_on">FM операција неуспешна. FM аудио није дозвољен у току позива.</string>
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
     <string name="audio_db_title_format"><xliff:g id="format">dd-MM-yyyy HH:mm:ss</xliff:g></string>
-    <!-- all recordings will show up in the media database with this 'artist' name -->
     <string name="audio_db_artist_name">Моји радио-снимци</string>
-    <!-- all recordings will show up in the media database with this 'album' name -->
     <string name="audio_db_album_name">Радио-снимци</string>
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="audio_db_playlist_name">Радио-снимци</string>
     <string name="station_name">Станица:</string>
     <string name="station_exists">Ова фреквенција већ постоји.</string>
@@ -191,7 +179,6 @@
     <string name="user_defind_band_msg">Унесите фреквенцију у опсегу 76,0–108,0 MHz са најмање једним каналом размака и 100 kHz размака између минималне и максималне фреквенције.</string>
     <string name="save_record_file">Радио-снимак је сачуван у „<xliff:g id="record_file">%1$s</xliff:g>“</string>
     <string name="fm_search_no_results">Нема одговарајућих станица.</string>
-    <!-- program types -->
     <string name="typ_All_stations">Све станице</string>
     <string name="typ_Culture">Култура</string>
     <string name="typ_Current_affairs">Актуелно</string>
@@ -224,7 +211,6 @@
     <string name="typ_Travel">Путовања</string>
     <string name="typ_Varied">Разно</string>
     <string name="typ_Weather">Време</string>
-    <!-- RBDS (North America) -->
     <string name="typ_Adult_hits">Хитови за одрасле</string>
     <string name="typ_Classical">Класика</string>
     <string name="typ_Classic_Rock">Класични рок</string>

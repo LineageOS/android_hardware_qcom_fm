@@ -108,20 +108,13 @@
     <string name="settings_revert_defaults_summary">সকলো ছেটিংচ ৰিছেট কৰক</string>
     <string name="settings_revert_confirm_title">ৰিছেট নিশ্চিত কৰক</string>
     <string name="settings_revert_confirm_msg">ই সংৰক্ষণ কৰা প্ৰিছেটসহ সকলো এপ্লিকেচন ছেটিং পৰিষ্কাৰ কৰিব। অব্যাহত ৰাখিবনে?</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">ৰেকৰ্ডিং আৰম্ভ কৰা আগতে SD কাৰ্ড মাউণ্ট কৰক।</string>
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">SD কাৰ্ড প্ৰস্তুত কৰি তোলা হৈছে\u2026</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">SD কাৰ্ড আহৰণ কৰিব নোৱাৰে।</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">আপোনাৰ SD কাৰ্ডৰ স্থান কমি গৈছে। স্থান মুকলি কৰিবলৈ গুণমান ছেটিং পৰিৱৰ্তন কৰক বা আন কিছুমান ফাইল বিলোপ কৰক।</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="menu_scan_for_preset">প্ৰিছেটৰ বাবে স্কেন কৰক</string>
-    <!-- Off messages -->
     <string name="fm_off">FM অফ কৰা হৈছে।</string>
     <string name="fm_call">কল কৰি থাকোতে FM ব্যৱহাৰ কৰিব নোৱাৰি।</string>
-    <!-- The messsage shown when long pressed on a station. -->
     <string name="alert_dialog_hint">এটা নাম প্ৰৱেশ কৰক</string>
     <string name="search_dialog_title">ষ্টেচন স্কেন কৰক</string>
     <string name="fm_command_timeout_title">টাইম আউট</string>
@@ -130,11 +123,6 @@
     <string name="fm_cmd_failed_msg">FM অপাৰেচন ব্যৰ্থ হৈছে। যদি সমস্যাটো চলি থাকে, অনুগ্ৰহ কৰি FM অফ কৰক আৰু পুনৰ অন কৰক।</string>
     <string name="fm_cmd_failed_msg_hdmi">FM অপাৰেচন ব্যৰ্থ হৈছে। FM আৰু HDMI একেলগে সমৰ্থন নকৰে।</string>
     <string name="fm_cmd_failed_call_on">FM অপাৰেচন ব্যৰ্থ হৈছে। কল চলি থকা সময়ত FM অডিঅ\'ৰ অনুমতি দিয়া নহয়।</string>
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
-    <!-- all recordings will show up in the media database with this 'artist' name -->
-    <!-- all recordings will show up in the media database with this 'album' name -->
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="station_name">ষ্টেচন:</string>
     <string name="station_exists">এই ফ্ৰিকোৱেন্সী ইতিমধ্যে বিদ্যমান!</string>
     <string name="station_list_delete_station">বিলোপ: <xliff:g id="name">%s</xliff:g></string>
@@ -147,7 +135,6 @@
     <string name="chanl_spacing">চেনেল স্পেচিং</string>
     <string name="set">ছেট</string>
     <string name="fm_search_no_results">কোনো সুসংগত ষ্টেচন পোৱা নগ\'ল</string>
-    <!-- program types -->
     <string name="typ_All_stations">সকলো ষ্টেচন</string>
     <string name="typ_Culture">সংস্কৃতি</string>
     <string name="typ_Current_affairs">চলিত ঘটনাপ্ৰৱাহ</string>
@@ -180,7 +167,6 @@
     <string name="typ_Travel">ভ্ৰমণ</string>
     <string name="typ_Varied">বিভিন্ন</string>
     <string name="typ_Weather">বতৰ</string>
-    <!-- RBDS (North America) -->
     <string name="typ_Adult_hits">প্ৰাপ্তবয়স্কৰ হিটবোৰ</string>
     <string name="typ_Classical">ধ্ৰুপদী</string>
     <string name="typ_Classic_Rock">ক্লাছিক ৰক</string>

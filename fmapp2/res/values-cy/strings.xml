@@ -145,36 +145,25 @@
     <string name="settings_revert_defaults_summary">Ailosod yr holl osodiadau</string>
     <string name="settings_revert_confirm_title">Cadarnhau ailosod</string>
     <string name="settings_revert_confirm_msg">Bydd hyn yn clirio holl osodiadau apiau, gan gynnwys y rhagosodiadau wedi\'u cadw. Parhau?</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">Mowntio cerdyn SD cyn dechrau recordio.</string>
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">Yn paratoi\'r cerdyn SD\u2026</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">Methwyd â chael at y cerdyn SD.</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">Mae dy storfa cerdyn SD yn rhedeg yn brin o le. Newidia\'r gosodiad ansawdd neu ddileu rhai lluniau neu ffeiliau eraill i ryddhau lle.</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="FMRecording_reach_size_limit">Wedi cyrraedd y terfyn maint.</string>
     <string name="menu_scan_for_preset">Sganio am ragosodiadau</string>
-    <!-- Off messages -->
     <string name="fm_off">Mae FM wedi\'i droi i ffwrdd.</string>
     <string name="fm_call">Ni ellir defnyddio FM tra mewn galwad.</string>
-    <!-- The messsage shown when long pressed on a station. -->
     <string name="alert_dialog_hint">Rho enw</string>
     <string name="search_dialog_title">Sganio gorsafoedd</string>
     <string name="fm_command_timeout_title">Terfyn amser</string>
     <string name="fm_tune_timeout_msg">Ni chafwyd ymateb i diwnio\'r orsaf FM. Os yw\'r broblem yn parhau, tro FM i ffwrdd a nôl ymlaen eto.</string>
     <string name="fm_command_failed_title">Methodd y weithred FM</string>
     <string name="fm_cmd_failed_msg">Methodd y weithred FM. Os yw\'r broblem yn parhau, tro FM i ffwrdd a nôl ymlaen eto.</string>
+    <string name="fm_cmd_failed_msg_hdmi">Methodd y weithred FM. Nid yw eto\'n bosib defnyddio FM a HDMI ar yr un pryd.</string>
     <string name="fm_cmd_failed_call_on">Methodd y weithred FM. Ni chaniateir sain FM yn ystod galwad.</string>
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
     <string name="audio_db_title_format"><xliff:g id="format">bbbb-MM-dd AA:mm:ee</xliff:g></string>
-    <!-- all recordings will show up in the media database with this 'artist' name -->
     <string name="audio_db_artist_name">Fy recordiadau FM</string>
-    <!-- all recordings will show up in the media database with this 'album' name -->
     <string name="audio_db_album_name">Recordiadau FM</string>
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="audio_db_playlist_name">Recordiadau FM</string>
     <string name="station_name">Gorsaf:</string>
     <string name="station_exists">Mae\'r amledd hwn yn bodoli eisoes!</string>
@@ -190,7 +179,6 @@
     <string name="user_defind_band_msg">Rho amledd o 76.0 i 108.0 MHz gyda bylchu o leiaf 1 sianel a bwlch 100 kHz rhwng yr amledd isaf ac uchaf.</string>
     <string name="save_record_file">Cadwyd y ffeil recordiad FM i \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
     <string name="fm_search_no_results">Ni chanfuwyd unrhyw orsafoedd cytûn</string>
-    <!-- program types -->
     <string name="typ_All_stations">Pob orsaf</string>
     <string name="typ_Culture">Diwylliant</string>
     <string name="typ_Current_affairs">Materion cyfoes</string>
@@ -198,6 +186,7 @@
     <string name="typ_Country">Cerddoriaeth gwlad</string>
     <string name="typ_Documentary">Dogfen</string>
     <string name="typ_Drama">Drama</string>
+    <string name="typ_Easy_listening">Cerddoriaeth ysgafn</string>
     <string name="typ_Education">Addysg</string>
     <string name="typ_Emergency">Argyfwng</string>
     <string name="typ_Emergency_test">Prawf argyfwng</string>
@@ -222,21 +211,23 @@
     <string name="typ_Travel">Teithio</string>
     <string name="typ_Varied">Amrywiol</string>
     <string name="typ_Weather">Tywydd</string>
-    <!-- RBDS (North America) -->
     <string name="typ_Adult_hits">Poblogaidd</string>
     <string name="typ_Classical">Clasurol</string>
     <string name="typ_Classic_Rock">Roc Clasurol</string>
     <string name="typ_College">Coleg</string>
     <string name="typ_Foreign_language">Iaith dramor</string>
     <string name="typ_Hiphop">Hip Hop</string>
+    <string name="typ_Nostalgia">Hiraeth</string>
     <string name="typ_Personality">Personoliaeth</string>
     <string name="typ_Public">Cyhoeddus</string>
     <string name="typ_Religious_music">Cerddoriaeth crefyddol</string>
     <string name="typ_Religious_talk">Sgwrsio crefyddol</string>
+    <string name="typ_Rhythm_and_Blues">Rhythm a Blues</string>
     <string name="typ_Spanish_music">Cerddoriaeth Sbaeneg</string>
     <string name="typ_Spanish_talk">Sgwrsio Sbaeneg</string>
     <string name="typ_Soft">Meddal</string>
     <string name="typ_Soft_Rock">Roc Meddal</string>
+    <string name="typ_Soft_Rhythm_and_Blues">Rhythm a Blues Meddal</string>
     <string name="typ_Sports">Chwaraeon</string>
     <string name="typ_Talk">Siarad</string>
     <string name="typ_Top_40">40 Uchaf</string>

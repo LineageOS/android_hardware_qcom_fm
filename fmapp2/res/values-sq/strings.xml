@@ -134,29 +134,17 @@
     <string name="audio_type_mono">Mono</string>
     <string name="record_dur">Regjistro kohëzgjatjen</string>
     <string name="settings_revert_defaults_summary">Rikthe në gjëndje të mëparshme të gjitha parametrat</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">Duke përgatitur kartën SD\u2026</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">Karta SD nuk mund të aksesohet.</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">Hapësira në kartën SD është pothuajse e mbushur plot. Ndrysho parametrat e cilësisë ose fshi disa imazhe apo disa skedarë të tjerë për të liruar vënd.</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="FMRecording_reach_size_limit">U arrit kufiri i madhësisë.</string>
-    <!-- Off messages -->
     <string name="fm_off">FM u çaktivizua.</string>
-    <!-- The messsage shown when long pressed on a station. -->
     <string name="alert_dialog_hint">Vendos një emër</string>
     <string name="search_dialog_title">Skano stacionet</string>
     <string name="fm_command_failed_title">Veprimi FM dështoi</string>
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
     <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
-    <!-- all recordings will show up in the media database with this 'artist' name -->
     <string name="audio_db_artist_name">Regjistrimet e mia FM</string>
-    <!-- all recordings will show up in the media database with this 'album' name -->
     <string name="audio_db_album_name">Regjistrimet FM</string>
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="audio_db_playlist_name">Regjistrimet FM</string>
     <string name="station_name">Stacioni:</string>
     <string name="station_exists">Kjo frekuencë ekziston tashmë!</string>
@@ -170,7 +158,6 @@
     <string name="set">Cakto</string>
     <string name="user_defind_band_msg">Vendos frekuencën nga 76.0 deri në 108.0 MHz me të paktën 1 hapësirë midis kanaleve dhe me hapësirë 100 kHz midis frekuencës minimale dhe asaj maksimale</string>
     <string name="save_record_file">Regjistrimi FM u ruajt në \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
-    <!-- program types -->
     <string name="typ_All_stations">Të gjitha stacionet</string>
     <string name="typ_Culture">Kulturë</string>
     <string name="typ_Current_affairs">Aktualitet</string>
@@ -200,7 +187,6 @@
     <string name="typ_Travel">Udhëtime</string>
     <string name="typ_Varied">Të ndryshme</string>
     <string name="typ_Weather">Moti</string>
-    <!-- RBDS (North America) -->
     <string name="typ_Classical">Klasike</string>
     <string name="typ_Classic_Rock">Rock Klasik</string>
     <string name="typ_College">Universitet</string>

@@ -108,20 +108,13 @@
     <string name="settings_revert_defaults_summary">ସମସ୍ତ ସେଟିଂସ୍‍ ରିସେଟ୍‍ କରନ୍ତୁ</string>
     <string name="settings_revert_confirm_title">ରିସେଟ୍‍ ସୁନିଶ୍ଚିତ କରନ୍ତୁ</string>
     <string name="settings_revert_confirm_msg">ଏହା ସଞ୍ଚିତ ହୋ‍ଇଥିବା ପ୍ରିସେଟ୍‍କୁ ଅନ୍ତଭୁକ୍ତ କରି ସମସ୍ତ ଆପ୍ଲିକେସନ୍‍ ସେଟିଂସ୍‍ ହଟାଇଦେବ। ଜାରି ରଖିବେ?</string>
-    <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
     <string name="no_storage">ରେକର୍ଡ କରିବା ଆରଂଭ କରିବା ପୂର୍ବରୁ SD କାର୍ଡ ମାଉଣ୍ଟ କରନ୍ତୁ</string>
-    <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
     <string name="preparing_sd">SD କାର୍ଡ ପ୍ରସ୍ତୁତ କରୁଛି\u2026</string>
-    <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
     <string name="access_sd_fail">SD କାର୍ଡ୍‍ ଆକସେସ୍ କରି ପାରିବେ ନାହିଁ।</string>
-    <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
     <string name="spaceIsLow_content">ଆପଣଙ୍କ SD କାର୍ଡ୍‍ ଷ୍ଟୋରେଜ୍‍ରେ ‍ସ୍ଥାନ ଖାଲି ନାହିଁ। ଗୁଣବତ୍ତା ସେଟିଂସ୍‍ ପରିବର୍ତ୍ତନ କରନ୍ତୁ ବା ‍ସ୍ଥାନ ଖାଲି କରିବା ପାଇଁ ଅନ୍ୟ କିଛି ଫାଇଲ୍‍ ବିଲୋପ କରନ୍ତୁ।</string>
-    <!-- The messsage shown when FM record reaches size limit. -->
     <string name="menu_scan_for_preset">ପ୍ରିସେଟ୍‍ ପାଇଁ ସ୍କାନ୍‍ କରନ୍ତୁ</string>
-    <!-- Off messages -->
     <string name="fm_off">FM ଅଫ୍‍ କରାଯାଇଛି।</string>
     <string name="fm_call">କଲ୍‍ କରିବା ସମୟରେ FM ବ୍ୟବହାର କରିହେବ ନାହିଁ।</string>
-    <!-- The messsage shown when long pressed on a station. -->
     <string name="alert_dialog_hint">ଏକ ନାମ ପ୍ରବେଶ କରନ୍ତୁ</string>
     <string name="search_dialog_title">ଷ୍ଟେସନ୍‍ଗୁଡିକୁ ସ୍କାନ୍‍ କରନ୍ତୁ</string>
     <string name="fm_command_timeout_title">ସମୟ ଶେଷ</string>
@@ -130,11 +123,6 @@
     <string name="fm_cmd_failed_msg">FM  ଅପରେସନ୍‍ ବିଫଳ ହୋଇଛି ଯଦି ସମସ୍ୟା ଲାଗିରହେ, ଦୟାକରି FM ବନ୍ଦ କରନ୍ତୁ ଓ ପୂଣିଥରେ ଅନ୍‍ କରନ୍ତୁ।</string>
     <string name="fm_cmd_failed_msg_hdmi">FM  ଅପରେସନ୍‍ ବିଫଳ ହୋଇଛି FM ଓ HDMI ଏକ ସମୟରେ କରିବା ସମର୍ଥନ କରୁନାହିଁ।</string>
     <string name="fm_cmd_failed_call_on">FM  ଅପରେସନ୍‍ ବିଫଳ ହୋଇଛି କଲ୍‍ କରିବା ସମୟରେ FM ଅଡିଓ ପାଇଁ ଅନୁମତି ଦିଆଯାଇ ନାହିଁ।</string>
-    <!-- Do not translate. Duration format. -->
-    <!-- the name under which recordings will be visible in the media database is formatted like this -->
-    <!-- all recordings will show up in the media database with this 'artist' name -->
-    <!-- all recordings will show up in the media database with this 'album' name -->
-    <!-- all recordings will show up in the media database in a playlist with this name -->
     <string name="station_name">ଷ୍ଟେସନ୍:</string>
     <string name="station_exists">ଏହି ଫ୍ରେକ୍ୱେନ୍ସି ଆଗରୁ ବିଦ୍ୟମାନ ଅଛି!</string>
     <string name="station_list_delete_station">ବିଲୋପ କରନ୍ତୁ: <xliff:g id="name">%s</xliff:g></string>
@@ -147,7 +135,6 @@
     <string name="chanl_spacing">ଚ୍ୟାନେଲ୍‍ ବ୍ୟବଧାନ</string>
     <string name="set">ସେଟ୍</string>
     <string name="fm_search_no_results">କୌଣସି କମ୍ପାଟିବୁଲ୍‍ ଷ୍ଟେସନ୍‍ ମିଳୁନାହିଁ</string>
-    <!-- program types -->
     <string name="typ_All_stations">ସମସ୍ତ ଷ୍ଟେସନ୍‍</string>
     <string name="typ_Culture">ସଂସ୍କୃତି</string>
     <string name="typ_Current_affairs">ସମ୍ପ୍ରତି ଘଟଣାବଳି</string>
@@ -180,7 +167,6 @@
     <string name="typ_Travel">ଭ୍ରମଣ</string>
     <string name="typ_Varied">ପୃଥକ୍‍ ହେଉଛି</string>
     <string name="typ_Weather">ପାଣିପାଗ</string>
-    <!-- RBDS (North America) -->
     <string name="typ_Adult_hits">ଆଡଲ୍ଟ ହିଟ୍ସ୍‍</string>
     <string name="typ_Classical">କ୍ଲାସିକାଲ୍</string>
     <string name="typ_Classic_Rock">କ୍ଲାସିକାଲ୍‍ ରକ୍‍</string>
