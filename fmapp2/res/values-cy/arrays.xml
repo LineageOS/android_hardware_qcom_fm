@@ -29,10 +29,23 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources>
+  <string-array name="ster_mon_entries">
+    <item>Stereo</item>
+    <item>Mono</item>
+  </string-array>
+  <string-array name="ster_entries">
+    <item>Stereo</item>
+  </string-array>
+  <string-array name="record_durations_entries">
+    <item>5 munud</item>
+    <item>15 munud</item>
+    <item>30 munud</item>
+    <item>Nes wedi\'i stopio</item>
+  </string-array>
   <string-array name="sleep_duration_values">
-    <item>15 minutes</item>
-    <item>30 minutes</item>
-    <item>45 minutes</item>
+    <item>15 munud</item>
+    <item>30 munud</item>
+    <item>45 munud</item>
     <item>1 awr</item>
   </string-array>
   <string-array name="channel_spacing_entries">

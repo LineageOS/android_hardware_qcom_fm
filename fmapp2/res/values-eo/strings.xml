@@ -29,54 +29,40 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="menu_settings">Agordoj</string>
-  <string name="preset_delete">Forigi</string>
-  <string name="stat_notif_frequency">\'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
-  <string name="regional_band_entry_europe">Eŭropo</string>
-  <string name="regional_band_entry_japan">Japanujo</string>
-  <string name="regional_band_entry_australia">Aŭstralio</string>
-  <string name="regional_band_entry_austria">Aŭstrujo</string>
-  <string name="regional_band_entry_belgium">Belgujo</string>
-  <string name="regional_band_entry_brazil">Brazilo</string>
-  <string name="regional_band_entry_china">Ĉinujo</string>
-  <string name="regional_band_entry_czech_republic">Ĉeĥujo</string>
-  <string name="regional_band_entry_denmark">Danujo</string>
-  <string name="regional_band_entry_finland">Finnlando</string>
-  <string name="regional_band_entry_france">Francujo</string>
-  <string name="regional_band_entry_germany">Germanujo</string>
-  <string name="regional_band_entry_greece">Grekujo</string>
-  <string name="regional_band_entry_hong_kong">Honkongo</string>
-  <string name="regional_band_entry_india">Barato</string>
-  <string name="regional_band_entry_indonesia">Indonezio</string>
-  <string name="regional_band_entry_ireland">Irlando</string>
-  <string name="regional_band_entry_italy">Italujo</string>
-  <string name="regional_band_entry_korea">Koreujo</string>
-  <string name="regional_band_entry_mexico">Meksiko</string>
-  <string name="regional_band_entry_netherlands">Nederlando</string>
-  <string name="regional_band_entry_new_zealand">Nov-Zelando</string>
-  <string name="regional_band_entry_norway">Norvegujo</string>
-  <string name="regional_band_entry_poland">Pollando</string>
-  <string name="regional_band_entry_portugal">Portugalujo</string>
-  <string name="regional_band_entry_russia">Rusujo</string>
-  <string name="regional_band_entry_singapore">Singapuro</string>
-  <string name="regional_band_entry_slovakia">Slovakujo</string>
-  <string name="regional_band_entry_spain">Hispanujo</string>
-  <string name="regional_band_entry_switzerland">Svislando</string>
-  <string name="regional_band_entry_sweden">Svedujo</string>
-  <string name="regional_band_entry_taiwan">Tajvano</string>
-  <string name="regional_band_entry_turkey">Turkujo</string>
-  <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
-  <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
-  <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
-  <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
-  <!-- The messsage shown when FM record reaches size limit. -->
-  <!-- Off messages -->
-  <!-- The messsage shown when long pressed on a station. -->
-  <!-- Do not translate. Duration format. -->
-  <!-- the name under which recordings will be visible in the media database is formatted like this -->
-  <!-- all recordings will show up in the media database with this 'artist' name -->
-  <!-- all recordings will show up in the media database with this 'album' name -->
-  <!-- all recordings will show up in the media database in a playlist with this name -->
-  <!-- program types -->
-  <!-- RBDS (North America) -->
+    <string name="menu_settings">Agordoj</string>
+    <string name="preset_delete">Forigi</string>
+    <string name="stat_notif_frequency">\'<xliff:g id="frequency">%1$s</xliff:g>\' MHz</string>
+    <string name="regional_band_entry_europe">Eŭropo</string>
+    <string name="regional_band_entry_japan">Japanujo</string>
+    <string name="regional_band_entry_australia">Aŭstralio</string>
+    <string name="regional_band_entry_austria">Aŭstrujo</string>
+    <string name="regional_band_entry_belgium">Belgujo</string>
+    <string name="regional_band_entry_brazil">Brazilo</string>
+    <string name="regional_band_entry_china">Ĉinujo</string>
+    <string name="regional_band_entry_czech_republic">Ĉeĥujo</string>
+    <string name="regional_band_entry_denmark">Danujo</string>
+    <string name="regional_band_entry_finland">Finnlando</string>
+    <string name="regional_band_entry_france">Francujo</string>
+    <string name="regional_band_entry_germany">Germanujo</string>
+    <string name="regional_band_entry_greece">Grekujo</string>
+    <string name="regional_band_entry_hong_kong">Honkongo</string>
+    <string name="regional_band_entry_india">Barato</string>
+    <string name="regional_band_entry_indonesia">Indonezio</string>
+    <string name="regional_band_entry_ireland">Irlando</string>
+    <string name="regional_band_entry_italy">Italujo</string>
+    <string name="regional_band_entry_korea">Koreujo</string>
+    <string name="regional_band_entry_mexico">Meksiko</string>
+    <string name="regional_band_entry_netherlands">Nederlando</string>
+    <string name="regional_band_entry_new_zealand">Nov-Zelando</string>
+    <string name="regional_band_entry_norway">Norvegujo</string>
+    <string name="regional_band_entry_poland">Pollando</string>
+    <string name="regional_band_entry_portugal">Portugalujo</string>
+    <string name="regional_band_entry_russia">Rusujo</string>
+    <string name="regional_band_entry_singapore">Singapuro</string>
+    <string name="regional_band_entry_slovakia">Slovakujo</string>
+    <string name="regional_band_entry_spain">Hispanujo</string>
+    <string name="regional_band_entry_switzerland">Svislando</string>
+    <string name="regional_band_entry_sweden">Svedujo</string>
+    <string name="regional_band_entry_taiwan">Tajvano</string>
+    <string name="regional_band_entry_turkey">Turkujo</string>
 </resources>
