@@ -159,6 +159,7 @@
     <string name="fm_tune_timeout_msg">Ni chafwyd ymateb i diwnio\'r orsaf FM. Os yw\'r broblem yn parhau, tro FM i ffwrdd a nôl ymlaen eto.</string>
     <string name="fm_command_failed_title">Methodd y weithred FM</string>
     <string name="fm_cmd_failed_msg">Methodd y weithred FM. Os yw\'r broblem yn parhau, tro FM i ffwrdd a nôl ymlaen eto.</string>
+    <string name="fm_cmd_failed_msg_hdmi">Methodd y weithred FM. Nid yw eto\'n bosib defnyddio FM a HDMI ar yr un pryd.</string>
     <string name="fm_cmd_failed_call_on">Methodd y weithred FM. Ni chaniateir sain FM yn ystod galwad.</string>
     <string name="audio_db_title_format"><xliff:g id="format">bbbb-MM-dd AA:mm:ee</xliff:g></string>
     <string name="audio_db_artist_name">Fy recordiadau FM</string>
@@ -185,6 +186,7 @@
     <string name="typ_Country">Cerddoriaeth gwlad</string>
     <string name="typ_Documentary">Dogfen</string>
     <string name="typ_Drama">Drama</string>
+    <string name="typ_Easy_listening">Cerddoriaeth ysgafn</string>
     <string name="typ_Education">Addysg</string>
     <string name="typ_Emergency">Argyfwng</string>
     <string name="typ_Emergency_test">Prawf argyfwng</string>
@@ -215,14 +217,17 @@
     <string name="typ_College">Coleg</string>
     <string name="typ_Foreign_language">Iaith dramor</string>
     <string name="typ_Hiphop">Hip Hop</string>
+    <string name="typ_Nostalgia">Hiraeth</string>
     <string name="typ_Personality">Personoliaeth</string>
     <string name="typ_Public">Cyhoeddus</string>
     <string name="typ_Religious_music">Cerddoriaeth crefyddol</string>
     <string name="typ_Religious_talk">Sgwrsio crefyddol</string>
+    <string name="typ_Rhythm_and_Blues">Rhythm a Blues</string>
     <string name="typ_Spanish_music">Cerddoriaeth Sbaeneg</string>
     <string name="typ_Spanish_talk">Sgwrsio Sbaeneg</string>
     <string name="typ_Soft">Meddal</string>
     <string name="typ_Soft_Rock">Roc Meddal</string>
+    <string name="typ_Soft_Rhythm_and_Blues">Rhythm a Blues Meddal</string>
     <string name="typ_Sports">Chwaraeon</string>
     <string name="typ_Talk">Siarad</string>
     <string name="typ_Top_40">40 Uchaf</string>
