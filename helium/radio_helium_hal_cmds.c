@@ -36,6 +36,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "radio-helium.h"
 #include "fm_hci_api.h"
 #include <dlfcn.h>
+#undef LOG_TAG
 #define LOG_TAG "radio_helium"
 extern struct fm_hal_t *hal;
 
@@ -204,10 +205,6 @@ int helium_set_sig_threshold_req(char th)
 {
     uint16_t opcode = 0;
 
-    if (th == NULL) {
-        ALOGE("%s:Threshold value NULL", LOG_TAG);
-        return -EINVAL;
-    }
     opcode = hci_opcode_pack(HCI_OGF_FM_RECV_CTRL_CMD_REQ,
                                HCI_OCF_FM_SET_SIGNAL_THRESHOLD);
     return send_fm_cmd_pkt(opcode, sizeof(th), &th);

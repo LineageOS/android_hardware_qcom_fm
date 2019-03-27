@@ -171,7 +171,7 @@ static void dequeue_fm_rx_event()
 
         if (hci.cb && hci.cb->process_event) {
             ALOGI("%s: processing the event", __func__);
-            hci.cb->process_event(NULL, (uint8_t *)evt_buf);
+            hci.cb->process_event((uint8_t *)evt_buf);
         }
 
         free(evt_buf);
@@ -364,8 +364,6 @@ static int start_tx_thread()
 *******************************************************************************/
 static void stop_tx_thread()
 {
-    int ret;
-
     ALOGI("%s:stop_tx_thread ++", __func__);
     hci.tx_cond_mtx.lock();
     hci.tx_cond.notify_all();

@@ -247,7 +247,7 @@ static int read_fm_event(struct fm_hci_t *hci, struct fm_event_header_t *pbuf, i
                         event_notification(hci, HC_EVENT_RX);
 
                         if (hci->cb && hci->cb->process_event)
-                            hci->cb->process_event(hci->private_data, (uint8_t *)pbuf);
+                            hci->cb->process_event((uint8_t *)pbuf);
                         else
                             ALOGE("%s: ASSERT $$$$$$ Callback function NULL $$$$$", __func__);
 

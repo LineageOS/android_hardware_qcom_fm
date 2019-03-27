@@ -63,7 +63,7 @@ typedef enum {
     FM_RADIO_ENABLING
 } fm_power_state_t;
 
-typedef int (*event_notification_cb_t)(void *hal, unsigned char *buf);
+typedef int (*event_notification_cb_t)(unsigned char *buf);
 typedef int (*hci_close_done_cb_t)();
 
 
