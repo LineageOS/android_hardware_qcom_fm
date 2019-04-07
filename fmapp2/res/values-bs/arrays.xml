@@ -29,25 +29,6 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources>
-  <string-array name="ster_mon_entries">
-    <item>สเตอริโอ</item>
-    <item>โมโน</item>
-  </string-array>
-  <string-array name="ster_entries">
-    <item>สเตอริโอ</item>
-  </string-array>
-  <string-array name="record_durations_entries">
-    <item>5 นาที</item>
-    <item>15 นาที</item>
-    <item>30 นาที</item>
-    <item>จนกว่าจะหยุด</item>
-  </string-array>
-  <string-array name="sleep_duration_values">
-    <item>15 นาที</item>
-    <item>30 นาที</item>
-    <item>45 นาที</item>
-    <item>1 ชั่วโมง</item>
-  </string-array>
   <string-array name="channel_spacing_entries">
     <item>50 kHz</item>
     <item>100 kHz</item>

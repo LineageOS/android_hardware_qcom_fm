@@ -102,6 +102,7 @@
     <string name="regional_band_summary_belgium">Belgjikë (87.5 deri në 108.0MHz me gjerësi 100 kHz)</string>
     <string name="regional_band_summary_brazil">Brazil (87.5 deri në 108.0MHz me gjerësi 200 kHz)</string>
     <string name="regional_band_summary_china">Kinë (87.0 deri në 108.0MHz me gjerësi 100 kHz)</string>
+    <string name="regional_band_summary_czech_republic">Republika Çeke (87.5 deri në 108.0MHz me gjerësi 100 kHz)</string>
     <string name="regional_band_summary_denmark">Danimarkë (87.5 deri në 108.0MHz me gjerësi 50 kHz)</string>
     <string name="regional_band_summary_finland">Finlandë (87.5 deri në 108.0MHz me gjerësi 100 kHz)</string>
     <string name="regional_band_summary_france">Francë (87.5 deri në 108.0MHz me gjerësi 100 kHz)</string>
