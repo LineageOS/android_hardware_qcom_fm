@@ -344,15 +344,15 @@ public class FmReceiver extends FmTransceiver
    private static final int SEARCH_SINR_INT = 1;
 
    public boolean isSmdTransportLayer() {
-       String chip = SystemProperties.get("vendor.bluetooth.soc","default");
-       if (chip.equals("default"))
+       String chip = getSocName();
+       if (chip.equals("pronto"))
            return true;
        else
            return false;
    }
 
    public static boolean isRomeChip() {
-       String chip = SystemProperties.get("vendor.bluetooth.soc");
+       String chip = FmReceiverJNI.getSocNameNative();
        if (chip.equals("rome"))
            return true;
        else
@@ -360,7 +360,7 @@ public class FmReceiver extends FmTransceiver
    }
 
    public static boolean isCherokeeChip() {
-       String chip = SystemProperties.get("vendor.bluetooth.soc");
+       String chip = FmReceiverJNI.getSocNameNative();
        if (chip.equals("cherokee"))
            return true;
        else
@@ -1403,7 +1403,8 @@ public class FmReceiver extends FmTransceiver
    public boolean setStereoMode (boolean stereoEnable) {
       int state = getFMState();
       /* Check current state of FM device */
-      if (state == FMState_Turned_Off || state == FMState_Srch_InProg) {
+      if (state == FMState_Turned_Off || state == FMState_Srch_InProg
+                             || state == subPwrLevel_FMTurning_Off) {
           Log.d(TAG, "setStereoMode: Device currently busy in executing another command.");
           return false;
       }
@@ -3086,5 +3087,9 @@ public class FmReceiver extends FmTransceiver
    public void EnableSoftMute(int enable) {
        Log.d(TAG, "enableSoftMute :enable =" + enable);
        mControl.enableSoftMute(sFd, enable);
+   }
+
+   public String getSocName() {
+     return FmReceiverJNI.getSocNameNative();
    }
 }

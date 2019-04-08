@@ -2066,6 +2066,12 @@ public class FMRadioService extends Service
       {
           return (mService.get().getAfJmpRmssiSamplesCnt());
       }
+
+      public String getSocName()
+      {
+          return (mService.get().getSocName());
+      }
+
       public boolean setAfJmpRmssiSamplesCnt(int afJmpRmssiSmplsCnt)
       {
           return (mService.get().setAfJmpRmssiSamplesCnt(afJmpRmssiSmplsCnt));
@@ -2299,6 +2305,7 @@ public class FMRadioService extends Service
        mEventReceived = false;
        bStatus = mReceiver.enable(FmSharedPreferences.getFMConfiguration(), this);
        bStatus = waitForEvent();
+       mReceiver.setRawRdsGrpMask();
 
        if (isSpeakerEnabled()) {
            setAudioPath(false);
@@ -3230,7 +3237,6 @@ public class FMRadioService extends Service
       {
          Log.d(LOGTAG, "FmRxEvEnableReceiver");
          if (mReceiver != null) {
-             mReceiver.setRawRdsGrpMask();
              if (mReceiver.isCherokeeChip()) {
                  synchronized(mEventWaitLock) {
                      mEventReceived = true;
@@ -3896,6 +3902,13 @@ public class FMRadioService extends Service
              return mReceiver.getAFJumpRmssiSamples();
           else
              return Integer.MIN_VALUE;
+   }
+
+   String getSocName() {
+          if(mReceiver != null)
+             return mReceiver.getSocName();
+          else
+             return null;
    }
    private void setAlarmSleepExpired (long duration) {
        Intent i = new Intent(SLEEP_EXPIRED_ACTION);

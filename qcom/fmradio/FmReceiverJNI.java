@@ -563,4 +563,5 @@ class FmReceiverJNI {
     static native void configurePerformanceParams(int fd);
     static native int enableSlimbus(int fd, int val);
     static native int enableSoftMute(int fd, int val);
+    static native String getSocNameNative();
 }
