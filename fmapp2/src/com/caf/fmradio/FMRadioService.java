@@ -1357,7 +1357,7 @@ public class FMRadioService extends Service
        cv.put(MediaStore.Audio.Media.DATA, file.getAbsolutePath());
        cv.put(MediaStore.Audio.Media.DATE_ADDED, (int) (current / 1000));
        cv.put(MediaStore.Audio.Media.DATE_MODIFIED, (int) (modDate / 1000));
-       cv.put(MediaStore.Audio.Media.MIME_TYPE, "AUDIO_AAC_MP4");
+       cv.put(MediaStore.Audio.Media.MIME_TYPE, "audio/aac_mp4");
        cv.put(MediaStore.Audio.Media.ARTIST,
                res.getString(R.string.audio_db_artist_name));
        cv.put(MediaStore.Audio.Media.ALBUM,
@@ -1427,12 +1427,12 @@ public class FMRadioService extends Service
 
    private void addToPlaylist(ContentResolver resolver, int audioId, long playlistId) {
        String[] cols = new String[] {
-               "count(*)"
+               MediaStore.Audio.Media.ALBUM_ID
        };
        Uri uri = MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId);
        Cursor cur = resolver.query(uri, cols, null, null, null);
        final int base;
-       if (cur != null) {
+       if(cur != null && cur.getCount() != 0) {
             cur.moveToFirst();
             base = cur.getInt(0);
             cur.close();
