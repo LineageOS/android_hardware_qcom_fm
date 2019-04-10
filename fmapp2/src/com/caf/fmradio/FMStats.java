@@ -355,6 +355,9 @@ public class FMStats extends Activity  {
                            this, R.array.cfg_rf2,
                            android.R.layout.simple_spinner_item);
         }else {
+            /* default RFstats app support,used for richwave FM chip
+             * set rssi threshold supported
+             */
             mSpinCfgRfListener1 = new CfgRfItemSelectedListener1();
             adaptCfgRf = ArrayAdapter.createFromResource(
                            this, R.array.cfg_rf1,
@@ -390,6 +393,9 @@ public class FMStats extends Activity  {
             mColumnHeader.setFreq("Freq");
             mColumnHeader.setRSSI("RMSSI");
             mColumnHeader.setSINR("SINR");
+        } else if(isHastingsChip()) {
+            mColumnHeader.setFreq("Freq");
+            mColumnHeader.setRSSI("RSSI");
         } else {
             mColumnHeader.setFreq("Freq");
             mColumnHeader.setRSSI("RMSSI");
@@ -482,10 +488,10 @@ public class FMStats extends Activity  {
                         if  (lastCmdSent == CMD_STNDBGPARAM_INFDETOUT)
                             nIntDet = msg.arg1;
                     }
-					synchronized (obj) {
-						obj.notify();
-					}
-					break;
+                    synchronized (obj) {
+                        obj.notify();
+                    }
+                    break;
                 default:
                     Log.e(LOGTAG, "mCallbackHandler:Default");
                     break;
@@ -717,24 +723,6 @@ public class FMStats extends Activity  {
         }
     }
 
-    private View.OnClickListener mOnSetRmssitListener =
-    new View.OnClickListener() {
-       public void onClick(View v) {
-          String a;
-          a = txtbox1.getText().toString();
-          try {
-               int rdel = Integer.parseInt(a);
-               Log.d(LOGTAG, "Value of RMSSI DELTA is : " + rdel);
-               mReceiver.setRmssiDel(rdel);
-          }catch (NumberFormatException e) {
-               Log.e(LOGTAG, "Value entered is not in correct format: " + a);
-               txtbox1.setText("");
-          }catch (NullPointerException e) {
-               e.printStackTrace();
-          }
-       }
-    };
-
     private View.OnClickListener mOnSetRxRePeatCount = new View.OnClickListener() {
         public void onClick(View v) {
             String a;
@@ -803,24 +791,6 @@ public class FMStats extends Activity  {
                  txtbox1.setText("");
             }
         }
-    };
-
-    private View.OnClickListener mOnSetSigThListener =
-     new View.OnClickListener() {
-       public void onClick(View v) {
-          String a;
-          a = txtbox1.getText().toString();
-          try {
-              int rdel = Integer.parseInt(a);
-              Log.d(LOGTAG, "Value of Signal Th. is : " + rdel);
-              mReceiver.setSignalThreshold(rdel);
-          }catch (NumberFormatException e) {
-              Log.e(LOGTAG, "Value entered is not in correct format: " + a);
-              txtbox1.setText("");
-          }catch (NullPointerException e) {
-              e.printStackTrace();
-          }
-      }
     };
 
     private View.OnClickListener mOnSetSinrSmplCntListener =
@@ -1139,7 +1109,7 @@ public class FMStats extends Activity  {
       }
     };
 
-    private View.OnClickListener mOnSetRssiThListenerSilabs =
+    private View.OnClickListener mOnSetRssiThListener =
     new View.OnClickListener() {
        public void onClick(View v) {
           String a;
@@ -1221,31 +1191,16 @@ public class FMStats extends Activity  {
                        txtbox1.setVisibility(View.VISIBLE);
                    }
                    if (tv1 != null) {
-                       tv1.setText(R.string.enter_rssi);
+                       tv1.setText(R.string.enter_RssiTh);
                        tv1.setVisibility(View.VISIBLE);
                    }
                    if (SetButton != null) {
-                       SetButton.setText(R.string.set_rmmsi_delta);
+                       SetButton.setText(R.string.set_RssiTh);
                        SetButton.setVisibility(View.VISIBLE);
-                       SetButton.setOnClickListener(mOnSetRmssitListener);
+                       SetButton.setOnClickListener(mOnSetRssiThListener);
                    }
                    break;
             case 1:
-                   if (txtbox1 != null) {
-                       txtbox1.setText(R.string.type_rd);
-                       txtbox1.setVisibility(View.VISIBLE);
-                   }
-                   if (tv1 != null) {
-                       tv1.setText(R.string.enter_sigth);
-                       tv1.setVisibility(View.VISIBLE);
-                   }
-                   if (SetButton != null) {
-                       SetButton.setText(R.string.set_sigth);
-                       SetButton.setVisibility(View.VISIBLE);
-                       SetButton.setOnClickListener(mOnSetSigThListener);
-                   }
-                   break;
-            case 2:
                    tLayout.removeAllViewsInLayout();
                    mNewRowIds = NEW_ROW_ID;
                    tLayout.setVisibility(View.VISIBLE);
@@ -2000,7 +1955,7 @@ public class FMStats extends Activity  {
                    if (SetButton != null) {
                        SetButton.setText(R.string.set_RssiTh);
                        SetButton.setVisibility(View.VISIBLE);
-                       SetButton.setOnClickListener(mOnSetRssiThListenerSilabs);
+                       SetButton.setOnClickListener(mOnSetRssiThListener);
                    }
                    break;
             case 3:
@@ -2911,6 +2866,14 @@ public class FMStats extends Activity  {
         return false;
     }
 
+    private boolean isHastingsChip() {
+        String chip = mReceiver.getSocName();
+
+        if(chip.equals("hastings"))
+           return true;
+        return false;
+    }
+
     private void createResult(Result aRes) {
         // Get the TableLayout
         TableLayout tl = (TableLayout) findViewById(R.id.maintable);
@@ -2943,7 +2906,7 @@ public class FMStats extends Activity  {
         colRMSSI.setWidth(width/4);
         tr2.addView(colRMSSI);
 
-        if(!isRomeChip()) {
+        if(!isRomeChip() && !isHastingsChip()) {
             TextView colIoC = new TextView(getApplicationContext());
             colIoC.setText(aRes.getIoC());
             colIoC.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
@@ -2958,13 +2921,6 @@ public class FMStats extends Activity  {
              colSINR.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
              colSINR.setWidth(width/4);
              tr2.addView(colSINR);
-        } else
-        {
-             TextView colMpxDcc = new TextView(getApplicationContext());
-             colMpxDcc.setText(aRes.getMpxDcc());
-             colMpxDcc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
-             colMpxDcc.setWidth(width/4);
-             tr2.addView(colMpxDcc);
         }
           /* Add row to TableLayout. */
           /* Add row to TableLayout. */
@@ -2978,7 +2934,7 @@ public class FMStats extends Activity  {
                  tempStr.append(String.format("%10s", aRes.getFreq()));
                  tempStr.append(String.format("%10s", aRes.getRSSI()));
 
-                 if(!isRomeChip()) {
+                 if(!isRomeChip() && !isHastingsChip()) {
                      tempStr.append(String.format("%10s", aRes.getIoC()));
                      tempStr.append(String.format("%10s", aRes.getIntDet()));
                  }
@@ -2986,10 +2942,8 @@ public class FMStats extends Activity  {
                  if(isTransportLayerSMD() || isRomeChip() || isCherokeeChip())
                  {
                     tempStr.append(String.format("%10s", aRes.getSINR()));
-                 } else
-                 {
-                    tempStr.append(String.format("%10s", aRes.getMpxDcc()));
                  }
+
                  tempStr.append("\r\n");
                  String testStr = new String(tempStr);
                  mFileCursor.write(testStr.getBytes());
@@ -3292,7 +3246,7 @@ public class FMStats extends Activity  {
                 e.printStackTrace();
             }
 
-            if(!isRomeChip()) {
+            if(!isRomeChip() && !isHastingsChip()) {
                 try {
                     if (isCherokeeChip) {
                         mService.getIoC();
@@ -3341,21 +3295,9 @@ public class FMStats extends Activity  {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else {
-                try {
-                    nMpxDcc = mService.getMpxDcc();
-                    if (nMpxDcc != Integer.MAX_VALUE)
-                        result.setMpxDcc(Integer.toString(nMpxDcc));
-                    else
-                        return null;
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
 
-            if(!isRomeChip()) {
+            if(!isRomeChip() && !isHastingsChip()) {
                 try {
                     if (isCherokeeChip) {
                         mService.getIntDet();
