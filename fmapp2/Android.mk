@@ -19,7 +19,6 @@ LOCAL_SRC_FILES += src/com/caf/fmradio/Settings.java
 LOCAL_SRC_FILES += src/com/caf/fmradio/StationListActivity.java
 LOCAL_SRC_FILES += src/com/caf/fmradio/IFMRadioService.aidl
 LOCAL_SRC_FILES += src/com/caf/fmradio/IFMRadioServiceCallbacks.aidl
-LOCAL_SRC_FILES += src/com/caf/fmradio/IFMTransmitterService.aidl
 LOCAL_SRC_FILES += src/com/caf/fmradio/IFMTransmitterServiceCallbacks.aidl
 
 ifeq (1,$(filter 1,$(shell echo "$$(( $(PLATFORM_SDK_VERSION) >= 11 ))" )))

@@ -61,19 +61,19 @@ static int slimbus_flag = 0;
 struct fm_hal_t *hal = NULL;
 static pthread_mutex_t hal_lock = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t hal_cond = PTHREAD_COND_INITIALIZER;
-
+#undef LOG_TAG
 #define LOG_TAG "radio_helium"
 #define WAIT_TIMEOUT 20000 /* 20*1000us */
 #define HAL_TIMEOUT  3
 
 static void radio_hci_req_complete(char result)
 {
-  ALOGD("%s:enetred %s", LOG_TAG, __func__);
+  ALOGD("%s:enetred %s result %d", LOG_TAG, __func__, result);
 }
 
 static void radio_hci_status_complete(int result)
 {
-   ALOGD("%s:enetred %s", LOG_TAG, __func__);
+   ALOGD("%s:enetred %s result %d", LOG_TAG, __func__, result);
 }
 
 static void hci_cc_fm_enable_rsp(char *ev_rsp)
@@ -111,7 +111,6 @@ static void hci_cc_conf_rsp(char *ev_rsp)
 static void hci_cc_fm_disable_rsp(char *ev_buff)
 {
     char status;
-    int ret;
 
     if (ev_buff == NULL) {
         ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
@@ -157,7 +156,6 @@ static void hci_cc_rds_grp_cntrs_rsp(char *ev_buff)
 static void hci_cc_rds_grp_cntrs_ext_rsp(char *ev_buff)
 {
     char status;
-    int i;
     if (ev_buff == NULL) {
         ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
         return;
@@ -457,10 +455,10 @@ static void hci_cc_enable_softmute_rsp(char *ev_buff)
     hal->jni_cb->enable_softmute_cb(ev_buff[0]);
 }
 
-static inline void hci_cmd_complete_event(char *buff)
+static inline void hci_cmd_complete_event(uint8_t buff[])
 {
     uint16_t opcode;
-    uint8_t *pbuf;
+    char *pbuf;
 
     if (buff == NULL) {
         ALOGE("%s:%s, buffer is null\n", LOG_TAG, __func__);
@@ -469,7 +467,7 @@ static inline void hci_cmd_complete_event(char *buff)
     ALOGV("%s:buff[1] = 0x%x buff[2] = 0x%x", LOG_TAG, buff[1], buff[2]);
     opcode = ((buff[2] << 8) | buff[1]);
     ALOGV("%s: Received HCI CMD COMPLETE EVENT for the opcode: 0x%x", __func__, opcode);
-    pbuf = &buff[3];
+    pbuf = (char *)&buff[3];
 
     switch (opcode) {
     case hci_recv_ctrl_cmd_op_pack(HCI_OCF_FM_ENABLE_RECV_REQ):
@@ -515,10 +513,10 @@ static inline void hci_cmd_complete_event(char *buff)
             hci_cc_rds_grp_cntrs_ext_rsp(pbuf);
             break;
     case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_PEEK_DATA):
-            hci_cc_riva_peek_rsp(buff);
+            hci_cc_riva_peek_rsp((char *)buff);
             break;
     case hci_diagnostic_cmd_op_pack(HCI_OCF_FM_SSBI_PEEK_REG):
-            hci_cc_ssbi_peek_rsp(buff);
+            hci_cc_ssbi_peek_rsp((char *)buff);
             break;
     case hci_diagnostic_cmd_op_pack(HCI_FM_SET_GET_RESET_AGC):
             hci_cc_agc_rsp(pbuf);
@@ -592,7 +590,7 @@ static inline void hci_cmd_complete_event(char *buff)
     }
 }
 
-static inline void hci_cmd_status_event(char *st_rsp)
+static inline void hci_cmd_status_event(uint8_t st_rsp[])
 {
     struct hci_ev_cmd_status *ev = (void *) st_rsp;
     uint16_t opcode;
@@ -608,12 +606,11 @@ static inline void hci_cmd_status_event(char *st_rsp)
     radio_hci_status_complete(ev->status);
 }
 
-static inline void hci_ev_tune_status(char *buff)
+static inline void hci_ev_tune_status(uint8_t buff[])
 {
 
     memcpy(&hal->radio->fm_st_rsp.station_rsp, &buff[0],
                                sizeof(struct hci_ev_tune_status));
-    char *freq = &hal->radio->fm_st_rsp.station_rsp.station_freq;
     ALOGD("freq = %d", hal->radio->fm_st_rsp.station_rsp.station_freq);
     hal->jni_cb->tune_cb(hal->radio->fm_st_rsp.station_rsp.station_freq);
 
@@ -631,12 +628,12 @@ static inline void hci_ev_tune_status(char *buff)
         hal->jni_cb->rds_avail_status_cb(false);
 }
 
-static inline void hci_ev_search_next(char *buff)
+static inline void hci_ev_search_next()
 {
     hal->jni_cb->scan_next_cb();
 }
 
-static inline void hci_ev_stereo_status(char *buff)
+static inline void hci_ev_stereo_status(uint8_t buff[])
 {
     char st_status;
 
@@ -651,7 +648,7 @@ static inline void hci_ev_stereo_status(char *buff)
         hal->jni_cb->stereo_status_cb(false);
 }
 
-static void hci_ev_rds_lock_status(char *buff)
+static void hci_ev_rds_lock_status(uint8_t buff[])
 {
     char rds_status;
 
@@ -668,7 +665,7 @@ static void hci_ev_rds_lock_status(char *buff)
         hal->jni_cb->rds_avail_status_cb(false);
 }
 
-static inline void hci_ev_program_service(char *buff)
+static inline void hci_ev_program_service(uint8_t buff[])
 {
     int len;
     char *data;
@@ -694,7 +691,7 @@ static inline void hci_ev_program_service(char *buff)
     free(data);
 }
 
-static inline void hci_ev_radio_text(char *buff)
+static inline void hci_ev_radio_text(uint8_t buff[])
 {
     int len = 0;
     char *data;
@@ -729,7 +726,7 @@ static inline void hci_ev_radio_text(char *buff)
     free(data);
 }
 
-static void hci_ev_af_list(char *buff)
+static void hci_ev_af_list(uint8_t buff[])
 {
     struct hci_ev_af_list ev;
 
@@ -746,10 +743,10 @@ static void hci_ev_af_list(char *buff)
     }
     memcpy(&ev.af_list[0], &buff[AF_LIST_OFFSET],
                                         ev.af_size * sizeof(int));
-    hal->jni_cb->af_list_update_cb(&ev);
+    hal->jni_cb->af_list_update_cb((uint16_t *)&ev);
 }
 
-static inline void hci_ev_search_compl(char *buff)
+static inline void hci_ev_search_compl(uint8_t buff[])
 {
     if (buff == NULL) {
         ALOGE("%s:%s,buffer is null\n", LOG_TAG, __func__);
@@ -759,7 +756,7 @@ static inline void hci_ev_search_compl(char *buff)
     hal->jni_cb->seek_cmpl_cb(hal->radio->fm_st_rsp.station_rsp.station_freq);
 }
 
-static inline void hci_ev_srch_st_list_compl(char *buff)
+static inline void hci_ev_srch_st_list_compl(uint8_t buff[])
 {
     struct hci_ev_srch_list_compl *ev ;
     int cnt;
@@ -795,15 +792,14 @@ static inline void hci_ev_srch_st_list_compl(char *buff)
     }
 
     len = ev->num_stations_found * 2 + sizeof(ev->num_stations_found);
-    hal->jni_cb->srch_list_cb((char*)ev);
+    hal->jni_cb->srch_list_cb((uint16_t *)ev);
     free(ev);
 }
 
-static inline void hci_ev_rt_plus_id(char *buff)
+static inline void hci_ev_rt_plus_id(uint8_t buff[])
 {
     char *data = NULL;
     int len = 15;
-    unsigned short int agt;
 
     ALOGD("%s:%s: start", LOG_TAG, __func__);
     data = malloc(len);
@@ -815,18 +811,17 @@ static inline void hci_ev_rt_plus_id(char *buff)
        data[4] = buff[3];
 
       memcpy(&data[RDS_OFFSET], &buff[4], len-RDS_OFFSET);
-      ALOGD("%s:%s: RT+ ID grouptype=0x%x%x\n", LOG_TAG, __func__,data[4]);
+      ALOGD("%s:%s: RT+ ID grouptype=0x%x\n", LOG_TAG, __func__,data[4]);
       free(data);
     } else {
         ALOGE("%s:memory allocation failed\n", LOG_TAG);
     }
 }
 
-static void hci_ev_rt_plus_tag(char *buff)
+static void hci_ev_rt_plus_tag(uint8_t buff[])
 {
     char *data = NULL;
     int len = 15;
-    unsigned short int agt;
 
     ALOGD("%s:%s: start", LOG_TAG, __func__);
     data = malloc(len);
@@ -846,7 +841,7 @@ static void hci_ev_rt_plus_tag(char *buff)
      }
 }
 
-static void  hci_ev_ext_country_code(char *buff)
+static void  hci_ev_ext_country_code(uint8_t buff[])
 {
     char *data = NULL;
     int len = ECC_EVENT_BUFSIZE;
@@ -884,7 +879,7 @@ static void hci_ev_ert()
     }
 }
 
-static void hci_ev_hw_error(char *buff)
+static void hci_ev_hw_error()
 {
    ALOGE("%s:%s: start", LOG_TAG, __func__);
    fm_hci_close(hal->private_data);
@@ -939,7 +934,7 @@ static void hci_buff_ert(struct rds_grp_data *rds_buf)
     }
 }
 
-static void hci_ev_raw_rds_group_data(char *buff)
+static void hci_ev_raw_rds_group_data(uint8_t buff[])
 {
     unsigned char blocknum, index;
     struct rds_grp_data temp;
@@ -1008,7 +1003,7 @@ static void hci_ev_raw_rds_group_data(char *buff)
         }
     } else {
         carrier = gtc;
-        if ((carrier == rt_plus_carrier)) {
+        if (carrier == rt_plus_carrier) {
          //    hci_ev_rt_plus(temp);
         }
         else if (carrier == ert_carrier) {
@@ -1034,7 +1029,7 @@ static void radio_hci_event_packet(char *evt_buf)
     case HCI_EV_SEARCH_PROGRESS:
     case HCI_EV_SEARCH_RDS_PROGRESS:
     case HCI_EV_SEARCH_LIST_PROGRESS:
-        hci_ev_search_next(((struct fm_event_header_t *)evt_buf)->params);
+        hci_ev_search_next();
         break;
     case HCI_EV_STEREO_STATUS:
         hci_ev_stereo_status(((struct fm_event_header_t *)evt_buf)->params);
@@ -1081,7 +1076,7 @@ static void radio_hci_event_packet(char *evt_buf)
         hci_ev_ext_country_code(((struct fm_event_header_t *)evt_buf)->params);
         break;
     case HCI_EV_HW_ERR_EVENT:
-        hci_ev_hw_error(((struct fm_event_header_t *)evt_buf)->params);
+        hci_ev_hw_error();
         break;
     default:
         break;
@@ -1089,18 +1084,18 @@ static void radio_hci_event_packet(char *evt_buf)
 }
 
 /* 'evt_buf' contains the event received from Controller */
-int process_event(void *hal, unsigned char *evt_buf)
+int process_event(unsigned char *evt_buf)
 {
     ALOGI("%s: %s: Received event notification from FM-HCI thread. EVT CODE: %d ",
                             LOG_TAG,  __func__, ((struct fm_event_header_t *)evt_buf)->evt_code);
-    radio_hci_event_packet(evt_buf);
+    radio_hci_event_packet((char*)evt_buf);
     return 0;
 }
 
 int fm_hci_close_done()
 {
     ALOGI("fm_hci_close_done");
-    fm_hal_callbacks_t *ptr = NULL;
+    const fm_hal_callbacks_t *ptr = NULL;
 
     pthread_mutex_lock(&hal_lock);
     if(hal != NULL){
@@ -1222,7 +1217,7 @@ static int helium_send_hci_cmd(int cmd, void *cmd_param)
 {
     int ret = FM_HC_STATUS_FAIL;
     struct timespec ts;
-    struct hci_fm_default_data_read_req *rd;
+    struct hci_fm_def_data_rd_req *rd;
 
     pthread_mutex_lock(&(hal->cmd_lock));
     hal->set_cmd_sent = true;
@@ -1244,7 +1239,7 @@ static int helium_send_hci_cmd(int cmd, void *cmd_param)
         case HCI_FM_HELIUM_AF_ALGO:
         case HCI_FM_HELIUM_AF_SINR_GD_CH_TH:
         case HCI_FM_HELIUM_AF_SINR_TH:
-            rd = (struct hci_fm_default_data_read_req *) cmd_param;
+            rd = (struct hci_fm_def_data_rd_req *) cmd_param;
             ret = hci_fm_default_data_read_req(rd);
             break;
         case HCI_FM_HELIUM_BLEND_SINRHI:
@@ -1278,9 +1273,9 @@ static struct fm_hci_callbacks_t hal_cb = {
     fm_hci_close_done
 };
 
-int hal_init(fm_hal_callbacks_t *cb)
+int hal_init(const fm_hal_callbacks_t *cb)
 {
-    int ret = -FM_HC_STATUS_FAIL, i;
+    int ret = -FM_HC_STATUS_FAIL;
     fm_hci_hal_t hci_hal;
     struct timespec ts;
 
@@ -1365,7 +1360,6 @@ static int set_fm_ctrl(int cmd, int val)
     int saved_val;
     char temp_val = 0;
     unsigned int rds_grps_proc = 0;
-    char *data;
     struct hci_fm_def_data_wr_req def_data_wrt;
     struct hci_fm_def_data_rd_req def_data_rd;
 

@@ -919,12 +919,6 @@ struct hci_fm_set_spur_table_req {
 #define AUDIO_CTRL_INTR (1 << 2)
 #define AF_JUMP_ENABLE  (1 << 4)
 
-int hci_def_data_read(struct hci_fm_def_data_rd_req *arg,
-       struct radio_hci_dev *hdev);
-int hci_def_data_write(struct hci_fm_def_data_wr_req *arg,
-       struct radio_hci_dev *hdev);
-int hci_fm_do_calibration(char *arg, struct radio_hci_dev *hdev);
-
 static inline int is_valid_tone(int tone)
 {
     if ((tone >= MIN_TX_TONE_VAL) &&
@@ -1250,7 +1244,7 @@ int hci_fm_enable_softmute(uint8_t enable);
 
 struct fm_hal_t {
     struct radio_helium_device *radio;
-    fm_hal_callbacks_t *jni_cb;
+    const fm_hal_callbacks_t *jni_cb;
     void *private_data;
     pthread_mutex_t cmd_lock;
     pthread_cond_t cmd_cond;
@@ -1260,7 +1254,7 @@ struct fm_hal_t {
 struct fm_interface_t {
     int (*init)(const fm_hal_callbacks_t *p_cb);
     int (*set_fm_ctrl)(int opcode, int val);
-    void (*get_fm_ctrl) (int opcode, int *val);
+    int (*get_fm_ctrl) (int opcode, int *val);
 };
 
 #endif /* __UAPI_RADIO_HCI_CORE_H */

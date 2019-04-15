@@ -81,6 +81,7 @@ public class Settings extends PreferenceActivity implements
 
         private FmSharedPreferences mPrefs = null;
         private boolean mRxMode = false;
+        private Dialog mDlgRestoreFactory;
 
         private int min_freq;
         private int max_freq;
@@ -455,15 +456,13 @@ public class Settings extends PreferenceActivity implements
         public boolean onPreferenceClick(Preference preference) {
           boolean handled = false;
           if (preference == mRestoreDefaultPreference) {
-              showDialog(RESTORE_FACTORY_DEFAULT_INT);
+             mDlgRestoreFactory = createDlgRestoreFactory();
+             mDlgRestoreFactory.show();
           }
           return handled;
         }
 
-        @Override
-        protected Dialog onCreateDialog(int id) {
-          switch (id) {
-          case RESTORE_FACTORY_DEFAULT_INT:
+        private Dialog createDlgRestoreFactory() {
                return new AlertDialog.Builder(this).setIcon(
                       R.drawable.alert_dialog_icon).setTitle(
                       R.string.settings_revert_confirm_title).setMessage(
@@ -484,10 +483,6 @@ public class Settings extends PreferenceActivity implements
                                                        int whichButton) {
                                 }
                               }).create();
-                default:
-                        break;
-                }
-                return null;
         }
 
         private void restoreSettingsDefault() {

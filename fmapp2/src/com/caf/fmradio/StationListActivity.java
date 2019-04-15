@@ -139,10 +139,17 @@ public class StationListActivity extends Activity implements
         AdapterContextMenuInfo mi = (AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
         case CONTEXT_MENU_RENAME:
-            showDialog(DIALOG_RENAME_ID);
+            mRenameDialog = new Dialog(this);
+            mRenameDialog.setContentView(R.layout.rename_dialog);
+            createRenameDeleteDialog(DIALOG_RENAME_ID, mRenameDialog);
+            mRenameDialog.show();
             break;
+
         case CONTEXT_MENU_DELETE:
-            showDialog(DIALOG_DELETE_ID);
+            mDeleteDialog = new Dialog(this);
+            mDeleteDialog.setContentView(R.layout.delete_dialog);
+            createRenameDeleteDialog(DIALOG_DELETE_ID, mDeleteDialog);
+            mDeleteDialog.show();
             break;
 
         }
@@ -177,8 +184,7 @@ public class StationListActivity extends Activity implements
         return false;
     }
 
-    @Override
-    protected void onPrepareDialog(int id, Dialog dialog, Bundle b) {
+    private void createRenameDeleteDialog(int id, Dialog dialog) {
         // TODO Auto-generated method stub
         // super.onPrepareDialog(id, dialog);
         // After change system language, current function will be executed before
@@ -246,25 +252,6 @@ public class StationListActivity extends Activity implements
             });
             break;
         }
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id, Bundle b) {
-        // TODO Auto-generated method stub
-        //should return different dialog
-        switch (id) {
-        case DIALOG_RENAME_ID:
-            mRenameDialog = new Dialog(this);
-            mRenameDialog.setContentView(R.layout.rename_dialog);
-            return mRenameDialog;
-        case DIALOG_DELETE_ID:
-            mDeleteDialog = new Dialog(this);
-            mDeleteDialog.setContentView(R.layout.delete_dialog);
-            return mDeleteDialog;
-        default:
-            ;
-        }
-        return null;
     }
 
     private void saveStationName(int id, String name) {

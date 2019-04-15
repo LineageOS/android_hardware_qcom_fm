@@ -29,18 +29,11 @@
 
 package com.caf.fmradio;
 
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.app.IntentService;
 import android.content.BroadcastReceiver;
-import android.content.pm.PackageManager;
 import android.content.Context;
-import android.content.ComponentName;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.os.Bundle;
-import java.lang.Object;
 
 public class FMMediaButtonIntentReceiver extends BroadcastReceiver {
 
