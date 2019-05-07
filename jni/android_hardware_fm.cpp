@@ -164,6 +164,7 @@ jmethodID method_getStnParamCallback;
 jmethodID method_getStnDbgParamCallback;
 jmethodID method_enableSlimbusCallback;
 jmethodID method_enableSoftMuteCallback;
+jmethodID method_FmReceiverJNICtor;
 
 int load_bt_configstore_lib();
 
@@ -188,9 +189,10 @@ void fm_enabled_cb() {
     } else {
         if (mCallbackEnv != NULL) {
             ALOGE("javaObjectRef creating");
-            jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_enableCallback);
+            jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_FmReceiverJNICtor);
             mCallbacksObj = javaObjectRef;
             ALOGE("javaObjectRef = %p mCallbackobject =%p \n",javaObjectRef,mCallbacksObj);
+            mCallbackEnv->CallVoidMethod(mCallbacksObj, method_enableCallback);
         }
     }
     ALOGD("exit  %s", __func__);
@@ -550,12 +552,13 @@ static void fm_get_station_debug_param_cb(int val, int status)
 
 static void fm_enable_slimbus_cb(int status)
 {
-    ALOGD("++fm_enable_slimbus_cb mCallbacksObjCreated: %d", mCallbacksObjCreated);
+    ALOGD("++fm_enable_slimbus_cb mCallbacksObjCreatedtor: %d", mCallbacksObjCreated);
     slimbus_flag = 1;
     if (mCallbacksObjCreated == false) {
-        jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_enableSlimbusCallback);
+        jobject javaObjectRef =  mCallbackEnv->NewObject(javaClassRef, method_FmReceiverJNICtor);
         mCallbacksObj = javaObjectRef;
         mCallbacksObjCreated = true;
+        mCallbackEnv->CallVoidMethod(mCallbacksObj, method_enableSlimbusCallback, status);
         return;
     }
 
@@ -660,17 +663,37 @@ static   fm_vendor_callbacks_t fm_callbacks = {
     fm_enable_softmute_cb
 };
 /* native interface */
+
+static bool is_soc_pronto() {
+    if(strcmp(soc_name, "pronto") == 0)
+        return true;
+    else
+        return false;
+}
+
+static void get_property(int ptype, char *value)
+{
+    std::vector<vendor_property_t> vPropList;
+    bt_configstore_intf->get_vendor_properties(ptype, vPropList);
+
+    for (auto&& vendorProp : vPropList) {
+        if (vendorProp.type == ptype) {
+            strlcpy(value, vendorProp.value,PROPERTY_VALUE_MAX);
+        }
+    }
+}
+
 static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
         (JNIEnv* env, jobject thiz, jstring path)
 {
     int fd;
     int i, retval=0, err;
     char value[PROPERTY_VALUE_MAX] = {'\0'};
-    char versionStr[40] = {'\0'};
     int init_success = 0;
     jboolean isCopy;
     v4l2_capability cap;
     const char* radio_path = env->GetStringUTFChars(path, &isCopy);
+
     if(radio_path == NULL){
         return FM_JNI_FAILURE;
     }
@@ -686,39 +709,33 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
 
     ALOGD("VIDIOC_QUERYCAP returns :%d: version: %d \n", err , cap.version );
 
-    if( err >= 0 ) {
-       ALOGD("Driver Version(Same as ChipId): %x \n",  cap.version );
-       /*Conver the integer to string */
-       snprintf(versionStr, sizeof(versionStr), "%d", cap.version);
-       property_set("vendor.hw.fm.version", versionStr);
-    } else {
-       close(fd);
-       return FM_JNI_FAILURE;
-    }
-
-    if ((strcmp(soc_name, "rome") != 0) && (strcmp(soc_name, "hastings") != 0))
+    if (is_soc_pronto())
     {
        /*Set the mode for soc downloader*/
-       property_set("vendor.hw.fm.mode", "normal");
-       /* Need to clear the hw.fm.init firstly */
-       property_set("vendor.hw.fm.init", "0");
-       property_set("ctl.start", "fm_dl");
-       sched_yield();
-       for(i=0; i<45; i++) {
-         property_get("vendor.hw.fm.init", value, NULL);
-         if (strcmp(value, "1") == 0) {
-            init_success = 1;
-            break;
-         } else {
-            usleep(WAIT_TIMEOUT);
-         }
-       }
-       ALOGE("init_success:%d after %f seconds \n", init_success, 0.2*i);
-       if(!init_success) {
-         property_set("ctl.stop", "fm_dl");
-         // close the fd(power down)
-         close(fd);
-         return FM_JNI_FAILURE;
+       if (bt_configstore_intf != NULL) {
+           bt_configstore_intf->set_vendor_property(FM_PROP_HW_MODE, "normal");
+
+          /* Need to clear the hw.fm.init firstly */
+          bt_configstore_intf->set_vendor_property(FM_PROP_HW_INIT, "0");
+          bt_configstore_intf->set_vendor_property(FM_PROP_CTL_START, "fm_dl");
+
+          sched_yield();
+          for(i=0; i<45; i++) {
+              get_property(FM_PROP_HW_INIT, value);
+              if (strcmp(value, "1") == 0) {
+                  init_success = 1;
+                  break;
+              } else {
+                  usleep(WAIT_TIMEOUT);
+              }
+          }
+          ALOGE("init_success:%d after %f seconds \n", init_success, 0.2*i);
+          if(!init_success) {
+             bt_configstore_intf->set_vendor_property(FM_PROP_CTL_STOP,"fm_dl");
+             // close the fd(power down)
+             close(fd);
+             return FM_JNI_FAILURE;
+          }
        }
     }
     return fd;
@@ -732,9 +749,9 @@ static jint android_hardware_fmradio_FmReceiverJNI_closeFdNative
     int cleanup_success = 0;
     char retval =0;
 
-    if ((strcmp(soc_name, "rome") != 0) && (strcmp(soc_name, "hastings") != 0))
+    if (is_soc_pronto() && bt_configstore_intf != NULL)
     {
-       property_set("ctl.stop", "fm_dl");
+        bt_configstore_intf->set_vendor_property(FM_PROP_CTL_STOP,"fm_dl");
     }
     close(fd);
     return FM_JNI_SUCCESS;
@@ -746,6 +763,7 @@ static bool is_soc_cherokee() {
     else
         return false;
 }
+
 /********************************************************************
  * Current JNI
  *******************************************************************/
@@ -1201,29 +1219,33 @@ static jint android_hardware_fmradio_FmReceiverJNI_setNotchFilterNative(JNIEnv *
     int band;
     int err = 0;
 
-    if ((strcmp(soc_name, "rome") != 0) && (strcmp(soc_name, "hastings") != 0))
+    if (is_soc_pronto() && bt_configstore_intf != NULL)
     {
-       /*Enable/Disable the WAN avoidance*/
-       property_set("vendor.hw.fm.init", "0");
-       if (aValue)
-          property_set("vendor.hw.fm.mode", "wa_enable");
-       else
-          property_set("vendor.hw.fm.mode", "wa_disable");
+        /* Need to clear the hw.fm.init firstly */
+        bt_configstore_intf->set_vendor_property(FM_PROP_HW_INIT, "0");
 
-       property_set("ctl.start", "fm_dl");
-       sched_yield();
-       for(i=0; i<10; i++) {
-          property_get("vendor.hw.fm.init", value, NULL);
-          if (strcmp(value, "1") == 0) {
-             init_success = 1;
-             break;
-          } else {
-             usleep(WAIT_TIMEOUT);
-          }
-       }
+        /*Enable/Disable the WAN avoidance*/
+        if (aValue)
+            bt_configstore_intf->set_vendor_property(FM_PROP_HW_MODE, "wa_enable");
+        else
+            bt_configstore_intf->set_vendor_property(FM_PROP_HW_MODE, "wa_disable");
+
+        bt_configstore_intf->set_vendor_property(FM_PROP_CTL_START, "fm_dl");
+
+        sched_yield();
+        for(i=0; i<10; i++) {
+            get_property(FM_PROP_HW_INIT, value);
+
+            if (strcmp(value, "1") == 0) {
+                init_success = 1;
+                break;
+            } else {
+                usleep(WAIT_TIMEOUT);
+            }
+        }
        ALOGE("init_success:%d after %f seconds \n", init_success, 0.2*i);
 
-       property_get("vendor.notch.value", notch, NULL);
+       get_property(FM_PROP_NOTCH_VALUE, notch);
        ALOGE("Notch = %s",notch);
        if (!strncmp("HIGH",notch,strlen("HIGH")))
            band = HIGH_BAND;
@@ -1253,32 +1275,9 @@ static jint android_hardware_fmradio_FmReceiverJNI_setNotchFilterNative(JNIEnv *
 /* native interface */
 static jint android_hardware_fmradio_FmReceiverJNI_setAnalogModeNative(JNIEnv * env, jobject thiz, jboolean aValue)
 {
-    int i=0;
-    char value[PROPERTY_VALUE_MAX] = {'\0'};
-    char firmwareVersion[80];
-
-    if ((strcmp(soc_name, "rome") != 0) && (strcmp(soc_name, "hastings") != 0))
-    {
-       /*Enable/Disable Analog Mode FM*/
-       property_set("vendor.hw.fm.init", "0");
-       property_set("vendor.hw.fm.mode","config_dac");
-       property_set("ctl.start", "fm_dl");
-       sched_yield();
-       for(i=0; i<10; i++) {
-          property_get("vendor.hw.fm.init", value, NULL);
-          if (strcmp(value, "1") == 0) {
-             return 1;
-          } else {
-             usleep(WAIT_TIMEOUT);
-          }
-       }
-    }
-
+    /*DAC configuration is applicable only msm7627a target*/
     return 0;
 }
-
-
-
 
 /*
  * Interfaces added for Tx
@@ -1702,6 +1701,7 @@ static void classInitNative(JNIEnv* env, jclass clazz) {
     method_getStnDbgParamCallback = env->GetMethodID(javaClassRef, "getStnDbgParamCallback", "(II)V");
     method_enableSlimbusCallback = env->GetMethodID(javaClassRef, "enableSlimbusCallback", "(I)V");
     method_enableSoftMuteCallback = env->GetMethodID(javaClassRef, "enableSoftMuteCallback", "(I)V");
+    method_FmReceiverJNICtor = env->GetMethodID(javaClassRef,"<init>","()V");
 
     return;
 error:
