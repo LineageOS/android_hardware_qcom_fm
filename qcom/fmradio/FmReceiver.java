@@ -1403,7 +1403,8 @@ public class FmReceiver extends FmTransceiver
    public boolean setStereoMode (boolean stereoEnable) {
       int state = getFMState();
       /* Check current state of FM device */
-      if (state == FMState_Turned_Off || state == FMState_Srch_InProg) {
+      if (state == FMState_Turned_Off || state == FMState_Srch_InProg
+                             || state == subPwrLevel_FMTurning_Off) {
           Log.d(TAG, "setStereoMode: Device currently busy in executing another command.");
           return false;
       }
