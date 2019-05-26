@@ -48,4 +48,9 @@
     <item>45 dəqiqə</item>
     <item>1 saat</item>
   </string-array>
+  <string-array name="channel_spacing_entries">
+    <item>50 kHz</item>
+    <item>100 kHz</item>
+    <item>200 kHz</item>
+  </string-array>
 </resources>

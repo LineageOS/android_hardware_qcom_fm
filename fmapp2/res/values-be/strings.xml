@@ -107,7 +107,7 @@
     <string name="settings_revert_defaults_title">Вярнуцца да завадскіх налад</string>
     <string name="settings_revert_defaults_summary">Скінуць усе налады</string>
     <string name="settings_revert_confirm_title">Пацвердзіце скід</string>
-    <string name="settings_revert_confirm_msg">Будуць выдалены ўсе налады дадатку, улучаючы спіс захаваных станцый.. Працягнуць?</string>
+    <string name="settings_revert_confirm_msg">Будуць выдалены ўсе налады праграм, уключаючы спіс захаваных станцый. Працягнуць?</string>
     <string name="no_storage">Для пачатку запісу далучыце SD-картку.</string>
     <string name="preparing_sd">Падрыхтоўка SD-карты\u2026</string>
     <string name="access_sd_fail">Няма доступу да SD-карткі.</string>

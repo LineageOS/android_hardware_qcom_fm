@@ -37,15 +37,20 @@
     <item>ಸ್ಟೀರಿಯೋ</item>
   </string-array>
   <string-array name="record_durations_entries">
-    <item>5 ನಿಮಿಷಗಳು</item>
-    <item>15 ನಿಮಿಷಗಳು</item>
-    <item>30 ನಿಮಿಷಗಳು</item>
+    <item>೫ ನಿಮಿಷ</item>
+    <item>೧೫ ನಿಮಿಷಗಳು</item>
+    <item>೩೦ ನಿಮಿಷ</item>
     <item>ನಿಲ್ಲಿಸುವವರೆಗೆ</item>
   </string-array>
   <string-array name="sleep_duration_values">
-    <item>15 ನಿಮಿಷಗಳು</item>
-    <item>30 ನಿಮಿಷಗಳು</item>
-    <item>45 ನಿಮೀಷಗಳು</item>
-    <item>1 ಗಂಟೆ</item>
+    <item>೧೫ ನಿಮಿಷಗಳು</item>
+    <item>೩೦ ನಿಮಿಷ</item>
+    <item>೪೫ ನಿಮಿಷ</item>
+    <item>೧ ಗಂಟೆ</item>
+  </string-array>
+  <string-array name="channel_spacing_entries">
+    <item>೫೦ kHz</item>
+    <item>೧೦೦ kHz</item>
+    <item>೨೦೦ kHz</item>
   </string-array>
 </resources>

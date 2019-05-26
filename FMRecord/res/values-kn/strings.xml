@@ -31,7 +31,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="no_storage">ರಿಕಾರ್ಡಿಂಗ್ ಪ್ರಾರಂಬಿಸುವ ಮುನ್ನ SD ಕಾರ್ಡ್ ಮೌಂಟ್ ಮಾಡಿ.</string>
     <string name="preparing_sd">SD ಕಾರ್ಡನ್ನು ಸಿದ್ಧಗೊಳಿಸುತ್ತಿದೆ</string>
-    <string name="access_sd_fail">SD ಕಾರ್ಡನ್ನು ಪ್ರವೇಶಿಸಲಾಗಲಿಲ್ಲ.</string>
+    <string name="access_sd_fail">SD ಬಿಲ್ಲೆ ಪ್ರವೇಶಿಸಲಾಗಲಿಲ್ಲ.</string>
     <string name="spaceIsLow_content">ನಿಮ್ಮ SD ಕಾರ್ಡ್‌ನಲ್ಲಿ ಜಾಗದ ಕೊರತೆಯಿದೆ. ಗುಣಮಟ್ಟದ ಅಳವಡಿಕೆ ಬದಲಿಸಿ ಅಥವಾ ಕೆಲವು ಚಿತ್ರಗಳನ್ನು ಅಥವಾ ಇತರೆ ಕಡತಗಳನ್ನು ಅಳಿಸಿ.</string>
     <string name="FMRecording_reach_size_limit">ಗಾತ್ರ ಮಿತಿಯನ್ನು ತಲುಪಿದೆ.</string>
     <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
