@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "b377404e_1201d4ae",
+        "filename": "libfm_jni/FmRadioController.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2019-06-04T12:53:34Z",
+      "side": 1,
+      "message": "It just sucks to have different props. If we\u0027re \"fixing\" their own mess by doing this revert, I think that we could just make it more proper.",
+      "parentUuid": "92f92a76_f509776c",
+      "range": {
+        "startLine": 167,
+        "startChar": 18,
+        "endLine": 167,
+        "endChar": 36
+      },
+      "revId": "ad34996f5d6435699e363bbaf054dd6f1b277794",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e456abc_f9f6d3df",
         "filename": "libfm_jni/FmRadioController.cpp",
         "patchSetId": 1
