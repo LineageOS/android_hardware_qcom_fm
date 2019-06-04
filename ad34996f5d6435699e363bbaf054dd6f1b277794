@@ -141,6 +141,30 @@
       "revId": "ad34996f5d6435699e363bbaf054dd6f1b277794",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "43a83996_47b94fb9",
+        "filename": "libfm_jni/FmRadioController.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1117,
+      "author": {
+        "id": 19975
+      },
+      "writtenOn": "2019-06-04T13:31:36Z",
+      "side": 1,
+      "message": "Implemented changes.",
+      "parentUuid": "5e462cda_c50cc732",
+      "range": {
+        "startLine": 1117,
+        "startChar": 19,
+        "endLine": 1117,
+        "endChar": 37
+      },
+      "revId": "ad34996f5d6435699e363bbaf054dd6f1b277794",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
