@@ -1512,7 +1512,10 @@ public class FMRadioService extends Service
                mMuted = bTempMute;
            }
        } else if (TelephonyManager.CALL_STATE_IDLE == state) {
-           resumeAfterCall();
+           /* do not resume FM after call when fm stopped on focus loss */
+           if(mStoppedOnFocusLoss == false) {
+               resumeAfterCall();
+           }
        }
    }
 
