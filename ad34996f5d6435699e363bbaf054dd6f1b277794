@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "69e781b1_1800a07d",
+        "filename": "libfm_jni/FmRadioController.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 19975
+      },
+      "writtenOn": "2019-06-04T13:12:11Z",
+      "side": 1,
+      "message": "I agree with you hence I\u0027m implementing the suggestions. Thank you.",
+      "parentUuid": "b377404e_1201d4ae",
+      "range": {
+        "startLine": 167,
+        "startChar": 18,
+        "endLine": 167,
+        "endChar": 36
+      },
+      "revId": "ad34996f5d6435699e363bbaf054dd6f1b277794",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2e456abc_f9f6d3df",
         "filename": "libfm_jni/FmRadioController.cpp",
         "patchSetId": 1
@@ -93,6 +117,30 @@
       "revId": "ad34996f5d6435699e363bbaf054dd6f1b277794",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e462cda_c50cc732",
+        "filename": "libfm_jni/FmRadioController.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 1117,
+      "author": {
+        "id": 19975
+      },
+      "writtenOn": "2019-06-04T13:12:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e456abc_f9f6d3df",
+      "range": {
+        "startLine": 1117,
+        "startChar": 19,
+        "endLine": 1117,
+        "endChar": 37
+      },
+      "revId": "ad34996f5d6435699e363bbaf054dd6f1b277794",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
