@@ -30,27 +30,7 @@
 -->
 <resources>
   <string-array name="ster_mon_entries">
-    <item>Stereo</item>
+    <item>სტერეო</item>
     <item>Mono</item>
-  </string-array>
-  <string-array name="ster_entries">
-    <item>Stereo</item>
-  </string-array>
-  <string-array name="record_durations_entries">
-    <item>5 minuten</item>
-    <item>15 minuten</item>
-    <item>30 minuten</item>
-    <item>Until stopped</item>
-  </string-array>
-  <string-array name="sleep_duration_values">
-    <item>15 minuten</item>
-    <item>30 minuten</item>
-    <item>45 minuten</item>
-    <item>1 oere</item>
-  </string-array>
-  <string-array name="channel_spacing_entries">
-    <item>50 kHz</item>
-    <item>100 kHz</item>
-    <item>200 kHz</item>
   </string-array>
 </resources>

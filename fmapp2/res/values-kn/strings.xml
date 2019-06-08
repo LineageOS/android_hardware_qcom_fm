@@ -98,6 +98,7 @@
     <string name="regional_band_entry_united_kingdom">ಯುನೈಟೆಡ್ ಕಿಂಗ್ಡಮ್</string>
     <string name="regional_band_entry_united_states">ಯುನೈಟೆಡ್ ಸ್ಟೇಟ್ಸ್</string>
     <string name="regional_band_entry_user_defined">ಬಳಕೆದಾರ ವ್ಯಾಕ್ಯಾನಿಸಿದ ಬ್ಯಾಂಡ್</string>
+    <string name="regional_band_summary_switzerland">ಸ್ವಿಜರ್ಲ್ಯಾಂಡ್ (೮೭.೫ - ೧೦೮.೦ MHz, ೧೦೦ kHz ಹಂತಗಳಲ್ಲಿ)</string>
     <string name="regional_band_summary_user_defined">ಬಳಕೆದಾರ ವ್ಯಾಖ್ಯಾನಿಸಿದ ಬ್ಯಾಂಡ್</string>
     <string name="aud_output_mode">ಆಡಿಯೋ ಔಟ್‍ಪುಟ್ ಮೋಡ್</string>
     <string name="audio_type_stereo">ಸ್ಟಿರಿಯೋ</string>
