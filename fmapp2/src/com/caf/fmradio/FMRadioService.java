@@ -752,7 +752,7 @@ public class FMRadioService extends Service
     final Runnable    mFmVolumeHandler = new Runnable() {
         public void run() {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1500);
             } catch (Exception ex) {
                 Log.d( LOGTAG, "RunningThread InterruptedException");
                 return;
@@ -1512,7 +1512,10 @@ public class FMRadioService extends Service
                mMuted = bTempMute;
            }
        } else if (TelephonyManager.CALL_STATE_IDLE == state) {
-           resumeAfterCall();
+           /* do not resume FM after call when fm stopped on focus loss */
+           if(mStoppedOnFocusLoss == false) {
+               resumeAfterCall();
+           }
        }
    }
 
