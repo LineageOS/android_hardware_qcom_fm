@@ -1612,7 +1612,8 @@ public class FMRadioService extends Service
                       //intentional fall through.
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
-                      if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
+                      if (mReceiver != null && mReceiver.isCherokeeChip() &&
+                                            (mPref.getBoolean("SLIMBUS_SEQ", true))) {
                           enableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
                       }
                       if (true == mPlaybackInProgress) {
@@ -1636,7 +1637,7 @@ public class FMRadioService extends Service
 
                       if(false == mPlaybackInProgress) {
                           startFM();
-                          if (mReceiver.isCherokeeChip() &&
+                          if (mReceiver != null && mReceiver.isCherokeeChip() &&
                                 (mPref.getBoolean("SLIMBUS_SEQ", true))) {
                               enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
                           }
