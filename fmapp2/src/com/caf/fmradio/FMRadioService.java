@@ -229,6 +229,7 @@ public class FMRadioService extends Service
    private static final int ENABLE_SLIMBUS_DATA_PORT = 1;
    private static final int DISABLE_SOFT_MUTE = 0;
    private static final int ENABLE_SOFT_MUTE = 1;
+   private static final int DEFAULT_VOLUME_INDEX = 6;
    private static Object mNotchFilterLock = new Object();
    private static Object mNotificationLock = new Object();
 
@@ -1587,28 +1588,32 @@ public class FMRadioService extends Service
                   return;
               }
               switch (msg.arg1) {
-                  case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                      Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
-                      if (true == isFmRecordingOn())
-                          stopRecording();
                   case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
-                      if ((mReceiver != null) && mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
-                          enableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
+                      mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                      int mCurrentVolumeIndex =
+                                  mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                      Log.d(LOGTAG, "Current Volume Index = "+ mCurrentVolumeIndex);
+                      /* lower fm volume only if fm audio playing above default volume index */
+                      if (mCurrentVolumeIndex > DEFAULT_VOLUME_INDEX) {
+                          setFMVolume(DEFAULT_VOLUME_INDEX);
                       }
-                      mStoppedOnFocusLoss = true;
-
-                      if (true == mPlaybackInProgress) {
-                          stopFM();
-                      }
-
                       break;
                   case AudioManager.AUDIOFOCUS_LOSS:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS mspeakerphone= " +
                                mSpeakerPhoneOn);
-
+                      if (mSpeakerPhoneOn) {
+                          if (isAnalogModeSupported())
+                              setAudioPath(false);
+                      }
+                      if (mSession.isActive()) {
+                          mSession.setActive(false);
+                      }
                       //intentional fall through.
-                      if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
+                  case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                      Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_LOSS_TRANSIENT");
+                      if (mReceiver != null && mReceiver.isCherokeeChip() &&
+                                            (mPref.getBoolean("SLIMBUS_SEQ", true))) {
                           enableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
                       }
                       if (true == mPlaybackInProgress) {
@@ -1618,12 +1623,7 @@ public class FMRadioService extends Service
                       if (true == isFmRecordingOn())
                           stopRecording();
 
-                      if (mSpeakerPhoneOn) {
-                          if (isAnalogModeSupported())
-                              setAudioPath(false);
-                      }
                       mStoppedOnFocusLoss = true;
-                      mSession.setActive(false);
                       break;
                   case AudioManager.AUDIOFOCUS_GAIN:
                       Log.v(LOGTAG, "AudioFocus: received AUDIOFOCUS_GAIN mPlaybackinprogress =" +
@@ -1637,12 +1637,20 @@ public class FMRadioService extends Service
 
                       if(false == mPlaybackInProgress) {
                           startFM();
-                          if (mReceiver.isCherokeeChip() &&
+                          if (mReceiver != null && mReceiver.isCherokeeChip() &&
                                 (mPref.getBoolean("SLIMBUS_SEQ", true))) {
                               enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
                           }
+                      } else {
+                          /* This case usually happens, when FM volume is lowered down and Playback
+                           * In Progress on AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK recived. Need
+                           * to restore volume level back when AUDIOFOCUS_GAIN received
+                           */
+                          setCurrentFMVolume();
                       }
-                      mSession.setActive(true);
+                      if (!mSession.isActive()) {
+                          mSession.setActive(true);
+                      }
                       break;
                   default:
                       Log.e(LOGTAG, "Unknown audio focus change code"+msg.arg1);
