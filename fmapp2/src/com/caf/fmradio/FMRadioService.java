@@ -2303,6 +2303,7 @@ public class FMRadioService extends Service
        mEventReceived = false;
        bStatus = mReceiver.enable(FmSharedPreferences.getFMConfiguration(), this);
        bStatus = waitForEvent();
+       mReceiver.setRawRdsGrpMask();
 
        if (isSpeakerEnabled()) {
            setAudioPath(false);
@@ -3246,7 +3247,6 @@ public class FMRadioService extends Service
       {
          Log.d(LOGTAG, "FmRxEvEnableReceiver");
          if (mReceiver != null) {
-             mReceiver.setRawRdsGrpMask();
              if (mReceiver.isCherokeeChip()) {
                  synchronized(mEventWaitLock) {
                      mEventReceived = true;

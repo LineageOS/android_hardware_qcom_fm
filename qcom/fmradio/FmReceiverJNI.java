@@ -58,7 +58,7 @@ class FmReceiverJNI {
     static native void initNative();
     static native void cleanupNative();
 
-    final private FmRxEvCallbacks mCallback;
+    private FmRxEvCallbacks mCallback;
     static private final int STD_BUF_SIZE = 256;
     static private byte[] mRdsBuffer = new byte[STD_BUF_SIZE];
 
@@ -313,6 +313,10 @@ class FmReceiverJNI {
             Log.e(TAG, "mCallback is null in JNI");
         Log.d(TAG, "init native called");
         initNative();
+    }
+
+    public FmReceiverJNI() {
+        Log.d(TAG, "FmReceiverJNI constructor called");
     }
 
     static native int acquireFdNative(String path);
