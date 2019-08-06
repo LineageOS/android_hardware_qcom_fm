@@ -32,7 +32,7 @@
     <string name="no_storage">Muntatu SD txartela grabazioa hasi baino lehen.</string>
     <string name="preparing_sd">SD txartela prestatzen</string>
     <string name="access_sd_fail">Ezin izan da SD txartela atzitu.</string>
-    <string name="spaceIsLow_content">SD biltegiratze txartela lekurik gabe geratzen ari da. Aldatu kalitate ezarpenak edo fitxategiren bat ezabatu.</string>
+    <string name="spaceIsLow_content">Zure SD txartela biltegiratze lekurik gabe geratzen ari da. Aldatu kalitate ezarpenak edo ezabatu fitxategiren bat.</string>
     <string name="FMRecording_reach_size_limit">Tamaina mugara heldu da.</string>
     <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
     <string name="audio_db_artist_name">Nire FM grabazioak</string>

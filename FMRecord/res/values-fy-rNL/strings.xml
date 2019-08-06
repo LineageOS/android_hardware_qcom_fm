@@ -29,16 +29,16 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="no_storage">ରେକର୍ଡ କରିବା ଆରଂଭ କରିବା ପୂର୍ବରୁ SD କାର୍ଡ ମାଉଣ୍ଟ କରନ୍ତୁ</string>
-    <string name="preparing_sd">SD କାର୍ଡ୍ ପ୍ରସ୍ତୁତ କରୁଛି</string>
-    <string name="access_sd_fail">SD କାର୍ଡ୍‍ ଆକସେସ୍ କରି ପାରିବେ ନାହିଁ।</string>
-    <string name="spaceIsLow_content">ଆପଣଙ୍କ SD କାର୍ଡ୍‍ ଷ୍ଟୋରେଜ୍‍ରେ ‍ସ୍ଥାନ ଖାଲି ନାହିଁ। ଗୁଣବତ୍ତା ସେଟିଂ ପରିବର୍ତ୍ତନ କରନ୍ତୁ କିମ୍ବା କିଛି ଫଟୋ ବା ଅନ୍ୟାନ୍ୟ ଫାଇଲଗୁଡିକ ବିଲୋପ କରନ୍ତୁ।</string>
-    <string name="FMRecording_reach_size_limit">ଆକାର ସୀମାରେ ପହଞ୍ଚିଛି।</string>
-    <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
-    <string name="audio_db_artist_name">ମୋ FM ରେକର୍ଡିଂଗୁଡିକ</string>
-    <string name="audio_db_album_name">FM ରେକର୍ଡିଂଗୁଡିକ</string>
-    <string name="audio_db_playlist_name">FM ରେକର୍ଡିଂଗୁଡିକ</string>
-    <string name="save_record_file">FM ରେକର୍ଡ୍‍ ହୋଇଥିବା ଫାଇଲ୍‍ \'<xliff:g id="record_file">%1$s</xliff:g>\'ରେ ସଂରକ୍ଷଣ ହୋଇଛି</string>
-    <string name="fm_record_progress">FM ରେକର୍ଡିଂଗୁଡିକ ଆଗକୁ ବଢୁଛି</string>
-    <string name="unable_to_store">ରେକର୍ଡ ହୋଇଥିବା ଅଡିଓ ସଂରକ୍ଷଣ କରିବାରେ ଅଷମ</string>
+    <string name="no_storage">Pleats SD-kaart om opnimme te kinnen.</string>
+    <string name="preparing_sd">SD-kaart tariede</string>
+    <string name="access_sd_fail">Gjin tagong ta SD-kaart.</string>
+    <string name="spaceIsLow_content">Jo SD-kaart is hast fol. Ferminderje de opnamekwaliteit of smyt bestannen fuort.</string>
+    <string name="FMRecording_reach_size_limit">Opnamelimyt berikke.</string>
+    <string name="audio_db_title_format"><xliff:g id="format">dd-MM-yyyy HH:mm:ss</xliff:g></string>
+    <string name="audio_db_artist_name">Myn FM-opnamen</string>
+    <string name="audio_db_album_name">FM-opnamen</string>
+    <string name="audio_db_playlist_name">FM-opnamen</string>
+    <string name="save_record_file">FM-opname bewarre yn \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
+    <string name="fm_record_progress">Opnimme\u2026</string>
+    <string name="unable_to_store">Kin lûdsopname net bewarje</string>
 </resources>
