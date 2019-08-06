@@ -29,16 +29,16 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="no_storage">Montér SD-kort, før optagelse startes.</string>
+    <string name="no_storage">Montér SD-kort, før start på optagelse.</string>
     <string name="preparing_sd">Forbereder SD-kort</string>
     <string name="access_sd_fail">Kunne ikke tilgå SD-kort.</string>
-    <string name="spaceIsLow_content">Dit SD-kort er ved at løbe tør for plads. Skift kvalitet eller slet nogle billeder eller andre filer.</string>
+    <string name="spaceIsLow_content">Dit SD-kort lager er ved at løbe tør for plads. Skift kvalitetsindstillingen, eller slet nogle billeder, eller andre filer.</string>
     <string name="FMRecording_reach_size_limit">Størrelsesgrænse nået.</string>
-    <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
+    <string name="audio_db_title_format"><xliff:g id="format">dd-MM-yyyy HH:mm:ss</xliff:g></string>
     <string name="audio_db_artist_name">Mine FM-optagelser</string>
     <string name="audio_db_album_name">FM-optagelser</string>
     <string name="audio_db_playlist_name">FM-optagelser</string>
-    <string name="save_record_file">FM-optagelse gemt til \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
+    <string name="save_record_file">FM-optagelsesfil gemt til \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
     <string name="fm_record_progress">FM-optagelse i gang</string>
-    <string name="unable_to_store">Kunne ikke gemme indspillet lyd</string>
+    <string name="unable_to_store">Ude af stand til at gemme optaget lyd</string>
 </resources>
