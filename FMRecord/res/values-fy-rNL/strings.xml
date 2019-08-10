@@ -29,13 +29,16 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
-  <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
-  <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
-  <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
-  <!-- The messsage shown when FM record reaches size limit. -->
-  <!-- the name under which recordings will be visible in the media database is formatted like this -->
-  <!-- all recordings will show up in the media database with this 'artist' name -->
-  <!-- all recordings will show up in the media database with this 'album' name -->
-  <!-- all recordings will show up in the media database in a playlist with this name -->
+    <string name="no_storage">Pleats SD-kaart om opnimme te kinnen.</string>
+    <string name="preparing_sd">SD-kaart tariede</string>
+    <string name="access_sd_fail">Gjin tagong ta SD-kaart.</string>
+    <string name="spaceIsLow_content">Jo SD-kaart is hast fol. Ferminderje de opnamekwaliteit of smyt bestannen fuort.</string>
+    <string name="FMRecording_reach_size_limit">Opnamelimyt berikke.</string>
+    <string name="audio_db_title_format"><xliff:g id="format">dd-MM-yyyy HH:mm:ss</xliff:g></string>
+    <string name="audio_db_artist_name">Myn FM-opnamen</string>
+    <string name="audio_db_album_name">FM-opnamen</string>
+    <string name="audio_db_playlist_name">FM-opnamen</string>
+    <string name="save_record_file">FM-opname bewarre yn \'<xliff:g id="record_file">%1$s</xliff:g>\'</string>
+    <string name="fm_record_progress">Opnimme\u2026</string>
+    <string name="unable_to_store">Kin lûdsopname net bewarje</string>
 </resources>

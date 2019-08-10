@@ -28,4 +28,29 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
-<resources></resources>
+<resources>
+  <string-array name="ster_mon_entries">
+    <item>Stereo</item>
+    <item>Mono</item>
+  </string-array>
+  <string-array name="ster_entries">
+    <item>Stereo</item>
+  </string-array>
+  <string-array name="record_durations_entries">
+    <item>5 munud</item>
+    <item>15 munud</item>
+    <item>30 munud</item>
+    <item>Nes wedi\'i stopio</item>
+  </string-array>
+  <string-array name="sleep_duration_values">
+    <item>15 munud</item>
+    <item>30 munud</item>
+    <item>45 munud</item>
+    <item>1 awr</item>
+  </string-array>
+  <string-array name="channel_spacing_entries">
+    <item>50 KHz</item>
+    <item>100 KHz</item>
+    <item>200 KHz</item>
+  </string-array>
+</resources>

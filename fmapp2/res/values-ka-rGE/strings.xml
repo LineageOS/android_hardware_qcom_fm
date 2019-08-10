@@ -29,18 +29,45 @@
  * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- alert to the user that USB storage must be available before using FM recording  [CHAR LIMIT=NONE] -->
-  <!-- alert to the user that the USB storage is being disk-checked [CHAR LIMIT=30] -->
-  <!-- alert to the user that the FM fails to read or write the USB storage. [CHAR LIMIT=NONE] -->
-  <!-- Low-memory dialog message [CHAR LIMT=NONE] -->
-  <!-- The messsage shown when FM record reaches size limit. -->
-  <!-- Off messages -->
-  <!-- The messsage shown when long pressed on a station. -->
-  <!-- Do not translate. Duration format. -->
-  <!-- the name under which recordings will be visible in the media database is formatted like this -->
-  <!-- all recordings will show up in the media database with this 'artist' name -->
-  <!-- all recordings will show up in the media database with this 'album' name -->
-  <!-- all recordings will show up in the media database in a playlist with this name -->
-  <!-- program types -->
-  <!-- RBDS (North America) -->
+    <string name="app_name">FM-რადიო</string>
+    <string name="menu_settings">პარამეტრები</string>
+    <string name="dialog_presetlist_rename_title">შეიყვანეთ სახელი</string>
+    <string name="preset_replace">ჩანაცვლება</string>
+    <string name="preset_rename">გადარქმევა</string>
+    <string name="preset_delete">წაშლა</string>
+    <string name="regional_band_entry_europe">ევროპა</string>
+    <string name="regional_band_entry_japan">იაპონია</string>
+    <string name="regional_band_entry_austria">ავსტრია</string>
+    <string name="regional_band_entry_belgium">ბელგია</string>
+    <string name="regional_band_entry_brazil">ბრაზილია</string>
+    <string name="regional_band_entry_china">ჩინეთი</string>
+    <string name="regional_band_entry_denmark">დანია</string>
+    <string name="regional_band_entry_finland">ფინეთი</string>
+    <string name="regional_band_entry_france">საფრანგეთი</string>
+    <string name="regional_band_entry_germany">გერმანია</string>
+    <string name="regional_band_entry_greece">საბერძნეთი</string>
+    <string name="regional_band_entry_india">ინდოეთი</string>
+    <string name="regional_band_entry_ireland">ირლანდია</string>
+    <string name="regional_band_entry_italy">იტალია</string>
+    <string name="regional_band_entry_korea">კორეა</string>
+    <string name="regional_band_entry_mexico">მექსიკა</string>
+    <string name="regional_band_entry_norway">ნორვეგია</string>
+    <string name="regional_band_entry_poland">პოლონეთი</string>
+    <string name="regional_band_entry_portugal">პორტუგალია</string>
+    <string name="regional_band_entry_russia">რუსეთი</string>
+    <string name="regional_band_entry_slovakia">სლოვაკეთი</string>
+    <string name="regional_band_entry_spain">ესპანეთი</string>
+    <string name="regional_band_entry_sweden">შვედეთი</string>
+    <string name="regional_band_entry_taiwan">ტაივანი</string>
+    <string name="regional_band_entry_turkey">თურქეთი</string>
+    <string name="audio_type_stereo">სტერეო</string>
+    <string name="station_name">სადგური:</string>
+    <string name="typ_Culture">კულტურა</string>
+    <string name="typ_Children">საბავშვო პროგრამები</string>
+    <string name="typ_News">ახალი ამბები</string>
+    <string name="typ_Religion">რელიგია</string>
+    <string name="typ_Science">მეცნიერება</string>
+    <string name="typ_Sport">სპორტი</string>
+    <string name="typ_Travel">მოგზაურობა</string>
+    <string name="typ_Weather">ამინდი</string>
 </resources>

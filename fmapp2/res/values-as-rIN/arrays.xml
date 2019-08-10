@@ -51,6 +51,6 @@
   <string-array name="channel_spacing_entries">
     <item>50 KHz</item>
     <item>100 KHz</item>
-    <item>200 KHz</item>
+    <item>200 kHz</item>
   </string-array>
 </resources>
