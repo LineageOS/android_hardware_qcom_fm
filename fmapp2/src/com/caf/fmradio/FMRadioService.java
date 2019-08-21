@@ -223,10 +223,13 @@ public class FMRadioService extends Service
    private static final int FM_RECORD_BUF_SIZE =
                       AudioRecord.getMinBufferSize(AUDIO_SAMPLE_RATE,
                                    AUDIO_CHANNEL_CONFIG, AUDIO_ENCODING_FORMAT);
+   private Thread mRecordSinkThread = null;
    private AudioRecord mAudioRecord = null;
    private AudioTrack mAudioTrack = null;
+   private boolean mIsRecordSink = false;
    private static final int AUDIO_FRAMES_COUNT_TO_IGNORE = 3;
    private Object mEventWaitLock = new Object();
+   private Object mRecordSinkLock = new Object();
    private boolean mIsFMDeviceLoopbackActive = false;
    private File mStoragePath = null;
    private static final int FM_OFF_FROM_APPLICATION = 1;
@@ -243,6 +246,9 @@ public class FMRadioService extends Service
    private boolean mEventReceived = false;
    private boolean isfmOffFromApplication = false;
 
+   private AudioRoutingListener mRoutingListener =  null;
+   private int mCurrentDevice = AudioDeviceInfo.TYPE_UNKNOWN; // current output device
+   private boolean mUseAudioSession = false;
    public FMRadioService() {
    }
 
@@ -295,6 +301,9 @@ public class FMRadioService extends Service
 
       getA2dpStatusAtStart();
 
+      mUseAudioSession = SystemProperties.getBoolean("ro.vendor.fm.use_audio_session", false);
+      if (mUseAudioSession)
+         mRoutingListener = new AudioRoutingListener();
    }
 
    @Override
@@ -374,6 +383,160 @@ public class FMRadioService extends Service
       mWakeLock.release();
       super.onDestroy();
    }
+    
+    private synchronized void CreateRecordSessions() {
+        
+        if (mAudioRecord != null) {
+            mAudioRecord.stop();
+        }
+        if (mAudioTrack != null) {
+            mAudioTrack.stop();
+        }
+        mAudioRecord = new AudioRecord(MediaRecorder.AudioSource.RADIO_TUNER,
+                                       AUDIO_SAMPLE_RATE, AUDIO_CHANNEL_CONFIG,
+                                       AUDIO_ENCODING_FORMAT, FM_RECORD_BUF_SIZE);
+        
+        mAudioTrack = new AudioTrack.Builder()
+        .setAudioFormat(new AudioFormat.Builder()
+                        .setEncoding(AUDIO_ENCODING_FORMAT)
+                        .setSampleRate(AUDIO_SAMPLE_RATE)
+                        .setChannelIndexMask(AUDIO_CHANNEL_CONFIG)
+                        .build())
+        .setBufferSizeInBytes(FM_RECORD_BUF_SIZE)
+        .build();
+        Log.d(LOGTAG," adding RoutingChangedListener() ");
+        mAudioTrack.addOnRoutingChangedListener(mRoutingListener, null);
+        
+        if (mMuted)
+            mAudioTrack.setVolume(0.0f);
+    }
+    
+    private synchronized void startRecordSink() {
+        Log.d(LOGTAG, "startRecordSink "
+              + AudioSystem.getForceUse(AudioSystem.FOR_MEDIA));
+        
+        mIsRecordSink = true;
+        createRecordSinkThread();
+        
+    }
+    
+    private synchronized void createRecordSinkThread() {
+        if (mRecordSinkThread == null) {
+            mRecordSinkThread = new RecordSinkThread();
+            mRecordSinkThread.start();
+            Log.d(LOGTAG, "mRecordSinkThread started");
+            try {
+                synchronized (mRecordSinkLock) {
+                    Log.d(LOGTAG, "waiting for play to complete");
+                    mRecordSinkLock.wait();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
+                enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
+            }
+        }
+    }
+    
+    private synchronized void exitRecordSinkThread() {
+        if(isRecordSinking()) {
+            Log.d(LOGTAG, "stopRecordSink");
+            mAudioTrack.setPreferredDevice(null);
+            mIsRecordSink = false;
+        } else {
+            Log.d(LOGTAG, "exitRecordSinkThread called mRecordSinkThread not running");
+            return;
+        }
+        try {
+            Log.d(LOGTAG, "stopRecordSink waiting to join mRecordSinkThread");
+            mRecordSinkThread.join();
+        } catch (InterruptedException e) {
+            Log.d(LOGTAG, "Exceprion while mRecordSinkThread join");
+        }
+        mRecordSinkThread = null;
+        mAudioTrack = null;
+        mAudioRecord = null;
+        Log.d(LOGTAG, "exitRecordSinkThread completed");
+    }
+    
+    private boolean isRecordSinking() {
+        return mIsRecordSink;
+    }
+    
+    class RecordSinkThread extends Thread {
+        private int mCurrentFrame = 0;
+        private boolean isAudioFrameNeedIgnore() {
+            return mCurrentFrame < AUDIO_FRAMES_COUNT_TO_IGNORE;
+        }
+        
+        @Override
+        public void run() {
+            try {
+                Log.d(LOGTAG, "RecordSinkThread: run started ");
+                byte[] buffer = new byte[FM_RECORD_BUF_SIZE];
+                while (isRecordSinking()) {
+                    // Speaker mode or BT a2dp mode will come here and keep reading and writing.
+                    // If we want FM sound output from speaker or BT a2dp, we must record data
+                    // to AudioRecrd and write data to AudioTrack.
+                    if (mAudioRecord.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED) {
+                        mAudioRecord.startRecording();
+                        Log.d(LOGTAG, "RecordSinkThread: mAudioRecord.startRecording started");
+                    }
+                    
+                    if (mAudioTrack.getPlayState() == AudioTrack.PLAYSTATE_STOPPED) {
+                        Log.d(LOGTAG, "RecordSinkThread: mAudioTrack.play executed");
+                        mAudioTrack.play();
+                        Log.d(LOGTAG, "RecordSinkThread: mAudioTrack.play completed");
+                        synchronized (mRecordSinkLock) {
+                            mRecordSinkLock.notify();
+                        }
+                    }
+                    int size = mAudioRecord.read(buffer, 0, FM_RECORD_BUF_SIZE);
+                    // check whether need to ignore first 3 frames audio data from AudioRecord
+                    // to avoid pop noise.
+                    if (isAudioFrameNeedIgnore()) {
+                        mCurrentFrame += 1;
+                        continue ;
+                    }
+                    if (size <= 0) {
+                        Log.e(LOGTAG, "RecordSinkThread read data from AudioRecord "
+                              + "error size: " + size);
+                        continue;
+                    }
+                    byte[] tmpBuf = new byte[size];
+                    System.arraycopy(buffer, 0, tmpBuf, 0, size);
+                    // Check again to avoid noises, because RecordSink may be changed
+                    // while AudioRecord is reading.
+                    if (isRecordSinking()) {
+                        mAudioTrack.write(tmpBuf, 0, tmpBuf.length);
+                    } else {
+                        mCurrentFrame = 0;
+                        Log.d(LOGTAG, "RecordSinkThread: stopRecordSink called stopping mAudioTrack and mAudioRecord ");
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                Log.d(LOGTAG, "RecordSinkThread.run, thread is interrupted, need exit thread");
+            } finally {
+                Log.d(LOGTAG, "RecordSinkThread: stopRecordSink called stopping mAudioTrack and mAudioRecord ");
+                if (mAudioRecord.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
+                    Log.d(LOGTAG, "RecordSinkThread: mAudioRecord.stop()");
+                    mAudioRecord.stop();
+                    Log.d(LOGTAG, "RecordSinkThread: mAudioRecord.stop() completed");
+                    mAudioRecord.release();
+                    Log.d(LOGTAG, "RecordSinkThread: mAudioRecord.release() completed");
+                }
+                if (mAudioTrack.getPlayState() == AudioTrack.PLAYSTATE_PLAYING) {
+                    Log.d(LOGTAG, "RecordSinkThread: mAudioTrack.stop();");
+                    mAudioTrack.stop();
+                    Log.d(LOGTAG, "RecordSinkThread:mAudioTrack.stop() completed");
+                    mAudioTrack.release();
+                    Log.d(LOGTAG, "RecordSinkThread: mAudioTrack.release() completed");
+                }
+            }
+        }
+    }
 
     private void setFMVolume(int mCurrentVolumeIndex) {
        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -433,6 +596,73 @@ public class FMRadioService extends Service
         audioManager.setParameters(keyValPairs);
 
         return true;
+    }
+
+    private boolean configureFMDeviceLoopback_O(boolean enable) {
+        boolean success = true;
+        int status = AudioSystem.SUCCESS;
+        
+        Log.d(LOGTAG, "configureFMDeviceLoopback enable:" + enable +
+              " DeviceLoopbackActive:" + mIsFMDeviceLoopbackActive);
+        if (enable && mIsFMDeviceLoopbackActive == false) {
+            status = AudioSystem.getDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,"");
+            Log.d(LOGTAG," FM hardwareLoopback Status = " + status);
+            if( status == AudioSystem.DEVICE_STATE_AVAILABLE) {
+                // This case usually happens, when FM is force killed through settings app
+                // and we don't get chance to disable Hardware LoopBack.
+                Log.d(LOGTAG," FM HardwareLoopBack Active, disable it first");
+                status =  AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,
+                              AudioSystem.DEVICE_STATE_UNAVAILABLE, "", "");
+                mCurrentDevice = AudioDeviceInfo.TYPE_WIRED_HEADSET;
+            }
+            status = AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,
+                                          AudioSystem.DEVICE_STATE_AVAILABLE, "", "");
+            if (status != AudioSystem.SUCCESS) {
+                success = false;
+                Log.e(LOGTAG, "configureFMDeviceLoopback failed! status:" + status);
+                AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,
+                                     AudioSystem.DEVICE_STATE_UNAVAILABLE, "", "");
+                mCurrentDevice = AudioDeviceInfo.TYPE_UNKNOWN;
+            } else {
+                mIsFMDeviceLoopbackActive = true;
+            }
+        } else if (!enable && mIsFMDeviceLoopbackActive == true) {
+            AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM,
+                                 AudioSystem.DEVICE_STATE_UNAVAILABLE, "", "");
+            mIsFMDeviceLoopbackActive = false;
+            mCurrentDevice = AudioDeviceInfo.TYPE_UNKNOWN;
+        }
+        
+        return success;
+    }
+    
+    private synchronized void configureAudioDataPath(boolean enable) {
+        Log.d(LOGTAG, "configureAudioDataPath:" + enable +
+              " mA2dpConnected:" + mA2dpConnected +
+              " isRecordSinking" + isRecordSinking() +
+              " mSpeakerPhoneOn:" + mSpeakerPhoneOn +
+              " mIsFMDeviceLoopbackActive:" + mIsFMDeviceLoopbackActive);
+        
+        if (enable) {
+            Log.d(LOGTAG,"Start Hardware loop back for audio");
+            if (mStoppedOnFocusLoss == true) {
+                Log.d(LOGTAG, "FM does not have audio focus, not enabling " +
+                      "audio path");
+                return;
+            }
+            if ((!mIsFMDeviceLoopbackActive) && (!mA2dpConnected) && (!mSpeakerPhoneOn)) {
+                // not on BT and device loop is also not active
+                if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
+                    enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
+                }
+                exitRecordSinkThread();
+                configureFMDeviceLoopback_O(true);
+            }
+        } else {
+            //inform audio to disbale fm audio
+            configureFMDeviceLoopback_O(false);
+            exitRecordSinkThread();
+        }
     }
 
     private void setCurrentFMVolume() {
@@ -1059,6 +1289,8 @@ public class FMRadioService extends Service
        if (mStoppedOnFactoryReset) {
            mStoppedOnFactoryReset = false;
            mSpeakerPhoneOn = false;
+           if (mUseAudioSession)
+              configureAudioDataPath(true);
        // In FM stop, the audio route is set to default audio device
        }
        String temp = mSpeakerPhoneOn ? "Speaker" : "WiredHeadset";
@@ -1068,7 +1300,10 @@ public class FMRadioService extends Service
        } else {
            mAudioDevice = AudioDeviceInfo.TYPE_WIRED_HEADPHONES;
        }
-       configureFMDeviceLoopback(true);
+       if (mUseAudioSession)
+          startApplicationLoopBack(mAudioDevice);
+       else
+          configureFMDeviceLoopback(true);
        try {
            if ((mServiceInUse) && (mCallbacks != null))
                mCallbacks.onFmAudioPathStarted();
@@ -1079,7 +1314,10 @@ public class FMRadioService extends Service
 
    private void stopFM() {
        Log.d(LOGTAG, "In stopFM");
-       configureFMDeviceLoopback(false);
+       if (mUseAudioSession)
+          configureAudioDataPath(false);
+       else
+          configureFMDeviceLoopback(false);
        mPlaybackInProgress = false;
        try {
            if ((mServiceInUse) && (mCallbacks != null))
@@ -1092,7 +1330,10 @@ public class FMRadioService extends Service
    private void resetFM(){
        Log.d(LOGTAG, "resetFM");
        mPlaybackInProgress = false;
-       configureFMDeviceLoopback(false);
+       if (mUseAudioSession)
+          configureAudioDataPath(false);
+       else
+          configureFMDeviceLoopback(false);
    }
 
    private boolean getRecordServiceStatus() {
@@ -1526,6 +1767,20 @@ public class FMRadioService extends Service
          }
       }
  };
+
+    private class AudioRoutingListener implements AudioRouting.OnRoutingChangedListener {
+        public void onRoutingChanged(AudioRouting audioRouting) {
+            Log.d(LOGTAG," onRoutingChanged  + currdevice " + mCurrentDevice);
+            AudioDeviceInfo routedDevice = audioRouting.getRoutedDevice();
+            // if routing is nowhere, we get routedDevice as null
+            if(routedDevice != null) {
+                Log.d(LOGTAG," Audio Routed to device id " + routedDevice.getType());
+                if(routedDevice.getType() != mCurrentDevice) {
+                    startApplicationLoopBack(mCurrentDevice);
+                }
+            }
+        }
+    }
 
    private Handler mDelayedStopHandler = new Handler() {
       @Override
@@ -2629,11 +2884,15 @@ public class FMRadioService extends Service
            mAudioDevice = AudioDeviceInfo.TYPE_BUILTIN_SPEAKER;
            outputDevice = "Speaker";
        }
-       mAudioDeviceType = mAudioDevice | AudioSystem.DEVICE_OUT_FM;
-       AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-       String keyValPairs = new String("fm_routing="+mAudioDeviceType);
-       Log.d(LOGTAG, "keyValPairs = "+keyValPairs);
-       audioManager.setParameters(keyValPairs);
+       if (mUseAudioSession) {
+          startApplicationLoopBack(mAudioDevice);
+       } else {
+          mAudioDeviceType = mAudioDevice | AudioSystem.DEVICE_OUT_FM;
+          AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+          String keyValPairs = new String("fm_routing="+mAudioDeviceType);
+          Log.d(LOGTAG, "keyValPairs = "+keyValPairs);
+          audioManager.setParameters(keyValPairs);
+       }
        if (mReceiver.isCherokeeChip() && (mPref.getBoolean("SLIMBUS_SEQ", true))) {
           enableSlimbus(ENABLE_SLIMBUS_DATA_PORT);
        }
@@ -4087,4 +4346,51 @@ public class FMRadioService extends Service
            //TODO unregister the fm service here.
        }
    }
+    private boolean startApplicationLoopBack(int deviceType) {
+
+        // stop existing playback path before starting new one
+        Log.d(LOGTAG,"startApplicationLoopBack for device "+deviceType);
+
+        AudioDeviceInfo outputDevice = null;
+        AudioDeviceInfo[] deviceList = mAudioManager.getDevices(AudioManager.GET_DEVICES_OUTPUTS);
+        for (int index = 0; index < deviceList.length; index++) {
+            Log.d(LOGTAG,"startApplicationLoopBack dev_type " + deviceList[index].getType());
+            if(AudioDeviceInfo.TYPE_WIRED_HEADSET == deviceType || AudioDeviceInfo.TYPE_WIRED_HEADPHONES == deviceType) {
+                if ((deviceList[index].getType() == AudioDeviceInfo.TYPE_WIRED_HEADSET ) ||
+                (deviceList[index].getType() == AudioDeviceInfo.TYPE_WIRED_HEADPHONES )){
+                outputDevice = deviceList[index];
+                Log.d(LOGTAG,"startApplicationLoopBack found_dev "
+                    + deviceList[index].getType());
+                break;
+            }
+        }
+        else if (deviceList[index].getType() == deviceType) {
+                outputDevice = deviceList[index];
+                Log.d(LOGTAG,"startApplicationLoopBack found_dev "+ deviceList[index].getType());
+                break;
+            }
+        }
+        if (outputDevice == null) {
+            Log.d(LOGTAG,"no output device" + deviceType + " found");
+            return false;
+        }
+        if(mIsFMDeviceLoopbackActive) {
+            if ((mReceiver != null) && mReceiver.isCherokeeChip() &&
+                            (mPref.getBoolean("SLIMBUS_SEQ", true))) {
+                enableSlimbus(DISABLE_SLIMBUS_DATA_PORT);
+            }
+            configureFMDeviceLoopback_O(false);
+        }
+        if(!isRecordSinking()) {
+            CreateRecordSessions();
+            Log.d(LOGTAG,"creating AudioTrack session");
+        }
+        mCurrentDevice = outputDevice.getType();
+        mAudioTrack.setPreferredDevice(outputDevice);
+        Log.d(LOGTAG,"PreferredDevice is set to "+ outputDevice.getType());
+        if(!isRecordSinking()) {
+            startRecordSink();
+        }
+        return true;
+    }
 }
