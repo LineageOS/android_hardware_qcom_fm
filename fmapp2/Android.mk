@@ -7,7 +7,6 @@ LOCAL_SRC_FILES := src/com/caf/fmradio/CommaSeparatedFreqFileReader.java
 LOCAL_SRC_FILES += src/com/caf/fmradio/FMAdapterApp.java
 LOCAL_SRC_FILES += src/com/caf/fmradio/FMMediaButtonIntentReceiver.java
 LOCAL_SRC_FILES += src/com/caf/fmradio/FMRadio.java
-LOCAL_SRC_FILES += src/com/caf/fmradio/FMRadioService.java
 LOCAL_SRC_FILES += src/com/caf/fmradio/FmSharedPreferences.java
 LOCAL_SRC_FILES += src/com/caf/fmradio/FMStats.java
 LOCAL_SRC_FILES += src/com/caf/fmradio/FmTags.java
@@ -21,6 +20,11 @@ LOCAL_SRC_FILES += src/com/caf/fmradio/IFMRadioService.aidl
 LOCAL_SRC_FILES += src/com/caf/fmradio/IFMRadioServiceCallbacks.aidl
 LOCAL_SRC_FILES += src/com/caf/fmradio/IFMTransmitterService.aidl
 LOCAL_SRC_FILES += src/com/caf/fmradio/IFMTransmitterServiceCallbacks.aidl
+ifeq ($(BOARD_USE_O_FM_CONFIG),true)
+LOCAL_SRC_FILES += src/com/caf/fmradio/oreo/FMRadioService.java
+else
+LOCAL_SRC_FILES += src/com/caf/fmradio/FMRadioService.java
+endif
 
 ifeq (1,$(filter 1,$(shell echo "$$(( $(PLATFORM_SDK_VERSION) >= 11 ))" )))
 LOCAL_SRC_FILES +=  $(call all-java-files-under, src/com/caf/hc_utils)
