@@ -495,6 +495,11 @@ public class FMRadio extends Activity
       if (isSleepTimerActive()) {
           Log.d(LOGTAG, "FMRadio: Sleep Timer active");
           mSleepUpdateHandlerThread.interrupt();
+          try {
+              mSleepUpdateHandlerThread.join();
+          } catch (Exception e) {
+              e.printStackTrace();
+          }
       }
       mRadioTextScroller.stopScroll();
       mERadioTextScroller.stopScroll();
@@ -535,6 +540,11 @@ public class FMRadio extends Activity
                   mService.cancelDelayedStop(FMRadioService.STOP_SERVICE);
                if(null != mSleepUpdateHandlerThread) {
                   mSleepUpdateHandlerThread.interrupt();
+                  try {
+                      mSleepUpdateHandlerThread.join();
+                  } catch (Exception e) {
+                      e.printStackTrace();
+                  }
                }
           } catch (Exception e) {
                e.printStackTrace();
@@ -2310,7 +2320,7 @@ public class FMRadio extends Activity
                                                 "SleepUpdateThread");
       }
       /* If the thread state is "new" then the thread has not yet started */
-      if(mSleepUpdateHandlerThread.getState() != Thread.State.TERMINATED && isFmOn()) {
+      if(mSleepUpdateHandlerThread.getState() == Thread.State.NEW && isFmOn()) {
           try {
               if((mService != null) &&
                  !mService.isSleepTimerActive()) {
@@ -2319,10 +2329,6 @@ public class FMRadio extends Activity
                     mService.delayedStop((mSleepAtPhoneTime - timeNow),
                                             FMRadioService.STOP_SERVICE);
                  }
-              }
-              if (mSleepUpdateHandlerThread.getState() == Thread.State.TERMINATED) {
-                  mSleepUpdateHandlerThread = new Thread(null, doSleepProcessing,
-                                                    "SleepUpdateThread");
               }
               mSleepUpdateHandlerThread.start();
           }catch(Exception e) {
@@ -2343,6 +2349,11 @@ public class FMRadio extends Activity
 
       if(null != mSleepUpdateHandlerThread) {
          mSleepUpdateHandlerThread.interrupt();
+         try {
+             mSleepUpdateHandlerThread.join();
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
       }
       if(null != mSleepMsgTV) {
          mSleepMsgTV.setVisibility(View.INVISIBLE);
