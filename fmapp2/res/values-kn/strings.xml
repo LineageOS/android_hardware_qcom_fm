@@ -128,6 +128,7 @@
     <string name="station_list_delete_station">ಅಳಿಸು: <xliff:g id="name">%s</xliff:g></string>
     <string name="station_list_delete_station_prompt">ನೀವು ಖಚಿತವೇ ನೀವು \'<xliff:g id="name">%s</xliff:g>\' ಅಳಿಸಲು ಬಯಸುತ್ತೀರಾ?</string>
     <string name="station_name_empty">ಕೇಂದ್ರದ ಹೆಸರು ಖಾಲಿಯಾಗಿದೆ, ದಯವಿಟ್ಟು ಇನ್ನೊಮ್ಮೆ ಬರೆಯಿರಿ.</string>
+    <string name="station_name_exist">\'<xliff:g id="name">%s</xliff:g>\' ಈಗಾಗಲೇ ಬಳಕೆಯಲ್ಲಿದೆ, ದಯವಿಟ್ಟು ಭಿನ್ನವಾದ ಹೆಸರನ್ನು ಹಾಕಿ.</string>
     <string name="rt_plus_tags">ಟ್ಯಾಗ್ಸ್</string>
     <string name="usr_def_band_min">ಕನಿಷ್ಠ ಆವರ್ತನ (MHz)</string>
     <string name="usr_def_band_max">ಗರಿಷ್ಠ ಆವರ್ತನ (MHz)</string>
