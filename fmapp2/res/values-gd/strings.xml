@@ -97,6 +97,43 @@
     <string name="regional_band_entry_united_kingdom">An Rìoghachd Aonaichte</string>
     <string name="regional_band_entry_united_states">Na Stàitean Aonaichte</string>
     <string name="regional_band_entry_user_defined">Bann gnàthaichte a’ chleachdaiche</string>
+    <string name="regional_band_summary_north_america">Aimeireaga a Tuath (87.5 gu 108.0 MHz ann an ceuman 200 kHz)</string>
+    <string name="regional_band_summary_europe">An Roinn-Eòrpa (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_japan">An t-Seapan (76.0 gu 90.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_japan_wide">An t-Seapan (leathann) (90.0 gu 108.0 MHz ann an ceuman 50 kHz)</string>
+    <string name="regional_band_summary_australia">Astràilia (87.7 gu 108.0MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_austria">An Ostair (87.5 gu 108.0 MHz ann an ceuman 50 kHz)</string>
+    <string name="regional_band_summary_belgium">A’ Bheilg (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_brazil">Braisil (87.5 gu 108.0 MHz ann an ceuman 200 kHz)</string>
+    <string name="regional_band_summary_china">An t-Sìn (87.0 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_czech_republic">Poblachd na Seice (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_denmark">An Danmhairg (87.5 gu 108.0 MHz ann an ceuman 50 kHz)</string>
+    <string name="regional_band_summary_finland">Fionnlann (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_france">An Fhraing (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_germany">A’ Ghearmailt (87.5 gu 108.0 MHz ann an ceuman 50 kHz)</string>
+    <string name="regional_band_summary_greece">A’ Ghreug (87.5 gu 108.0 MHz ann an ceuman 50 kHz)</string>
+    <string name="regional_band_summary_hong_kong">Hong Kong (87.5 gu 108.0MHz ann an ceuman 100KHz)</string>
+    <string name="regional_band_summary_india">Na h-Innseachan (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_indonesia">Na h-Innd-Innse (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_ireland">Èirinn (87.5 gu 108.0 MHz ann an ceuman 50 kHz)</string>
+    <string name="regional_band_summary_italy">An Eadailt (87.5 gu 108.0 MHz ann an ceuman 50 kHz)</string>
+    <string name="regional_band_summary_korea">Coirèa (87.5 gu 108.0 MHz ann an ceuman 200 kHz)</string>
+    <string name="regional_band_summary_mexico">Meagsago (88.1 gu 107.9 MHz ann an ceuman 200 kHz)</string>
+    <string name="regional_band_summary_netherlands">Na Tìrean Ìsle (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_new_zealand">Sealainn Nuadh (88.0 gu 107.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_norway">Nirribhidh (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_poland">A’ Phòlainn (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_portugal">A’ Phortagail (87.5 gu 108.0 MHz ann an ceuman 50 kHz)</string>
+    <string name="regional_band_summary_russia">An Ruis (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_singapore">Singeapòr (88.0 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_slovakia">An t-Slòbhac (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_spain">An Spàinnt (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_switzerland">An Eilbheis (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_sweden">An t-Suain (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_taiwan">Taidh-Bhàn (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_turkey">An Tuirc (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_united_kingdom">An Rìoghachd Aonaichte (87.5 gu 108.0 MHz ann an ceuman 100 kHz)</string>
+    <string name="regional_band_summary_united_states">Na Stàitean Aonaichte (88.1 gu 107.9 MHz ann an ceuman 200 kHz)</string>
     <string name="regional_band_summary_user_defined">Bann gnàthaichte a’ chleachdaiche</string>
     <string name="aud_output_mode">Modh às-chur fuaime</string>
     <string name="audio_type_stereo">Stereo</string>
@@ -123,6 +160,7 @@
     <string name="fm_cmd_failed_msg">Dh’fhàillig le obrachadh FM. Ma mhaireas an duilgheadas, cuir FM dheth is air a-rithist.</string>
     <string name="fm_cmd_failed_msg_hdmi">Dh’fhàillig le obrachadh FM. Cha chuir sinn taic ri FM ’s HDMI aig an aon àm.</string>
     <string name="fm_cmd_failed_call_on">Dh’fhàillig le obrachadh FM. Chan eil fuaim FM ceadaichte rè gairme.</string>
+    <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
     <string name="audio_db_artist_name">Na clàraidhean FM agam</string>
     <string name="audio_db_album_name">Clàraidhean FM</string>
     <string name="audio_db_playlist_name">Clàraidhean FM</string>
@@ -137,6 +175,7 @@
     <string name="usr_def_band_max">An tricead as àirde (MHz)</string>
     <string name="chanl_spacing">Beàrnan eadar seanailean</string>
     <string name="set">Suidhich</string>
+    <string name="user_defind_band_msg">Cuir a-steach tricead eadar 76.0 ’s 108.0 MHz le beàrnadh sheanailean dhe 1 air a char as lugha agus 100 kHz a bheàrn eadar an tricead as lugha is as motha</string>
     <string name="save_record_file">Chaidh faidhle clàradh FM a shàbhaladh gu “<xliff:g id="record_file">%1$s</xliff:g>”</string>
     <string name="fm_search_no_results">Cha deach stèisean co-chòrdail a lorg</string>
     <string name="typ_All_stations">A h‑uile stèisean</string>
@@ -176,6 +215,7 @@
     <string name="typ_Classic_Rock">Ròc clasaigeach</string>
     <string name="typ_College">Colaiste</string>
     <string name="typ_Foreign_language">Cànan cèin</string>
+    <string name="typ_Hiphop">Hip Hop</string>
     <string name="typ_Nostalgia">An uair a bha siud</string>
     <string name="typ_Personality">Pearsantachd</string>
     <string name="typ_Public">Poblach</string>
@@ -189,4 +229,5 @@
     <string name="typ_Soft_Rhythm_and_Blues">Rhythm ⁊ Blues bog</string>
     <string name="typ_Sports">Spòrs</string>
     <string name="typ_Talk">Deasbaireachd</string>
+    <string name="typ_Top_40">Top 40</string>
 </resources>
