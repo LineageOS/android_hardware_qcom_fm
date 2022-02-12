@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (c) 2009-2013, The Linux Foundation. All rights reserved.
+ * Copyright (C) 2014-2015 The CyanogenMod Project
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *    * Neither the name of The Linux Foundation nor
+ *      the names of its contributors may be used to endorse or promote
+ *      products derived from this software without specific prior written
+ *      permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NON-INFRINGEMENT ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="no_storage">Munntaich cairt SD mus tòisich thu air a’ chlàradh.</string>
+  <string name="preparing_sd">Ag ullachadh a’ chairt SD</string>
+  <string name="access_sd_fail">Cha b’ urrainn dhuinn a’ chairt SD inntrigeadh.</string>
+  <string name="spaceIsLow_content">Tha an stòras gu bhith a’ ruith air a’ chairt SD agad. Atharraich roghainn na càileachd no sguab às dealbh no dhà no faidhlichean eile.</string>
+  <string name="FMRecording_reach_size_limit">Ràinig thu crìoch a’ mheud.</string>
+  <string name="audio_db_title_format"><xliff:g id="format">yyyy-MM-dd HH:mm:ss</xliff:g></string>
+  <string name="audio_db_artist_name">Na clàraidhean FM agam</string>
+  <string name="audio_db_album_name">Clàraidhean FM</string>
+  <string name="audio_db_playlist_name">Clàraidhean FM</string>
+  <string name="save_record_file">Chaidh faidhle clàradh FM a shàbhaladh gu “<xliff:g id="record_file">%1$s</xliff:g>”</string>
+  <string name="fm_record_progress">Tha FM ’ga chlàradh</string>
+  <string name="unable_to_store">Cha deach leinn an fhuaim a chlàraich thu a shàbhaladh</string>
+</resources>

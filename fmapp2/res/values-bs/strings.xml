@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (c) 2009, 2011-2013 The Linux Foundation. All rights reserved.
+ * Copyright (C) 2014-2015 The CyanogenMod Project
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *    * Neither the name of The Linux Foundation nor
+ *      the names of its contributors may be used to endorse or promote
+ *      products derived from this software without specific prior written
+ *      permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NON-INFRINGEMENT ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="regional_band_entry_austria">Austrija</string>
+    <string name="regional_band_entry_belgium">Belgija</string>
+    <string name="regional_band_entry_brazil">Brazil</string>
+    <string name="regional_band_entry_china">Kina</string>
+    <string name="regional_band_entry_czech_republic">Češka Republika</string>
+    <string name="regional_band_entry_denmark">Danska</string>
+    <string name="regional_band_entry_finland">Finska</string>
+    <string name="regional_band_entry_france">Francuska</string>
+    <string name="regional_band_entry_germany">Njemačka</string>
+    <string name="regional_band_entry_greece">Grčka</string>
+    <string name="regional_band_entry_hong_kong">Hong Kong</string>
+    <string name="regional_band_entry_india">Indija</string>
+    <string name="regional_band_entry_indonesia">Indonezija</string>
+    <string name="regional_band_entry_ireland">Irska</string>
+    <string name="regional_band_entry_italy">Italija</string>
+    <string name="regional_band_entry_korea">Koreja</string>
+    <string name="regional_band_entry_mexico">Meksiko</string>
+    <string name="regional_band_entry_netherlands">Holandija</string>
+    <string name="regional_band_entry_new_zealand">Novi Zeland</string>
+    <string name="regional_band_entry_norway">Norveška</string>
+    <string name="regional_band_entry_poland">Poljska</string>
+    <string name="regional_band_entry_portugal">Portugal</string>
+    <string name="regional_band_entry_russia">Rusija</string>
+    <string name="regional_band_entry_singapore">Singapur</string>
+    <string name="regional_band_entry_slovakia">Slovačka</string>
+    <string name="regional_band_entry_spain">Španija</string>
+    <string name="regional_band_entry_switzerland">Švicarska</string>
+    <string name="regional_band_entry_sweden">Švedska</string>
+    <string name="regional_band_entry_taiwan">Tajvan</string>
+    <string name="regional_band_entry_turkey">Turska</string>
+    <string name="regional_band_entry_united_kingdom">Ujedinjeno Kraljevstvo</string>
+    <string name="regional_band_entry_united_states">Sjedinjene Američke Države</string>
+    <string name="audio_type_stereo">Stereo</string>
+    <string name="audio_type_mono">Mono</string>
+    <string name="record_dur">Dužina snimanja</string>
+    <string name="settings_revert_confirm_title">Potvrdite resetovanje</string>
+    <string name="access_sd_fail">Pristup SD kartici nije moguć.</string>
+    <string name="fm_off">FM je isključen.</string>
+    <string name="alert_dialog_hint">Unesite naziv</string>
+    <string name="audio_db_artist_name">Moje FM snimke</string>
+    <string name="audio_db_album_name">FM snimke</string>
+    <string name="audio_db_playlist_name">FM snimke</string>
+    <string name="station_name">Stanica:</string>
+    <string name="station_exists">Ova frekvencija već postoji!</string>
+    <string name="station_list_delete_station">Obriši: <xliff:g id="name">%s</xliff:g></string>
+    <string name="station_list_delete_station_prompt">Jeste li sigurni da želite obrisati \'<xliff:g id="name">%s</xliff:g>\'?</string>
+    <string name="typ_News">Vijesti</string>
+    <string name="typ_Pop">Pop muzika</string>
+    <string name="typ_Religion">Religija</string>
+</resources>
