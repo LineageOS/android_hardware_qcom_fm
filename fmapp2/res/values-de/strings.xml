@@ -46,7 +46,7 @@
     <string name="msg_search_title"><xliff:g id="frequency_string">%1$s</xliff:g> MHz</string>
     <string name="msg_searching_title">Senderliste automatisch erstellen</string>
     <string name="msg_searching">Suche nach Radiosendern mit starkem Signal, um eine Senderliste zu erstellen\u2026</string>
-    <string name="msg_noantenna">Bitte schließen Sie ein Headset an, um das FM-Radio nutzen zu können.</string>
+    <string name="msg_noantenna">Bitte schließe ein Headset an, um das FM-Radio nutzen zu können.</string>
     <string name="dialog_sleep_title">Zeit bis zum automatischen Ausschalten</string>
     <string name="presetlist_select_name">\"<xliff:g id="presetlist_name">%1$s</xliff:g>\" auswählen</string>
     <string name="presetlist_add_new">Neue Liste hinzufügen</string>
@@ -147,12 +147,12 @@
     <string name="no_storage">Mounten Sie die SD-Karte vor Aufnahmebeginn.</string>
     <string name="preparing_sd">SD-Karte wird vorbereitet\u2026</string>
     <string name="access_sd_fail">Auf die SD-Karte konnte nicht zugegriffen werden.</string>
-    <string name="spaceIsLow_content">Auf Ihrer SD-Karte ist nicht mehr genügend Speicherplatz vorhanden. Bitte reduzieren Sie die Aufnahmequalität oder löschen Sie einige Daten, um Speicher frei zu machen.</string>
+    <string name="spaceIsLow_content">Auf deiner SD-Karte ist nicht mehr genügend Speicherplatz vorhanden. Bitte reduziere die Aufnahmequalität oder lösche einige Daten, um Speicher frei zu machen.</string>
     <string name="FMRecording_reach_size_limit">Maximale Größe erreicht.</string>
     <string name="menu_scan_for_preset">Nach Senderlisten suchen</string>
     <string name="fm_off">FM ist ausgeschaltet.</string>
     <string name="fm_call">FM kann nicht während eines Anrufs verwendet werden.</string>
-    <string name="alert_dialog_hint">Geben Sie einen Namen ein.</string>
+    <string name="alert_dialog_hint">Gib einen Namen ein</string>
     <string name="search_dialog_title">Sendersuche</string>
     <string name="fm_command_timeout_title">Zeitüberschreitung</string>
     <string name="fm_tune_timeout_msg">Kein Empfang des gewünschten FM-Senders. Wenn das Problem weiterhin besteht, bitte Radio aus- und einschalten.</string>
@@ -167,15 +167,15 @@
     <string name="station_name">Sender:</string>
     <string name="station_exists">Diese Frequenz ist bereits vorhanden!</string>
     <string name="station_list_delete_station">Löschen: <xliff:g id="name">%s</xliff:g></string>
-    <string name="station_list_delete_station_prompt">Sind Sie sicher, dass Sie \"<xliff:g id="name">%s</xliff:g>\"  löschen wollen?</string>
-    <string name="station_name_empty">Der Sendername ist leer. Bitte geben Sie einen Namen ein.</string>
-    <string name="station_name_exist">\"<xliff:g id="name">%s</xliff:g>\" wird bereits verwendet. Bitte geben Sie einen anderen Namen ein.</string>
+    <string name="station_list_delete_station_prompt">Bist du sicher, dass du \"<xliff:g id="name">%s</xliff:g>\"  löschen willst?</string>
+    <string name="station_name_empty">Der Sendername ist leer. Bitte gib einen Namen ein.</string>
+    <string name="station_name_exist">\"<xliff:g id="name">%s</xliff:g>\" wird bereits verwendet. Bitte gib einen anderen Namen ein.</string>
     <string name="rt_plus_tags">Schlagworte</string>
     <string name="usr_def_band_min">Niedrigste Frequenz (MHz)</string>
     <string name="usr_def_band_max">Höchste Frequenz (MHz)</string>
     <string name="chanl_spacing">Kanalabstand</string>
     <string name="set">Übernehmen</string>
-    <string name="user_defind_band_msg">Geben Sie einen Frequenzbereich zwischen 76,0 und 108,0 MHz mit mindestens einem Kanal und 100 kHz Abstand zwischen minimaler und maximaler Frequenz ein</string>
+    <string name="user_defind_band_msg">Gib einen Frequenzbereich zwischen 76,0 und 108,0 MHz mit mindestens einem Kanal und 100 kHz Abstand zwischen minimaler und maximaler Frequenz ein</string>
     <string name="save_record_file">Radioaufnahme wurde unter \"<xliff:g id="record_file">%1$s</xliff:g>\" gespeichert</string>
     <string name="fm_search_no_results">Keine kompatiblen Sender gefunden</string>
     <string name="typ_All_stations">Alle Sender</string>

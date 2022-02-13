@@ -187,8 +187,8 @@
     <string name="typ_Drama">Dram</string>
     <string name="typ_Easy_listening">Asan dinlənən musiqi</string>
     <string name="typ_Education">Təhsil</string>
-    <string name="typ_Emergency">Təcili</string>
-    <string name="typ_Emergency_test">Təcili test</string>
+    <string name="typ_Emergency">Fövqəladə</string>
+    <string name="typ_Emergency_test">Fövqəladə test</string>
     <string name="typ_Finance">Maliyyə</string>
     <string name="typ_Folk">Xalq musiqisi</string>
     <string name="typ_Information">İnformasiya</string>

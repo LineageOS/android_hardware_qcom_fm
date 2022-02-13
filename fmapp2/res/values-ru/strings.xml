@@ -147,7 +147,7 @@
     <string name="settings_revert_confirm_msg">Будут удалены все настройки приложения, включая список сохраненных станций. Продолжить?</string>
     <string name="no_storage">Для начала записи подключите SD-карту.</string>
     <string name="preparing_sd">Подготовка SD-карты…</string>
-    <string name="access_sd_fail">Нет доступа к SD-карте</string>
+    <string name="access_sd_fail">Не удалось получить доступ к SD-карте</string>
     <string name="spaceIsLow_content">На SD-карте недостаточно места. Измените настройки качества или удалите несколько файлов, чтобы освободить место.</string>
     <string name="FMRecording_reach_size_limit">Достигнут максимальный размер файла.</string>
     <string name="menu_scan_for_preset">Искать сохраненные станции</string>
